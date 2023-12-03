@@ -90,15 +90,16 @@ kind: ConfigManagementPlugin
 metadata:
   name: argocd-vault-plugin
 spec:
-  version: v1.0.1
+  version: v1.0.2
   generate:
     command: ['bash', '-c']
     args:
       - |-
         export AVP_TYPE=sops
-        find . \
+        find \
           -regextype egrep \
-          -iregex '.*\.(yaml|yml)' \
+          -iregex '.*\.ya?ml$' -not -iregex '.*/sopssecret[^/]*$' \
+          -type f \
           -printf '---\n' \
           -exec cat {} \; \
         | argocd-vault-plugin generate -
