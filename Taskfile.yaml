@@ -1,0 +1,78 @@
+# https://taskfile.dev
+---
+version: "3"
+
+silent: true
+set: [pipefail]
+shopt: [globstar]
+
+vars:
+  MYKS_ROOT: kubernetes
+
+tasks:
+  default: ${GOTASK_BIN:-task} --list
+
+  do:sync:
+    desc: Syncs upstream dependencies of Kubernetes applications
+    summary: |
+      Uses myks to download all actual dependencies of Kubernetes applications.
+      Accepts the same arguments as myks. Example:
+
+        task do:sync -- envs/phoenix grafana,apisix --log-level debug
+
+    cmds:
+      - |
+        cd "{{.MYKS_ROOT}}" && \
+        myks sync {{.CLI_ARGS}}
+
+  do:render:
+    desc: Renders Kubernetes applications
+    summary: |
+      Uses myks to render Kubernetes applications.
+      Accepts the same arguments as myks. Example:
+
+        task do:render -- envs/phoenix grafana,apisix --log-level debug
+
+    cmds:
+      - |
+        cd "{{.MYKS_ROOT}}" && \
+        myks render {{.CLI_ARGS}}
+
+  git:diff:
+    desc: Shows filtered git diff
+    summary: |
+      Shows git diff filtered using ./hack/git/git-diff-ignore-versions.sh script.
+      Accepts the same arguments as git diff.
+      Example:
+
+        task git:diff -- origin/main...origin/feature/123
+    env:
+      GIT_CONFIG_SYSTEM:
+        sh: echo "$(git rev-parse --show-toplevel)/hack/git/gitconfig"
+    cmds:
+      - git diff {{.CLI_ARGS}}
+
+  git:diff:pr:
+    desc: Shows filtered git diff for a pull request
+    summary: |
+      Shows filtered git diff. See git:diff task for details.
+      Accepts the number of pull request and git diff arguments.
+      Example:
+
+        # shows diff for pull request #123 in kubernetes/rendered directory
+        task git:diff:pr -- 123 kubernetes/rendered
+
+      Tip: you can use `gh pr list` to get the list of pull requests.
+    cmds:
+      - task: git:diff
+        vars:
+          CLI_ARGS:
+            sh: |
+              {{ $pr_number := .CLI_ARGS|splitArgs|first }}
+              {{ $pr_args := .CLI_ARGS|splitArgs|rest|join " " }}
+              echo "$( \
+                gh pr view \
+                  --json baseRefName,headRefName \
+                  --jq '"origin/" + .baseRefName + "...origin/" + .headRefName' \
+                  {{ $pr_number }} \
+              ) {{ if $pr_args }}{{ $pr_args|shellQuote }}{{ end }}"

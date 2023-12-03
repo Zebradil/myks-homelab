@@ -1,0 +1,4 @@
+[core]
+    attributesFile = ./hack/git/gitattributes
+[diff "ignoreVersions"]
+    textconv = ./hack/git/git-diff-ignore-versions.sh
