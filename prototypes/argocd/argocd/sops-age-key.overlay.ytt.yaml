@@ -1,0 +1,18 @@
+#! This file contains an overlay that adds a rule to ignore differences in the
+#! sops age key Secret. The value of the secret must be set and updated manually.
+
+#@ load("@ytt:overlay", "overlay")
+#@ load("@ytt:data", "data")
+
+#@ name = data.values.application._.sopsAgeKeySecretName
+
+#@overlay/match by=overlay.subset({"kind": "Application"})
+---
+#@overlay/match-child-defaults missing_ok=True
+spec:
+  ignoreDifferences:
+    - kind: Secret
+      name: #@ name
+      jqPathExpressions:
+        - .data.key
+        - .stringData.key

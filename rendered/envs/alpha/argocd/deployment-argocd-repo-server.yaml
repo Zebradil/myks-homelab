@@ -212,6 +212,12 @@ spec:
               name: plugins
         - command:
             - /var/run/argocd/argocd-cmp-server
+          env:
+            - name: SOPS_AGE_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: key
+                  name: sops-age-key
           image: registry.access.redhat.com/ubi8
           name: argocd-vault-plugin
           securityContext:

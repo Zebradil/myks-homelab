@@ -4,6 +4,16 @@
 
 #@ config_map_name = "cmp-plugin"
 #@ service_account = "argocd-repo-server"
+#@ sops_age_key_secret = data.values.application._.sopsAgeKeySecretName
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: #@ sops_age_key_secret
+type: Opaque
+stringData:
+  key: NOTHING HERE, SET IT MANUALLY
 
 #! The following overlay is used to add the argocd-vault-plugin to ArgoCD.
 #! It is done by patching the argocd-repo-server deployment in the following way:
@@ -47,6 +57,12 @@ spec:
         - name: argocd-vault-plugin
           command: [/var/run/argocd/argocd-cmp-server]
           image: registry.access.redhat.com/ubi8
+          env:
+            - name: SOPS_AGE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: #@ sops_age_key_secret
+                  key: key
           securityContext:
             runAsNonRoot: true
             runAsUser: 999

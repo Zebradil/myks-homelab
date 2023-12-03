@@ -3,3 +3,5 @@
 #@overlay/match-child-defaults missing_ok=True
 application:
   namespace: argocd
+  _:
+    sopsAgeKeySecretName: sops-age-key
