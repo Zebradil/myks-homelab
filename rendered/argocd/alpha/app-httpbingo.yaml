@@ -16,7 +16,7 @@ spec:
   source:
     path: rendered/envs/alpha/httpbingo
     plugin:
-      name: argocd-vault-plugin-v1.0.2
+      name: argocd-vault-plugin
     repoURL: https://github.com/Zebradil/myks-homelab.git
     targetRevision: main
   syncPolicy:

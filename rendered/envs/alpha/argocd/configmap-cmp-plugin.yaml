@@ -6,7 +6,6 @@ data:
     metadata:
       name: argocd-vault-plugin
     spec:
-      version: v1.0.2
       generate:
         command:
         - bash
