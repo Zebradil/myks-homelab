@@ -98,7 +98,7 @@ spec:
         find \
           -maxdepth 1 \
           -regextype egrep \
-          -iregex '.*\.ya?ml$'
+          -iregex '.*\.ya?ml$' \
           -type f \
           -printf '---\n' \
           -exec cat {} \; \
