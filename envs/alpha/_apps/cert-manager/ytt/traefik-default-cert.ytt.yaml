@@ -1,3 +1,5 @@
+#@ load("@ytt:data", "data")
+
 #@ cert_name = "wildcard-default"
 #@ secret_name = cert_name + "-tls"
 #@ traefik_ns = "kube-system"
@@ -14,6 +16,9 @@ spec:
   dnsNames:
     -  #@ domain
     -  #@ "*." + domain
+  issuerRef:
+    name: #@ data.values.application._.defaultIssuerName
+    kind: ClusterIssuer
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: TLSStore

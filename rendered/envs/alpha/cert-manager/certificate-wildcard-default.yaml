@@ -9,4 +9,7 @@ spec:
   dnsNames:
     - zebradil.dev
     - '*.zebradil.dev'
+  issuerRef:
+    kind: ClusterIssuer
+    name: cloudflare-zerossl
   secretName: wildcard-default-tls
