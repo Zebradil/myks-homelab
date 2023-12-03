@@ -1,6 +1,7 @@
 #@data/values
 ---
 environment:
+  host: junior.zebradil.dev
   id: alpha
   applications:
     - proto: argocd
