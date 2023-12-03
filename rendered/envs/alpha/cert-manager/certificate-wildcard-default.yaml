@@ -7,8 +7,8 @@ metadata:
   namespace: kube-system
 spec:
   dnsNames:
-    - zebradil.dev
-    - '*.zebradil.dev'
+    - junior.zebradil.dev
+    - '*.junior.zebradil.dev'
   issuerRef:
     kind: ClusterIssuer
     name: cloudflare-zerossl

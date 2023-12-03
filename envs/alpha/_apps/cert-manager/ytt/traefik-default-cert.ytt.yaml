@@ -3,7 +3,7 @@
 #@ cert_name = "wildcard-default"
 #@ secret_name = cert_name + "-tls"
 #@ traefik_ns = "kube-system"
-#@ domain = "zebradil.dev"
+#@ domain = "junior.zebradil.dev"
 
 ---
 apiVersion: cert-manager.io/v1
