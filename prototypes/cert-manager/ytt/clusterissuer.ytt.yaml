@@ -1,0 +1,55 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
+
+#@ cloudflare_secret = "cloudflare-api-token"
+#@ acme_secret = "zerossl-acme-account-key"
+#@ zerossl_eab_secret = "zerossl-eab"
+
+#@ ap = data.values.application
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: #@ cloudflare_secret
+stringData:
+  token: #@ ap.cloudflare.token
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: #@ zerossl_eab_secret
+stringData:
+  secret: #@ ap.zerossl.eabKeySecret
+
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: #@ ap._.defaultIssuerName
+spec:
+  acme:
+    email: #@ ap.zerossl.email
+    #! ZeroSSL ACME server
+    server: https://acme.zerossl.com/v2/DV90
+
+    #! name of a secret used to store the ACME account private key
+    privateKeySecretRef:
+      name: #@ acme_secret
+
+    #! for each cert-manager new EAB credencials are required
+    externalAccountBinding:
+      keyID: #@ ap.zerossl.eabKeyID
+      keySecretRef:
+        name: #@ zerossl_eab_secret
+        key: secret
+      keyAlgorithm: HS256
+
+    solvers:
+      - dns01:
+          cloudflare:
+            email: #@ ap.cloudflare.email
+            apiKeySecretRef:
+              name: #@ cloudflare_secret
+              key: token

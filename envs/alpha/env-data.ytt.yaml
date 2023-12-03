@@ -5,4 +5,5 @@ environment:
   id: alpha
   applications:
     - proto: argocd
+    - proto: cert-manager
     - proto: httpbingo

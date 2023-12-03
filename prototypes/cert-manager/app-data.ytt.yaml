@@ -1,0 +1,15 @@
+#@data/values-schema
+---
+#@overlay/match-child-defaults missing_ok=True
+application:
+  zerossl:
+    email: <path:static/0.sops.yaml#zerossl_email>
+    eabKeyID: <path:static/0.sops.yaml#zerossl_eab_key_id>
+    eabKeySecret: <path:static/0.sops.yaml#zerossl_eab_secret>
+  cloudflare:
+    email: <path:static/0.sops.yaml#cloudflare_email>
+    token: <path:static/0.sops.yaml#cloudflare_api_token>
+  #! Private values are used for sharing values between rendering steps.
+  #! They are not intended to be changed directly.
+  _:
+    defaultIssuerName: cloudflare-zerossl

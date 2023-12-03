@@ -1,0 +1,10 @@
+#@data/values-schema
+#@overlay/match-child-defaults missing_ok=True
+---
+chart:
+  #! IMPORTANT: Do not change order of the keys, they must go in the right
+  #!            order to be recognized by renovate.
+  #! renovate: datasource=helm
+  name: cert-manager
+  url: https://charts.jetstack.io
+  version: v1.13.2

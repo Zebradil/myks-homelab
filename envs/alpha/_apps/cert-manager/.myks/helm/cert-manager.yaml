@@ -1,0 +1,3 @@
+ingressShim:
+  defaultIssuerName: cloudflare-zerossl
+  defaultIssuerKind: ClusterIssuer

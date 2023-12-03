@@ -1,0 +1,11 @@
+#@ load("@ytt:data", "data")
+
+#@ ap = data.values.application
+
+---
+ingressShim:
+  defaultIssuerName: #@ ap._.defaultIssuerName
+  defaultIssuerKind: "ClusterIssuer"
+#! prometheus:
+#!   servicemonitor:
+#!     enabled: true
