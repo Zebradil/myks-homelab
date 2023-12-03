@@ -4,16 +4,6 @@
 
 #@ config_map_name = "cmp-plugin"
 #@ service_account = "argocd-repo-server"
-#@ gcp_sa = data.values.application.gcpServiceAccountEmail
-
-
-#! Modify existing argocd-repo-server service account to use workload identity.
-#@overlay/match by=overlay.subset({"kind": "ServiceAccount", "metadata": {"name": service_account}})
----
-#@overlay/match-child-defaults missing_ok=True
-metadata:
-  annotations:
-    iam.gke.io/gcp-service-account: #@ gcp_sa
 
 #! The following overlay is used to add the argocd-vault-plugin to ArgoCD.
 #! It is done by patching the argocd-repo-server deployment in the following way:
