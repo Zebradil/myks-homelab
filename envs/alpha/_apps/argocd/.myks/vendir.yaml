@@ -8,5 +8,5 @@ directories:
       url: https://github.com/argoproj/argo-cd
       ref: v2.7.3
     includePaths:
-    - manifests/ha/install.yaml
-    newRootPath: manifests/ha
+    - manifests/install.yaml
+    newRootPath: manifests

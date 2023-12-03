@@ -5,16 +5,14 @@ metadata:
     a8r.io/repository: git@github.com:Zebradil/myks-homelab.git
   labels:
     app.kubernetes.io/component: redis
-    app.kubernetes.io/name: argocd-redis-ha-haproxy
+    app.kubernetes.io/name: argocd-redis
     app.kubernetes.io/part-of: argocd
-  name: argocd-redis-ha-haproxy
+  name: argocd-redis
   namespace: argocd
 spec:
   ports:
-    - name: tcp-haproxy
+    - name: tcp-redis
       port: 6379
-      protocol: TCP
-      targetPort: redis
+      targetPort: 6379
   selector:
-    app.kubernetes.io/name: argocd-redis-ha-haproxy
-  type: ClusterIP
+    app.kubernetes.io/name: argocd-redis

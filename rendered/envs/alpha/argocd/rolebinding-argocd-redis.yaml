@@ -5,14 +5,14 @@ metadata:
     a8r.io/repository: git@github.com:Zebradil/myks-homelab.git
   labels:
     app.kubernetes.io/component: redis
-    app.kubernetes.io/name: argocd-redis-ha
+    app.kubernetes.io/name: argocd-redis
     app.kubernetes.io/part-of: argocd
-  name: argocd-redis-ha
+  name: argocd-redis
   namespace: argocd
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: argocd-redis-ha
+  name: argocd-redis
 subjects:
   - kind: ServiceAccount
-    name: argocd-redis-ha
+    name: argocd-redis

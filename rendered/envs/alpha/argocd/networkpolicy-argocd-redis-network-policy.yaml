@@ -3,19 +3,10 @@ kind: NetworkPolicy
 metadata:
   annotations:
     a8r.io/repository: git@github.com:Zebradil/myks-homelab.git
-  name: argocd-redis-ha-server-network-policy
+  name: argocd-redis-network-policy
   namespace: argocd
 spec:
   egress:
-    - ports:
-        - port: 6379
-          protocol: TCP
-        - port: 26379
-          protocol: TCP
-      to:
-        - podSelector:
-            matchLabels:
-              app.kubernetes.io/name: argocd-redis-ha
     - ports:
         - port: 53
           protocol: UDP
@@ -25,18 +16,19 @@ spec:
     - from:
         - podSelector:
             matchLabels:
-              app.kubernetes.io/name: argocd-redis-ha-haproxy
+              app.kubernetes.io/name: argocd-server
         - podSelector:
             matchLabels:
-              app.kubernetes.io/name: argocd-redis-ha
+              app.kubernetes.io/name: argocd-repo-server
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: argocd-application-controller
       ports:
         - port: 6379
           protocol: TCP
-        - port: 26379
-          protocol: TCP
   podSelector:
     matchLabels:
-      app.kubernetes.io/name: argocd-redis-ha
+      app.kubernetes.io/name: argocd-redis
   policyTypes:
     - Ingress
     - Egress
