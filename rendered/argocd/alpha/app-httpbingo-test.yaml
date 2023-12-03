@@ -1,10 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: app-alpha-httpbingo
+  name: app-alpha-httpbingo-test
   namespace: argocd
   finalizers:
-  - resources-finalizer.argocd.argoproj.io
+    - resources-finalizer.argocd.argoproj.io
   annotations:
     myks.dev/environment: alpha
     app.kubernetes.io/source: git@github.com:Zebradil/myks-homelab.git
@@ -12,7 +12,7 @@ spec:
   project: env-alpha
   destination:
     name: in-cluster
-    namespace: httpbingo
+    namespace: httpbingo-test
   source:
     path: rendered/envs/alpha/httpbingo
     plugin:
@@ -24,5 +24,5 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-    - CreateNamespace=true
-    - ServerSideApply=true
+      - CreateNamespace=true
+      - ServerSideApply=true
