@@ -17,7 +17,7 @@ spec:
     path: rendered/envs/alpha/argocd
     plugin:
       name: argocd-vault-plugin-v1.0.0
-    repoURL: git@github.com:Zebradil/myks-homelab.git
+    repoURL: https://github.com/Zebradil/myks-homelab.git
     targetRevision: main
   syncPolicy:
     automated:
