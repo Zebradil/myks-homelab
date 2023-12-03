@@ -13,7 +13,7 @@ data:
         - -c
         args:
         - |-
-          export AVP_TYPE=gcpsecretmanager
+          export AVP_TYPE=sops
           find . \
             -regextype egrep \
             -iregex '.*\.(yaml|yml)' \
