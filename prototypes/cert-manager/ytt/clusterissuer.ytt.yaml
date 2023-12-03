@@ -44,7 +44,6 @@ spec:
       keySecretRef:
         name: #@ zerossl_eab_secret
         key: secret
-      keyAlgorithm: HS256
 
     solvers:
       - dns01:

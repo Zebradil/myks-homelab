@@ -8,7 +8,6 @@ spec:
   acme:
     email: <path:static/0.sops.yaml#zerossl_email>
     externalAccountBinding:
-      keyAlgorithm: HS256
       keyID: <path:static/0.sops.yaml#zerossl_eab_key_id>
       keySecretRef:
         key: secret
