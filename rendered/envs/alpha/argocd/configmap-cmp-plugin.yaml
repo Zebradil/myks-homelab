@@ -14,8 +14,9 @@ data:
         - |-
           export AVP_TYPE=sops
           find \
+            -maxdepth 1 \
             -regextype egrep \
-            -iregex '.*\.ya?ml$' -not -iregex '.*/sopssecret[^/]*$' \
+            -iregex '.*\.ya?ml$'
             -type f \
             -printf '---\n' \
             -exec cat {} \; \
