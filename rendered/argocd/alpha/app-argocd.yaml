@@ -15,7 +15,7 @@ spec:
     namespace: argocd
   source:
     path: rendered/envs/alpha/argocd
-    plugin: null
+    plugin: {}
     repoURL: https://github.com/Zebradil/myks-homelab.git
     targetRevision: main
   syncPolicy:
