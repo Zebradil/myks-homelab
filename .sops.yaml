@@ -8,8 +8,5 @@ _:
       age1yyyc0qqffmsnyleccakjkulr359rmv0x9syy3k7pf0zmlv5w94tse0rj5r
 creation_rules:
   - <<: *common
-    path_regex: secrets/.*\.ya?ml$
+    path_regex: .*\.sops\.ya?ml$
     encrypted_regex: .
-  - <<: *common
-    path_regex: envs/.*\.sops.ya?ml$
-    unencrypted_regex: "^(kind|metadata)$"
