@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    a8r.io/repository: git@github.com:Zebradil/myks-homelab.git
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: apps-alpha
+  namespace: argocd
+spec:
+  destination:
+    name: in-cluster
+    namespace: ""
+    server: ""
+  project: default
+  source:
+    path: rendered/argocd/alpha
+    repoURL: https://github.com/Zebradil/myks-homelab.git
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true

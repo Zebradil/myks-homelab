@@ -1,0 +1,27 @@
+#@ load("@ytt:data", "data")
+
+#@ d = data.values
+#! source = dict(d.argocd.app.source)
+#! source["path"] = "rendered/argocd/" + d.environment.id
+#! source["targetRevision"] = d.myks.gitRepoBranch
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: #@ "apps-" + d.environment.id
+  namespace: #@ d.argocd.namespace
+  finalizers: #@ d.argocd.app.finalizers
+spec:
+  project: default
+  destination: #@ d.argocd.app.destination
+  source:
+    path: #@ "rendered/argocd/" + d.environment.id
+    repoURL: #@ d.argocd.app.source.repoURL
+    targetRevision: #@ d.myks.gitRepoBranch
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true
