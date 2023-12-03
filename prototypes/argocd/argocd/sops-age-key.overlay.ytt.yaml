@@ -16,3 +16,8 @@ spec:
       jqPathExpressions:
         - .data.key
         - .stringData.key
+  syncPolicy:
+    syncOptions:
+      #! This is required to ensure that the secret is not changed when the
+      #! application is synced.
+      - RespectIgnoreDifferences=true

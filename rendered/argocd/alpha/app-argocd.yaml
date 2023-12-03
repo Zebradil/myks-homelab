@@ -26,6 +26,7 @@ spec:
     syncOptions:
     - CreateNamespace=true
     - ServerSideApply=true
+    - RespectIgnoreDifferences=true
   ignoreDifferences:
   - kind: Secret
     name: sops-age-key
