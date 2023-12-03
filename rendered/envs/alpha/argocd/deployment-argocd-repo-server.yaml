@@ -263,8 +263,6 @@ spec:
           volumeMounts:
             - mountPath: /custom-tools
               name: custom-tools
-      nodeSelector:
-        iam.gke.io/gke-metadata-server-enabled: "true"
       serviceAccountName: argocd-repo-server
       volumes:
         - configMap:
