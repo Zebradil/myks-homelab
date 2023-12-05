@@ -1,0 +1,9 @@
+#@data/values-schema
+---
+#@overlay/match-child-defaults missing_ok=True
+application:
+  host: ""
+  #@schema/validation min_len=1
+  image: ""
+  name: ""
+  containerPort: 80

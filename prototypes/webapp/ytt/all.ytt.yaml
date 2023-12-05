@@ -1,0 +1,67 @@
+#@ load("@ytt:data", "data")
+
+#@ a = data.values.application
+#@ e = data.values.environment
+#@ m = data.values.myks
+
+#@ name = a.name or m.context.app
+#@ host = a.host or "{}.{}".format(name, e.host)
+
+#@ pod_labels = { "app.kubernetes.io/name": name }
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: #@ name
+spec:
+  selector:
+    matchLabels: #@ pod_labels
+  template:
+    metadata:
+      labels: #@ pod_labels
+    spec:
+      containers:
+        - image: #@ a.image
+          name: #@ name
+          ports:
+            - containerPort: #@ a.containerPort
+              name: http
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+            privileged: false
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #@ name
+spec:
+  ports:
+    - name: http
+      port: 80
+  selector: #@ pod_labels
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: #@ name
+spec:
+  rules:
+    - host: #@ host
+      http:
+        paths:
+          - backend:
+              service:
+                name: #@ name
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
