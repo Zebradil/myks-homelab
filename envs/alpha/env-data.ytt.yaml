@@ -7,3 +7,5 @@ environment:
     - proto: argocd
     - proto: cert-manager
     - proto: httpbingo
+    - proto: webapp
+      name: speedtest

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    a8r.io/repository: git@github.com:Zebradil/myks-homelab.git
+  name: speedtest
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: speedtest
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: speedtest
+    spec:
+      containers:
+        - image: adolfintel/speedtest
+          name: speedtest
+          ports:
+            - containerPort: 80
+              name: http
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+            privileged: false
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
