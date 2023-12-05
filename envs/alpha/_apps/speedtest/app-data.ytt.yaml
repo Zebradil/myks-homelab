@@ -1,4 +1,4 @@
 #@data/values
 ---
 application:
-  image: adolfintel/speedtest
+  image: ghcr.io/librespeed/speedtest:latest

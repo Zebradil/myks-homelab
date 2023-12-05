@@ -14,7 +14,7 @@ spec:
         app.kubernetes.io/name: speedtest
     spec:
       containers:
-        - image: adolfintel/speedtest
+        - image: ghcr.io/librespeed/speedtest:latest
           name: speedtest
           ports:
             - containerPort: 80
