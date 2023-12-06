@@ -46,6 +46,7 @@ spec:
   ports:
     - name: http
       port: 80
+      targetPort: http
   selector: #@ pod_labels
 
 ---
