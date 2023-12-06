@@ -3,10 +3,10 @@ kind: Service
 metadata:
   annotations:
     a8r.io/repository: git@github.com:Zebradil/myks-homelab.git
-  name: speedtest
+  name: iperf
 spec:
   ports:
     - name: http
       port: 80
   selector:
-    app.kubernetes.io/name: speedtest
+    app.kubernetes.io/name: iperf

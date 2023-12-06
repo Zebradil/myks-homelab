@@ -3,15 +3,15 @@ kind: Ingress
 metadata:
   annotations:
     a8r.io/repository: git@github.com:Zebradil/myks-homelab.git
-  name: speedtest
+  name: iperf
 spec:
   rules:
-    - host: speedtest.junior.zebradil.dev
+    - host: iperf.junior.zebradil.dev
       http:
         paths:
           - backend:
               service:
-                name: speedtest
+                name: iperf
                 port:
                   name: http
             path: /

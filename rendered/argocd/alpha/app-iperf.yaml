@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: app-alpha-speedtest
+  name: app-alpha-iperf
   namespace: argocd
   finalizers:
   - resources-finalizer.argocd.argoproj.io
@@ -12,9 +12,9 @@ spec:
   project: env-alpha
   destination:
     name: in-cluster
-    namespace: speedtest
+    namespace: iperf
   source:
-    path: rendered/envs/alpha/speedtest
+    path: rendered/envs/alpha/iperf
     plugin:
       name: argocd-vault-plugin
     repoURL: https://github.com/Zebradil/myks-homelab.git

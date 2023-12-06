@@ -8,4 +8,4 @@ environment:
     - proto: cert-manager
     - proto: httpbingo
     - proto: webapp
-      name: speedtest
+      name: iperf

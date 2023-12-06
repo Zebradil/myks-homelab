@@ -1,4 +1,0 @@
-#@data/values
----
-application:
-  image: ghcr.io/librespeed/speedtest:latest

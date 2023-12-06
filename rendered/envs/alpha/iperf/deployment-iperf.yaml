@@ -3,21 +3,21 @@ kind: Deployment
 metadata:
   annotations:
     a8r.io/repository: git@github.com:Zebradil/myks-homelab.git
-  name: speedtest
+  name: iperf
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/name: speedtest
+      app.kubernetes.io/name: iperf
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: speedtest
+        app.kubernetes.io/name: iperf
     spec:
       containers:
-        - image: ghcr.io/librespeed/speedtest:latest
-          name: speedtest
+        - image: clearlinux/iperf
+          name: iperf
           ports:
-            - containerPort: 80
+            - containerPort: 5201
               name: http
           securityContext:
             allowPrivilegeEscalation: false
