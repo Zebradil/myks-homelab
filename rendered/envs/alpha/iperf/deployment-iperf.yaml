@@ -14,7 +14,9 @@ spec:
         app.kubernetes.io/name: iperf
     spec:
       containers:
-        - image: clearlinux/iperf
+        - args:
+            - -s
+          image: clearlinux/iperf
           name: iperf
           ports:
             - containerPort: 5201
