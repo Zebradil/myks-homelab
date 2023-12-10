@@ -9,3 +9,5 @@ environment:
     - proto: httpbingo
     - proto: webapp
       name: iperf
+    - proto: webapp
+      name: pacoloco

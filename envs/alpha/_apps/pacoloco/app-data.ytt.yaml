@@ -1,0 +1,7 @@
+#@data/values
+---
+application:
+  #! renovate: datasource=docker
+  image: ghcr.io/anatol/pacoloco:1.6
+  containerPort: 9129
+  #! See additional configuration in ytt/config.ytt.yaml
