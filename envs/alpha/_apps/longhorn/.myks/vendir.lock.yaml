@@ -1,0 +1,11 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - git:
+      commitTitle: 'release: v1.5.3...'
+      sha: 90b9d194f3ea23e0f3f7a156f8c9a09b599adeb2
+      tags:
+      - v1.5.3
+    path: .
+  path: ytt/longhorn
+kind: LockConfig

@@ -7,6 +7,7 @@ environment:
     - proto: argocd
     - proto: cert-manager
     - proto: httpbingo
+    - proto: longhorn
     - proto: webapp
       name: iperf
     - proto: webapp

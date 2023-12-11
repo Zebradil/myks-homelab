@@ -1,0 +1,14 @@
+#@ load("@ytt:data", "data")
+---
+apiVersion: vendir.k14s.io/v1alpha1
+kind: Config
+directories:
+  - path: ytt/longhorn
+    contents:
+      - path: .
+        git:
+          url: #@ data.values.application.url
+          ref: #@ data.values.application.version
+        includePaths:
+          - deploy/longhorn.yaml
+        newRootPath: deploy

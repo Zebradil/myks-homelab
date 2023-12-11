@@ -1,0 +1,13 @@
+apiVersion: v1
+data:
+  default-setting.yaml: ""
+kind: ConfigMap
+metadata:
+  annotations:
+    a8r.io/repository: git@github.com:Zebradil/myks-homelab.git
+  labels:
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/version: v1.5.3
+  name: longhorn-default-setting
+  namespace: longhorn-system

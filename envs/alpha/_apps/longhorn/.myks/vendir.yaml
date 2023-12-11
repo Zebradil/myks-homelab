@@ -1,0 +1,12 @@
+apiVersion: vendir.k14s.io/v1alpha1
+kind: Config
+directories:
+- path: ytt/longhorn
+  contents:
+  - path: .
+    git:
+      url: https://github.com/longhorn/longhorn
+      ref: v1.5.3
+    includePaths:
+    - deploy/longhorn.yaml
+    newRootPath: deploy
