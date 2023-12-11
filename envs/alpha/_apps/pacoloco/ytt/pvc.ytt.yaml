@@ -9,11 +9,11 @@ kind: PersistentVolumeClaim
 metadata:
   name: #@ pvc_name
 spec:
-  capacity:
-    storage: 20Gi
   accessModes:
     - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Delete
+  resources:
+    requests:
+      storage: 20Gi
   storageClassName: local-path
 
 #@overlay/match by=overlay.subset({"kind":"Deployment"})
