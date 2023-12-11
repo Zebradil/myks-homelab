@@ -1,0 +1,35 @@
+#@ load("@ytt:overlay", "overlay")
+
+#@ pv_name = "cache"
+#@ cache_path = "/var/cache/pacoloco"
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: #@ pv_name
+spec:
+  capacity:
+    storage: 20Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: local-path
+
+#@overlay/match by=overlay.subset({"kind":"Deployment"})
+---
+spec:
+  template:
+    spec:
+      containers:
+        #@overlay/match by="name"
+        - name: pacoloco
+          #@overlay/match missing_ok=True
+          volumeMounts:
+            - name: #@ pv_name
+              mountPath: #@ cache_path
+      #@overlay/match missing_ok=True
+      volumes:
+        - name: #@ pv_name
+          persistentVolumeClaim:
+            claimName: #@ pv_name

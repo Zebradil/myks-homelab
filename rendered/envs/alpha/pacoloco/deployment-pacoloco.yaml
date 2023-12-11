@@ -29,7 +29,12 @@ spec:
             - mountPath: /etc
               name: config
               readOnly: true
+            - mountPath: /var/cache/pacoloco
+              name: cache
       volumes:
         - configMap:
             name: config
           name: config
+        - name: cache
+          persistentVolumeClaim:
+            claimName: cache
