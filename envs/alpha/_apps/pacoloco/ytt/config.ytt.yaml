@@ -34,7 +34,8 @@ spec:
           #@overlay/match missing_ok=True
           volumeMounts:
             - name: #@ cm_name
-              mountPath: /etc
+              mountPath: #@ "/etc/" + pacoloco_config_name
+              subPath: #@ pacoloco_config_name
               readOnly: true
       #@overlay/match missing_ok=True
       volumes:

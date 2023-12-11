@@ -26,9 +26,10 @@ spec:
                 - all
             privileged: false
           volumeMounts:
-            - mountPath: /etc
+            - mountPath: /etc/pacoloco.yaml
               name: config
               readOnly: true
+              subPath: pacoloco.yaml
             - mountPath: /var/cache/pacoloco
               name: cache
       volumes:
