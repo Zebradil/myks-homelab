@@ -1,13 +1,13 @@
 #@ load("@ytt:overlay", "overlay")
 
-#@ pv_name = "cache"
+#@ pvc_name = "cache"
 #@ cache_path = "/var/cache/pacoloco"
 
 ---
 apiVersion: v1
-kind: PersistentVolume
+kind: PersistentVolumeClaim
 metadata:
-  name: #@ pv_name
+  name: #@ pvc_name
 spec:
   capacity:
     storage: 20Gi
@@ -26,10 +26,10 @@ spec:
         - name: pacoloco
           #@overlay/match missing_ok=True
           volumeMounts:
-            - name: #@ pv_name
+            - name: #@ pvc_name
               mountPath: #@ cache_path
       #@overlay/match missing_ok=True
       volumes:
-        - name: #@ pv_name
+        - name: #@ pvc_name
           persistentVolumeClaim:
-            claimName: #@ pv_name
+            claimName: #@ pvc_name
