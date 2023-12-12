@@ -5,9 +5,9 @@ environment:
   id: alpha
   applications:
     - proto: argocd
-    - proto: cert-manager
+    #! - proto: cert-manager
     - proto: httpbingo
-    - proto: webapp
-      name: iperf
-    - proto: webapp
-      name: pacoloco
+    #! - proto: webapp
+    #!   name: iperf
+    #! - proto: webapp
+    #!   name: pacoloco
