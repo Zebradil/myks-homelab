@@ -15,6 +15,9 @@ service:
   enabled: false
 nodeSelector:
   kubernetes.io/hostname: junior
+updateStrategy:
+  rollingUpdate:
+    maxUnavailable: 1
 securityContext:
   capabilities:
     drop:
@@ -24,7 +27,7 @@ securityContext:
   runAsNonRoot: false
   runAsUser: 0
 additionalArguments:
-- --providers.kubernetesingress.ingressendpoint.ip=junior
+- --providers.kubernetesingress.ingressendpoint.hostname=junior
 logs:
   general:
     level: INFO

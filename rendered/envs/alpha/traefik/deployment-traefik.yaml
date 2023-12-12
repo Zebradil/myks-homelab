@@ -20,7 +20,7 @@ spec:
   strategy:
     rollingUpdate:
       maxSurge: 1
-      maxUnavailable: 0
+      maxUnavailable: 1
     type: RollingUpdate
   template:
     metadata:
@@ -53,7 +53,7 @@ spec:
             - --accesslog=true
             - --accesslog.fields.defaultmode=keep
             - --accesslog.fields.headers.defaultmode=drop
-            - --providers.kubernetesingress.ingressendpoint.ip=junior
+            - --providers.kubernetesingress.ingressendpoint.hostname=junior
           env:
             - name: POD_NAME
               valueFrom:

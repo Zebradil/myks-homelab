@@ -24,6 +24,10 @@ service:
 nodeSelector:
   kubernetes.io/hostname: #@ data.values.application.nodeSelector.hostname
 
+updateStrategy:
+  rollingUpdate:
+    maxUnavailable: 1
+
 securityContext:
   capabilities:
     drop: [ALL]
