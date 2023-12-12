@@ -4,7 +4,7 @@ metadata:
   name: app-alpha-traefik
   namespace: argocd
   finalizers:
-    - resources-finalizer.argocd.argoproj.io
+  - resources-finalizer.argocd.argoproj.io
   annotations:
     myks.dev/environment: alpha
     app.kubernetes.io/source: git@github.com:Zebradil/myks-homelab.git
@@ -22,7 +22,7 @@ spec:
   syncPolicy:
     automated:
       prune: true
-      selfHeal: false
+      selfHeal: true
     syncOptions:
-      - CreateNamespace=true
-      - ServerSideApply=true
+    - CreateNamespace=true
+    - ServerSideApply=true
