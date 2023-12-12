@@ -1,0 +1,10 @@
+#@data/values-schema
+---
+#@overlay/match-child-defaults missing_ok=True
+application:
+  #! At the moment, the default traefik version is 2, but we want to use version 3.
+  #! TODO: Remove this when traefik 3 is the default.
+  #! renovate: datasource=docker depName=docker.io/traefik
+  version: v3.0
+  nodeSelector:
+    hostname: junior

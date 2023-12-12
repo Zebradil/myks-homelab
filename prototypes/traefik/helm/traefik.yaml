@@ -1,0 +1,33 @@
+#@ load("@ytt:data", "data")
+---
+image:
+  tag: #@ data.values.application.version
+
+hostNetwork: true
+dnsPolicy: ClusterFirstWithHostNet
+
+ports:
+  metrics:
+    #! When using hostNetwork, use another port to avoid conflict with node exporter:
+    #! https://github.com/prometheus/prometheus/wiki/Default-port-allocations
+    port: 19100
+  web:
+    port: 80
+    redirectTo:
+      port: websecure
+  websecure:
+    port: 443
+
+service:
+  enabled: false
+
+nodeSelector:
+  kubernetes.io/hostname: #@ data.values.application.nodeSelector.hostname
+
+logs:
+  general:
+    level: INFO
+  access:
+    enabled: true
+
+globalArguments: []
