@@ -108,7 +108,7 @@ spec:
               drop:
                 - ALL
             readOnlyRootFilesystem: true
-            runAsRoot: true
+            runAsNonRoot: false
             runAsUser: 0
           volumeMounts:
             - mountPath: /data
