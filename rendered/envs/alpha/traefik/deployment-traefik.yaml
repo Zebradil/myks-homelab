@@ -53,6 +53,7 @@ spec:
             - --accesslog=true
             - --accesslog.fields.defaultmode=keep
             - --accesslog.fields.headers.defaultmode=drop
+            - --providers.kubernetesingress.ingressendpoint.ip=junior
           env:
             - name: POD_NAME
               valueFrom:

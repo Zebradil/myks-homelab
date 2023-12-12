@@ -23,6 +23,8 @@ securityContext:
     - NET_BIND_SERVICE
   runAsNonRoot: false
   runAsUser: 0
+additionalArguments:
+- --providers.kubernetesingress.ingressendpoint.ip=junior
 logs:
   general:
     level: INFO
