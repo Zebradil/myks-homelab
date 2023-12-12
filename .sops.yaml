@@ -5,7 +5,8 @@ _:
     encryption_method: age
     age: >-
       age13hxx3dgpjcp0v2z5xx07nwm4zvdy78rc9xra6lujzzrl7c657ekq2vgwnk,
-      age1yyyc0qqffmsnyleccakjkulr359rmv0x9syy3k7pf0zmlv5w94tse0rj5r
+      age188h98rs643kglmetvqt3hhnllw0ga45jg94p8xar2qe0c987k59q9qxv3v,
+      age13vh8ef8lgqfgr7aljd2y9c82syxlf7u35lxwrr9yxlhrhjdxfptsc9uk7v
 creation_rules:
   - <<: *common
     path_regex: .*\.sops\.ya?ml$
