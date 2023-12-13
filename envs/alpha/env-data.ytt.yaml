@@ -10,5 +10,5 @@ environment:
     - proto: traefik
     #! - proto: webapp
     #!   name: iperf
-    #! - proto: webapp
-    #!   name: pacoloco
+    - proto: webapp
+      name: pacoloco

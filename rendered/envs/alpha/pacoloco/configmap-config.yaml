@@ -1,0 +1,15 @@
+apiVersion: v1
+data:
+  pacoloco.yaml: |
+    download_timeout: 600
+    purge_files_after: 2592000
+    repos:
+      archlinux:
+        urls:
+        - http://mirror.lty.me/archlinux
+        - http://mirrors.kernel.org/archlinux
+kind: ConfigMap
+metadata:
+  annotations:
+    a8r.io/repository: git@github.com:Zebradil/myks-homelab.git
+  name: config
