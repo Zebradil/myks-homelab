@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: app-alpha-cert-manager
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  annotations:
+    myks.dev/environment: alpha
+    app.kubernetes.io/source: git@github.com:Zebradil/myks-homelab.git
+spec:
+  project: env-alpha
+  destination:
+    name: in-cluster
+    namespace: cert-manager
+  source:
+    path: rendered/envs/alpha/cert-manager
+    plugin:
+      name: argocd-vault-plugin
+    repoURL: https://github.com/Zebradil/myks-homelab.git
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true

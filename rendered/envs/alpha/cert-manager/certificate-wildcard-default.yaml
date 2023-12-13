@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  annotations:
+    a8r.io/repository: git@github.com:Zebradil/myks-homelab.git
+  name: wildcard-default
+  namespace: kube-system
+spec:
+  dnsNames:
+    - junior.zebradil.dev
+    - '*.junior.zebradil.dev'
+  issuerRef:
+    kind: ClusterIssuer
+    name: cloudflare-zerossl
+  secretName: wildcard-default-tls
