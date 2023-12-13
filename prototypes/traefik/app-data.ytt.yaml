@@ -8,3 +8,10 @@ application:
   version: v3.0
   nodeSelector:
     hostname: junior
+  tls:
+    #! Base domain for the cluster. This is used to generate the wildcard certificate.
+    #@schema/validation min_len=1
+    baseDomain: ""
+    #! Cert-Manager issuer name for the wildcard certificate.
+    #@schema/validation min_len=1
+    issuer: ""

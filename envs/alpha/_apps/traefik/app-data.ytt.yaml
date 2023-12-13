@@ -1,0 +1,6 @@
+#@data/values
+---
+application:
+  tls:
+    baseDomain: junior.zebradil.dev
+    issuer: cloudflare-zerossl

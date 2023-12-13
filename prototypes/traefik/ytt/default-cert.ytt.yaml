@@ -2,29 +2,26 @@
 
 #@ cert_name = "wildcard-default"
 #@ secret_name = cert_name + "-tls"
-#@ traefik_ns = "kube-system"
-#@ domain = "junior.zebradil.dev"
+#@ domain = data.values.application.tls.baseDomain
 
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: #@ cert_name
-  namespace: #@ traefik_ns
 spec:
   secretName: #@ secret_name
   dnsNames:
     -  #@ domain
     -  #@ "*." + domain
   issuerRef:
-    name: #@ data.values.application._.defaultIssuerName
+    name: #@ data.values.application.tls.issuer
     kind: ClusterIssuer
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: TLSStore
 metadata:
   name: default
-  namespace: #@ traefik_ns
 spec:
   defaultCertificate:
     secretName: #@ secret_name
