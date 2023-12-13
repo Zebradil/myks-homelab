@@ -50,7 +50,7 @@ spec:
               ARTEFACT="argocd-vault-plugin_${AVP_VERSION#v}_linux_amd64"
               URL="https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/$AVP_VERSION/$ARTEFACT"
               curl --location --output "$BIN" "$URL" \
-                && chmod 0700 "$BIN"
+                && chmod 0755 "$BIN"
           volumeMounts:
             - name: custom-tools
               mountPath: /custom-tools
