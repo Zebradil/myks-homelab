@@ -42,14 +42,15 @@ spec:
           image: registry.access.redhat.com/ubi8
           env:
             - name: AVP_VERSION
-              value: 1.14.0
-          command: [sh, -c]
+              value: #@ data.values.application.argocdVaultPlugin.version
+          command: [bash, -c]
           args:
-            - '
-              curl https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v$(AVP_VERSION)/argocd-vault-plugin_$(AVP_VERSION)_linux_amd64
-                --location
-                --output /custom-tools/argocd-vault-plugin
-              && chmod 0755 /custom-tools/argocd-vault-plugin'
+            - |
+              BIN=/custom-tools/argocd-vault-plugin
+              ARTEFACT="argocd-vault-plugin_${AVP_VERSION#v}_linux_amd64"
+              URL="https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/$AVP_VERSION/$ARTEFACT"
+              curl --location --output "$BIN" "$URL" \
+                && chmod 0700 "$BIN"
           volumeMounts:
             - name: custom-tools
               mountPath: /custom-tools

@@ -3,5 +3,8 @@
 #@overlay/match-child-defaults missing_ok=True
 application:
   namespace: argocd
+  argocdVaultPlugin:
+    #! renovate: datasource=github-releases depName=argoproj-labs/argocd-vault-plugin
+    version: v1.14.0
   _:
     sopsAgeKeySecretName: sops-age-key
