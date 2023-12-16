@@ -1,0 +1,14 @@
+#@ load("secrets.star", "sec")
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+  name: synology-iscsi-retain-v1
+allowVolumeExpansion: true
+provisioner: csi.san.synology.com
+reclaimPolicy: Retain
+parameters:
+  dsm: #@ sec.sops("dsm-1", "host")
+  location: /volume3
