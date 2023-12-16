@@ -7,5 +7,5 @@ application:
     - host: #@ sec("dsm-1", "host")
       port: 5001
       https: true
-      username: #@ sec("dsm-1", "username")
       password: #@ sec("dsm-1", "password")
+      username: #@ sec("dsm-1", "username")
