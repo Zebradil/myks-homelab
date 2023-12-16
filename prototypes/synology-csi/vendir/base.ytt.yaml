@@ -1,0 +1,16 @@
+#@ load("@ytt:data", "data")
+---
+apiVersion: vendir.k14s.io/v1alpha1
+kind: Config
+directories:
+  - path: ytt/synologi-csi
+    contents:
+      - path: .
+        git:
+          url: #@ data.values.application.url
+          ref: #@ data.values.application.version
+        includePaths:
+          - deploy/kubernetes/v1.20/*
+          #! To include snapshotter
+          #!- deploy/kubernetes/v1.20/**/*
+        newRootPath: deploy/kubernetes/v1.20

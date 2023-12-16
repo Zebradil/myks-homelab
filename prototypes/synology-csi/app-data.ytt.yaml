@@ -1,0 +1,10 @@
+#@data/values-schema
+---
+#@overlay/match-child-defaults missing_ok=True
+application:
+  clients:
+    - host: ""
+      port: 5001
+      https: true
+      username: ""
+      password: ""

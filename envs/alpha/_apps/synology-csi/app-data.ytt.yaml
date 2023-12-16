@@ -1,0 +1,11 @@
+#@data/values
+
+#@ sec = lambda name, key: "<path:static/{}.sops.yaml#{}>".format(name, key)
+---
+application:
+  clients:
+    - host: #@ sec("dsm-1", "host")
+      port: 5001
+      https: true
+      username: #@ sec("dsm-1", "username")
+      password: #@ sec("dsm-1", "password")

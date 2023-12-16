@@ -1,0 +1,11 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - git:
+      commitTitle: Merge remote-tracking branch 'upstream/main'...
+      sha: 26e76bd0cd01efb263cf32befbfd760400d0e620
+      tags:
+      - synology-csi-0.9.4
+    path: .
+  path: ytt/synologi-csi
+kind: LockConfig
