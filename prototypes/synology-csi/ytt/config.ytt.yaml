@@ -1,8 +1,9 @@
 #@ load("@ytt:data", "data")
+#@ load("@ytt:yaml", "yaml")
 ---
 apiVersion: v1
 kind: Secret
 metadata:
   name: client-info-secret
 stringData:
-  client-info.yml: #@ {"clients": data.values.application.clients}
+  client-info.yml: #@ yaml.encode({"clients": data.values.application.clients})
