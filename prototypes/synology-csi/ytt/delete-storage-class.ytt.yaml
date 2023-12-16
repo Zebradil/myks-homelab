@@ -1,0 +1,8 @@
+#! Delete the default StorageClass to avoid confusion.
+#! Instead, new StorageClasses must be created, tailored to specific environments.
+
+#@ load("@ytt:overlay", "overlay")
+
+#@overlay/match by=overlay.subset({"kind": "StorageClass", "metadata": {"name": "synology-iscsi"}})
+#@overlay/delete
+---
