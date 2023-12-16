@@ -26,3 +26,8 @@ spec:
     syncOptions:
     - CreateNamespace=true
     - ServerSideApply=true
+  ignoreDifferences:
+  - group: storage.k8s.io
+    kind: CSIDriver
+    jqPathExpressions:
+    - .spec.seLinuxMount

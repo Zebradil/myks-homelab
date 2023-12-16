@@ -1,0 +1,13 @@
+#! This file contains a workaround for the ArgoCD issue: https://github.com/argoproj/argo-cd/issues/13585
+
+#@ load("@ytt:overlay", "overlay")
+
+#@overlay/match by=overlay.subset({"kind": "Application"})
+---
+#@overlay/match-child-defaults missing_ok=True
+spec:
+  ignoreDifferences:
+    - group: storage.k8s.io
+      kind: CSIDriver
+      jqPathExpressions:
+        - .spec.seLinuxMount
