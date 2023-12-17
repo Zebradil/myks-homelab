@@ -3,8 +3,11 @@ image:
 hostNetwork: true
 dnsPolicy: ClusterFirstWithHostNet
 ports:
+  traefik:
+    hostIP: localhost
   metrics:
     port: 19100
+    hostIP: localhost
   web:
     port: 80
     redirectTo:
