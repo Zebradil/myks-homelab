@@ -6,5 +6,5 @@ application:
   #!          When changed, renovate won't be able to detect the new version.
   #!          See renovate.json for more details.
   #! renovate: datasource=git-tags
-  url: https://github.com/zebernst/synology-csi-talos
+  url: https://github.com/SynologyOpenSource/synology-csi
   version: v1.1.3

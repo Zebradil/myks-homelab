@@ -51,7 +51,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
-          image: ghcr.io/zebernst/synology-csi:v1.1.3
+          image: synology/synology-csi:v1.1.3
           imagePullPolicy: IfNotPresent
           name: csi-plugin
           securityContext:
@@ -70,7 +70,6 @@ spec:
             - mountPath: /dev
               name: device-dir
       hostNetwork: true
-      hostPID: true
       serviceAccount: csi-node-sa
       volumes:
         - hostPath:

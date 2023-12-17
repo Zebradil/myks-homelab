@@ -3,6 +3,6 @@
 
 #@ load("@ytt:overlay", "overlay")
 
-#@overlay/match by=overlay.subset({"kind": "StorageClass", "metadata": {"name": "synology-iscsi"}})
+#@overlay/match by=overlay.subset({"kind": "StorageClass", "metadata": {"name": "synology-iscsi-storage"}})
 #@overlay/delete
 ---
