@@ -5,9 +5,11 @@ metadata:
   annotations:
     a8r.io/repository: git@github.com:Zebradil/myks-homelab.git
     storageclass.kubernetes.io/is-default-class: "true"
-  name: synology-iscsi-retain-v1
+  name: synology-iscsi-btrfs-retain-v1
 parameters:
   dsm: <path:static/dsm-1.sops.yaml#host>
+  formatOptions: --nodiscard
+  fsType: btrfs
   location: /volume3
 provisioner: csi.san.synology.com
 reclaimPolicy: Retain
