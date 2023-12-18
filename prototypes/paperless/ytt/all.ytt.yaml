@@ -1,0 +1,75 @@
+#@ load("@ytt:data", "data")
+
+#@ ap = data.values.application
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paperless
+spec:
+  selector:
+    matchLabels:
+      app: paperless
+  serviceName: paperless
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: paperless
+    spec:
+      containers:
+        - name: paperless
+          image: #@ ap.paperless.image
+          command:
+            - /bin/sh
+            - -c
+            - tail -f /dev/null
+          env:
+            - name: PAPERLESS_DBPASS
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql
+                  key: password
+            #@ for/end name in ap.paperless.env:
+            - name: #@ name
+              value: #@ ap.paperless.env[name]
+          ports:
+            - containerPort: 8000
+              name: http
+          volumeMounts:
+            - name: data
+              mountPath: /usr/src/paperless/data
+            - name: media
+              mountPath: /usr/src/paperless/media
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: data
+        - name: media
+          persistentVolumeClaim:
+            claimName: media
+
+#! Manually create PVCs for media and data to ensure they are not duplicated by StatefulSet.
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: #@ ap.paperless.storage.data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: media
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: #@ ap.paperless.storage.media

@@ -1,9 +1,34 @@
 #@data/values-schema
+
+#@ databaseName = "paperless"
+#@ databaseUser = "paperless"
 ---
 #@overlay/match-child-defaults missing_ok=True
 application:
+  paperless:
+    #! renovate: datasource=docker
+    image: ghcr.io/paperless-ngx/paperless-ngx:1.16.5
+    storage:
+      data: 1Gi
+      media: 5Gi
+    env:
+      PAPERLESS_DBHOST: postgresql
+      PAPERLESS_DBUSER: #@ databaseUser
+
+      PAPERLESS_REDIS: redis://redis:6379
+
+      PAPERLESS_OCR_LANGUAGE: deu+eng+rus
+      PAPERLESS_OCR_LANGUAGES: deu eng rus
+      #! The default is "pdfa", which may cause removing a form text
+      PAPERLESS_OCR_OUTPUT_TYPE: pdf
+      PAPERLESS_OCR_ROTATE_PAGES_THRESHOLD: 4
+
+      #@schema/validation min_len=1
+      PAPERLESS_SECRET_KEY: ""
+      PAPERLESS_TIME_ZONE: Europe/Berlin
+      PAPERLESS_URL: http://localhost
   postgresql:
-    database: paperless
+    database: #@ databaseName
     #@schema/validation min_len=1
     password: ""
-    username: paperless
+    username: #@ databaseUser

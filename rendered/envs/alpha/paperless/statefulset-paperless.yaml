@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  annotations:
+    a8r.io/repository: git@github.com:Zebradil/myks-homelab.git
+  name: paperless
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: paperless
+  serviceName: paperless
+  template:
+    metadata:
+      labels:
+        app: paperless
+    spec:
+      containers:
+        - command:
+            - /bin/sh
+            - -c
+            - tail -f /dev/null
+          env:
+            - name: PAPERLESS_DBPASS
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: postgresql
+            - name: PAPERLESS_DBHOST
+              value: postgresql
+            - name: PAPERLESS_DBUSER
+              value: paperless
+            - name: PAPERLESS_REDIS
+              value: redis://redis:6379
+            - name: PAPERLESS_OCR_LANGUAGE
+              value: deu+eng+rus
+            - name: PAPERLESS_OCR_LANGUAGES
+              value: deu eng rus
+            - name: PAPERLESS_OCR_OUTPUT_TYPE
+              value: pdf
+            - name: PAPERLESS_OCR_ROTATE_PAGES_THRESHOLD
+              value: 4
+            - name: PAPERLESS_SECRET_KEY
+              value: <path:static/0.sops.yaml#sessionSecretKey>
+            - name: PAPERLESS_TIME_ZONE
+              value: Europe/Berlin
+            - name: PAPERLESS_URL
+              value: http://localhost
+          image: ghcr.io/paperless-ngx/paperless-ngx:1.16.5
+          name: paperless
+          ports:
+            - containerPort: 8000
+              name: http
+          volumeMounts:
+            - mountPath: /usr/src/paperless/data
+              name: data
+            - mountPath: /usr/src/paperless/media
+              name: media
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: data
+        - name: media
+          persistentVolumeClaim:
+            claimName: media

@@ -3,5 +3,8 @@
 #@data/values
 ---
 application:
+  paperless:
+    env:
+      PAPERLESS_SECRET_KEY: #@ sec.sops("0", "sessionSecretKey")
   postgresql:
     password: #@ sec.sops("0", "databasePassword")
