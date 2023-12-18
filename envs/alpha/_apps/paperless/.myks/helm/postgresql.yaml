@@ -1,6 +1,7 @@
 auth:
   database: paperless
   password: <path:static/0.sops.yaml#databasePassword>
+  postgresPassword: <path:static/0.sops.yaml#databasePassword>
   username: paperless
 image:
   tag: 13.13.0

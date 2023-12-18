@@ -5,6 +5,7 @@
 auth:
   database: #@ pg.database
   password: #@ pg.password
+  postgresPassword: #@ pg.password
   username: #@ pg.username
 image:
   tag: 13.13.0
