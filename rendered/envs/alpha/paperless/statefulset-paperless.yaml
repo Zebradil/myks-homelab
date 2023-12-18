@@ -39,7 +39,7 @@ spec:
             - name: PAPERLESS_OCR_OUTPUT_TYPE
               value: pdf
             - name: PAPERLESS_OCR_ROTATE_PAGES_THRESHOLD
-              value: 4
+              value: "4"
             - name: PAPERLESS_SECRET_KEY
               value: <path:static/0.sops.yaml#sessionSecretKey>
             - name: PAPERLESS_TIME_ZONE
