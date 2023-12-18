@@ -32,6 +32,12 @@ spec:
             #@ for/end name in ap.paperless.env:
             - name: #@ name
               value: #@ ap.paperless.env[name]
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
           ports:
             - containerPort: 8000
               name: http
