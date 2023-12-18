@@ -19,10 +19,6 @@ spec:
       containers:
         - name: paperless
           image: #@ ap.paperless.image
-          command:
-            - /bin/sh
-            - -c
-            - tail -f /dev/null
           env:
             - name: PAPERLESS_DBPASS
               valueFrom:

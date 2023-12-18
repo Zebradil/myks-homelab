@@ -14,11 +14,7 @@ spec:
         app: paperless
     spec:
       containers:
-        - command:
-            - /bin/sh
-            - -c
-            - tail -f /dev/null
-          env:
+        - env:
             - name: PAPERLESS_DBPASS
               valueFrom:
                 secretKeyRef:
