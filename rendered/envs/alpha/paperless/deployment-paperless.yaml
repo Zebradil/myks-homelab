@@ -1,15 +1,13 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   annotations:
     a8r.io/repository: git@github.com:Zebradil/myks-homelab.git
   name: paperless
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: paperless
-  serviceName: paperless
   template:
     metadata:
       labels:

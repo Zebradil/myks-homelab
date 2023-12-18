@@ -4,15 +4,13 @@
 
 ---
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: paperless
 spec:
   selector:
     matchLabels:
       app: paperless
-  serviceName: paperless
-  replicas: 1
   template:
     metadata:
       labels:
@@ -50,7 +48,6 @@ spec:
           persistentVolumeClaim:
             claimName: media
 
-#! Manually create PVCs for media and data to ensure they are not duplicated by StatefulSet.
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
