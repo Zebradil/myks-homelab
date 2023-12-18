@@ -45,11 +45,7 @@ spec:
                 topologyKey: kubernetes.io/hostname
               weight: 1
       containers:
-        - command:
-            - /bin/sh
-            - -c
-            - tail -f /dev/null
-          env:
+        - env:
             - name: BITNAMI_DEBUG
               value: "false"
             - name: POSTGRESQL_PORT_NUMBER
@@ -90,6 +86,17 @@ spec:
               value: pgaudit
           image: docker.io/bitnami/postgresql:13.13.0
           imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - exec pg_isready -U "paperless" -d "dbname=paperless" -h 127.0.0.1 -p 5432
+            failureThreshold: 6
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
           name: postgresql
           ports:
             - containerPort: 5432

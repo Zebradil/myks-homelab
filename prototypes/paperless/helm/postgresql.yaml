@@ -9,11 +9,5 @@ auth:
 image:
   tag: 13.13.0
 primary:
-  command:
-    - /bin/sh
-    - -c
-    - tail -f /dev/null
-  livenessProbe:
-    enabled: false
   persistence:
     size: 1Gi
