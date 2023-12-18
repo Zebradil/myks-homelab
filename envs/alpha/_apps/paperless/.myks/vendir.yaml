@@ -1,0 +1,19 @@
+apiVersion: vendir.k14s.io/v1alpha1
+kind: Config
+directories:
+- path: charts/postgresql
+  contents:
+  - path: .
+    helmChart:
+      name: postgresql
+      version: 13.2.24
+      repository:
+        url: oci://registry-1.docker.io/bitnamicharts
+- path: charts/redis
+  contents:
+  - path: .
+    helmChart:
+      name: redis
+      version: 18.5.0
+      repository:
+        url: oci://registry-1.docker.io/bitnamicharts

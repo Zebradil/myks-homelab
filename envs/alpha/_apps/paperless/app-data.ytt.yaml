@@ -1,0 +1,7 @@
+#@ load("secrets.star", "sec")
+
+#@data/values
+---
+application:
+  postgresql:
+    password: #@ sec.sops("0", "databasePassword")

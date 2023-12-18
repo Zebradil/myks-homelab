@@ -1,0 +1,15 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - helmChart:
+      appVersion: 16.1.0
+      version: 13.2.24
+    path: .
+  path: charts/postgresql
+- contents:
+  - helmChart:
+      appVersion: 7.2.3
+      version: 18.5.0
+    path: .
+  path: charts/redis
+kind: LockConfig
