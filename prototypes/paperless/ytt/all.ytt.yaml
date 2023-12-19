@@ -20,6 +20,10 @@ spec:
       labels:
         app: #@ name
     spec:
+      #! With enableServiceLinks set to true, Kubernetes shadows PAPERLESS_PORT with a service link.
+      #! This breaks the paperless container, which expects PAPERLESS_PORT to be an integer.
+      #! See https://github.com/paperless-ngx/paperless-ngx/issues/264
+      enableServiceLinks: false
       containers:
         - name: #@ name
           image: #@ ap.paperless.image
@@ -40,10 +44,6 @@ spec:
           ports:
             - containerPort: 8000
               name: http
-          #! With enableServiceLinks set to true, Kubernetes shadows PAPERLESS_PORT with a service link.
-          #! This breaks the paperless container, which expects PAPERLESS_PORT to be an integer.
-          #! See https://github.com/paperless-ngx/paperless-ngx/issues/264
-          enableServiceLinks: false
           volumeMounts:
             - name: data
               mountPath: /usr/src/paperless/data
