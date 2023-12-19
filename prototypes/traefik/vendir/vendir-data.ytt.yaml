@@ -11,7 +11,3 @@ application:
       name: traefik
       url: https://traefik.github.io/charts
       version: v26.0.0
-    oauth2Proxy:
-      name: oauth2-proxy
-      url: https://oauth2-proxy.github.io/manifests
-      version: 6.23.1
