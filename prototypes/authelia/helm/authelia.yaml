@@ -55,3 +55,5 @@ secret:
 #! For the "file" authentication backend.
 persistence:
   enabled: true
+  #! Minimum size with synology-csi is 1Gi.
+  size: 1Gi

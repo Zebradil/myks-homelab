@@ -38,3 +38,4 @@ secret:
   existingSecret: authelia
 persistence:
   enabled: true
+  size: 1Gi
