@@ -10,7 +10,9 @@ spec:
       match: Host(`httpbingo.junior.zebradil.dev`)
       middlewares:
         - name: auth-errors
+          namespace: traefik
         - name: oauth2-proxy
+          namespace: traefik
       services:
         - name: httpbingo
           port: http
