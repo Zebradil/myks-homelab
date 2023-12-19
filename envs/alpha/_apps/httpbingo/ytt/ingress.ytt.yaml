@@ -13,11 +13,6 @@ spec:
   routes:
     - match: #@ "Host(`{}`)".format(host)
       kind: Rule
-      middlewares:
-        - name: auth-errors
-          namespace: traefik
-        - name: oauth2-proxy
-          namespace: traefik
       services:
         - name: #@ name
           port: http
