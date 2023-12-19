@@ -36,3 +36,5 @@ configMap:
       enabled: false
 secret:
   existingSecret: authelia
+persistence:
+  enabled: true

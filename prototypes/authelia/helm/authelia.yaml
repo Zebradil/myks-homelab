@@ -51,3 +51,7 @@ configMap:
 
 secret:
   existingSecret: authelia
+
+#! For the "file" authentication backend.
+persistence:
+  enabled: true
