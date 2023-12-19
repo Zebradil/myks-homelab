@@ -18,7 +18,7 @@ metadata:
   name: oauth2-proxy
 spec:
   forwardAuth:
-    address: http://oauth2-proxy/oauth2/auth
+    address: http://oauth2-proxy
     authResponseHeaders:
       - X-Auth-Request-User
       - Set-Cookie
