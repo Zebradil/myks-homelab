@@ -6,4 +6,10 @@ directories:
       version: 26.0.0
     path: .
   path: charts/traefik
+- contents:
+  - helmChart:
+      appVersion: 7.5.1
+      version: 6.23.1
+    path: .
+  path: charts/oauth2-proxy
 kind: LockConfig

@@ -9,3 +9,11 @@ directories:
       version: v26.0.0
       repository:
         url: https://traefik.github.io/charts
+- path: charts/oauth2-proxy
+  contents:
+  - path: .
+    helmChart:
+      name: oauth2-proxy
+      version: 6.23.1
+      repository:
+        url: https://oauth2-proxy.github.io/manifests

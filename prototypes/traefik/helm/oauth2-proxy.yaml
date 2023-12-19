@@ -1,0 +1,27 @@
+#@ load("@ytt:data", "data")
+
+#@ ap = data.values.application.oauth2Proxy
+#@ domain = data.values.environment.host
+
+---
+config:
+  clientID: #@ ap.clientID
+  clientSecret: #@ ap.clientSecret
+  cookieSecret: #@ ap.cookieSecret
+  #@yaml/text-templated-strings
+  configFile: |-
+    cookie_domains = ".(@= domain @)"
+    email_domains = ["*"]
+    pass_user_headers = true
+    redirect_url = "https://(@= ap.domain @).(@= domain @)/oauth2/callback"
+    reverse_proxy = true
+    set_authorization_header = true
+    set_xauthrequest = true
+    # or file:///dev/null ?
+    upstreams = "static://202"
+    whitelist_domains = ".(@= domain @)"
+authenticatedEmailsFile:
+  enabled: #@ ap.allowedEmails != ""
+  restricted_access: #@ ap.allowedEmails
+serviceAccount:
+  enabled: false

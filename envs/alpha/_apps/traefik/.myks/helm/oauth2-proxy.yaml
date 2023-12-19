@@ -1,0 +1,20 @@
+config:
+  clientID: <path:static/0.sops.yaml#clientID>
+  clientSecret: <path:static/0.sops.yaml#clientSecret>
+  cookieSecret: <path:static/0.sops.yaml#cookieSecret>
+  configFile: |-
+    cookie_domains = ".junior.zebradil.dev"
+    email_domains = ["*"]
+    pass_user_headers = true
+    redirect_url = "https://oauth2-proxy.junior.zebradil.dev/oauth2/callback"
+    reverse_proxy = true
+    set_authorization_header = true
+    set_xauthrequest = true
+    # or file:///dev/null ?
+    upstreams = "static://202"
+    whitelist_domains = ".junior.zebradil.dev"
+authenticatedEmailsFile:
+  enabled: true
+  restricted_access: <path:static/0.sops.yaml#allowedEmails>
+serviceAccount:
+  enabled: false

@@ -15,3 +15,15 @@ application:
     #! Cert-Manager issuer name for the wildcard certificate.
     #@schema/validation min_len=1
     issuer: ""
+  oauth2Proxy:
+    #! List of allowed emails, one per line
+    allowedEmails: ""
+    domain: oauth2-proxy
+    #! OAuth client ID
+    #@schema/validation min_len=1
+    clientID: ""
+    #! OAuth client secret
+    #@schema/validation min_len=1
+    clientSecret: ""
+    #@schema/validation min_len=1
+    cookieSecret: ""

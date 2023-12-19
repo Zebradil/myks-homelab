@@ -1,6 +1,13 @@
+#@ load("secrets.star", "sec")
+
 #@data/values
 ---
 application:
   tls:
     baseDomain: junior.zebradil.dev
     issuer: cloudflare-zerossl
+  oauth2Proxy:
+    allowedEmails: #@ sec.sops("0", "allowedEmails")
+    clientID: #@ sec.sops("0", "clientID")
+    clientSecret: #@ sec.sops("0", "clientSecret")
+    cookieSecret: #@ sec.sops("0", "cookieSecret")
