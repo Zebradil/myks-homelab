@@ -5,19 +5,17 @@
 #@ host = name + "." + d.environment.host
 
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
 metadata:
   name: #@ name
 spec:
-  rules:
-    - host: #@ host
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: #@ name
-                port:
-                  name: http
+  routes:
+    - match: #@ "Host(`{}`)".format(host)
+      kind: Rule
+      middlewares:
+        - name: auth-errors
+        - name: oauth2-proxy
+      services:
+        - name: #@ name
+          port: http
