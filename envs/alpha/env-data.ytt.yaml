@@ -5,6 +5,7 @@ environment:
   id: alpha
   applications:
     - proto: argocd
+    - proto: authelia
     - proto: cert-manager
     - proto: httpbingo
     - proto: paperless

@@ -1,0 +1,14 @@
+apiVersion: v1
+data:
+  configuration.yaml: "---\ntheme: light\ndefault_redirection_url: https://www.example.com\ndefault_2fa_method: ''\nserver:\n  host: 0.0.0.0\n  port: 9091\n  asset_path: ''\n  headers:\n    csp_template: ''\n  buffers:\n    read: 4096\n    write: 4096\n  timeouts:\n    read: 6s\n    write: 6s\n    idle: 30s\n  enable_pprof: false\n  enable_expvars: false\nlog:\n  level: info\n  format: text\n  file_path: ''\n  keep_stdout: true\ntotp:\n  disable: false\n  issuer: example.com\n  algorithm: sha1\n  digits: 6\n  period: 30\n  skew: 1\n  secret_size: 32\nwebauthn:\n  disable: false\n  display_name: Authelia\n  attestation_conveyance_preference: indirect\n  user_verification: preferred\n  timeout: 60s\nntp:\n  address: time.cloudflare.com:123\n  version: 4\n  max_desync: 3s\n  disable_startup_check: false\n  disable_failure: false\nauthentication_backend:\n  password_reset:\n    disable: false\n    custom_url: ''\n  file:\n    path: /config/users_database.yml\n    watch: true\n    search:\n      email: false\n      case_insensitive: false\n    password:\n      algorithm: 'argon2'\n      argon2:\n        variant: 'argon2id'\n        iterations: 3\n        memory: 65536\n        parallelism: 4\n        key_length: 32\n        salt_length: 16\n      scrypt:\n        iterations: 16\n        block_size: 8\n        parallelism: 1\n        key_length: 32\n        salt_length: 16\n      pbkdf2:\n        variant: 'sha512'\n        iterations: 310000\n        salt_length: 16\n      sha2crypt:\n        variant: 'sha512'\n        iterations: 50000\n        salt_length: 16\n      bcrypt:\n        variant: 'standard'\n        cost: 12\npassword_policy:\n  standard:\n    enabled: false\n    min_length: 8\n    max_length: 0\n    require_uppercase: true\n    require_lowercase: true\n    require_number: true\n    require_special: true\n  zxcvbn:\n    enabled: false\n    min_score: 0\nsession:\n  name: 'authelia_session'\n  domain: 'example.com'\n  same_site: 'lax'\n  expiration: 1h\n  inactivity: 5m\n  remember_me_duration: 1M\nregulation: \n  ban_time: 5m\n  find_time: 2m\n  max_retries: 3\nstorage:\n  local:\n    path: /config/db.sqlite3\nnotifier:\n  disable_startup_check: false\n  filesystem:\n    filename: /config/notification.txt\naccess_control:\n  default_policy: two_factor\n...\n"
+kind: ConfigMap
+metadata:
+  annotations:
+    a8r.io/repository: git@github.com:Zebradil/myks-homelab.git
+  labels:
+    app.kubernetes.io/instance: authelia
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: authelia
+    app.kubernetes.io/version: 4.37.5
+    helm.sh/chart: authelia-0.8.58
+  name: authelia

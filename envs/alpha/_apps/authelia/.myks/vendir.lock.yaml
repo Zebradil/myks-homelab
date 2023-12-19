@@ -1,0 +1,9 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - helmChart:
+      appVersion: 4.37.5
+      version: 0.8.58
+    path: .
+  path: charts/authelia
+kind: LockConfig

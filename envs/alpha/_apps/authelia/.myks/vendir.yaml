@@ -1,0 +1,11 @@
+apiVersion: vendir.k14s.io/v1alpha1
+kind: Config
+directories:
+- path: charts/authelia
+  contents:
+  - path: .
+    helmChart:
+      name: authelia
+      version: 0.8.58
+      repository:
+        url: https://charts.authelia.com
