@@ -25,7 +25,7 @@ spec:
             - name: PAPERLESS_DBUSER
               value: paperless
             - name: PAPERLESS_REDIS
-              value: redis://redis:6379
+              value: redis://redis-master:6379
             - name: PAPERLESS_OCR_LANGUAGE
               value: deu+eng+rus
             - name: PAPERLESS_OCR_LANGUAGES

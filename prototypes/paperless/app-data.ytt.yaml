@@ -15,7 +15,7 @@ application:
       PAPERLESS_DBHOST: postgresql
       PAPERLESS_DBUSER: #@ databaseUser
 
-      PAPERLESS_REDIS: redis://redis:6379
+      PAPERLESS_REDIS: redis://redis-master:6379
 
       PAPERLESS_OCR_LANGUAGE: deu+eng+rus
       PAPERLESS_OCR_LANGUAGES: deu eng rus
