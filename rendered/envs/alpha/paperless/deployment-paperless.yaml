@@ -14,7 +14,8 @@ spec:
         app: paperless
     spec:
       containers:
-        - env:
+        - enableServiceLinks: false
+          env:
             - name: PAPERLESS_DBPASS
               valueFrom:
                 secretKeyRef:
