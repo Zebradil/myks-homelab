@@ -1,0 +1,13 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+    a8r.io/repository: git@github.com:Zebradil/myks-homelab.git
+  name: oauth2-proxy
+spec:
+  routes:
+    - kind: Rule
+      match: PathPrefix(`/oauth2`)
+      services:
+        - name: oauth2-proxy
+          port: http

@@ -9,6 +9,6 @@ spec:
     query: /oauth2/sign_in
     service:
       name: oauth2-proxy
-      port: 80
+      port: http
     status:
       - 401-403

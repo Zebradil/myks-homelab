@@ -8,7 +8,7 @@ spec:
     query: /oauth2/sign_in
     service:
       name: oauth2-proxy
-      port: 80
+      port: http
     status:
       - 401-403
 ---
@@ -23,3 +23,15 @@ spec:
       - X-Auth-Request-User
       - Set-Cookie
     trustForwardHeader: true
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: oauth2-proxy
+spec:
+  routes:
+    - match: PathPrefix(`/oauth2`)
+      kind: Rule
+      services:
+        - name: oauth2-proxy
+          port: http
