@@ -6,5 +6,6 @@ application:
   paperless:
     env:
       PAPERLESS_SECRET_KEY: #@ sec.sops("0", "sessionSecretKey")
+      PAPERLESS_URL: https://paperless.junior.zebradil.dev
   postgresql:
     password: #@ sec.sops("0", "databasePassword")

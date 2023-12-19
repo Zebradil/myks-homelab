@@ -39,7 +39,7 @@ spec:
             - name: PAPERLESS_TIME_ZONE
               value: Europe/Berlin
             - name: PAPERLESS_URL
-              value: http://localhost
+              value: https://paperless.junior.zebradil.dev
           image: ghcr.io/paperless-ngx/paperless-ngx:1.16.5
           name: paperless
           ports:

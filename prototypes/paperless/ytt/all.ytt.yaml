@@ -1,25 +1,27 @@
 #@ load("@ytt:data", "data")
+#@ load("util.star", "util")
 
 #@ d = data.values
 #@ ap = d.application
-#@ host = "paperless." + d.environment.host
+#@ name = d.myks.context.app
+#@ host = name + "." + d.environment.host
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: paperless
+  name: #@ name
 spec:
   selector:
     matchLabels:
-      app: paperless
+      app: #@ name
   template:
     metadata:
       labels:
-        app: paperless
+        app: #@ name
     spec:
       containers:
-        - name: paperless
+        - name: #@ name
           image: #@ ap.paperless.image
           env:
             - name: PAPERLESS_DBPASS
@@ -27,9 +29,8 @@ spec:
                 secretKeyRef:
                   name: postgresql
                   key: password
-            #@ for/end name in ap.paperless.env:
-            - name: #@ name
-              value: #@ ap.paperless.env[name]
+            #@ for/end envvar in util.map_to_envs(ap.paperless.env):
+            -  #@ envvar
           readinessProbe:
             httpGet:
               path: /
@@ -78,29 +79,27 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: paperless
+  name: #@ name
 spec:
   selector:
-    app: paperless
+    app: #@ name
   ports:
     - name: http
       port: 80
       targetPort: http
 
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
 metadata:
-  name: paperless
+  name: #@ name
 spec:
-  rules:
-    - host: #@ host
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: paperless
-                port:
-                  name: http
+  routes:
+    - match: #@ "Host(`{}`)".format(host)
+      kind: Rule
+      middlewares:
+        - name: chain-authelia-auth
+          namespace: authelia
+      services:
+        - name: #@ name
+          port: http
