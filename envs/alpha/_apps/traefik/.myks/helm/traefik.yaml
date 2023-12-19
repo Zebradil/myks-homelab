@@ -4,7 +4,8 @@ providers:
   kubernetesCRD:
     allowCrossNamespace: true
 hostNetwork: true
-dnsPolicy: ClusterFirstWithHostNet
+deployment:
+  dnsPolicy: ClusterFirstWithHostNet
 ports:
   traefik:
     hostIP: localhost

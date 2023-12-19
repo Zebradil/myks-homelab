@@ -119,6 +119,7 @@ spec:
               name: data
             - mountPath: /tmp
               name: tmp
+      dnsPolicy: ClusterFirstWithHostNet
       hostNetwork: true
       nodeSelector:
         kubernetes.io/hostname: junior
