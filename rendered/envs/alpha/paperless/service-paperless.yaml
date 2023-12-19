@@ -3,7 +3,7 @@ kind: Service
 metadata:
   annotations:
     a8r.io/repository: git@github.com:Zebradil/myks-homelab.git
-  name: PAPERLESS_URL
+  name: paperless
 spec:
   ports:
     - name: http

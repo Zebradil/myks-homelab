@@ -2,8 +2,7 @@
 
 #@ d = data.values
 #@ ap = d.application
-#@ name = d.myks.context.app
-#@ host = name + "." + d.environment.host
+#@ host = "paperless." + d.environment.host
 
 ---
 apiVersion: apps/v1
@@ -79,7 +78,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: #@ name
+  name: paperless
 spec:
   selector:
     app: paperless
@@ -92,7 +91,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: #@ name
+  name: paperless
 spec:
   rules:
     - host: #@ host
@@ -102,6 +101,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: #@ name
+                name: paperless
                 port:
                   name: http
