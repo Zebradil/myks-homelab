@@ -45,6 +45,7 @@ spec:
             - --metrics.prometheus=true
             - --metrics.prometheus.entrypoint=metrics
             - --providers.kubernetescrd
+            - --providers.kubernetescrd.allowCrossNamespace=true
             - --providers.kubernetesingress
             - --entrypoints.web.http.redirections.entryPoint.to=:443
             - --entrypoints.web.http.redirections.entryPoint.scheme=https

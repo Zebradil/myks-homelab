@@ -1,5 +1,8 @@
 image:
   tag: v3.0
+providers:
+  kubernetesCRD:
+    allowCrossNamespace: true
 hostNetwork: true
 dnsPolicy: ClusterFirstWithHostNet
 ports:
