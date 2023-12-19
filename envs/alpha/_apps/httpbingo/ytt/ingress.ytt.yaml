@@ -14,8 +14,8 @@ spec:
     - match: #@ "Host(`{}`)".format(host)
       kind: Rule
       middlewares:
-        - name: oauth2-proxy
-          namespace: traefik
+        - name: chain-authelia-auth
+          namespace: authelia
       services:
         - name: #@ name
           port: http
