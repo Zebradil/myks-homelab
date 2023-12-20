@@ -9,7 +9,7 @@ ingress:
   tls:
     enabled: false
 pod:
-  kind: StatefulSet
+  kind: Deployment
   replicas: 1
 configMap:
   enabled: true

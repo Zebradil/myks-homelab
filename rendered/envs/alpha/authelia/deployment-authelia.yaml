@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   annotations:
     a8r.io/repository: git@github.com:Zebradil/myks-homelab.git
@@ -11,18 +11,22 @@ metadata:
     helm.sh/chart: authelia-0.8.58
   name: authelia
 spec:
-  podManagementPolicy: Parallel
+  minReadySeconds: 0
   replicas: 1
   revisionHistoryLimit: 5
   selector:
     matchLabels:
       app.kubernetes.io/instance: authelia
       app.kubernetes.io/name: authelia
-  serviceName: authelia
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
   template:
     metadata:
       annotations:
-        checksum/config: d715848a4c9d526ce7b0a4c3aaad13478acbaaeb5f73c50648845d397d39e320
+        checksum/config: 498236b9d3a0a48aa3a8c31dfe4fdb52a4badb362b618497b6aae6cb74ed76da
       labels:
         app.kubernetes.io/instance: authelia
         app.kubernetes.io/managed-by: Helm
@@ -123,7 +127,3 @@ spec:
               - key: STORAGE_ENCRYPTION_KEY
                 path: STORAGE_ENCRYPTION_KEY
             secretName: authelia
-  updateStrategy:
-    rollingUpdate:
-      partition: 0
-    type: RollingUpdate
