@@ -30,7 +30,6 @@ configMap:
     smtp:
       enabled: true
       username: <path:static/smtp.sops.yaml#username>
-      password: <path:static/smtp.sops.yaml#password>
       sender: authelia@junior.zebradil.dev
       host: smtp.gmail.com
       port: 587

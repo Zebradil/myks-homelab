@@ -44,7 +44,6 @@ configMap:
     smtp:
       enabled: true
       username: #@ sec.sops("smtp", "username")
-      password: #@ sec.sops("smtp", "password")
       #!sender: #@ sec.sops("smtp", "sender")
       sender: #@ "authelia@" + d.environment.host
       host: smtp.gmail.com
