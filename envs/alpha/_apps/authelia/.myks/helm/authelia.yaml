@@ -29,6 +29,7 @@ configMap:
   notifier:
     smtp:
       enabled: true
+      enabledSecret: true
       username: <path:static/smtp.sops.yaml#username>
       sender: authelia@junior.zebradil.dev
       host: smtp.gmail.com

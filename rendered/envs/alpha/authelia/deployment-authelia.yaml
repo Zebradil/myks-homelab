@@ -50,6 +50,8 @@ spec:
               value: /secrets/JWT_TOKEN
             - name: AUTHELIA_SESSION_SECRET_FILE
               value: /secrets/SESSION_ENCRYPTION_KEY
+            - name: AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE
+              value: /secrets/SMTP_PASSWORD
             - name: AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE
               value: /secrets/STORAGE_ENCRYPTION_KEY
           image: ghcr.io/authelia/authelia:4.37.5
@@ -126,4 +128,6 @@ spec:
                 path: SESSION_ENCRYPTION_KEY
               - key: STORAGE_ENCRYPTION_KEY
                 path: STORAGE_ENCRYPTION_KEY
+              - key: SMTP_PASSWORD
+                path: SMTP_PASSWORD
             secretName: authelia

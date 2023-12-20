@@ -43,6 +43,7 @@ configMap:
   notifier:
     smtp:
       enabled: true
+      enabledSecret: true
       username: #@ sec.sops("smtp", "username")
       #!sender: #@ sec.sops("smtp", "sender")
       sender: #@ "authelia@" + d.environment.host
