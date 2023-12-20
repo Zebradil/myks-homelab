@@ -1,5 +1,9 @@
+#@ load("@ytt:data", "data")
+#@ load("secrets.star", "sec")
+
+#@ d = data.values
 ---
-domain: junior.zebradil.dev
+domain: #@ d.environment.host
 
 ingress:
   enabled: true
@@ -37,16 +41,17 @@ configMap:
       enabled: false
 
   notifier:
-    filesystem:
-      enabled: true
-    #! TODO: Configure SMTP notifier.
     smtp:
-      enabled: false
+      enabled: true
+      username: #@ sec.sops("smtp", "username")
+      password: #@ sec.sops("smtp", "password")
+      #!sender: #@ sec.sops("smtp", "sender")
+      sender: #@ "authelia@" + d.environment.host
+      host: smtp.gmail.com
+      port: 587
 
   identity_providers:
     oidc:
-      #! TODO: Configure OIDC identity provider.
-      #! See https://www.authelia.com/docs/configuration/identity-providers/oidc.html#roadmap
       enabled: false
 
 secret:
