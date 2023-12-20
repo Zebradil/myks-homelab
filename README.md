@@ -16,8 +16,8 @@ cd rendered/envs/alpha/argocd
 
 # First, create the CRDs, then the rest.
 CRDs=customresourcedefinition-*
-kubectl create -f $~CRDs
-kubectl create -f ^$~CRDs
+find      -name $CRDs -exec kubectl create -f {} \;
+find -not -name $CRDs -exec kubectl create -f {} \;
 ```
 
 Give it a few minutes to start up.
