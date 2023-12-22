@@ -52,7 +52,7 @@ jobs:
       - name: Set commit status
         uses: myrotvorets/set-commit-status-action@v2.0.0
         with:
-          context: render
+          context: myks
           description: "${{
             steps.commit.outputs.changes_detected == 'true'
             && 'New changes have been committed'
