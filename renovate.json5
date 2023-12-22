@@ -54,6 +54,7 @@
         // version: 13.2.24
         "#!\\s+renovate:\\s+datasource=(?<datasource>docker)\\s+name:\\s+['\"]?(?<product>[^'\"\\s]+)['\"]?\\s+url:\\s+['\"]?oci://(?<namespace>[^'\"\\s]+)['\"]?\\s+version:\\s+['\"]?(?<currentValue>[^'\"\\s]+)['\"]?",
       ],
+      depNameTemplate: "{{product}}",
       packageNameTemplate: "{{namespace}}/{{product}}",
     },
   ],
