@@ -62,5 +62,9 @@ jobs:
           # indefinitely. This, in particular, blocks Renovate from merging PRs
           # automatically.
           # If running on a push, set the commit status on the current commit.
-          sha: ${{ steps.commit.outputs.commit_hash || github.sha }}
+          sha: "${{
+            steps.commit.outputs.commit_hash
+            || github.event.pull_request.head.sha
+            || github.sha
+          }}"
           status: success
