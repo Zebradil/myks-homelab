@@ -5,8 +5,8 @@
   schedule: ["before 8am every weekday", "every weekend"],
   // Rebase PRs if needed even if there are commits from other bots
   gitIgnoredAuthors: [
+    "renovate[bot]@users.noreply.github.com",
     "github-actions[bot]@users.noreply.github.com",
-    "german.lashevich+github-zebradil-bot@gmail.com",
   ],
   packageRules: [
     {
