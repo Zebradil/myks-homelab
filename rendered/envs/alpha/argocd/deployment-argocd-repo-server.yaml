@@ -268,7 +268,7 @@ spec:
             - -c
           env:
             - name: AVP_VERSION
-              value: v1.14.0
+              value: v1.17.0
           image: registry.access.redhat.com/ubi8
           name: download-tools
           volumeMounts:
