@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    a8r.io/repository: git@github.com:Zebradil/myks-homelab.git
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
     service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
   labels:
     app.kubernetes.io/component: primary

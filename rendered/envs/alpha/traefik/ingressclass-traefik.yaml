@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: IngressClass
 metadata:
   annotations:
-    a8r.io/repository: git@github.com:Zebradil/myks-homelab.git
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
     ingressclass.kubernetes.io/is-default-class: "true"
   labels:
     app.kubernetes.io/instance: traefik-traefik

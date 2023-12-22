@@ -7,7 +7,7 @@ metadata:
   - resources-finalizer.argocd.argoproj.io
   annotations:
     myks.dev/environment: alpha
-    app.kubernetes.io/source: git@github.com:Zebradil/myks-homelab.git
+    app.kubernetes.io/source: https://github.com/Zebradil/myks-homelab
 spec:
   description: Project for "alpha" environment
   clusterResourceWhitelist:

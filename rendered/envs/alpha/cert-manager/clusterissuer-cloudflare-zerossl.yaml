@@ -2,7 +2,7 @@ apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
   annotations:
-    a8r.io/repository: git@github.com:Zebradil/myks-homelab.git
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
   name: cloudflare-zerossl
 spec:
   acme:

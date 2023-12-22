@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    a8r.io/repository: git@github.com:Zebradil/myks-homelab.git
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
     app: cert-manager
     app.kubernetes.io/component: controller

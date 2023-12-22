@@ -4,7 +4,7 @@ data:
 kind: ConfigMap
 metadata:
   annotations:
-    a8r.io/repository: git@github.com:Zebradil/myks-homelab.git
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
     app.kubernetes.io/instance: authelia
     app.kubernetes.io/managed-by: Helm
