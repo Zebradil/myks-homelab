@@ -22,6 +22,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          fetch-depth: 0
           ref: ${{ github.head_ref || github.ref_name }}
           # use more powerful token on the default branch, otherwise use the default GITHUB_TOKEN
           token: "${{
@@ -34,7 +35,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Render
-        run: myks all
+        run: myks all --smart-mode.base-revision=origin/${GITHUB_BASE_REF}
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v6
         with:
