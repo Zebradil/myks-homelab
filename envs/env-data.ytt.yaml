@@ -18,6 +18,8 @@ argocd:
     source:
       #! Use HTTPS URL to avoid necessity to set up SSH keys.
       repoURL: https://github.com/Zebradil/myks-homelab.git
+      #! Explicitly set the target revision to avoid overwriting in CI
+      targetRevision: main
       plugin:
         name: argocd-vault-plugin
   project:
