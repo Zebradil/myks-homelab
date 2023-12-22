@@ -26,3 +26,5 @@ argocd:
       name: in-cluster
   env:
     generateSecret: false
+myks:
+  gitRepoUrl: https://github.com/Zebradil/myks-homelab
