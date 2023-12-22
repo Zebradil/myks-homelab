@@ -4,7 +4,10 @@
   extends: ["config:base"],
   schedule: ["before 8am every weekday", "every weekend"],
   // Rebase PRs if needed even if there are commits from other bots
-  gitIgnoredAuthors: ["github-actions[bot]@users.noreply.github.com"],
+  gitIgnoredAuthors: [
+    "github-actions[bot]@users.noreply.github.com",
+    "german.lashevich+github-zebradil-bot@gmail.com",
+  ],
   packageRules: [
     {
       matchUpdateTypes: ["minor", "patch", "pin", "digest"],
