@@ -16,7 +16,7 @@ spec:
   source:
     path: rendered/argocd/alpha
     repoURL: https://github.com/Zebradil/myks-homelab
-    targetRevision: main
+    targetRevision: renovate/https-github.com-argoproj-argo-cd-2.x
   syncPolicy:
     automated:
       prune: true

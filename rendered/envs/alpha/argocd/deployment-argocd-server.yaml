@@ -211,6 +211,18 @@ spec:
                   key: server.http.cookie.maxnumber
                   name: argocd-cmd-params-cm
                   optional: true
+            - name: ARGOCD_SERVER_LISTEN_ADDRESS
+              valueFrom:
+                configMapKeyRef:
+                  key: server.listen.address
+                  name: argocd-cmd-params-cm
+                  optional: true
+            - name: ARGOCD_SERVER_METRICS_LISTEN_ADDRESS
+              valueFrom:
+                configMapKeyRef:
+                  key: server.metrics.listen.address
+                  name: argocd-cmd-params-cm
+                  optional: true
             - name: ARGOCD_SERVER_OTLP_ADDRESS
               valueFrom:
                 configMapKeyRef:
@@ -229,7 +241,7 @@ spec:
                   key: server.enable.proxy.extension
                   name: argocd-cmd-params-cm
                   optional: true
-          image: quay.io/argoproj/argocd:v2.7.3
+          image: quay.io/argoproj/argocd:v2.9.3
           imagePullPolicy: Always
           livenessProbe:
             httpGet:
