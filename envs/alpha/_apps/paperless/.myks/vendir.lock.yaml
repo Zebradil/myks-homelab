@@ -8,10 +8,10 @@ directories:
     path: .
   path: charts/postgresql
 - contents:
-  - configDigest: 7acd905354d43ed2b3458a2622d2f821de97e3ba846d315f57c4e66fa60260bb
+  - configDigest: 096ff2d60d9e508a62a8a6bc0ebe405e60d750dd1fc583133f2ca439dae9290c
     helmChart:
       appVersion: 7.2.3
-      version: 18.5.0
+      version: 18.6.1
     path: .
   path: charts/redis
 kind: LockConfig
