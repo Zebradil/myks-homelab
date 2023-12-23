@@ -17,7 +17,7 @@ spec:
     path: rendered/envs/alpha/cert-manager
     plugin:
       name: argocd-vault-plugin
-    repoURL: https://github.com/Zebradil/myks-homelab.git
+    repoURL: https://github.com/Zebradil/myks-homelab
     targetRevision: main
   syncPolicy:
     automated:

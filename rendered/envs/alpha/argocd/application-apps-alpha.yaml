@@ -15,7 +15,7 @@ spec:
   project: default
   source:
     path: rendered/argocd/alpha
-    repoURL: https://github.com/Zebradil/myks-homelab.git
+    repoURL: https://github.com/Zebradil/myks-homelab
     targetRevision: main
   syncPolicy:
     automated:
