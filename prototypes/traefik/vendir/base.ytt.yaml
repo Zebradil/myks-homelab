@@ -10,6 +10,7 @@ directories:
   - path: #@ "charts/" + chart.name
     contents:
       - path: .
+        lazy: true
         helmChart:
           name: #@ chart.name
           version: #@ chart.version

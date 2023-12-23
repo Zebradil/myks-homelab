@@ -6,6 +6,7 @@ directories:
   - path: #@ "charts/" + data.values.chart.name
     contents:
       - path: .
+        lazy: true
         helmChart:
           name: #@ data.values.chart.name
           version: #@ data.values.chart.version
@@ -14,5 +15,6 @@ directories:
   - path: ytt
     contents:
       - path: .
+        lazy: true
         http:
           url: #@ "https://github.com/cert-manager/cert-manager/releases/download/{}/cert-manager.crds.yaml".format(data.values.chart.version)

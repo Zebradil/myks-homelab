@@ -8,6 +8,7 @@ directories:
   - path: #@ "charts/" + app.name
     contents:
       - path: .
+        lazy: true
         helmChart:
           name: #@ app.name
           version: #@ app.version
