@@ -4,6 +4,7 @@ directories:
 - path: charts/postgresql
   contents:
   - path: .
+    lazy: true
     helmChart:
       name: postgresql
       version: 13.2.24
@@ -12,6 +13,7 @@ directories:
 - path: charts/redis
   contents:
   - path: .
+    lazy: true
     helmChart:
       name: redis
       version: 18.5.0

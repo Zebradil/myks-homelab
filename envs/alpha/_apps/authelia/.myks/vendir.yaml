@@ -4,6 +4,7 @@ directories:
 - path: charts/authelia
   contents:
   - path: .
+    lazy: true
     helmChart:
       name: authelia
       version: 0.8.58

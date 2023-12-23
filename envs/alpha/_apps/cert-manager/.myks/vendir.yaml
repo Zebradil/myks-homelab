@@ -4,6 +4,7 @@ directories:
 - path: charts/cert-manager
   contents:
   - path: .
+    lazy: true
     helmChart:
       name: cert-manager
       version: v1.13.3
@@ -12,5 +13,6 @@ directories:
 - path: ytt
   contents:
   - path: .
+    lazy: true
     http:
       url: https://github.com/cert-manager/cert-manager/releases/download/v1.13.3/cert-manager.crds.yaml

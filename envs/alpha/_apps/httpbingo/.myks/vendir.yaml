@@ -4,6 +4,7 @@ directories:
 - path: charts/httpbingo
   contents:
   - path: .
+    lazy: true
     helmChart:
       name: httpbingo
       version: 0.1.1

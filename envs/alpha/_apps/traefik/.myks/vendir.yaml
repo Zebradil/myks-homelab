@@ -4,6 +4,7 @@ directories:
 - path: charts/traefik
   contents:
   - path: .
+    lazy: true
     helmChart:
       name: traefik
       version: v26.0.0
