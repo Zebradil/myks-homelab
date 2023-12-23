@@ -62,6 +62,18 @@ spec:
                   key: reposerver.parallelism.limit
                   name: argocd-cmd-params-cm
                   optional: true
+            - name: ARGOCD_REPO_SERVER_LISTEN_ADDRESS
+              valueFrom:
+                configMapKeyRef:
+                  key: reposerver.listen.address
+                  name: argocd-cmd-params-cm
+                  optional: true
+            - name: ARGOCD_REPO_SERVER_LISTEN_METRICS_ADDRESS
+              valueFrom:
+                configMapKeyRef:
+                  key: reposerver.metrics.listen.address
+                  name: argocd-cmd-params-cm
+                  optional: true
             - name: ARGOCD_REPO_SERVER_DISABLE_TLS
               valueFrom:
                 configMapKeyRef:
@@ -152,6 +164,18 @@ spec:
                   key: reposerver.streamed.manifest.max.extracted.size
                   name: argocd-cmd-params-cm
                   optional: true
+            - name: ARGOCD_REPO_SERVER_HELM_MANIFEST_MAX_EXTRACTED_SIZE
+              valueFrom:
+                configMapKeyRef:
+                  key: reposerver.helm.manifest.max.extracted.size
+                  name: argocd-cmd-params-cm
+                  optional: true
+            - name: ARGOCD_REPO_SERVER_DISABLE_HELM_MANIFEST_MAX_EXTRACTED_SIZE
+              valueFrom:
+                configMapKeyRef:
+                  key: reposerver.disable.helm.manifest.max.extracted.size
+                  name: argocd-cmd-params-cm
+                  optional: true
             - name: ARGOCD_GIT_MODULES_ENABLED
               valueFrom:
                 configMapKeyRef:
@@ -164,7 +188,7 @@ spec:
               value: /helm-working-dir
             - name: HELM_DATA_HOME
               value: /helm-working-dir
-          image: quay.io/argoproj/argocd:v2.7.3
+          image: quay.io/argoproj/argocd:v2.9.3
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 3
@@ -242,7 +266,7 @@ spec:
             - -n
             - /usr/local/bin/argocd
             - /var/run/argocd/argocd-cmp-server
-          image: quay.io/argoproj/argocd:v2.7.3
+          image: quay.io/argoproj/argocd:v2.9.3
           name: copyutil
           securityContext:
             allowPrivilegeEscalation: false
