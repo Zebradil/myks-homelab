@@ -6,11 +6,11 @@ directories:
   - path: .
     helmChart:
       name: cert-manager
-      version: v1.13.2
+      version: v1.13.3
       repository:
         url: https://charts.jetstack.io
 - path: ytt
   contents:
   - path: .
     http:
-      url: https://github.com/cert-manager/cert-manager/releases/download/v1.13.2/cert-manager.crds.yaml
+      url: https://github.com/cert-manager/cert-manager/releases/download/v1.13.3/cert-manager.crds.yaml
