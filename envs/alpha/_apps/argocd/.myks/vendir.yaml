@@ -4,6 +4,7 @@ directories:
 - path: ytt/argocd
   contents:
   - path: .
+    lazy: true
     git:
       url: https://github.com/argoproj/argo-cd
       ref: v2.9.3

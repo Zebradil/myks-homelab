@@ -1,13 +1,15 @@
 apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
-  - helmChart:
+  - configDigest: 9985fb1bb2b0374da6c309942ccaf23f2acfa6c05c4bfd4c76f494111614d371
+    helmChart:
       appVersion: v1.13.3
       version: v1.13.3
     path: .
   path: charts/cert-manager
 - contents:
-  - http: {}
+  - configDigest: 11bde54a4b8eff125a9177692982448011f89d5f535ef1d0d91d6dddea8bd528
+    http: {}
     path: .
   path: ytt
 kind: LockConfig

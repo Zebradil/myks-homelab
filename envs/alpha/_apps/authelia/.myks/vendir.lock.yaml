@@ -1,7 +1,8 @@
 apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
-  - helmChart:
+  - configDigest: a0d3de653820848e9c25ca34985e40efbe3e9547b99825c3fbc0369aae831368
+    helmChart:
       appVersion: 4.37.5
       version: 0.8.58
     path: .
