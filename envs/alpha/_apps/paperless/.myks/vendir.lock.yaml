@@ -1,10 +1,10 @@
 apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
-  - configDigest: c677c40bec318e4d55a8cb9b38127a86d060d9b64fe898293bca9633d28d6999
+  - configDigest: 86dfec63f02d190b498ac955a529c2881b34e1e676cdec113f506faa3f68a3e3
     helmChart:
       appVersion: 16.1.0
-      version: 13.2.24
+      version: 13.2.25
     path: .
   path: charts/postgresql
 - contents:
