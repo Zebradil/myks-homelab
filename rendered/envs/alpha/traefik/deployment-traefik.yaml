@@ -26,7 +26,7 @@ spec:
     metadata:
       annotations:
         prometheus.io/path: /metrics
-        prometheus.io/port: "19100"
+        prometheus.io/port: "9100"
         prometheus.io/scrape: "true"
       labels:
         app.kubernetes.io/instance: traefik-traefik
@@ -36,10 +36,10 @@ spec:
     spec:
       containers:
         - args:
-            - --entrypoints.metrics.address=:19100/tcp
+            - --entrypoints.metrics.address=:9100/tcp
             - --entrypoints.traefik.address=:9000/tcp
-            - --entrypoints.web.address=:80/tcp
-            - --entrypoints.websecure.address=:443/tcp
+            - --entrypoints.web.address=:8000/tcp
+            - --entrypoints.websecure.address=:8443/tcp
             - --api.dashboard=true
             - --ping=true
             - --metrics.prometheus=true
@@ -79,18 +79,18 @@ spec:
             timeoutSeconds: 2
           name: traefik
           ports:
-            - containerPort: 19100
-              hostIP: localhost
+            - containerPort: 9100
               name: metrics
               protocol: TCP
             - containerPort: 9000
-              hostIP: localhost
               name: traefik
               protocol: TCP
-            - containerPort: 80
+            - containerPort: 8000
+              hostPort: 80
               name: web
               protocol: TCP
-            - containerPort: 443
+            - containerPort: 8443
+              hostPort: 443
               name: websecure
               protocol: TCP
           readinessProbe:
@@ -119,8 +119,7 @@ spec:
               name: data
             - mountPath: /tmp
               name: tmp
-      dnsPolicy: ClusterFirstWithHostNet
-      hostNetwork: true
+      hostNetwork: false
       nodeSelector:
         kubernetes.io/hostname: junior
       securityContext:
