@@ -3,13 +3,21 @@ image:
 providers:
   kubernetesCRD:
     allowCrossNamespace: true
+hostNetwork: true
+deployment:
+  dnsPolicy: ClusterFirstWithHostNet
 ports:
+  traefik:
+    hostIP: localhost
+  metrics:
+    port: 19100
+    hostIP: localhost
   web:
-    hostPort: 80
+    port: 80
     redirectTo:
       port: websecure
   websecure:
-    hostPort: 443
+    port: 443
 service:
   enabled: false
 nodeSelector:
