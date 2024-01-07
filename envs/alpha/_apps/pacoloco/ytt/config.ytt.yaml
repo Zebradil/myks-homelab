@@ -14,6 +14,10 @@ repos:
     urls:
       - http://mirror.lty.me/archlinux
       - http://mirrors.kernel.org/archlinux
+prefetch:
+  #! Prefetch every day at 3:00 AM
+  #! See https://github.com/gorhill/cronexpr#implementation
+  cron: 0 0 3 * * * *
 #@ end
 
 ---
