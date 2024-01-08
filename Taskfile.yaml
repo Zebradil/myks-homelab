@@ -6,37 +6,8 @@ silent: true
 set: [pipefail]
 shopt: [globstar]
 
-vars:
-  MYKS_ROOT: kubernetes
-
 tasks:
   default: ${GOTASK_BIN:-task} --list
-
-  do:sync:
-    desc: Syncs upstream dependencies of Kubernetes applications
-    summary: |
-      Uses myks to download all actual dependencies of Kubernetes applications.
-      Accepts the same arguments as myks. Example:
-
-        task do:sync -- envs/phoenix grafana,apisix --log-level debug
-
-    cmds:
-      - |
-        cd "{{.MYKS_ROOT}}" && \
-        myks sync {{.CLI_ARGS}}
-
-  do:render:
-    desc: Renders Kubernetes applications
-    summary: |
-      Uses myks to render Kubernetes applications.
-      Accepts the same arguments as myks. Example:
-
-        task do:render -- envs/phoenix grafana,apisix --log-level debug
-
-    cmds:
-      - |
-        cd "{{.MYKS_ROOT}}" && \
-        myks render {{.CLI_ARGS}}
 
   git:diff:
     desc: Shows filtered git diff
