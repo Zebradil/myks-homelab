@@ -6,5 +6,5 @@ directories:
       appVersion: v2.2.2
       version: 0.1.1
     path: .
-  path: charts/httpbingo
+  path: envs/alpha/_apps/httpbingo/vendor/charts/httpbingo
 kind: LockConfig

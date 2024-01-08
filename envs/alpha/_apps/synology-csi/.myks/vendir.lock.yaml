@@ -8,5 +8,5 @@ directories:
       tags:
       - v1.1.3
     path: .
-  path: ytt/synologi-csi
+  path: envs/alpha/_apps/synology-csi/vendor/ytt/synologi-csi
 kind: LockConfig

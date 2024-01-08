@@ -1,7 +1,7 @@
 apiVersion: vendir.k14s.io/v1alpha1
 kind: Config
 directories:
-- path: charts/authelia
+- path: envs/alpha/_apps/authelia/vendor/charts/authelia
   contents:
   - path: .
     lazy: true

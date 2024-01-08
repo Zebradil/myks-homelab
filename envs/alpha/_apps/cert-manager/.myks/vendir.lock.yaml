@@ -6,10 +6,10 @@ directories:
       appVersion: v1.13.3
       version: v1.13.3
     path: .
-  path: charts/cert-manager
+  path: envs/alpha/_apps/cert-manager/vendor/charts/cert-manager
 - contents:
   - configDigest: 11bde54a4b8eff125a9177692982448011f89d5f535ef1d0d91d6dddea8bd528
     http: {}
     path: .
-  path: ytt
+  path: envs/alpha/_apps/cert-manager/vendor/ytt
 kind: LockConfig

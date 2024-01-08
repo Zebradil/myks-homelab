@@ -6,5 +6,5 @@ directories:
       appVersion: v2.10.6
       version: 26.0.0
     path: .
-  path: charts/traefik
+  path: envs/alpha/_apps/traefik/vendor/charts/traefik
 kind: LockConfig

@@ -8,5 +8,5 @@ directories:
       tags:
       - stable
     path: .
-  path: ytt/argocd
+  path: envs/alpha/_apps/argocd/vendor/ytt/argocd
 kind: LockConfig

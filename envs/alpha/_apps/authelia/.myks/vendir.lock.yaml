@@ -6,5 +6,5 @@ directories:
       appVersion: 4.37.5
       version: 0.8.58
     path: .
-  path: charts/authelia
+  path: envs/alpha/_apps/authelia/vendor/charts/authelia
 kind: LockConfig
