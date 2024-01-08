@@ -1,7 +1,7 @@
 apiVersion: vendir.k14s.io/v1alpha1
 kind: Config
 directories:
-- path: charts/postgresql
+- path: envs/alpha/_apps/paperless/vendor/charts/postgresql
   contents:
   - path: .
     lazy: true
@@ -10,7 +10,7 @@ directories:
       version: 13.2.27
       repository:
         url: oci://registry-1.docker.io/bitnamicharts
-- path: charts/redis
+- path: envs/alpha/_apps/paperless/vendor/charts/redis
   contents:
   - path: .
     lazy: true
