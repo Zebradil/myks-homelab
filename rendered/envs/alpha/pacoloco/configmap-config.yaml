@@ -8,6 +8,8 @@ data:
         urls:
         - http://mirror.lty.me/archlinux
         - http://mirrors.kernel.org/archlinux
+    prefetch:
+      cron: 0 0 3 * * * *
 kind: ConfigMap
 metadata:
   annotations:
