@@ -42,7 +42,7 @@ spec:
                   key: application.namespaces
                   name: argocd-cmd-params-cm
                   optional: true
-          image: quay.io/argoproj/argocd:v2.9.3
+          image: quay.io/argoproj/argocd:v2.9.5
           imagePullPolicy: Always
           livenessProbe:
             tcpSocket:
