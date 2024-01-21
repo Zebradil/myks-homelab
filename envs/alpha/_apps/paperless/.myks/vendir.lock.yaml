@@ -8,10 +8,10 @@ directories:
     path: .
   path: envs/alpha/_apps/paperless/vendor/charts/postgresql
 - contents:
-  - configDigest: 28ecb7e722b0658455a78910b732baed85008e425f9e6ac7d4794577edc6fa8f
+  - configDigest: 1ac9acc6c5ad3394cf3b98888c2c98aa2927cfae26e566289ba677d74a24acdf
     helmChart:
       appVersion: 7.2.4
-      version: 18.7.0
+      version: 18.7.1
     path: .
   path: envs/alpha/_apps/paperless/vendor/charts/redis
 kind: LockConfig
