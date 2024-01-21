@@ -14,4 +14,6 @@ directories:
           depth: 1
         includePaths:
           - traefik/**
+        excludePaths:
+          - traefik/tests/**
         newRootPath: traefik
