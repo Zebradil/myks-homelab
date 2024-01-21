@@ -18,6 +18,10 @@ ports:
       port: websecure
   websecure:
     port: 443
+livenessProbe:
+  host: localhost
+readinessProbe:
+  host: localhost
 service:
   enabled: false
 nodeSelector:
