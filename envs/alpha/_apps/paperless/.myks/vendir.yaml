@@ -7,7 +7,7 @@ directories:
     lazy: true
     helmChart:
       name: postgresql
-      version: 13.3.0
+      version: 13.3.1
       repository:
         url: oci://registry-1.docker.io/bitnamicharts
 - path: envs/alpha/_apps/paperless/vendor/charts/redis
