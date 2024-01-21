@@ -2,8 +2,8 @@ apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
   - git:
-      commitTitle: 'feat: allow exposure of ports on internal service only'
-      sha: d9f4731fce7c8fdb134f417d977537e2ecad1a6e
+      commitTitle: 'feat: add entrypoint host to ports configuration'
+      sha: 6c4bf2728ce396026337c51c98a3adc90146ed9a
     path: .
   path: envs/alpha/_apps/traefik/vendor/charts/traefik
 kind: LockConfig

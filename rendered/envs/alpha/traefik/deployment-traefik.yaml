@@ -36,8 +36,8 @@ spec:
     spec:
       containers:
         - args:
-            - --entrypoints.metrics.address=:19100/tcp
-            - --entrypoints.traefik.address=:9000/tcp
+            - --entrypoints.metrics.address=localhost:19100/tcp
+            - --entrypoints.traefik.address=localhost:9000/tcp
             - --entrypoints.web.address=:80/tcp
             - --entrypoints.websecure.address=:443/tcp
             - --api.dashboard=true
@@ -80,11 +80,9 @@ spec:
           name: traefik
           ports:
             - containerPort: 19100
-              hostIP: localhost
               name: metrics
               protocol: TCP
             - containerPort: 9000
-              hostIP: localhost
               name: traefik
               protocol: TCP
             - containerPort: 80
