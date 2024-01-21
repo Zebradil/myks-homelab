@@ -4,9 +4,10 @@ directories:
 - path: envs/alpha/_apps/traefik/vendor/charts/traefik
   contents:
   - path: .
-    lazy: true
-    helmChart:
-      name: traefik
-      version: v26.0.0
-      repository:
-        url: https://traefik.github.io/charts
+    git:
+      url: https://github.com/zebradil/traefik-helm-chart
+      ref: address-host
+      depth: 1
+    includePaths:
+    - traefik/**
+    newRootPath: traefik

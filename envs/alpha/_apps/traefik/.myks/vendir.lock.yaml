@@ -1,10 +1,9 @@
 apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
-  - configDigest: dc769657206c91fb342e14f034a63810b0d9b43e053bde17c9e3e2bf84b7aca2
-    helmChart:
-      appVersion: v2.10.6
-      version: 26.0.0
+  - git:
+      commitTitle: 'feat: allow exposure of ports on internal service only'
+      sha: d9f4731fce7c8fdb134f417d977537e2ecad1a6e
     path: .
   path: envs/alpha/_apps/traefik/vendor/charts/traefik
 kind: LockConfig

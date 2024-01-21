@@ -1,6 +1,6 @@
 # traefik
 
-![Version: 26.0.0](https://img.shields.io/badge/Version-26.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.10.6](https://img.shields.io/badge/AppVersion-v2.10.6-informational?style=flat-square)
+![Version: 26.0.0](https://img.shields.io/badge/Version-26.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.10.7](https://img.shields.io/badge/AppVersion-v2.10.7-informational?style=flat-square)
 
 A Traefik based Kubernetes ingress controller
 
@@ -10,11 +10,9 @@ A Traefik based Kubernetes ingress controller
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| emilevauge | <emile@vauge.com> |  |
-| dtomcej | <daniel.tomcej@gmail.com> |  |
-| ldez | <ldez@traefik.io> |  |
 | mloiseleur | <michel.loiseleur@traefik.io> |  |
 | charlie-haley | <charlie.haley@traefik.io> |  |
+| darkweaver87 | <remi.buisson@traefik.io> |  |
 
 ## Source Code
 

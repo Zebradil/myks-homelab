@@ -1,0 +1,325 @@
+suite: Traefik configuration
+templates:
+  - deployment.yaml
+  - service.yaml
+tests:
+  - it: should have port 8000 of pod published to 80 of service by default, and defined as entrypoint "web"
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: web
+            containerPort: 8000
+            protocol: TCP
+        template: deployment.yaml
+      - contains:
+          path: spec.ports
+          content:
+            name: web
+            port: 80
+            protocol: TCP
+            targetPort: web
+        template: service.yaml
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--entrypoints.web.address=:8000/tcp"
+        template: deployment.yaml
+  - it: should have port 8443 of pod published to 443 of service by default, and defined as entrypoint "websecure"
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: websecure
+            containerPort: 8443
+            protocol: TCP
+        template: deployment.yaml
+      - contains:
+          path: spec.ports
+          content:
+            name: websecure
+            port: 443
+            protocol: TCP
+            targetPort: websecure
+        template: service.yaml
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--entrypoints.websecure.address=:8443/tcp"
+        template: deployment.yaml
+  - it: should have port 9000 of pod exposed for probes but NOT published to the service by default
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: traefik
+            containerPort: 9000
+            protocol: TCP
+        template: deployment.yaml
+      - notContains:
+          path: spec.ports
+          content:
+            name: traefik
+            port: 9000
+            targetPort: traefik
+        template: service.yaml
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--entrypoints.traefik.address=:9000/tcp"
+        template: deployment.yaml
+  - it: should have a custom port when specified via values
+    set:
+      ports:
+        ssh:
+          port: 22
+          expose: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: ssh
+            containerPort: 22
+            protocol: TCP
+        template: deployment.yaml
+      - contains:
+          path: spec.ports
+          content:
+            name: ssh
+            port: 22
+            protocol: TCP
+            targetPort: ssh
+        template: service.yaml
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--entrypoints.ssh.address=:22/tcp"
+        template: deployment.yaml
+  - it: should have a hostPort when specified via values
+    set:
+      ports:
+        ssh:
+          port: 22
+          expose: true
+          hostPort: 22
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: ssh
+            containerPort: 22
+            hostPort: 22
+            protocol: TCP
+        template: deployment.yaml
+      - contains:
+          path: spec.ports
+          content:
+            name: ssh
+            port: 22
+            protocol: TCP
+            targetPort: ssh
+        template: service.yaml
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--entrypoints.ssh.address=:22/tcp"
+        template: deployment.yaml
+  - it: should have a UDP custom port when specified via values
+    set:
+      ports:
+        udp:
+          port: 51
+          expose: true
+          protocol: UDP
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: udp
+            containerPort: 51
+            protocol: UDP
+        template: deployment.yaml
+      - contains:
+          path: spec.ports
+          content:
+            name: udp
+            port: 51
+            protocol: UDP
+            targetPort: udp
+        template: service.yaml
+        documentIndex: 0
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--entrypoints.udp.address=:51/udp"
+        template: deployment.yaml
+
+  - it: should set entrypoint to default when configured
+    template: deployment.yaml
+    set:
+      image:
+        tag: v3.0.0-beta3
+      ports:
+        web:
+          asDefault: true
+        websecure:
+          asDefault: false
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--entrypoints.web.asDefault=true"
+      - notContains:
+          path: spec.template.spec.containers[0].args
+          content: "--entrypoints.websecure.asDefault=false"
+      - notContains:
+          path: spec.template.spec.containers[0].args
+          content: "--entrypoints.websecure.asDefault=true"
+
+  - it: should throw and error when default entrypoint is enabled without traefik v3
+    template: deployment.yaml
+    set:
+      image:
+        tag: v2.10.0
+      ports:
+        web:
+          asDefault: true
+        websecure:
+          asDefault: false
+    asserts:
+      - failedTemplate:
+          errorMessage: "ERROR: Default entrypoints are only available on Traefik v3. Please set `image.tag` to `v3.x`."
+
+  - it: should be possible to use a different containerPort
+    set:
+      ports:
+        ssh:
+          port: 2222
+          expose: true
+          containerPort: 22
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: ssh
+            containerPort: 22
+            protocol: TCP
+        template: deployment.yaml
+      - contains:
+          path: spec.ports
+          content:
+            name: ssh
+            port: 2222
+            protocol: TCP
+            targetPort: ssh
+        template: service.yaml
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--entrypoints.ssh.address=:2222/tcp"
+        template: deployment.yaml
+  - it: should be possible to use same custom containerPort and keep default exposedPort
+    set:
+      ports:
+        web:
+          port: 666
+          expose: true
+          containerPort: 666
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: web
+            containerPort: 666
+            protocol: TCP
+        template: deployment.yaml
+      - contains:
+          path: spec.ports
+          content:
+            name: web
+            port: 80
+            protocol: TCP
+            targetPort: web
+        template: service.yaml
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: "--entrypoints.web.address=:666/tcp"
+        template: deployment.yaml
+  - it: should be possible to disable traefik & metrics port
+    set:
+      deployment:
+        healthchecksPort: 80
+      ports:
+        web:
+          port: 80
+        websecure:
+          port: 443
+          http3:
+            enabled: true
+            advertisedPort: 443
+        traefik: null
+        metrics: null
+    asserts:
+      - containsDocument:
+          kind: Deployment
+          apiVersion: apps/v1
+        template: deployment.yaml
+      - notContains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: "metrics"
+            containerPort: 9100
+            protocol: "TCP"
+        template: deployment.yaml
+      - notContains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: "traefik"
+            containerPort: 9100
+            protocol: "TCP"
+        template: deployment.yaml
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+        template: service.yaml
+  - it: should be possible to disable web, metrics & websecure port
+    set:
+      ports:
+        web: null
+        websecure: null
+        metrics: null
+        traefik:
+          port: 8082
+        http-internal:
+          port: 8443
+          tls:
+            enabled: true
+          expose: true
+        http-external:
+          port: 8445
+          tls:
+            enabled: true
+          expose: true
+    asserts:
+      - containsDocument:
+          kind: Deployment
+          apiVersion: apps/v1
+        template: deployment.yaml
+      - notContains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: "metrics"
+            containerPort: 9100
+            protocol: "TCP"
+        template: deployment.yaml
+      - notContains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: "traefik"
+            containerPort: 9100
+            protocol: "TCP"
+        template: deployment.yaml
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+        template: service.yaml
+  - it: should fail when disabling traefik port and not specifying an healthcheck port
+    set:
+      ports:
+        traefik: null
+    asserts:
+      - failedTemplate:
+          errorMessage: "ERROR: When disabling traefik port, you need to specify `deployment.healthchecksPort`"
+        template: deployment.yaml
