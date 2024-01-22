@@ -7,8 +7,6 @@ hostNetwork: true
 deployment:
   dnsPolicy: ClusterFirstWithHostNet
 ports:
-  traefik:
-    host: localhost
   metrics:
     port: 19100
     host: localhost
@@ -18,6 +16,8 @@ ports:
       port: websecure
   websecure:
     port: 443
+  traefik:
+    host: localhost
 service:
   enabled: false
 nodeSelector:
