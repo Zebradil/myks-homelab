@@ -8,7 +8,7 @@ charts:
     #! renovate: datasource=docker
     name: postgresql
     url: oci://registry-1.docker.io/bitnamicharts
-    version: 13.3.1
+    version: 13.4.0
   redis:
     #! IMPORTANT: Do not change order of the keys, they must go in the right
     #!            order to be recognized by renovate.
