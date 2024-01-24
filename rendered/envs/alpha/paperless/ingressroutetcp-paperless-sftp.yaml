@@ -10,5 +10,5 @@ spec:
   routes:
     - match: HostSNI(`*`)
       services:
-        - name: paperless-sftp
+        - name: paperless
           port: sftp

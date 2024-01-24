@@ -11,5 +11,5 @@ spec:
     #! See https://doc.traefik.io/traefik/routing/routers/#rule_1
     - match: HostSNI(`*`)
       services:
-        - name: paperless-sftp
+        - name: paperless
           port: sftp
