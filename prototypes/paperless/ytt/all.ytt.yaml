@@ -58,9 +58,9 @@ spec:
           env:
             #! The UID and GID are set to the same value as the paperless container.
             - name: PUID
-              value: 1000
+              value: "1000"
             - name: PGID
-              value: 1000
+              value: "1000"
             - name: USER_NAME
               value: #@ sftp.user
             - name: PUBLIC_KEY
