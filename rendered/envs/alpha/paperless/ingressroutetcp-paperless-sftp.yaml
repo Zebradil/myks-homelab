@@ -1,0 +1,15 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: paperless-sftp
+spec:
+  entryPoints:
+    - paperless-sftp
+  routes:
+    - kind: Rule
+      match: HostSNI(`*`)
+      services:
+        - name: paperless-sftp
+          port: sftp
