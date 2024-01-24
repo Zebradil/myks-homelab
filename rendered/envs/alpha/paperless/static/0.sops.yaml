@@ -1,5 +1,6 @@
 databasePassword: ENC[AES256_GCM,data:ZJ9AJVSHqe/iuS2/0C9cUI1KvLPZkO5/xzCkpymQuY8=,iv:DPBktiZ/9Lg4oq0FOV3qgDYfKRT7d0Oc2xoxMGI65I0=,tag:K2G0kuTWpUNQiQozkyWVqg==,type:str]
 sessionSecretKey: ENC[AES256_GCM,data:JodObo9gxUfdsZ8RLqi6Q56kh6aSL1+az5aCPVxV53N8s53Zefs8spzwzi2+NfViJpzrl2JWxhyx5qCK+kKs+Q==,iv:Wm50DuG6UdfbjnqKiVQmy9gW98+DfI9YnMf01UR90js=,tag:mma22rOLz/jIxrgq643GBg==,type:str]
+sftpPrivateKey: ENC[AES256_GCM,data:VoJw+DotyoTntnE0hNYdX+jcvJRh6Mj6Pnx156d7gJyKBu+EbNtTAdU3zSZ4hXs+0bjouJczf2EXUVgQGM7ZVH+YumsJYP/1K7eThIA34/ez1PjV8yYHNor9Utd1HUpNt3+YDVY2s7F/py1iLxQi83Wnr+sE9hJEYBNura6aJk+2blzJOgi21opb2NR7eGIul6gDAknGiiEXtd6u/VD/WBdXzYtUfmkRmsN51X8Qr6IdCLHU609NKLfLcTV+ewP0eq0qRMPRbNj0Kg7sCR42TrYCKAZAFGFGJMJb/fpvoGEgwJjMwKJ+cTAjRx87q36JvwFTll4kg++0KSKNabT+Cbgg9VJn/b99IzQ/E6dzLmK1NSS6/Vc3F8Vppx9zy/plkSZmkk7Ed2gtN03jE+dLEqIsCpovdGHWYkFErDjlZjEjB4pnRw78cZeDzgG2bIKZAjiSS/mvhZ8Jn/MpjsPIWZrOfkPxcxdgwEFyZqbknXTpyU8vcTL+4lV0l4Z/cU6XmQR59kcfkWns7YxmPRi8Vh5qnSY+ZkJhR/8L,iv:F5Xj3ncizWWgVHmslmZS+083rSDrXO6+PUreBFCngZM=,tag:GInbgguvqkqvjbHoKokucw==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -33,8 +34,8 @@ sops:
             YTRjMjhYQkt0ckhCelkyaklhdTZUMVUKAdVMQdz1rgcWmmG28Urd7cGefDCDL98m
             KyLLduweFOK3P2YPPWY1PYJyP/U12pFrB9l21cqpz/ZU20V+iEcJoQ==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2023-12-18T20:23:30Z"
-    mac: ENC[AES256_GCM,data:BcbYoqTEHLgFRLELYwd689aDewvvaaA55jN2ypXUCmwEsHNTnKRflJgMY2rz7mrdf/5wyiDi4kDg4RXRhNLQ9U7teBQ0hacxln9AD6IAssRsb9w8BVMEmG/vpaRsGeHIo9q23qgACn9cTQ1TLoNTECwNYpM7vrvBk4wBR/o8TN8=,iv:eHcikG5E9NxroHXnfD7/U8xFivDoXox7CzTyNTzvgao=,tag:sOMNmf+lPNRIqIbjOBCO4g==,type:str]
+    lastmodified: "2024-01-24T22:16:00Z"
+    mac: ENC[AES256_GCM,data:3pe7R3qhbj68VNkpC4X5U1FXFoEllo3zroXnEs9p3pjyf/OKmkvr//pfVWlgdCiCmBxHMc8x/nAc/S4MbYHx6rmzXzOPTtQSEBGoeoCIymudT7JKY91u0LZ2kE1z6FQJRk+c3F7gg57HkYhSI7z318EkgLX46yX6B6gGUWVwX8c=,iv:prm1V3FIxQyEWNXJrYGckQ8RBi9L7DXG3Y9Qi+fYW2I=,tag:cWlZLBwQRPwF29OY2RVS+w==,type:str]
     pgp: []
     encrypted_regex: .
     version: 3.8.1
