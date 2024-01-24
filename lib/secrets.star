@@ -2,7 +2,7 @@ load("@ytt:struct", "struct")
 
 def sops(name, key, filter=""):
     if filter:
-        tail = " | ".format(filter)
+        tail = " | " + filter
     else:
         tail = ""
     end
