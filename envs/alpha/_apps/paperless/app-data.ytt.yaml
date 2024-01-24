@@ -7,5 +7,7 @@ application:
     env:
       PAPERLESS_SECRET_KEY: #@ sec.sops("0", "sessionSecretKey")
       PAPERLESS_URL: https://paperless.junior.zebradil.dev
+    sftp:
+      public_key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMVVKE4iHitFyOKZws7G+rhw5AxE8JFFYp8BMkVc9k0h
   postgresql:
     password: #@ sec.sops("0", "databasePassword")

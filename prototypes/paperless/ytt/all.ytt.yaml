@@ -3,8 +3,10 @@
 
 #@ d = data.values
 #@ ap = d.application
+#@ sftp = ap.paperless.sftp
 #@ name = d.myks.context.app
 #@ host = name + "." + d.environment.host
+#@ secret_name = name + "-sftp"
 
 ---
 apiVersion: apps/v1
@@ -49,6 +51,28 @@ spec:
               mountPath: /usr/src/paperless/data
             - name: media
               mountPath: /usr/src/paperless/media
+            - name: consume
+              mountPath: /usr/src/paperless/consume
+        - name: sftp
+          image: #@ sftp.image
+          env:
+            #! The UID and GID are set to the same value as the paperless container.
+            - name: PUID
+              value: 1000
+            - name: PGID
+              value: 1000
+            - name: USER_NAME
+              value: #@ sftp.user
+            - name: PUBLIC_KEY
+              value: #@ sftp.public_key
+            - name: LOG_STDOUT
+              value: "true"
+          ports:
+            - containerPort: 2222
+              name: sftp
+          volumeMounts:
+            - name: consume
+              mountPath: /srv/consume
       volumes:
         - name: data
           persistentVolumeClaim:
@@ -56,6 +80,8 @@ spec:
         - name: media
           persistentVolumeClaim:
             claimName: media
+        - name: consume
+          emptyDir: {}
 
 ---
 apiVersion: v1
@@ -79,6 +105,7 @@ spec:
   resources:
     requests:
       storage: #@ ap.paperless.storage.media
+
 ---
 apiVersion: v1
 kind: Service
@@ -91,6 +118,9 @@ spec:
     - name: http
       port: 80
       targetPort: http
+    - name: sftp
+      port: 2222
+      targetPort: sftp
 
 ---
 apiVersion: traefik.io/v1alpha1

@@ -56,6 +56,27 @@ spec:
               name: data
             - mountPath: /usr/src/paperless/media
               name: media
+            - mountPath: /usr/src/paperless/consume
+              name: consume
+        - env:
+            - name: PUID
+              value: 1000
+            - name: PGID
+              value: 1000
+            - name: USER_NAME
+              value: paperless
+            - name: PUBLIC_KEY
+              value: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMVVKE4iHitFyOKZws7G+rhw5AxE8JFFYp8BMkVc9k0h
+            - name: LOG_STDOUT
+              value: "true"
+          image: linuxserver/openssh-server:9.3_p2-r1-ls143
+          name: sftp
+          ports:
+            - containerPort: 2222
+              name: sftp
+          volumeMounts:
+            - mountPath: /srv/consume
+              name: consume
       enableServiceLinks: false
       volumes:
         - name: data
@@ -64,3 +85,5 @@ spec:
         - name: media
           persistentVolumeClaim:
             claimName: media
+        - emptyDir: {}
+          name: consume

@@ -27,6 +27,12 @@ application:
       PAPERLESS_SECRET_KEY: ""
       PAPERLESS_TIME_ZONE: Europe/Berlin
       PAPERLESS_URL: http://localhost
+    sftp:
+      #! renovate: datasource=docker
+      image: linuxserver/openssh-server:9.3_p2-r1-ls143
+      user: paperless
+      #@schema/validation min_len=1
+      public_key: ""
   postgresql:
     database: #@ databaseName
     #@schema/validation min_len=1

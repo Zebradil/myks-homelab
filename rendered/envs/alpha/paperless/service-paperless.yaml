@@ -9,5 +9,8 @@ spec:
     - name: http
       port: 80
       targetPort: http
+    - name: sftp
+      port: 2222
+      targetPort: sftp
   selector:
     app: paperless
