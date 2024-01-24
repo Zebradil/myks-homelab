@@ -8,8 +8,7 @@ spec:
   entryPoints:
     - paperless-sftp
   routes:
-    - kind: Rule
-      match: HostSNI(`*`)
+    - match: HostSNI(`*`)
       services:
         - name: paperless-sftp
           port: sftp

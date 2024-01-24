@@ -10,7 +10,6 @@ spec:
     #! Change match to something more specific.
     #! See https://doc.traefik.io/traefik/routing/routers/#rule_1
     - match: HostSNI(`*`)
-      kind: Rule
       services:
         - name: paperless-sftp
           port: sftp
