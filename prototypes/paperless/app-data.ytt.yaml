@@ -33,6 +33,8 @@ application:
       user: paperless
       #@schema/validation min_len=1
       public_key: ""
+      #@schema/type any=True
+      files: null
   postgresql:
     database: #@ databaseName
     #@schema/validation min_len=1
