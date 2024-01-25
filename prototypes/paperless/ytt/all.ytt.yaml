@@ -73,7 +73,7 @@ spec:
           volumeMounts:
             - name: consume
               mountPath: /srv/consume
-            - name: sftp-init.d
+            - name: sftp-init
               mountPath: /config/custom-cont-init.d
       volumes:
         - name: data
@@ -84,7 +84,7 @@ spec:
             claimName: media
         - name: consume
           emptyDir: {}
-        - name: sftp-init.d
+        - name: sftp-init
           configMap:
             name: #@ name + "-sftp-init.d"
 

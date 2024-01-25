@@ -78,7 +78,7 @@ spec:
             - mountPath: /srv/consume
               name: consume
             - mountPath: /config/custom-cont-init.d
-              name: sftp-init.d
+              name: sftp-init
       enableServiceLinks: false
       volumes:
         - name: data
@@ -91,4 +91,4 @@ spec:
           name: consume
         - configMap:
             name: paperless-sftp-init.d
-          name: sftp-init.d
+          name: sftp-init
