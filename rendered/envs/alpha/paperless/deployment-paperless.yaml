@@ -90,5 +90,6 @@ spec:
         - emptyDir: {}
           name: consume
         - configMap:
+            defaultMode: 511
             name: paperless-sftp-init.d
           name: sftp-init

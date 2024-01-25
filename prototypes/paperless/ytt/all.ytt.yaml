@@ -87,6 +87,7 @@ spec:
         - name: sftp-init
           configMap:
             name: #@ name + "-sftp-init.d"
+            defaultMode: 0777
 
 ---
 apiVersion: v1
