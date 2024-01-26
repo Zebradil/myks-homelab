@@ -34,10 +34,9 @@ spec:
         - name: copy-scripts
           #! It is fine to use existing image as long as it has the `cp` command.
           image: #@ sftp.image
-          command: ["/bin/cp"]
+          command: ["/bin/sh", "-c"]
           args:
-            - /mnt/configmap/*
-            - /mnt/scripts
+            - cp /mnt/configmap/* /mnt/scripts/
           volumeMounts:
             - name: sftp-init-scripts
               mountPath: /mnt/scripts
