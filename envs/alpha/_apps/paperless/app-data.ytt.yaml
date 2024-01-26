@@ -14,8 +14,9 @@ application:
         init-sshd_config.sh: |
           #!/bin/sh
           {
-              echo KexAlgorithms +diffie-hellman-group14-sha1
               echo HostKeyAlgorithms +ssh-rsa
+              echo KexAlgorithms +diffie-hellman-group14-sha1
+              echo PubkeyAcceptedKeyTypes +ssh-rsa
           } >> /etc/ssh/sshd_config
         #@yaml/text-templated-strings
         init-rsa-keys.sh: |
