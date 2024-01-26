@@ -17,6 +17,9 @@ kind: Deployment
 metadata:
   name: #@ name
 spec:
+  strategy:
+    #! Use Recreate strategy to avoid conflicts with accessing the PVCs
+    type: Recreate
   selector:
     matchLabels:
       app: #@ name
