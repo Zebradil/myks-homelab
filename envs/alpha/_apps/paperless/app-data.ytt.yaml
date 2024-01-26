@@ -17,5 +17,14 @@ application:
               echo KexAlgorithms +diffie-hellman-group14-sha1
               echo HostKeyAlgorithms +ssh-rsa
           } >> /etc/ssh/sshd_config
+        #@yaml/text-templated-strings
+        init-rsa-keys.sh: |
+          #!/bin/sh
+          cat <<EOF > /etc/ssh/ssh_host_rsa_key
+          (@= sec.sops("0", "ssh_host_rsa_key") @)
+          EOF
+          cat <<EOF > /etc/ssh/ssh_host_rsa_key.pub
+          (@= sec.sops("0", "ssh_host_rsa_key.pub") @)
+          EOF
   postgresql:
     password: #@ sec.sops("0", "databasePassword")

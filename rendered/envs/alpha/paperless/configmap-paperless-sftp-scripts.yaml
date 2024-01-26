@@ -1,5 +1,13 @@
 apiVersion: v1
 data:
+  init-rsa-keys.sh: |
+    #!/bin/sh
+    cat <<EOF > /etc/ssh/ssh_host_rsa_key
+    <path:static/0.sops.yaml#ssh_host_rsa_key>
+    EOF
+    cat <<EOF > /etc/ssh/ssh_host_rsa_key.pub
+    <path:static/0.sops.yaml#ssh_host_rsa_key.pub>
+    EOF
   init-sshd_config.sh: |
     #!/bin/sh
     {
