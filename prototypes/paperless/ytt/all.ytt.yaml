@@ -1,6 +1,9 @@
 #@ load("@ytt:data", "data")
 #@ load("util.star", "util")
 
+#@ PAPERLESS_UID = "1000"
+#@ PAPERLESS_GID = "1000"
+
 #@ d = data.values
 #@ ap = d.application
 #@ sftp = ap.paperless.sftp
@@ -26,6 +29,24 @@ spec:
       #! This breaks the paperless container, which expects PAPERLESS_PORT to be an integer.
       #! See https://github.com/paperless-ngx/paperless-ngx/issues/264
       enableServiceLinks: false
+      initContainers:
+        #! This init-container copies the scripts from the configmap to the emptyDir volume.
+        - name: copy-scripts
+          #! It is fine to use existing image as long as it has the `cp` command.
+          image: #@ sftp.image
+          command: ["/bin/sh", "-c"]
+          #@yaml/text-templated-strings
+          args:
+            - |
+              DST=/mnt/scripts
+              cp /mnt/configmap/* "$DST"
+              chmod -R +x "$DST"
+              chown -R (@= PAPERLESS_UID @):(@= PAPERLESS_GID @) "$DST"
+          volumeMounts:
+            - name: sftp-init-scripts
+              mountPath: /mnt/scripts
+            - name: sftp-init-cm
+              mountPath: /mnt/configmap
       containers:
         - name: #@ name
           image: #@ ap.paperless.image
@@ -58,9 +79,9 @@ spec:
           env:
             #! The UID and GID are set to the same value as the paperless container.
             - name: PUID
-              value: "1000"
+              value: #@ PAPERLESS_UID
             - name: PGID
-              value: "1000"
+              value: #@ PAPERLESS_GID
             - name: USER_NAME
               value: #@ sftp.user
             - name: PUBLIC_KEY
@@ -73,7 +94,7 @@ spec:
           volumeMounts:
             - name: consume
               mountPath: /srv/consume
-            - name: sftp-init
+            - name: sftp-init-scripts
               mountPath: /config/custom-cont-init.d
       volumes:
         - name: data
@@ -84,10 +105,11 @@ spec:
             claimName: media
         - name: consume
           emptyDir: {}
-        - name: sftp-init
+        - name: sftp-init-scripts
+          emptyDir: {}
+        - name: sftp-init-cm
           configMap:
             name: #@ name + "-sftp-init.d"
-            defaultMode: 0777
 
 ---
 apiVersion: v1
