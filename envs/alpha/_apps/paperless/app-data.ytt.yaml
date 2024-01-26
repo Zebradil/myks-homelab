@@ -13,6 +13,9 @@ application:
       files:
         init-sshd_config.sh: |
           #!/bin/sh
-          echo KexAlgorithms +diffie-hellman-group14-sha1 >> /etc/ssh/sshd_config
+          {
+              echo KexAlgorithms +diffie-hellman-group14-sha1
+              echo HostKeyAlgorithms +ssh-rsa
+          } >> /etc/ssh/sshd_config
   postgresql:
     password: #@ sec.sops("0", "databasePassword")
