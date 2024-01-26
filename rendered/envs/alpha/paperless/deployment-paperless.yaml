@@ -82,14 +82,10 @@ spec:
       enableServiceLinks: false
       initContainers:
         - args:
-            - |
-              DST=/mnt/scripts
-              cp /mnt/configmap/* "$DST"
-              chmod -R +x "$DST"
-              chown -R 1000:1000 "$DST"
+            - /mnt/configmap/*
+            - /mnt/scripts
           command:
-            - /bin/sh
-            - -c
+            - /bin/cp
           image: linuxserver/openssh-server:9.3_p2-r1-ls143
           name: copy-scripts
           volumeMounts:

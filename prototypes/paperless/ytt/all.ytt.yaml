@@ -34,14 +34,10 @@ spec:
         - name: copy-scripts
           #! It is fine to use existing image as long as it has the `cp` command.
           image: #@ sftp.image
-          command: ["/bin/sh", "-c"]
-          #@yaml/text-templated-strings
+          command: ["/bin/cp"]
           args:
-            - |
-              DST=/mnt/scripts
-              cp /mnt/configmap/* "$DST"
-              chmod -R +x "$DST"
-              chown -R (@= PAPERLESS_UID @):(@= PAPERLESS_GID @) "$DST"
+            - /mnt/configmap/*
+            - /mnt/scripts
           volumeMounts:
             - name: sftp-init-scripts
               mountPath: /mnt/scripts
