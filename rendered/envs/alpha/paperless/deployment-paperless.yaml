@@ -79,7 +79,7 @@ spec:
           volumeMounts:
             - mountPath: /srv/consume
               name: consume
-            - mountPath: /config/custom-cont-init.d
+            - mountPath: /custom-cont-init.d
               name: sftp-init-scripts
       enableServiceLinks: false
       initContainers:

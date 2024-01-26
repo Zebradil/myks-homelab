@@ -93,7 +93,7 @@ spec:
             - name: consume
               mountPath: /srv/consume
             - name: sftp-init-scripts
-              mountPath: /config/custom-cont-init.d
+              mountPath: /custom-cont-init.d
       volumes:
         - name: data
           persistentVolumeClaim:
