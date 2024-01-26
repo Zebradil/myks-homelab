@@ -9,7 +9,7 @@
 #@ sftp = ap.paperless.sftp
 #@ name = d.myks.context.app
 #@ host = name + "." + d.environment.host
-#@ secret_name = name + "-sftp"
+#@ sftp_scripts_cm_name = name + "-sftp-scripts"
 
 ---
 apiVersion: apps/v1
@@ -28,6 +28,10 @@ spec:
     metadata:
       labels:
         app: #@ name
+      annotations:
+        #! Set checksum annotation to force redeployment when the configmap changes.
+        #@yaml/text-templated-strings
+        checksum/(@= sftp_scripts_cm_name @): #@ util.checksum(sftp.files)
     spec:
       #! With enableServiceLinks set to true, Kubernetes shadows PAPERLESS_PORT with a service link.
       #! This breaks the paperless container, which expects PAPERLESS_PORT to be an integer.
@@ -108,13 +112,13 @@ spec:
           emptyDir: {}
         - name: sftp-init-cm
           configMap:
-            name: #@ name + "-sftp-init.d"
+            name: #@ sftp_scripts_cm_name
 
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: #@ name + "-sftp-init.d"
+  name: #@ sftp_scripts_cm_name
 data: #@ sftp.files
 
 ---

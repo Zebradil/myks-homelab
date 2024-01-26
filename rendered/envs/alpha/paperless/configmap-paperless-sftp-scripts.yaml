@@ -10,4 +10,4 @@ kind: ConfigMap
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
-  name: paperless-sftp-init.d
+  name: paperless-sftp-scripts

@@ -13,6 +13,8 @@ spec:
     type: Recreate
   template:
     metadata:
+      annotations:
+        checksum/paperless-sftp-scripts: f0dbd95adbacb1a7ab5651fdfcbc13eb08a9ceedefc949da725dfdfe8d3a8dbb
       labels:
         app: paperless
     spec:
@@ -108,5 +110,5 @@ spec:
         - emptyDir: {}
           name: sftp-init-scripts
         - configMap:
-            name: paperless-sftp-init.d
+            name: paperless-sftp-scripts
           name: sftp-init-cm
