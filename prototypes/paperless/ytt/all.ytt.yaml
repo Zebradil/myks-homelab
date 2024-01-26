@@ -20,6 +20,7 @@ spec:
   strategy:
     #! Use Recreate strategy to avoid conflicts with accessing the PVCs
     type: Recreate
+    rollingUpdate: null
   selector:
     matchLabels:
       app: #@ name

@@ -9,6 +9,7 @@ spec:
     matchLabels:
       app: paperless
   strategy:
+    rollingUpdate: null
     type: Recreate
   template:
     metadata:
