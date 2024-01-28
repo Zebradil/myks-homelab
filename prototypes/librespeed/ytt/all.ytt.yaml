@@ -34,7 +34,7 @@ spec:
           #@ if/end ap.template != "":
           volumeMounts:
             - name: #@ cm_templates_name
-              mountPath: /config/www
+              mountPath: /config/www/index.html
               subPath: index.html
       #@ if/end ap.template != "":
       volumes:
