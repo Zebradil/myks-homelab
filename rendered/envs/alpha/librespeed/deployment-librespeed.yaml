@@ -25,3 +25,11 @@ spec:
           ports:
             - containerPort: 80
               name: http
+          volumeMounts:
+            - mountPath: /config/www
+              name: librespeed-templates
+              subPath: index.html
+      volumes:
+        - configMap:
+            name: librespeed-templates
+          name: librespeed-templates

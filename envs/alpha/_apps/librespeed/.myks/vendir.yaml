@@ -1,0 +1,13 @@
+apiVersion: vendir.k14s.io/v1alpha1
+kind: Config
+directories:
+- path: envs/alpha/_apps/librespeed/vendor/ytt/librespeed
+  contents:
+  - path: .
+    lazy: true
+    git:
+      url: https://github.com/librespeed/speedtest
+      ref: 5.3.0
+    includePaths:
+    - examples/example-singleServer-*
+    newRootPath: examples

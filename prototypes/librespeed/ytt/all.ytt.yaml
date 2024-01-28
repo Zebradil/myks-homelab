@@ -3,6 +3,7 @@
 #@ d = data.values
 #@ ap = d.application
 #@ name = d.myks.context.app
+#@ cm_templates_name = name + "-templates"
 
 ---
 apiVersion: apps/v1
@@ -30,6 +31,16 @@ spec:
           ports:
             - containerPort: 80
               name: http
+          #@ if/end ap.template != "":
+          volumeMounts:
+            - name: #@ cm_templates_name
+              mountPath: /config/www
+              subPath: index.html
+      #@ if/end ap.template != "":
+      volumes:
+        - name: #@ cm_templates_name
+          configMap:
+            name: #@ cm_templates_name
 
 ---
 apiVersion: v1
@@ -38,6 +49,15 @@ metadata:
   name: #@ name
 stringData:
   password: #@ ap.password
+
+#@ if/end ap.template != "":
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: #@ name + "-templates"
+data:
+  index.html: #@ data.read("librespeed/example-singleServer-{}.html".format(ap.template))
 
 ---
 apiVersion: v1
