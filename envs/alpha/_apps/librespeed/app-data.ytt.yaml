@@ -4,4 +4,4 @@
 ---
 application:
   password: #@ sec.sops("0", "password")
-  template: basic
+  template: chart

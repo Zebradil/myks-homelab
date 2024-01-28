@@ -11,7 +11,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/librespeed-templates: 5899231fd0723e5a6b5692d95ff0d93eb22c74c2d206a2d3de98da48a56ec0ab
+        checksum/librespeed-templates: eb21f72e033be57cfaf3e90d49343b1af280f97f5b3122cb21d4a68a1cb5d052
       labels:
         app: librespeed
     spec:
