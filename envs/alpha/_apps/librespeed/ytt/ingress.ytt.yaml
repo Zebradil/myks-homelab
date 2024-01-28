@@ -1,0 +1,21 @@
+#@ load("@ytt:data", "data")
+
+#@ d = data.values
+#@ name = d.myks.context.app
+#@ host = name + "." + d.environment.host
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: #@ name
+spec:
+  routes:
+    - match: #@ "Host(`{}`)".format(host)
+      kind: Rule
+      middlewares:
+        - name: chain-authelia-auth
+          namespace: authelia
+      services:
+        - name: #@ name
+          port: http

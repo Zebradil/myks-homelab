@@ -1,0 +1,53 @@
+#@ load("@ytt:data", "data")
+
+#@ d = data.values
+#@ ap = d.application
+#@ name = d.myks.context.app
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: #@ name
+spec:
+  selector:
+    matchLabels:
+      app: #@ name
+  template:
+    metadata:
+      labels:
+        app: #@ name
+    spec:
+      containers:
+        - name: #@ name
+          image: #@ ap.image
+          env:
+            - name: PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: #@ name
+                  key: password
+          ports:
+            - containerPort: 80
+              name: http
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: #@ name
+stringData:
+  password: #@ ap.password
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #@ name
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+  selector:
+    app: #@ name

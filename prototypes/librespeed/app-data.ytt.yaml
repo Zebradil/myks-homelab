@@ -1,0 +1,8 @@
+#@data/values-schema
+---
+#@overlay/match-child-defaults missing_ok=True
+application:
+  #! renovate: datasource=docker
+  image: linuxserver/librespeed:5.3.0
+  #@schema/validation min_len=1
+  password: ""

@@ -9,6 +9,7 @@ environment:
     - proto: cert-manager
     - proto: httpbingo
     - proto: paperless
+    - proto: librespeed
     - proto: synology-csi
     - proto: traefik
     #! - proto: webapp
