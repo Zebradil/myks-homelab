@@ -10,8 +10,6 @@ spec:
       app: librespeed
   template:
     metadata:
-      annotations:
-        checksum/librespeed-templates: eb21f72e033be57cfaf3e90d49343b1af280f97f5b3122cb21d4a68a1cb5d052
       labels:
         app: librespeed
     spec:
@@ -27,11 +25,3 @@ spec:
           ports:
             - containerPort: 80
               name: http
-          volumeMounts:
-            - mountPath: /config/www/index.html
-              name: librespeed-templates
-              subPath: index.html
-      volumes:
-        - configMap:
-            name: librespeed-templates
-          name: librespeed-templates

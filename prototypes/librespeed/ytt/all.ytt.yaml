@@ -4,13 +4,7 @@
 #@ d = data.values
 #@ ap = d.application
 #@ name = d.myks.context.app
-#@ cm_templates_name = name + "-templates"
-
-#@ if ap.template == "":
-#@   frontpage_template = ""
-#@ else:
-#@   frontpage_template = data.read("librespeed/example-singleServer-{}.html".format(ap.template))
-#@ end
+#@ cm_static_files_name = name + "-static-files"
 
 ---
 apiVersion: apps/v1
@@ -25,10 +19,11 @@ spec:
     metadata:
       labels:
         app: #@ name
+      #@ if/end ap.customFrontpage != "":
       annotations:
         #! Set checksum annotation to force redeployment when the configmap changes.
         #@yaml/text-templated-strings
-        checksum/(@= cm_templates_name @): #@ sha256.sum(frontpage_template)
+        checksum/(@= cm_static_files_name @): #@ sha256.sum(ap.customFrontpage)
     spec:
       containers:
         - name: #@ name
@@ -42,16 +37,16 @@ spec:
           ports:
             - containerPort: 80
               name: http
-          #@ if/end ap.template != "":
+          #@ if/end ap.customFrontpage != "":
           volumeMounts:
-            - name: #@ cm_templates_name
+            - name: #@ cm_static_files_name
               mountPath: /config/www/index.html
               subPath: index.html
-      #@ if/end ap.template != "":
+      #@ if/end ap.customFrontpage != "":
       volumes:
-        - name: #@ cm_templates_name
+        - name: #@ cm_static_files_name
           configMap:
-            name: #@ cm_templates_name
+            name: #@ cm_static_files_name
 
 ---
 apiVersion: v1
@@ -61,14 +56,14 @@ metadata:
 stringData:
   password: #@ ap.password
 
-#@ if/end ap.template != "":
+#@ if/end ap.customFrontpage != "":
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: #@ name + "-templates"
+  name: #@ cm_static_files_name
 data:
-  index.html: #@ frontpage_template
+  index.html: #@ ap.customFrontpage
 
 ---
 apiVersion: v1
