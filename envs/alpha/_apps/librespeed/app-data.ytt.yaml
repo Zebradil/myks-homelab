@@ -1,4 +1,6 @@
+#@ load("secrets.star", "sec")
+
 #@data/values
 ---
 application:
-  password: tmppass
+  password: #@ sec.sops("0", "password")
