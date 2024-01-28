@@ -10,6 +10,8 @@ spec:
       app: librespeed
   template:
     metadata:
+      annotations:
+        checksum/librespeed-templates: 5899231fd0723e5a6b5692d95ff0d93eb22c74c2d206a2d3de98da48a56ec0ab
       labels:
         app: librespeed
     spec:

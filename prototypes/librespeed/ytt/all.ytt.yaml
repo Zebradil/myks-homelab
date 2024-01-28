@@ -1,9 +1,16 @@
 #@ load("@ytt:data", "data")
+#@ load("@ytt:sha256", "sha256")
 
 #@ d = data.values
 #@ ap = d.application
 #@ name = d.myks.context.app
 #@ cm_templates_name = name + "-templates"
+
+#@ if ap.template == "":
+#@   frontpage_template = ""
+#@ else:
+#@   frontpage_template = data.read("librespeed/example-singleServer-{}.html".format(ap.template))
+#@ end
 
 ---
 apiVersion: apps/v1
@@ -18,6 +25,10 @@ spec:
     metadata:
       labels:
         app: #@ name
+      annotations:
+        #! Set checksum annotation to force redeployment when the configmap changes.
+        #@yaml/text-templated-strings
+        checksum/(@= cm_templates_name @): #@ sha256.sum(frontpage_template)
     spec:
       containers:
         - name: #@ name
@@ -57,7 +68,7 @@ kind: ConfigMap
 metadata:
   name: #@ name + "-templates"
 data:
-  index.html: #@ data.read("librespeed/example-singleServer-{}.html".format(ap.template))
+  index.html: #@ frontpage_template
 
 ---
 apiVersion: v1
