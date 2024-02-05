@@ -10,8 +10,8 @@ metadata:
     app.kubernetes.io/instance: cert-manager
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: webhook
-    app.kubernetes.io/version: v1.13.3
-    helm.sh/chart: cert-manager-v1.13.3
+    app.kubernetes.io/version: v1.14.1
+    helm.sh/chart: cert-manager-v1.14.1
   name: cert-manager-webhook
 webhooks:
   - admissionReviewVersions:
@@ -27,13 +27,11 @@ webhooks:
     rules:
       - apiGroups:
           - cert-manager.io
-          - acme.cert-manager.io
         apiVersions:
           - v1
         operations:
           - CREATE
-          - UPDATE
         resources:
-          - '*/*'
+          - certificaterequests
     sideEffects: None
-    timeoutSeconds: 10
+    timeoutSeconds: 30
