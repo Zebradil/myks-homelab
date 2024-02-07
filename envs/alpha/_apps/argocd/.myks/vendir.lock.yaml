@@ -1,12 +1,12 @@
 apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
-  - configDigest: f3a5e8206329a15a0359a0338fda1aeb65cfc7845a97c6f439dfb796899429cf
+  - configDigest: a6a4f1e4d69f97c92d28cb9a446589dae8e179b134dc18528497796744b422bc
     git:
-      commitTitle: Bump version to 2.9.6 (#17078)...
-      sha: ba62a0a86d19f71a65ec2b510a39ea55497e1580
+      commitTitle: Bump version to 2.10.0 (#17094)...
+      sha: 1c959b7b0df1042c3da531442fca79608663cf90
       tags:
-      - v2.9.6
+      - v2.10.0
     path: .
   path: envs/alpha/_apps/argocd/vendor/ytt/argocd
 kind: LockConfig

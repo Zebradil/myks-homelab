@@ -134,6 +134,18 @@ spec:
                   key: otlp.address
                   name: argocd-cmd-params-cm
                   optional: true
+            - name: ARGOCD_REPO_SERVER_OTLP_INSECURE
+              valueFrom:
+                configMapKeyRef:
+                  key: otlp.insecure
+                  name: argocd-cmd-params-cm
+                  optional: true
+            - name: ARGOCD_REPO_SERVER_OTLP_HEADERS
+              valueFrom:
+                configMapKeyRef:
+                  key: otlp.headers
+                  name: argocd-cmd-params-cm
+                  optional: true
             - name: ARGOCD_REPO_SERVER_MAX_COMBINED_DIRECTORY_MANIFESTS_SIZE
               valueFrom:
                 configMapKeyRef:
@@ -182,13 +194,25 @@ spec:
                   key: reposerver.enable.git.submodule
                   name: argocd-cmd-params-cm
                   optional: true
+            - name: ARGOCD_GIT_LS_REMOTE_PARALLELISM_LIMIT
+              valueFrom:
+                configMapKeyRef:
+                  key: reposerver.git.lsremote.parallelism.limit
+                  name: argocd-cmd-params-cm
+                  optional: true
+            - name: ARGOCD_GIT_REQUEST_TIMEOUT
+              valueFrom:
+                configMapKeyRef:
+                  key: reposerver.git.request.timeout
+                  name: argocd-cmd-params-cm
+                  optional: true
             - name: HELM_CACHE_HOME
               value: /helm-working-dir
             - name: HELM_CONFIG_HOME
               value: /helm-working-dir
             - name: HELM_DATA_HOME
               value: /helm-working-dir
-          image: quay.io/argoproj/argocd:v2.9.6
+          image: quay.io/argoproj/argocd:v2.10.0
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 3
@@ -266,7 +290,7 @@ spec:
             - -n
             - /usr/local/bin/argocd
             - /var/run/argocd/argocd-cmp-server
-          image: quay.io/argoproj/argocd:v2.9.6
+          image: quay.io/argoproj/argocd:v2.10.0
           name: copyutil
           securityContext:
             allowPrivilegeEscalation: false
