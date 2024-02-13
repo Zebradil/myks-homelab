@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: postgresql
     app.kubernetes.io/version: 16.2.0
-    helm.sh/chart: postgresql-14.0.4
+    helm.sh/chart: postgresql-14.0.5
   name: postgresql-read
   namespace: paperless
 spec:
@@ -20,7 +20,6 @@ spec:
         - port: 53
           protocol: TCP
     - ports:
-        - port: 5432
         - port: 5432
       to:
         - podSelector:
