@@ -1,10 +1,10 @@
 apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
-  - configDigest: c785a42ecc9d3bb9ea65fc39867075d7f5bd2c17f444009bb4a069e4bd21b08e
+  - configDigest: e70055ab4401c8439bec057e7d86b7ad1f016bdb60cd2a4354ed978119b845ae
     helmChart:
       appVersion: 16.2.0
-      version: 14.1.8
+      version: 14.2.1
     path: .
   path: envs/alpha/_apps/paperless/vendor/charts/postgresql
 - contents:
