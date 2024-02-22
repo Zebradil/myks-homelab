@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: redis
     app.kubernetes.io/version: 7.2.4
-    helm.sh/chart: redis-18.14.2
+    helm.sh/chart: redis-18.16.0
   name: redis-master
   namespace: paperless
 spec:
@@ -33,7 +33,7 @@ spec:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: redis
         app.kubernetes.io/version: 7.2.4
-        helm.sh/chart: redis-18.14.2
+        helm.sh/chart: redis-18.16.0
     spec:
       affinity:
         nodeAffinity: null
@@ -66,7 +66,7 @@ spec:
               value: "no"
             - name: REDIS_PORT
               value: "6379"
-          image: registry-1.docker.io/bitnami/redis:7.2.4-debian-11-r19
+          image: docker.io/bitnami/redis:7.2.4-debian-12-r8
           imagePullPolicy: IfNotPresent
           livenessProbe:
             exec:
@@ -99,6 +99,7 @@ spec:
             capabilities:
               drop:
                 - ALL
+            readOnlyRootFilesystem: false
             runAsGroup: 0
             runAsNonRoot: true
             runAsUser: 1001
@@ -115,9 +116,11 @@ spec:
             - mountPath: /opt/bitnami/redis/mounted-etc
               name: config
             - mountPath: /opt/bitnami/redis/etc/
-              name: redis-tmp-conf
+              name: empty-dir
+              subPath: app-conf-dir
             - mountPath: /tmp
-              name: tmp
+              name: empty-dir
+              subPath: tmp-dir
       enableServiceLinks: true
       securityContext:
         fsGroup: 1001
@@ -139,9 +142,7 @@ spec:
             name: redis-configuration
           name: config
         - emptyDir: {}
-          name: redis-tmp-conf
-        - emptyDir: {}
-          name: tmp
+          name: empty-dir
         - emptyDir: {}
           name: redis-data
   updateStrategy:
