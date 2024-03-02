@@ -1,10 +1,10 @@
 apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
-  - configDigest: 2eca2d95378c96139289c1c4f7be637e4a2d524791ddfb85efdc6d5e5f4898f1
+  - configDigest: 07d69a79f261588fe55a77c49976da4ed9d8376b4f201d163844b98517d6367a
     git:
-      commitTitle: Bump version to 2.10.1 (#17211)...
-      sha: a79e0eaca415461dc36615470cecc25d6d38cefb
+      commitTitle: 'chore(ci): free up disk space for goreleaser (#17373) (#17374)...'
+      sha: fcf5d8c2381b68ab1621b90be63913b12cca2eb7
       tags:
       - stable
     path: .
