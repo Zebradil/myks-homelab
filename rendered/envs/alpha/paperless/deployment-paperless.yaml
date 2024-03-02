@@ -105,8 +105,9 @@ spec:
         - name: media
           persistentVolumeClaim:
             claimName: media
-        - emptyDir: {}
-          name: consume
+        - name: consume
+          persistentVolumeClaim:
+            claimName: consume
         - emptyDir: {}
           name: sftp-init-scripts
         - configMap:

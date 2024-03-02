@@ -107,7 +107,8 @@ spec:
           persistentVolumeClaim:
             claimName: media
         - name: consume
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: consume
         - name: sftp-init-scripts
           emptyDir: {}
         - name: sftp-init-cm
@@ -143,6 +144,17 @@ spec:
   resources:
     requests:
       storage: #@ ap.paperless.storage.media
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: consume
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: #@ ap.paperless.storage.consume
 
 ---
 apiVersion: v1
