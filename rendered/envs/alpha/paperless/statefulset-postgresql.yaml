@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: postgresql
     app.kubernetes.io/version: 16.2.0
-    helm.sh/chart: postgresql-14.3.1
+    helm.sh/chart: postgresql-14.3.3
   name: postgresql
   namespace: paperless
 spec:
@@ -28,7 +28,7 @@ spec:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: postgresql
         app.kubernetes.io/version: 16.2.0
-        helm.sh/chart: postgresql-14.3.1
+        helm.sh/chart: postgresql-14.3.3
       name: postgresql
     spec:
       affinity:
