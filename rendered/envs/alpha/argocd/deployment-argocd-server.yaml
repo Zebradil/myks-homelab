@@ -271,7 +271,7 @@ spec:
                   key: server.api.content.types
                   name: argocd-cmd-params-cm
                   optional: true
-          image: quay.io/argoproj/argocd:v2.10.2
+          image: quay.io/argoproj/argocd:v2.10.3
           imagePullPolicy: Always
           livenessProbe:
             httpGet:
