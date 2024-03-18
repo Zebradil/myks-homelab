@@ -45,7 +45,7 @@ spec:
               value: Europe/Berlin
             - name: PAPERLESS_URL
               value: https://paperless.junior.zebradil.dev
-          image: ghcr.io/paperless-ngx/paperless-ngx:2.6.2
+          image: ghcr.io/paperless-ngx/paperless-ngx:2.6.3
           name: paperless
           ports:
             - containerPort: 8000
