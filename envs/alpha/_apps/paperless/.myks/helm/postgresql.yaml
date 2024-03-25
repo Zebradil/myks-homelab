@@ -6,5 +6,6 @@ auth:
 image:
   tag: 13.13.0
 primary:
+  resourcesPreset: none
   persistence:
     size: 1Gi
