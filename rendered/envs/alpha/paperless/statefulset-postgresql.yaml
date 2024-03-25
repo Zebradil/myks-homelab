@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: postgresql
     app.kubernetes.io/version: 16.2.0
-    helm.sh/chart: postgresql-14.3.3
+    helm.sh/chart: postgresql-15.1.4
   name: postgresql
   namespace: paperless
 spec:
@@ -28,7 +28,7 @@ spec:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: postgresql
         app.kubernetes.io/version: 16.2.0
-        helm.sh/chart: postgresql-14.3.3
+        helm.sh/chart: postgresql-15.1.4
       name: postgresql
     spec:
       affinity:
@@ -116,17 +116,26 @@ spec:
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 5
+          resources:
+            limits:
+              cpu: 150m
+              ephemeral-storage: 1024Mi
+              memory: 192Mi
+            requests:
+              cpu: 100m
+              ephemeral-storage: 50Mi
+              memory: 128Mi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
               drop:
                 - ALL
             privileged: false
-            readOnlyRootFilesystem: false
-            runAsGroup: 0
+            readOnlyRootFilesystem: true
+            runAsGroup: 1001
             runAsNonRoot: true
             runAsUser: 1001
-            seLinuxOptions: null
+            seLinuxOptions: {}
             seccompProfile:
               type: RuntimeDefault
           volumeMounts:
