@@ -10,5 +10,7 @@ auth:
 image:
   tag: 13.13.0
 primary:
+  #! TODO(@zebradil): Perform rightsizing.
+  resourcesPreset: "none"
   persistence:
     size: 1Gi
