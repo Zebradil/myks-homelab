@@ -152,7 +152,7 @@ spec:
                   key: applicationsetcontroller.enable.scm.providers
                   name: argocd-cmd-params-cm
                   optional: true
-          image: quay.io/argoproj/argocd:v2.10.3
+          image: quay.io/argoproj/argocd:v2.10.4
           imagePullPolicy: Always
           name: argocd-applicationset-controller
           ports:
