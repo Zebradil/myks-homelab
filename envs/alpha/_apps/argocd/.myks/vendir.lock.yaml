@@ -1,10 +1,10 @@
 apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
-  - configDigest: 8f54b0272366cb69f0b55fb8671f70afb4259e9974ada5e2ce6c19f5eaefabb4
+  - configDigest: 2f3ff0e279fbf7e816db04fa64633b24ee890c4fb017ac01c5163f679c031ebf
     git:
-      commitTitle: Bump version to 2.10.3 (#17513)...
-      sha: 0fd6344537eb948cff602824a1d060421ceff40e
+      commitTitle: Bump version to 2.10.4 (#17557)...
+      sha: f5d63a5c77d2e804e51ef94bee3db441e0789d00
       tags:
       - stable
     path: .
