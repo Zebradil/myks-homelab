@@ -2,5 +2,6 @@ architecture: standalone
 auth:
   enabled: false
 master:
+  resourcesPreset: none
   persistence:
     enabled: false

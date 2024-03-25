@@ -4,5 +4,7 @@ architecture: standalone
 auth:
   enabled: false
 master:
+  #! TODO(@zebradil): Perform rightsizing.
+  resourcesPreset: "none"
   persistence:
     enabled: false
