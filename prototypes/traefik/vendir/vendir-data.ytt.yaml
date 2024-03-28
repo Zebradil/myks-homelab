@@ -3,11 +3,11 @@
 #@overlay/match-child-defaults missing_ok=True
 application:
   charts:
-    #! WARNING: The order of the keys (alphabetical) is important for renovate.
-    #!          When changed, renovate won't be able to detect the new version.
-    #!          See renovate.json for more details.
-    #! renovate: datasource=helm
     traefik:
+      #! WARNING: The order of the keys (alphabetical) is important for renovate.
+      #!          When changed, renovate won't be able to detect the new version.
+      #!          See renovate.json for more details.
+      #! renovate: datasource=helm
       name: traefik
       url: https://traefik.github.io/charts
       version: v26.0.0
