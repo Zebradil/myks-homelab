@@ -2373,8 +2373,6 @@ spec:
                               - metadata
                               - spec
                             type: object
-                        required:
-                          - elements
                         type: object
                       matrix:
                         properties:
@@ -4717,8 +4715,6 @@ spec:
                                         - metadata
                                         - spec
                                       type: object
-                                  required:
-                                    - elements
                                   type: object
                                 matrix:
                                   x-kubernetes-preserve-unknown-fields: true
@@ -9744,8 +9740,6 @@ spec:
                                         - metadata
                                         - spec
                                       type: object
-                                  required:
-                                    - elements
                                   type: object
                                 matrix:
                                   x-kubernetes-preserve-unknown-fields: true
