@@ -23,11 +23,11 @@ data:
     }
     prometheus.scrape "pods" {
       targets    = discovery.kubernetes.pods.targets
-      forward_to = [prometheus.remote_write.grafana-cloud.receiver]
+      forward_to = [prometheus.remote_write.grafana_cloud.receiver]
     }
     prometheus.scrape "nodes" {
       targets    = discovery.kubernetes.nodes.targets
-      forward_to = [prometheus.remote_write.grafana-cloud.receiver]
+      forward_to = [prometheus.remote_write.grafana_cloud.receiver]
     }
 kind: ConfigMap
 metadata:
