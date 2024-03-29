@@ -1,0 +1,49 @@
+---
+cluster:
+  name: alpha
+configValidator:
+  enabled: false
+externalServices:
+  prometheus:
+    secret:
+      create: false
+      name: grafana-cloud-prometheus-endpoint
+  loki:
+    secret:
+      create: false
+      name: grafana-cloud-loki-endpoint
+  tempo:
+    secret:
+      create: false
+      name: grafana-cloud-tempo-endpoint
+metrics:
+  enabled: true
+  cost:
+    enabled: false
+  node-exporter:
+    enabled: true
+logs:
+  enabled: true
+  pod_logs:
+    enabled: true
+  cluster_events:
+    enabled: true
+traces:
+  enabled: false
+receivers:
+  grpc:
+    enabled: true
+  http:
+    enabled: true
+  zipkin:
+    enabled: false
+opencost:
+  enabled: false
+kube-state-metrics:
+  enabled: true
+prometheus-node-exporter:
+  enabled: true
+prometheus-operator-crds:
+  enabled: true
+grafana-agent: {}
+grafana-agent-logs: {}

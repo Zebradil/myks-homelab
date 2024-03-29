@@ -1,11 +1,11 @@
 apiVersion: vendir.k14s.io/v1alpha1
 kind: Config
 directories:
-- path: envs/alpha/_apps/grafana-agent/vendor/charts/grafana-agent
+- path: envs/alpha/_apps/grafana-agent/vendor/charts/k8s-monitoring
   contents:
   - path: .
     helmChart:
-      name: grafana-agent
-      version: 0.37.0
+      name: k8s-monitoring
+      version: 0.12.3
       repository:
         url: https://grafana.github.io/helm-charts

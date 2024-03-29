@@ -9,6 +9,6 @@ application:
       #!          When changed, renovate won't be able to detect the new version.
       #!          See renovate.json for more details.
       #! renovate: datasource=helm
-      name: grafana-agent
+      name: k8s-monitoring
       url: https://grafana.github.io/helm-charts
-      version: 0.37.0
+      version: 0.12.3
