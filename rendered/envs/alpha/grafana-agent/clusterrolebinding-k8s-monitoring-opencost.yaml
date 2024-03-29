@@ -1,0 +1,21 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    app.kubernetes.io/instance: k8s-monitoring
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: opencost
+    app.kubernetes.io/part-of: opencost
+    app.kubernetes.io/version: 1.109.0
+    helm.sh/chart: opencost-1.32.0
+  name: k8s-monitoring-opencost
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: k8s-monitoring-opencost
+subjects:
+  - kind: ServiceAccount
+    name: k8s-monitoring-opencost
+    namespace: grafana-agent

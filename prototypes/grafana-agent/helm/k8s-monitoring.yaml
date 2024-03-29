@@ -19,7 +19,7 @@ externalServices:
 metrics:
   enabled: true
   cost:
-    enabled: false
+    enabled: true
   node-exporter:
     enabled: true
 logs:
@@ -38,7 +38,7 @@ receivers:
   zipkin:
     enabled: false
 opencost:
-  enabled: false
+  enabled: true
 kube-state-metrics:
   enabled: true
 prometheus-node-exporter:
