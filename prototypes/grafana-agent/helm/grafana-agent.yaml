@@ -12,7 +12,7 @@ agent:
       discovery.kubernetes "nodes" {
         role = "node"
       }
-      prometheus.remote_write "grafana-cloud" {
+      prometheus.remote_write "grafana_cloud" {
         endpoint {
           url = env("GC_PROM_URL")
 
