@@ -28,7 +28,7 @@ def sopsy(name, key, filters=[]):
     parts = key.split(".")
     if len(parts) > 1:
         key = parts[0]
-        filters = ["jsonPath {{{}}}".format(".".join(parts[1:]))] + filters
+        filters = ["jsonPath {{.{}}}".format(".".join(parts[1:]))] + filters
     end
     return sops(name, key, filters)
 end
