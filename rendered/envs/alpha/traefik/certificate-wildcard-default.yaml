@@ -6,8 +6,14 @@ metadata:
   name: wildcard-default
 spec:
   dnsNames:
+    - zebradil.dev
+    - '*.zebradil.dev'
+    - ts.zebradil.dev
+    - '*.ts.zebradil.dev'
     - junior.zebradil.dev
     - '*.junior.zebradil.dev'
+    - junior.ts.zebradil.dev
+    - '*.junior.ts.zebradil.dev'
   issuerRef:
     kind: ClusterIssuer
     name: cloudflare-zerossl

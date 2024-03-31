@@ -1,4 +1,4 @@
-domain: junior.zebradil.dev
+domain: zebradil.dev
 ingress:
   enabled: true
   subdomain: auth
@@ -31,7 +31,7 @@ configMap:
       enabled: true
       enabledSecret: true
       username: <path:static/smtp.sops.yaml#username>
-      sender: authelia@junior.zebradil.dev
+      sender: authelia@mail.zebradil.dev
       host: smtp.gmail.com
       port: 587
   identity_providers:

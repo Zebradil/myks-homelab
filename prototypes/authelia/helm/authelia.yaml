@@ -3,7 +3,7 @@
 
 #@ d = data.values
 ---
-domain: #@ d.environment.host
+domain: #@ d.environment.hosts[0]
 
 ingress:
   enabled: true
@@ -46,7 +46,7 @@ configMap:
       enabledSecret: true
       username: #@ sec.sops("smtp", "username")
       #! NOTE: this has no effect as GMail replaces the sender with the authenticated user.
-      sender: #@ "authelia@" + d.environment.host
+      sender: #@ "authelia@mail." + d.environment.hosts[0]
       host: smtp.gmail.com
       port: 587
 

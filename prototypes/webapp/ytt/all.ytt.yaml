@@ -5,7 +5,6 @@
 #@ m = data.values.myks
 
 #@ name = a.name or m.context.app
-#@ host = a.host or "{}.{}".format(name, e.host)
 
 #@ pod_labels = { "app.kubernetes.io/name": name }
 
@@ -56,7 +55,8 @@ metadata:
   name: #@ name
 spec:
   rules:
-    - host: #@ host
+    #@ for/end host in e.hosts:
+    - host: #@ name + "." + host
       http:
         paths:
           - backend:

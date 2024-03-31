@@ -6,7 +6,37 @@ metadata:
   name: pacoloco
 spec:
   rules:
+    - host: pacoloco.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: pacoloco
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: pacoloco.ts.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: pacoloco
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
     - host: pacoloco.junior.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: pacoloco
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: pacoloco.junior.ts.zebradil.dev
       http:
         paths:
           - backend:

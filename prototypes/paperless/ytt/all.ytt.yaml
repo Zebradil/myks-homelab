@@ -1,4 +1,5 @@
 #@ load("@ytt:data", "data")
+#@ load("traefik.lib.yaml", "route")
 #@ load("util.star", "util")
 
 #@ PAPERLESS_UID = "1000"
@@ -8,7 +9,6 @@
 #@ ap = d.application
 #@ sftp = ap.paperless.sftp
 #@ name = d.myks.context.app
-#@ host = name + "." + d.environment.host
 #@ sftp_scripts_cm_name = name + "-sftp-scripts"
 
 ---
@@ -172,18 +172,4 @@ spec:
       port: 2222
       targetPort: sftp
 
----
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
-metadata:
-  name: #@ name
-spec:
-  routes:
-    - match: #@ "Host(`{}`)".format(host)
-      kind: Rule
-      middlewares:
-        - name: chain-authelia-auth
-          namespace: authelia
-      services:
-        - name: #@ name
-          port: http
+--- #@ route.protected(name, d.environment.hosts)

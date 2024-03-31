@@ -15,7 +15,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`auth.junior.zebradil.dev`) && PathPrefix(`/`)
+      match: Host(`auth.zebradil.dev`) && PathPrefix(`/`)
       middlewares:
         - name: chain-authelia
           namespace: authelia

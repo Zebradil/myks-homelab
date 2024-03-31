@@ -2,7 +2,7 @@
 
 #@ cert_name = "wildcard-default"
 #@ secret_name = cert_name + "-tls"
-#@ domain = data.values.application.tls.baseDomain
+#@ domains = data.values.application.tls.baseDomains
 
 ---
 apiVersion: cert-manager.io/v1
@@ -12,8 +12,10 @@ metadata:
 spec:
   secretName: #@ secret_name
   dnsNames:
+    #@ for domain in domains:
     -  #@ domain
     -  #@ "*." + domain
+    #@ end
   issuerRef:
     name: #@ data.values.application.tls.issuer
     kind: ClusterIssuer

@@ -9,4 +9,4 @@
 ---
 environment:
   #@overlay/match missing_ok=True
-  host: ""
+  hosts: [""]

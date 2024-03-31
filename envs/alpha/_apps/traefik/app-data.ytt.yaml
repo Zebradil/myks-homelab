@@ -4,5 +4,9 @@
 ---
 application:
   tls:
-    baseDomain: junior.zebradil.dev
+    baseDomains:
+      - zebradil.dev
+      - ts.zebradil.dev
+      - junior.zebradil.dev
+      - junior.ts.zebradil.dev
     issuer: cloudflare-zerossl
