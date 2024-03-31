@@ -1,6 +1,6 @@
 # traefik
 
-![Version: 26.0.0](https://img.shields.io/badge/Version-26.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.10.7](https://img.shields.io/badge/AppVersion-v2.10.7-informational?style=flat-square)
+![Version: 26.1.0](https://img.shields.io/badge/Version-26.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.11.0](https://img.shields.io/badge/AppVersion-v2.11.0-informational?style=flat-square)
 
 A Traefik based Kubernetes ingress controller
 
@@ -13,6 +13,7 @@ A Traefik based Kubernetes ingress controller
 | mloiseleur | <michel.loiseleur@traefik.io> |  |
 | charlie-haley | <charlie.haley@traefik.io> |  |
 | darkweaver87 | <remi.buisson@traefik.io> |  |
+| jnoordsij |  |  |
 
 ## Source Code
 
@@ -47,6 +48,7 @@ Kubernetes: `>=1.16.0-0`
 | deployment.podAnnotations | object | `{}` | Additional pod annotations (e.g. for mesh injection or prometheus scraping) It supports templating. One can set it with values like traefik/name: '{{ template "traefik.name" . }}' |
 | deployment.podLabels | object | `{}` | Additional Pod labels (e.g. for filtering Pod by custom labels) |
 | deployment.replicas | int | `1` | Number of pods of the deployment (only applies when kind == Deployment) |
+| deployment.runtimeClassName | string | `nil` | Set a runtimeClassName on pod |
 | deployment.shareProcessNamespace | bool | `false` | Use process namespace sharing |
 | deployment.terminationGracePeriodSeconds | int | `60` | Amount of time (in seconds) before Kubernetes will send the SIGKILL signal if Traefik does not shut down |
 | env | list | `[{"name":"POD_NAME","valueFrom":{"fieldRef":{"fieldPath":"metadata.name"}}},{"name":"POD_NAMESPACE","valueFrom":{"fieldRef":{"fieldPath":"metadata.namespace"}}}]` | Environment variables to be passed to Traefik's binary |
@@ -162,7 +164,7 @@ Kubernetes: `>=1.16.0-0`
 | serviceAccount | object | `{"name":""}` | The service account the pods will use to interact with the Kubernetes API |
 | serviceAccountAnnotations | object | `{}` | Additional serviceAccount annotations (e.g. for oidc authentication) |
 | startupProbe | string | `nil` | Define Startup Probe for container: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-startup-probes eg. `startupProbe:   exec:     command:       - mycommand       - foo   initialDelaySeconds: 5   periodSeconds: 5` |
-| tlsOptions | object | `{}` | TLS Options are created as TLSOption CRDs https://doc.traefik.io/traefik/https/tls/#tls-options When using `labelSelector`, you'll need to set labels on tlsOption accordingly. Example: tlsOptions:   default:     labels: {}     sniStrict: true     preferServerCipherSuites: true   customOptions:     labels: {}     curvePreferences:       - CurveP521       - CurveP384 |
+| tlsOptions | object | `{}` | TLS Options are created as TLSOption CRDs https://doc.traefik.io/traefik/https/tls/#tls-options When using `labelSelector`, you'll need to set labels on tlsOption accordingly. Example: tlsOptions:   default:     labels: {}     sniStrict: true     preferServerCipherSuites: true   custom-options:     labels: {}     curvePreferences:       - CurveP521       - CurveP384 |
 | tlsStore | object | `{}` | TLS Store are created as TLSStore CRDs. This is useful if you want to set a default certificate https://doc.traefik.io/traefik/https/tls/#default-certificate Example: tlsStore:   default:     defaultCertificate:       secretName: tls-cert |
 | tolerations | list | `[]` | Tolerations allow the scheduler to schedule pods with matching taints. |
 | topologySpreadConstraints | list | `[]` | You can use topology spread constraints to control how Pods are spread across your cluster among failure-domains. |

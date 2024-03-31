@@ -3,7 +3,7 @@ directories:
 - contents:
   - git:
       commitTitle: 'feat: add entrypoint host to ports configuration'
-      sha: 6c4bf2728ce396026337c51c98a3adc90146ed9a
+      sha: 669e335f9fd50b93d4fa065854c0750e8a281792
     path: .
   path: envs/alpha/_apps/traefik/vendor/charts/traefik
 kind: LockConfig
