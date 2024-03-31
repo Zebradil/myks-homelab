@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: DaemonSet
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
@@ -12,16 +12,10 @@ metadata:
   namespace: traefik
 spec:
   minReadySeconds: 0
-  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/instance: traefik-traefik
       app.kubernetes.io/name: traefik
-  strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
-    type: RollingUpdate
   template:
     metadata:
       annotations:
@@ -125,8 +119,6 @@ spec:
               name: tmp
       dnsPolicy: ClusterFirstWithHostNet
       hostNetwork: true
-      nodeSelector:
-        kubernetes.io/hostname: junior
       securityContext:
         fsGroupChangePolicy: OnRootMismatch
         runAsGroup: 65532
@@ -139,3 +131,8 @@ spec:
           name: data
         - emptyDir: {}
           name: tmp
+  updateStrategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate

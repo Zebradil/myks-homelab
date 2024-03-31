@@ -10,6 +10,7 @@ providers:
 hostNetwork: true
 deployment:
   dnsPolicy: ClusterFirstWithHostNet
+  kind: DaemonSet
 
 ports:
   metrics:
@@ -26,8 +27,8 @@ ports:
 service:
   enabled: false
 
-nodeSelector:
-  kubernetes.io/hostname: #@ data.values.application.nodeSelector.hostname
+#! nodeSelector:
+#!   kubernetes.io/hostname: #@ data.values.application.nodeSelector.hostname
 
 updateStrategy:
   rollingUpdate:

@@ -6,6 +6,7 @@ providers:
 hostNetwork: true
 deployment:
   dnsPolicy: ClusterFirstWithHostNet
+  kind: DaemonSet
 ports:
   metrics:
     port: 19100
@@ -23,8 +24,6 @@ ports:
     host: 0.0.0.0
 service:
   enabled: false
-nodeSelector:
-  kubernetes.io/hostname: junior
 updateStrategy:
   rollingUpdate:
     maxUnavailable: 1
