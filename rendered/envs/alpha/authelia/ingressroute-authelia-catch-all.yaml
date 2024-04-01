@@ -7,10 +7,11 @@ metadata:
 spec:
   routes:
     - kind: Rule
-      match: HostRegexp(`{host:.*}`)
+      match: PathPrefix(`/`)
       middlewares:
         - name: chain-authelia-auth
           namespace: authelia
+      priority: 1
       services:
         - name: starbase80
           namespace: starbase80

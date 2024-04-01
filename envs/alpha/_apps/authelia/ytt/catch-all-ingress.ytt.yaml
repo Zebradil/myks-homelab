@@ -5,11 +5,12 @@ metadata:
 spec:
   routes:
     - kind: Rule
-      match: HostRegexp(`{host:.*}`)
+      match: PathPrefix(`/`)
+      priority: 1
       middlewares:
         - name: chain-authelia-auth
           namespace: authelia
       services:
         - name: starbase80
-          port: http
           namespace: starbase80
+          port: http
