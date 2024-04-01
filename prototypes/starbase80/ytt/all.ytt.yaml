@@ -1,0 +1,119 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:json", "json")
+#@ load("traefik.lib.yaml", "route")
+
+#@ a = data.values.application
+#@ e = data.values.environment
+#@ m = data.values.myks
+
+#@ name = a.name or m.context.app
+
+#@ pod_labels = { "app.kubernetes.io/name": name }
+
+#@ cm_name = "config"
+#@ config_name = "config.json"
+
+---
+#@ def get_config():
+#! See https://github.com/notclickable-jordan/starbase-80?tab=readme-ov-file#configuration
+- category: Services
+  services:
+    - name: Archivebox
+      uri: https://archivebox.mywebsite.com
+      description: Backup webpages
+      icon: /icons/archivebox.jpg
+    - name: Authelia
+      uri: https://auth.mywebsite.com
+      description: Authentication
+      icon: /icons/authelia.png
+    - name: Calibre
+      uri: https://calibre.mywebsite.com
+      description: eBook library
+      icon: /icons/calibre.png
+- category: Devices
+  bubble: true
+  services:
+    - name: Router
+      uri: http://192.168.1.1/
+      description: Netgear Orbi
+      icon: /icons/router.png
+    - name: Home Assistant
+      uri: http://homeassistant.local:8123/
+      description: Home automation
+      icon: home-assistant
+      iconBubble: false
+    - name: Synology
+      uri: http://synology:5000
+      description: Network storage
+      icon: /icons/synology.png
+#@ end
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: #@ cm_name
+data: #@ { config_name: json.encode(get_config()) }
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: #@ name
+spec:
+  selector:
+    matchLabels: #@ pod_labels
+  template:
+    metadata:
+      labels: #@ pod_labels
+    spec:
+      volumes:
+        - name: static
+          emptyDir: {}
+        - name: #@ cm_name
+          configMap:
+            name: #@ cm_name
+      initContainers:
+        - name: builder
+          image: #@ a.builder.image
+          command: ["sh", "-c"]
+          args:
+            - |
+              npm run build
+              cp -r public /static/
+          volumeMounts:
+            - name: static
+              mountPath: /static
+            - name: #@ cm_name
+              mountPath: #@ "/app/src/config/" + config_name
+              readOnly: true
+      containers:
+        - image: #@ a.server.image
+          name: server
+          ports:
+            - containerPort: #@ a.server.containerPort
+              name: http
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+            privileged: false
+          volumeMounts:
+            - name: static
+              mountPath: /usr/share/nginx/html
+              readOnly: true
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #@ name
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+  selector: #@ pod_labels
+
+--- #@ route.protected(name, e.hosts)

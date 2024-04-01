@@ -1,0 +1,12 @@
+#@data/values-schema
+---
+#@overlay/match-child-defaults missing_ok=True
+application:
+  builder:
+    #! renovate: datasource=docker
+    image: jordanroher/starbase-80:1.5.1
+  server:
+    #! renovate: datasource=docker
+    image: nginx:1.25.4
+    containerPort: 80
+  name: ""
