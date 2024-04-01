@@ -22,6 +22,11 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
+              add:
+                - NET_BIND_SERVICE
+                - CHOWN
+                - SETGID
+                - SETUID
               drop:
                 - all
             privileged: false
@@ -35,13 +40,13 @@ spec:
             - -c
             - |
               npm run build
-              cp -r public /static/
+              cp -vr public/. /static/
           image: jordanroher/starbase-80:1.5.1
           name: builder
           volumeMounts:
             - mountPath: /static
               name: static
-            - mountPath: /app/src/configconfig.json
+            - mountPath: /app/src/config/config.json
               name: config
               readOnly: true
               subPath: config.json
