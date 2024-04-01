@@ -13,14 +13,16 @@ environment:
     - proto: cert-manager
     - proto: grafana-agent
     - proto: httpbingo
-    - proto: paperless
     - proto: librespeed
+    - proto: paperless
     - proto: synology-csi
     - proto: traefik
     #! - proto: webapp
     #!   name: iperf
     - proto: webapp
       name: pacoloco
+    - proto: webapp
+      name: starbase80
 argocd:
   app:
     prefix: app-

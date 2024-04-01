@@ -1,0 +1,7 @@
+#@data/values
+---
+application:
+  #! renovate: datasource=docker
+  image: jordanroher/starbase-80:1.5.1
+  containerPort: 4173
+  #! See additional configuration in ytt/config.ytt.yaml

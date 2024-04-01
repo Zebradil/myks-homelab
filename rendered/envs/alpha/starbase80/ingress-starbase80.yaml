@@ -1,0 +1,48 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: starbase80
+spec:
+  rules:
+    - host: starbase80.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: starbase80
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: starbase80.ts.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: starbase80
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: starbase80.junior.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: starbase80
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: starbase80.junior.ts.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: starbase80
+                port:
+                  name: http
+            path: /
+            pathType: Prefix

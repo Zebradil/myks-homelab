@@ -1,0 +1,69 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
+#@ load("@ytt:json", "json")
+
+#@ app_name = data.values.myks.context.app
+#@ cm_name = "config"
+#@ config_name = "config.json"
+
+---
+#@ def get_config():
+#! See https://github.com/notclickable-jordan/starbase-80?tab=readme-ov-file#configuration
+- category: Services
+  services:
+    - name: Archivebox
+      uri: https://archivebox.mywebsite.com
+      description: Backup webpages
+      icon: /icons/archivebox.jpg
+    - name: Authelia
+      uri: https://auth.mywebsite.com
+      description: Authentication
+      icon: /icons/authelia.png
+    - name: Calibre
+      uri: https://calibre.mywebsite.com
+      description: eBook library
+      icon: /icons/calibre.png
+- category: Devices
+  bubble: true
+  services:
+    - name: Router
+      uri: http://192.168.1.1/
+      description: Netgear Orbi
+      icon: /icons/router.png
+    - name: Home Assistant
+      uri: http://homeassistant.local:8123/
+      description: Home automation
+      icon: home-assistant
+      iconBubble: false
+    - name: Synology
+      uri: http://synology:5000
+      description: Network storage
+      icon: /icons/synology.png
+#@ end
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: #@ cm_name
+data: #@ { config_name: json.encode(get_config()) }
+
+#@overlay/match by=overlay.subset({"kind":"Deployment"})
+---
+spec:
+  template:
+    spec:
+      containers:
+        #@overlay/match by="name"
+        - name: #@ app_name
+          #@overlay/match missing_ok=True
+          volumeMounts:
+            - name: #@ cm_name
+              mountPath: #@ "/app/src/config/" + config_name
+              subPath: #@ config_name
+              readOnly: true
+      #@overlay/match missing_ok=True
+      volumes:
+        - name: #@ cm_name
+          configMap:
+            name: #@ cm_name
