@@ -86,7 +86,7 @@ spec:
             - name: static
               mountPath: /static
             - name: #@ cm_name
-              mountPath: /app/src/config
+              mountPath: #@ "/app/src/config" + config_name
               subPath: #@ config_name
               readOnly: true
       containers:
