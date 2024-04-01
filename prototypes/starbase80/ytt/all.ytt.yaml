@@ -76,8 +76,9 @@ spec:
       initContainers:
         - name: builder
           image: #@ a.builder.image
-          command: ["sh", "-c"]
           args:
+            - sh
+            - -c
             - |
               npm run build
               cp -r public /static/
@@ -85,7 +86,8 @@ spec:
             - name: static
               mountPath: /static
             - name: #@ cm_name
-              mountPath: #@ "/app/src/config/" + config_name
+              mountPath: /app/src/config
+              subPath: #@ config_name
               readOnly: true
       containers:
         - image: #@ a.server.image

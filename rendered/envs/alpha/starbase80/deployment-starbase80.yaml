@@ -31,20 +31,20 @@ spec:
               readOnly: true
       initContainers:
         - args:
+            - sh
+            - -c
             - |
               npm run build
               cp -r public /static/
-          command:
-            - sh
-            - -c
           image: jordanroher/starbase-80:1.5.1
           name: builder
           volumeMounts:
             - mountPath: /static
               name: static
-            - mountPath: /app/src/config/config.json
+            - mountPath: /app/src/config
               name: config
               readOnly: true
+              subPath: config.json
       volumes:
         - emptyDir: {}
           name: static
