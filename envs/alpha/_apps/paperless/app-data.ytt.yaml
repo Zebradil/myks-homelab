@@ -6,7 +6,6 @@ application:
   paperless:
     env:
       PAPERLESS_SECRET_KEY: #@ sec.sops("0", "sessionSecretKey")
-      PAPERLESS_URL: https://paperless.junior.zebradil.dev
     sftp:
       #! The corresponding private key was generated on the scanner host
       public_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCnzIKHO6ux0JUuSZGmnrVtukIvvqiPRt3pdwPbvMDQwTSFtW0xdORkYKGsCYhPuzEcLMFfJgUT4JEtMPFdj1TTizo5fDOlQP+pJMoRc4HKmqzTsK4FvmS/7Bl6IvWbhAcceKynGkZmOrQziMo7RINrFy1/sjf9ZVaMoQvbFjLUEGboxuq0gJVfgxlRQX28rHolFZk9YWWbHMJ0Gbw/YLQWqf3EJuQnyAWSrnZsX+a8CsKoCzlgsFne91PgNFA5OhkIMkKQy1Mk4qSXhQ7ZUHhcN7reDhyyDX/E+Y0y87Y5NZ8OxAU6Bzl0wZKcAIhZkE/hvhb6L4hJ98VS04QD7Gpj
