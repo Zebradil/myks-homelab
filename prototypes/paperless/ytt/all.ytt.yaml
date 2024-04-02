@@ -12,10 +12,14 @@
 #@ sftp_scripts_cm_name = name + "-sftp-scripts"
 
 #@ hosts = []
+#@ origins = []
 #@ for host in data.values.environment.hosts:
-#@   hosts.append(name + "." + host)
+#@   full_host = name + "." + host
+#@   hosts.append(full_host)
+#@   origins.append("https://" + full_host)
 #@ end
 #@ hosts_list = ",".join(hosts)
+#@ origins_list = ",".join(origins)
 
 ---
 apiVersion: apps/v1
@@ -66,10 +70,12 @@ spec:
                   name: postgresql
                   key: password
             - name: PAPERLESS_URL
-              value: #@ "https://" + hosts[0]
+              value: #@ origins[0]
             - name: PAPERLESS_CSRF_TRUSTED_ORIGINS
-              value: #@ hosts_list
+              value: #@ origins_list
             - name: PAPERLESS_ALLOWED_HOSTS
+              value: #@ hosts_list
+            - name: PAPERLESS_CORS_ALLOWED_HOSTS
               value: #@ hosts_list
             #@ for/end envvar in util.map_to_envs(ap.paperless.env):
             -  #@ envvar
