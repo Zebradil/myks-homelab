@@ -11,14 +11,11 @@
 #@ name = d.myks.context.app
 #@ sftp_scripts_cm_name = name + "-sftp-scripts"
 
-#@ hosts = []
 #@ origins = []
 #@ for host in data.values.environment.hosts:
 #@   full_host = name + "." + host
-#@   hosts.append(full_host)
 #@   origins.append("https://" + full_host)
 #@ end
-#@ hosts_list = ",".join(hosts)
 #@ origins_list = ",".join(origins)
 
 ---
@@ -73,8 +70,6 @@ spec:
               value: #@ origins[0]
             - name: PAPERLESS_CSRF_TRUSTED_ORIGINS
               value: #@ origins_list
-            - name: PAPERLESS_ALLOWED_HOSTS
-              value: #@ hosts_list
             - name: PAPERLESS_CORS_ALLOWED_HOSTS
               value: #@ origins_list
             #@ for/end envvar in util.map_to_envs(ap.paperless.env):
