@@ -76,7 +76,7 @@ spec:
             - name: PAPERLESS_ALLOWED_HOSTS
               value: #@ hosts_list
             - name: PAPERLESS_CORS_ALLOWED_HOSTS
-              value: #@ hosts_list
+              value: #@ origins_list
             #@ for/end envvar in util.map_to_envs(ap.paperless.env):
             -  #@ envvar
           readinessProbe:
