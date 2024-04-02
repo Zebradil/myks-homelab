@@ -2,7 +2,7 @@
 
 OpenCost and OpenCost UI
 
-![Version: 1.32.0](https://img.shields.io/badge/Version-1.32.0-informational?style=flat-square)
+![Version: 1.33.0](https://img.shields.io/badge/Version-1.33.0-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: 1.109.0](https://img.shields.io/badge/AppVersion-1.109.0-informational?style=flat-square)
 
@@ -52,6 +52,7 @@ During installation, you can specify the following parameters if you have your o
 | nameOverride | string | `""` | Overwrite the default name of the chart |
 | namespaceOverride | string | `""` | Override the deployment namespace |
 | networkPolicies.enabled | bool | `false` | Specifies whether networkpolicies should be created |
+| networkPolicies.extraEgress | list | `[]` | Extra egress rule |
 | networkPolicies.prometheus | object | `{"labels":{"app.kubernetes.io/name":"prometheus"},"namespace":"prometheus-system","port":9090}` | Internal Prometheus settings related to NetworkPolicies |
 | networkPolicies.prometheus.labels | object | `{"app.kubernetes.io/name":"prometheus"}` | Labels applied to the Prometheus server pod(s) |
 | networkPolicies.prometheus.namespace | string | `"prometheus-system"` | Namespace where internal Prometheus is installed |
@@ -110,6 +111,8 @@ During installation, you can specify the following parameters if you have your o
 | opencost.exporter.startupProbe.path | string | `"/healthz"` | Probe path |
 | opencost.exporter.startupProbe.periodSeconds | int | `5` | Probe frequency in seconds |
 | opencost.extraContainers | list | `[]` | extra sidecars to add to the pod.  Useful for things like oauth-proxy for the UI |
+| opencost.metrics.config.disabledMetrics | list | `[]` | List of metrics to be disabled |
+| opencost.metrics.config.enabled | bool | `false` | Enables creating the metrics.json configuration as a ConfigMap |
 | opencost.metrics.kubeStateMetrics.emitKsmV1Metrics | string | `""` | Enable emission of KSM v1 metrics |
 | opencost.metrics.kubeStateMetrics.emitKsmV1MetricsOnly | string | `""` | Enable only emission of KSM v1 metrics that do not exist in KSM 2 by default |
 | opencost.metrics.kubeStateMetrics.emitNamespaceAnnotations | string | `""` | Enable emission of namespace annotations |

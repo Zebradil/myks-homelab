@@ -3,7 +3,7 @@
 
 # k8s-monitoring
 
-![Version: 0.12.3](https://img.shields.io/badge/Version-0.12.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.0.4](https://img.shields.io/badge/AppVersion-2.0.4-informational?style=flat-square)
+![Version: 0.12.4](https://img.shields.io/badge/Version-0.12.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.1.0](https://img.shields.io/badge/AppVersion-2.1.0-informational?style=flat-square)
 
 A Helm chart for gathering, scraping, and forwarding Kubernetes infrastructure metrics and logs to a Grafana Stack.
 
@@ -104,9 +104,9 @@ The Prometheus and Loki services may be hosted on the same cluster, or remotely 
 | https://grafana.github.io/helm-charts | grafana-agent | 0.37.0 |
 | https://grafana.github.io/helm-charts | grafana-agent-events(grafana-agent) | 0.37.0 |
 | https://grafana.github.io/helm-charts | grafana-agent-logs(grafana-agent) | 0.37.0 |
-| https://opencost.github.io/opencost-helm-chart | opencost | 1.32.0 |
-| https://prometheus-community.github.io/helm-charts | kube-state-metrics | 5.17.0 |
-| https://prometheus-community.github.io/helm-charts | prometheus-node-exporter | 4.31.0 |
+| https://opencost.github.io/opencost-helm-chart | opencost | 1.33.0 |
+| https://prometheus-community.github.io/helm-charts | kube-state-metrics | 5.18.0 |
+| https://prometheus-community.github.io/helm-charts | prometheus-node-exporter | 4.32.0 |
 | https://prometheus-community.github.io/helm-charts | prometheus-operator-crds | 10.0.0 |
 | https://prometheus-community.github.io/helm-charts | prometheus-windows-exporter | 0.3.1 |
 
@@ -222,6 +222,7 @@ The Prometheus and Loki services may be hosted on the same cluster, or remotely 
 | logs.pod_logs.gatherMethod | string | `"volumes"` | Controls the behavior of gathering pod logs. When set to "volumes", the Grafana Agent will use HostPath volume mounts on the cluster nodes to access the pod log files directly. When set to "api", the Grafana Agent will access pod logs via the API server. This method may be preferable if your cluster prevents DaemonSets, HostPath volume mounts, or for other reasons. |
 | logs.pod_logs.namespaces | list | `[]` | Only capture logs from pods in these namespaces (`[]` means all namespaces) |
 | logs.receiver.filters | object | `{"log_record":[]}` | Apply a filter to logs received via the OTLP or OTLP HTTP receivers. ([docs](https://grafana.com/docs/agent/latest/flow/reference/components/otelcol.processor.filter/)) |
+| logs.receiver.transforms | object | `{"log":[],"resource":[]}` | Apply a transformation to logs received via the OTLP or OTLP HTTP receivers. ([docs](https://grafana.com/docs/agent/latest/flow/reference/components/otelcol.processor.transform/)) |
 | metrics.agent.enabled | bool | `true` | Scrape metrics from Grafana Agent |
 | metrics.agent.extraMetricRelabelingRules | string | `""` | Rule blocks to be added to the prometheus.relabel component for Grafana Agent. ([docs](https://grafana.com/docs/agent/latest/flow/reference/components/prometheus.relabel/#rule-block)) |
 | metrics.agent.extraRelabelingRules | string | `""` | Rule blocks to be added to the discovery.relabel component for Grafana Agent. ([docs](https://grafana.com/docs/agent/latest/flow/reference/components/discovery.relabel/#rule-block)) |
@@ -335,6 +336,7 @@ The Prometheus and Loki services may be hosted on the same cluster, or remotely 
 | metrics.probes.scrapeInterval | string | 60s | How frequently to scrape metrics from Probe objects. Only used if the Probe does not specify the scrape interval. Overrides metrics.scrapeInterval |
 | metrics.probes.selector | string | `""` | Selector to filter which Probes objects to use. |
 | metrics.receiver.filters | object | `{"datapoint":[],"metric":[]}` | Apply a filter to metrics received via the OTLP or OTLP HTTP receivers. ([docs](https://grafana.com/docs/agent/latest/flow/reference/components/otelcol.processor.filter/)) |
+| metrics.receiver.transforms | object | `{"datapoint":[],"metric":[],"resource":[]}` | Apply a transformation to metrics received via the OTLP or OTLP HTTP receivers. ([docs](https://grafana.com/docs/agent/latest/flow/reference/components/otelcol.processor.transform/)) |
 | metrics.scrapeInterval | string | `"60s"` | How frequently to scrape metrics |
 | metrics.serviceMonitors.enabled | bool | `true` | Enable discovery of Prometheus Operator ServiceMonitor objects. |
 | metrics.serviceMonitors.extraMetricRelabelingRules | string | `""` | Rule blocks to be added to the prometheus.relabel component for ServiceMonitor objects. ([docs](https://grafana.com/docs/agent/latest/flow/reference/components/prometheus.relabel/#rule-block)) |
@@ -395,6 +397,7 @@ The Prometheus and Loki services may be hosted on the same cluster, or remotely 
 | test.tolerations | list | `[]` | Tolerations to apply to the test job. |
 | traces.enabled | bool | `false` | Receive and forward traces. |
 | traces.receiver.filters | object | `{"span":[],"spanevent":[]}` | Apply a filter to traces received via the OTLP or OTLP HTTP receivers. ([docs](https://grafana.com/docs/agent/latest/flow/reference/components/otelcol.processor.filter/)) |
+| traces.receiver.transforms | object | `{"resource":[],"span":[],"spanevent":[]}` | Apply a transformation to traces received via the OTLP or OTLP HTTP receivers. ([docs](https://grafana.com/docs/agent/latest/flow/reference/components/otelcol.processor.transform/)) |
 
 ## Customizing the configuration
 
