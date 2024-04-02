@@ -45,6 +45,8 @@ spec:
               value: pdf
             - name: PAPERLESS_OCR_ROTATE_PAGES_THRESHOLD
               value: "4"
+            - name: PAPERLESS_OCR_USER_ARGS
+              value: '{"invalidate_digital_signatures": true}'
             - name: PAPERLESS_SECRET_KEY
               value: <path:static/0.sops.yaml#sessionSecretKey>
             - name: PAPERLESS_TIME_ZONE

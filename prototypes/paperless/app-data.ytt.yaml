@@ -23,6 +23,9 @@ application:
       #! The default is "pdfa", which may cause removing a form text
       PAPERLESS_OCR_OUTPUT_TYPE: pdf
       PAPERLESS_OCR_ROTATE_PAGES_THRESHOLD: "4"
+      #! Allow OCR to process PDFs with digital signatures
+      #! It is safe because paperless keeps the original PDFs
+      PAPERLESS_OCR_USER_ARGS: '{"invalidate_digital_signatures": true}'
 
       #@schema/validation min_len=1
       PAPERLESS_SECRET_KEY: ""
