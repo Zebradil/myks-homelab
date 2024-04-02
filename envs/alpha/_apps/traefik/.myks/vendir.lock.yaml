@@ -2,8 +2,8 @@ apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
   - git:
-      commitTitle: 'feat: add entrypoint host to ports configuration'
-      sha: 669e335f9fd50b93d4fa065854c0750e8a281792
+      commitTitle: Use hostIP instead of host, set host for probes
+      sha: 2b62d6ef7b3a0d06e45452e4d1b36e934e681734
     path: .
   path: envs/alpha/_apps/traefik/vendor/charts/traefik
 kind: LockConfig
