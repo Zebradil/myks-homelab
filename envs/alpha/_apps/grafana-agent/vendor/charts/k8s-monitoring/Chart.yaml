@@ -1,5 +1,5 @@
 apiVersion: v2
-appVersion: 2.1.0
+appVersion: 2.1.3
 dependencies:
 - name: grafana-agent
   repository: https://grafana.github.io/helm-charts
@@ -14,10 +14,15 @@ dependencies:
   name: grafana-agent
   repository: https://grafana.github.io/helm-charts
   version: 0.37.0
+- alias: grafana-agent-profiles
+  condition: profiles.enabled
+  name: grafana-agent
+  repository: https://grafana.github.io/helm-charts
+  version: 0.37.0
 - condition: kube-state-metrics.enabled
   name: kube-state-metrics
   repository: https://prometheus-community.github.io/helm-charts
-  version: 5.18.0
+  version: 5.18.1
 - condition: prometheus-node-exporter.enabled
   name: prometheus-node-exporter
   repository: https://prometheus-community.github.io/helm-charts
@@ -33,9 +38,9 @@ dependencies:
 - condition: opencost.enabled
   name: opencost
   repository: https://opencost.github.io/opencost-helm-chart
-  version: 1.33.0
-description: A Helm chart for gathering, scraping, and forwarding Kubernetes infrastructure
-  metrics and logs to a Grafana Stack.
+  version: 1.33.1
+description: A Helm chart for gathering, scraping, and forwarding Kubernetes telemetry
+  data to a Grafana Stack.
 icon: https://raw.githubusercontent.com/grafana/grafana/main/public/img/grafana_icon.svg
 maintainers:
 - email: pete.wall@grafana.com
@@ -46,4 +51,4 @@ name: k8s-monitoring
 sources:
 - https://github.com/grafana/k8s-monitoring-helm/tree/main/charts/k8s-monitoring
 type: application
-version: 0.12.4
+version: 0.13.1
