@@ -1,39 +1,29 @@
-apiVersion: v2
-name: traefik
-description: A Traefik based Kubernetes ingress controller
-type: application
-version: 26.1.0
-# renovate: image=traefik
-appVersion: v2.11.0
-kubeVersion: ">=1.16.0-0"
-keywords:
-  - traefik
-  - ingress
-  - networking
-home: https://traefik.io/
-sources:
-  - https://github.com/traefik/traefik
-  - https://github.com/traefik/traefik-helm-chart
-maintainers:
-  - name: mloiseleur
-    email: michel.loiseleur@traefik.io
-  - name: charlie-haley
-    email: charlie.haley@traefik.io
-  - name: darkweaver87
-    email: remi.buisson@traefik.io
-  - name: jnoordsij
-icon: https://raw.githubusercontent.com/traefik/traefik/v2.3/docs/content/assets/img/traefik.logo.png
 annotations:
-  artifacthub.io/changes: |
-    - "fix: 🐛 missing quote on experimental plugin args"
-    - "fix: update traefik v3 serverstransporttcps CRD"
-    - "feat: set runtimeClassName on pod spec"
-    - "feat: create v1 Gateway and GatewayClass Version for Traefik v3"
-    - "feat: allow exposure of ports on internal service only"
-    - "doc: fix invalid suggestion on TLSOption (#996)"
-    - "chore: 🔧 update maintainers"
-    - "chore: 🔧 promote jnoordsij to Traefik Helm Chart maintainer"
-    - "chore(release): publish v26.1.0"
-    - "chore(deps): update traefik docker tag to v2.11.0"
-    - "chore(deps): update traefik docker tag to v2.10.7"
-    - "chore(crds): update definitions for traefik v2.11"
+  artifacthub.io/changes: "- \"fix: remove null annotations on dashboard `IngressRoute`\"\n-
+    \"fix(rbac): do not create clusterrole for namespace deployment on Traefik v3\"\n-
+    \"feat: restrict access to secrets\"\n- \"feat!: :boom: refactor custom services
+    and port exposure\"\n- \"chore(release): \U0001F680 publish v27.0.0\"\n"
+apiVersion: v2
+appVersion: v2.11.0
+description: A Traefik based Kubernetes ingress controller
+home: https://traefik.io/
+icon: https://raw.githubusercontent.com/traefik/traefik/v2.3/docs/content/assets/img/traefik.logo.png
+keywords:
+- traefik
+- ingress
+- networking
+kubeVersion: '>=1.16.0-0'
+maintainers:
+- email: michel.loiseleur@traefik.io
+  name: mloiseleur
+- email: charlie.haley@traefik.io
+  name: charlie-haley
+- email: remi.buisson@traefik.io
+  name: darkweaver87
+- name: jnoordsij
+name: traefik
+sources:
+- https://github.com/traefik/traefik
+- https://github.com/traefik/traefik-helm-chart
+type: application
+version: 27.0.0

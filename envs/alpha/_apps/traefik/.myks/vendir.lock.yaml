@@ -1,9 +1,10 @@
 apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
-  - git:
-      commitTitle: Use hostIP instead of host, set host for probes
-      sha: 2b62d6ef7b3a0d06e45452e4d1b36e934e681734
+  - configDigest: e076380f19810e2c3f730ae60fb152935515f8acf6f575929b40d19bba2fb88d
+    helmChart:
+      appVersion: v2.11.0
+      version: 27.0.0
     path: .
   path: envs/alpha/_apps/traefik/vendor/charts/traefik
 kind: LockConfig
