@@ -6,7 +6,9 @@ application:
   #! TODO: Remove this when traefik 3 is the default.
   #! renovate: datasource=docker depName=docker.io/traefik
   version: v3.0.0-rc3
-  nodeSelector:
+  ingress:
+    #! Hostname for the ingress endpoint.
+    #! See https://doc.traefik.io/traefik/providers/kubernetes-ingress/#hostname
     hostname: junior
   tls:
     #! Base domains for the cluster. This is used to generate the wildcard certificates.
