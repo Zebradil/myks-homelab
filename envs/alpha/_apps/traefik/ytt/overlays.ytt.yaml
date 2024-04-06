@@ -25,3 +25,8 @@ spec:
               exec /entrypoint.sh "$@"
           #@overlay/remove
           ports:
+          env:
+            - name: POD_IPS
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIPs
