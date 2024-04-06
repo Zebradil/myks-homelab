@@ -5,5 +5,12 @@ metadata:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   name: default
 spec:
+  certificates:
+    - secretName: wildcard-zebradil.dev-tls
+    - secretName: wildcard-ts.zebradil.dev-tls
+    - secretName: wildcard-gray.zebradil.dev-tls
+    - secretName: wildcard-gray.ts.zebradil.dev-tls
+    - secretName: wildcard-junior.zebradil.dev-tls
+    - secretName: wildcard-junior.ts.zebradil.dev-tls
   defaultCertificate:
-    secretName: wildcard-default-tls
+    secretName: wildcard-zebradil.dev-tls
