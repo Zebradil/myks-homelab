@@ -28,9 +28,9 @@ spec:
             - name: PAPERLESS_URL
               value: https://paperless.zebradil.dev
             - name: PAPERLESS_CSRF_TRUSTED_ORIGINS
-              value: https://paperless.zebradil.dev,https://paperless.ts.zebradil.dev,https://paperless.junior.zebradil.dev,https://paperless.junior.ts.zebradil.dev
+              value: https://paperless.zebradil.dev,https://paperless.gray.zebradil.dev,https://paperless.junior.zebradil.dev,https://paperless.ts.zebradil.dev,https://paperless.gray.ts.zebradil.dev,https://paperless.junior.ts.zebradil.dev
             - name: PAPERLESS_CORS_ALLOWED_HOSTS
-              value: https://paperless.zebradil.dev,https://paperless.ts.zebradil.dev,https://paperless.junior.zebradil.dev,https://paperless.junior.ts.zebradil.dev
+              value: https://paperless.zebradil.dev,https://paperless.gray.zebradil.dev,https://paperless.junior.zebradil.dev,https://paperless.ts.zebradil.dev,https://paperless.gray.ts.zebradil.dev,https://paperless.junior.ts.zebradil.dev
             - name: PAPERLESS_DBHOST
               value: postgresql
             - name: PAPERLESS_DBUSER

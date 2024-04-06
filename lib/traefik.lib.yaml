@@ -1,17 +1,26 @@
+#@ load("@ytt:data", "data")
 #@ load("@ytt:struct", "struct")
 
-#@ def gen_protected_ingress_route(name, hosts):
+#@ t = data.values.environment.traefik
+
+#@ def gen_host_matches(name, hosts):
 #@   matches = []
 #@   for host in hosts:
 #@     matches.append("Host(`{}.{}`)".format(name, host))
 #@   end
+#@   return " || ".join(matches)
+#@ end
+
+#@ def gen_protected_ingress_route(name, hosts, entrypoints=[]):
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
-  name: #@ name
+  name: #@ name + "-protected"
 spec:
+  #@ if/end entrypoints:
+  entryPoints: #@ entrypoints
   routes:
-    - match: #@ " || ".join(matches)
+    - match: #@ gen_host_matches(name, hosts)
       kind: Rule
       middlewares:
         - name: chain-authelia-auth
@@ -21,4 +30,33 @@ spec:
           port: http
 #@ end
 
-#@ route = struct.make(protected=gen_protected_ingress_route)
+---
+#@ def gen_ingress_route(name, hosts, entrypoints=[]):
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: #@ name
+spec:
+  #@ if/end entrypoints:
+  entryPoints: #@ entrypoints
+  routes:
+    - match: #@ gen_host_matches(name, hosts)
+      kind: Rule
+      services:
+        - name: #@ name
+          port: http
+#@ end
+
+---
+#@ def gen_default_routes(name):
+#@   return [
+#@     gen_protected_ingress_route(name, t.hosts.web),
+#@     gen_ingress_route(name, t.hosts.vpn, ["vpn"]),
+#@   ]
+#@ end
+
+#@ route = struct.make(
+#@   protected=gen_protected_ingress_route,
+#@   unprotected=gen_ingress_route,
+#@   default=gen_default_routes,
+#@ )

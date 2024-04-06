@@ -185,4 +185,5 @@ spec:
       port: 2222
       targetPort: sftp
 
---- #@ route.protected(name, d.environment.hosts)
+#@ for/end route_doc in route.default(name):
+--- #@ route_doc

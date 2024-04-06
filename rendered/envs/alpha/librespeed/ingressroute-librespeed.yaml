@@ -5,12 +5,11 @@ metadata:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   name: librespeed
 spec:
+  entryPoints:
+    - vpn
   routes:
     - kind: Rule
-      match: Host(`librespeed.zebradil.dev`) || Host(`librespeed.ts.zebradil.dev`) || Host(`librespeed.junior.zebradil.dev`) || Host(`librespeed.junior.ts.zebradil.dev`)
-      middlewares:
-        - name: chain-authelia-auth
-          namespace: authelia
+      match: Host(`librespeed.ts.zebradil.dev`) || Host(`librespeed.gray.ts.zebradil.dev`) || Host(`librespeed.junior.ts.zebradil.dev`)
       services:
         - name: librespeed
           port: http

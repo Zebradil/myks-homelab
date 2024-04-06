@@ -16,7 +16,7 @@ spec:
                   name: http
             path: /
             pathType: Prefix
-    - host: pacoloco.ts.zebradil.dev
+    - host: pacoloco.gray.zebradil.dev
       http:
         paths:
           - backend:
@@ -27,6 +27,26 @@ spec:
             path: /
             pathType: Prefix
     - host: pacoloco.junior.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: pacoloco
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: pacoloco.ts.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: pacoloco
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: pacoloco.gray.ts.zebradil.dev
       http:
         paths:
           - backend:

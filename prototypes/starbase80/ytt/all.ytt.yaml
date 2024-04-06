@@ -123,4 +123,5 @@ spec:
       targetPort: http
   selector: #@ pod_labels
 
---- #@ route.protected(name, e.hosts)
+#@ for/end route_doc in route.default(name):
+--- #@ route_doc

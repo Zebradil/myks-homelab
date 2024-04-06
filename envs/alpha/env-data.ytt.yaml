@@ -1,11 +1,26 @@
 #@data/values
+
+#@ nodes = ["gray", "junior"]
+#@ base_domain = "zebradil.dev"
+#@ vpn_domain = "ts." + base_domain
+
+#@ base_hosts = [base_domain]
+#@ for node in nodes:
+#@   base_hosts.append(node + "." + base_domain)
+#@ end
+#@
+#@ vpn_hosts = [vpn_domain]
+#@ for node in nodes:
+#@   vpn_hosts.append(node + "." + vpn_domain)
+#@ end
+
 ---
 environment:
-  hosts:
-    - zebradil.dev
-    - ts.zebradil.dev
-    - junior.zebradil.dev
-    - junior.ts.zebradil.dev
+  hosts: #@ base_hosts + vpn_hosts
+  traefik:
+    hosts:
+      vpn: #@ vpn_hosts
+      web: #@ base_hosts
   id: alpha
   applications:
     - proto: argocd

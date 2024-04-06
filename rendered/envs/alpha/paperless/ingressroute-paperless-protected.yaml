@@ -1,0 +1,16 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: paperless-protected
+spec:
+  routes:
+    - kind: Rule
+      match: Host(`paperless.zebradil.dev`) || Host(`paperless.gray.zebradil.dev`) || Host(`paperless.junior.zebradil.dev`)
+      middlewares:
+        - name: chain-authelia-auth
+          namespace: authelia
+      services:
+        - name: paperless
+          port: http

@@ -5,12 +5,11 @@ metadata:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   name: paperless
 spec:
+  entryPoints:
+    - vpn
   routes:
     - kind: Rule
-      match: Host(`paperless.zebradil.dev`) || Host(`paperless.ts.zebradil.dev`) || Host(`paperless.junior.zebradil.dev`) || Host(`paperless.junior.ts.zebradil.dev`)
-      middlewares:
-        - name: chain-authelia-auth
-          namespace: authelia
+      match: Host(`paperless.ts.zebradil.dev`) || Host(`paperless.gray.ts.zebradil.dev`) || Host(`paperless.junior.ts.zebradil.dev`)
       services:
         - name: paperless
           port: http

@@ -1,6 +1,5 @@
 #@ load("@ytt:data", "data")
 #@ load("traefik.lib.yaml", "route")
 
-#@ d = data.values
-
---- #@ route.protected(d.myks.context.app, d.environment.hosts)
+#@ for/end route_doc in route.default(data.values.myks.context.app):
+--- #@ route_doc

@@ -5,12 +5,11 @@ metadata:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   name: starbase80
 spec:
+  entryPoints:
+    - vpn
   routes:
     - kind: Rule
-      match: Host(`starbase80.zebradil.dev`) || Host(`starbase80.ts.zebradil.dev`) || Host(`starbase80.junior.zebradil.dev`) || Host(`starbase80.junior.ts.zebradil.dev`)
-      middlewares:
-        - name: chain-authelia-auth
-          namespace: authelia
+      match: Host(`starbase80.ts.zebradil.dev`) || Host(`starbase80.gray.ts.zebradil.dev`) || Host(`starbase80.junior.ts.zebradil.dev`)
       services:
         - name: starbase80
           port: http
