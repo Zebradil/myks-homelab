@@ -1,0 +1,29 @@
+#@ load("@ytt:overlay", "overlay")
+
+#@ deployments = overlay.subset({"kind":"Deployment"})
+#@ daemonsets = overlay.subset({"kind":"DaemonSet"})
+
+#! This overlay adds a custom command to the traefik container and removes the
+#! hostIP field from the container ports.
+#@overlay/match by=overlay.or_op(deployments, daemonsets)
+---
+spec:
+  template:
+    spec:
+      containers:
+        #@overlay/match by="name"
+        - name: traefik
+          #@overlay/match missing_ok=True
+          command:
+            - sh
+            - -c
+            - |
+              set -euo pipefail
+              NODE_IPV6="$(echo "$POD_IPS" | cut -d, -f2)"
+              echo "Selected IPv6: $NODE_IPV6"
+              export NODE_IPV6
+              exec /entrypoint.sh "$@"
+          ports:
+            - #@overlay/match by=overlay.all, expects="1+"
+              #@overlay/remove
+              hostIP:

@@ -33,8 +33,10 @@ spec:
             - --entrypoints.metrics.address=node.k8s.lan:19100/tcp
             - --entrypoints.paperless-sftp.address=node.k8s.lan:2222/tcp
             - --entrypoints.traefik.address=node.k8s.lan:9000/tcp
-            - --entrypoints.web.address=:80/tcp
-            - --entrypoints.websecure.address=:443/tcp
+            - --entrypoints.vpn-web.address=node.k8s.vpn:80/tcp
+            - --entrypoints.vpn-websecure.address=node.k8s.vpn:443/tcp
+            - --entrypoints.web.address=$(NODE_IPV6):80/tcp
+            - --entrypoints.websecure.address=$(NODE_IPV6):443/tcp
             - --api.dashboard=true
             - --ping=true
             - --metrics.prometheus=true
@@ -50,6 +52,15 @@ spec:
             - --accesslog.fields.defaultmode=keep
             - --accesslog.fields.headers.defaultmode=drop
             - --providers.kubernetesingress.ingressendpoint.hostname=junior
+          command:
+            - sh
+            - -c
+            - |
+              set -euo pipefail
+              NODE_IPV6="$(echo "$POD_IPS" | cut -d, -f2)"
+              echo "Selected IPv6: $NODE_IPV6"
+              export NODE_IPV6
+              exec /entrypoint.sh "$@"
           env:
             - name: POD_NAME
               valueFrom:
@@ -76,16 +87,19 @@ spec:
           name: traefik
           ports:
             - containerPort: 19100
-              hostIP: node.k8s.lan
               name: metrics
               protocol: TCP
             - containerPort: 2222
-              hostIP: node.k8s.lan
               name: paperless-sftp
               protocol: TCP
             - containerPort: 9000
-              hostIP: node.k8s.lan
               name: traefik
+              protocol: TCP
+            - containerPort: 80
+              name: vpn-web
+              protocol: TCP
+            - containerPort: 443
+              name: vpn-websecure
               protocol: TCP
             - containerPort: 80
               name: web
