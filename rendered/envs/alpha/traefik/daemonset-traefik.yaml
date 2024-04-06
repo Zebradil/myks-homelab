@@ -46,6 +46,7 @@ spec:
             - --providers.kubernetesingress
             - --entrypoints.vpn-web.http.redirections.entryPoint.to=:443
             - --entrypoints.vpn-web.http.redirections.entryPoint.scheme=https
+            - --entrypoints.vpn-websecure.http.tls=true
             - --entrypoints.web.http.redirections.entryPoint.to=:443
             - --entrypoints.web.http.redirections.entryPoint.scheme=https
             - --entrypoints.websecure.http.tls=true

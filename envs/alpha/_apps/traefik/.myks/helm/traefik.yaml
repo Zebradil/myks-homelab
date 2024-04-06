@@ -33,6 +33,8 @@ ports:
     port: 443
     exposedPort: 443
     hostIP: node.k8s.vpn
+    tls:
+      enabled: true
 service:
   enabled: false
 updateStrategy:

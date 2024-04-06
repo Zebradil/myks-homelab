@@ -36,3 +36,5 @@ ports:
     #! of this field to generate the redirect arguments.
     exposedPort: 443
     hostIP: #@ node_vpn_host
+    tls:
+      enabled: true
