@@ -6,7 +6,8 @@ metadata:
   name: librespeed
 spec:
   entryPoints:
-    - vpn
+    - vpn-web
+    - vpn-websecure
   routes:
     - kind: Rule
       match: Host(`librespeed.ts.zebradil.dev`) || Host(`librespeed.gray.ts.zebradil.dev`) || Host(`librespeed.junior.ts.zebradil.dev`)

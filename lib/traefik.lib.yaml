@@ -51,7 +51,7 @@ spec:
 #@ def gen_default_routes(name):
 #@   return [
 #@     gen_protected_ingress_route(name, t.hosts.web),
-#@     gen_ingress_route(name, t.hosts.vpn, ["vpn"]),
+#@     gen_ingress_route(name, t.hosts.vpn, ["vpn-web", "vpn-websecure"]),
 #@   ]
 #@ end
 

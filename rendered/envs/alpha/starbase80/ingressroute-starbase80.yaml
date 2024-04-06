@@ -6,7 +6,8 @@ metadata:
   name: starbase80
 spec:
   entryPoints:
-    - vpn
+    - vpn-web
+    - vpn-websecure
   routes:
     - kind: Rule
       match: Host(`starbase80.ts.zebradil.dev`) || Host(`starbase80.gray.ts.zebradil.dev`) || Host(`starbase80.junior.ts.zebradil.dev`)

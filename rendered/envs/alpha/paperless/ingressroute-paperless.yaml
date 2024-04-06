@@ -6,7 +6,8 @@ metadata:
   name: paperless
 spec:
   entryPoints:
-    - vpn
+    - vpn-web
+    - vpn-websecure
   routes:
     - kind: Rule
       match: Host(`paperless.ts.zebradil.dev`) || Host(`paperless.gray.ts.zebradil.dev`) || Host(`paperless.junior.ts.zebradil.dev`)

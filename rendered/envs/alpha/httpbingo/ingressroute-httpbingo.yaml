@@ -6,7 +6,8 @@ metadata:
   name: httpbingo
 spec:
   entryPoints:
-    - vpn
+    - vpn-web
+    - vpn-websecure
   routes:
     - kind: Rule
       match: Host(`httpbingo.ts.zebradil.dev`) || Host(`httpbingo.gray.ts.zebradil.dev`) || Host(`httpbingo.junior.ts.zebradil.dev`)
