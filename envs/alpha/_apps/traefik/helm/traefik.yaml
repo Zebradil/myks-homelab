@@ -18,4 +18,4 @@ ports:
     hostIP: #@ node_host
   paperless-sftp:
     port: 2222
-    hostIP: 0.0.0.0
+    hostIP: #@ node_host

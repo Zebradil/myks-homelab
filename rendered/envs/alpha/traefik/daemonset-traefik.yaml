@@ -31,7 +31,7 @@ spec:
       containers:
         - args:
             - --entrypoints.metrics.address=node.k8s.lan:19100/tcp
-            - --entrypoints.paperless-sftp.address=0.0.0.0:2222/tcp
+            - --entrypoints.paperless-sftp.address=node.k8s.lan:2222/tcp
             - --entrypoints.traefik.address=node.k8s.lan:9000/tcp
             - --entrypoints.web.address=:80/tcp
             - --entrypoints.websecure.address=:443/tcp
@@ -80,7 +80,7 @@ spec:
               name: metrics
               protocol: TCP
             - containerPort: 2222
-              hostIP: 0.0.0.0
+              hostIP: node.k8s.lan
               name: paperless-sftp
               protocol: TCP
             - containerPort: 9000
