@@ -3,6 +3,7 @@ kind: Service
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
+    prometheus.io/scrape: "true"
   labels:
     app.kubernetes.io/component: metrics
     app.kubernetes.io/instance: k8s-monitoring

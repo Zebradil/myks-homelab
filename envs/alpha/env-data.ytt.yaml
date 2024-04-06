@@ -40,5 +40,7 @@ argocd:
       name: in-cluster
   env:
     generateSecret: false
+helm:
+  kubeVersion: "1.29"
 myks:
   gitRepoUrl: https://github.com/Zebradil/myks-homelab
