@@ -35,8 +35,8 @@ spec:
             - --entrypoints.traefik.address=node.k8s.lan:9000/tcp
             - --entrypoints.vpn-web.address=node.k8s.vpn:80/tcp
             - --entrypoints.vpn-websecure.address=node.k8s.vpn:443/tcp
-            - --entrypoints.web.address=$NODE_IPV6:80/tcp
-            - --entrypoints.websecure.address=$NODE_IPV6:443/tcp
+            - --entrypoints.web.address=[$NODE_IPV6]:80/tcp
+            - --entrypoints.websecure.address=[$NODE_IPV6]:443/tcp
             - --api.dashboard=true
             - --ping=true
             - --metrics.prometheus=true

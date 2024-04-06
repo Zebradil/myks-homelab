@@ -15,10 +15,10 @@ ports:
     port: 80
     redirectTo:
       port: websecure
-    hostIP: $NODE_IPV6
+    hostIP: '[$NODE_IPV6]'
   websecure:
     port: 443
-    hostIP: $NODE_IPV6
+    hostIP: '[$NODE_IPV6]'
   traefik:
     hostIP: node.k8s.lan
   paperless-sftp:
