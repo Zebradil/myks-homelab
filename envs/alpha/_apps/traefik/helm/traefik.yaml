@@ -21,9 +21,9 @@ ports:
     port: 2222
     hostIP: #@ node_lan_host
   web:
-    hostIP: "${NODE_IPV6}"
+    hostIP: "$NODE_IPV6"
   websecure:
-    hostIP: "${NODE_IPV6}"
+    hostIP: "$NODE_IPV6"
   #! Dedicated ports for connection from the VPN network.
   vpn-web:
     port: 80
