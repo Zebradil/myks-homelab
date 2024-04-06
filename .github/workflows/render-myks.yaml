@@ -18,6 +18,9 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
+    permissions:
+      contents: read
+      actions: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,6 +33,11 @@ jobs:
             && secrets.ZEBRADIL_BOT_GITHUB_TOKEN
             || github.token
           }}"
+      - name: Derive appropriate SHAs for base and head for myks Smart Mode
+        uses: nrwl/nx-set-shas@v4
+      - run: |
+          echo "BASE: ${{ env.NX_BASE }}"
+          echo "HEAD: ${{ env.NX_HEAD }}"
       - name: Setup myks
         uses: mykso/setup-action@v1
         with:
