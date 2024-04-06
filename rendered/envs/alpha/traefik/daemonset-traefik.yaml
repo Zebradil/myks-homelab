@@ -85,28 +85,6 @@ spec:
             successThreshold: 1
             timeoutSeconds: 2
           name: traefik
-          ports:
-            - containerPort: 19100
-              name: metrics
-              protocol: TCP
-            - containerPort: 2222
-              name: paperless-sftp
-              protocol: TCP
-            - containerPort: 9000
-              name: traefik
-              protocol: TCP
-            - containerPort: 80
-              name: vpn-web
-              protocol: TCP
-            - containerPort: 443
-              name: vpn-websecure
-              protocol: TCP
-            - containerPort: 80
-              name: web
-              protocol: TCP
-            - containerPort: 443
-              name: websecure
-              protocol: TCP
           readinessProbe:
             failureThreshold: 1
             httpGet:

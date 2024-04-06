@@ -4,7 +4,7 @@
 #@ daemonsets = overlay.subset({"kind":"DaemonSet"})
 
 #! This overlay adds a custom command to the traefik container and removes the
-#! hostIP field from the container ports.
+#! ports field from the container spec, as it is not needed when using hostNetwork.
 #@overlay/match by=overlay.or_op(deployments, daemonsets)
 ---
 spec:
@@ -23,7 +23,5 @@ spec:
               echo "Selected IPv6: $NODE_IPV6"
               export NODE_IPV6
               exec /entrypoint.sh "$@"
+          #@overlay/remove
           ports:
-            - #@overlay/match by=overlay.all, expects="1+"
-              #@overlay/remove
-              hostIP:
