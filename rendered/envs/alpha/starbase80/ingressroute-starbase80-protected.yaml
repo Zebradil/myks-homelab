@@ -5,6 +5,9 @@ metadata:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   name: starbase80-protected
 spec:
+  entryPoints:
+    - web
+    - websecure
   routes:
     - kind: Rule
       match: Host(`starbase80.zebradil.dev`) || Host(`starbase80.gray.zebradil.dev`) || Host(`starbase80.junior.zebradil.dev`)

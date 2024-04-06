@@ -5,6 +5,9 @@ metadata:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   name: librespeed-protected
 spec:
+  entryPoints:
+    - web
+    - websecure
   routes:
     - kind: Rule
       match: Host(`librespeed.zebradil.dev`) || Host(`librespeed.gray.zebradil.dev`) || Host(`librespeed.junior.zebradil.dev`)

@@ -5,6 +5,9 @@ metadata:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   name: paperless-protected
 spec:
+  entryPoints:
+    - web
+    - websecure
   routes:
     - kind: Rule
       match: Host(`paperless.zebradil.dev`) || Host(`paperless.gray.zebradil.dev`) || Host(`paperless.junior.zebradil.dev`)

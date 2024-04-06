@@ -27,8 +27,11 @@ ports:
   vpn-web:
     port: 80
     hostIP: node.k8s.vpn
+    redirectTo:
+      port: vpn-websecure
   vpn-websecure:
     port: 443
+    exposedPort: 443
     hostIP: node.k8s.vpn
 service:
   enabled: false
