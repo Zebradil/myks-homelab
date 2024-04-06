@@ -30,9 +30,9 @@ spec:
     spec:
       containers:
         - args:
-            - --entrypoints.metrics.address=localhost:19100/tcp
+            - --entrypoints.metrics.address=node.k8s.lan:19100/tcp
             - --entrypoints.paperless-sftp.address=0.0.0.0:2222/tcp
-            - --entrypoints.traefik.address=localhost:9000/tcp
+            - --entrypoints.traefik.address=node.k8s.lan:9000/tcp
             - --entrypoints.web.address=:80/tcp
             - --entrypoints.websecure.address=:443/tcp
             - --api.dashboard=true
@@ -65,7 +65,7 @@ spec:
           livenessProbe:
             failureThreshold: 3
             httpGet:
-              host: localhost
+              host: node.k8s.lan
               path: /ping
               port: 9000
               scheme: HTTP
@@ -76,7 +76,7 @@ spec:
           name: traefik
           ports:
             - containerPort: 19100
-              hostIP: localhost
+              hostIP: node.k8s.lan
               name: metrics
               protocol: TCP
             - containerPort: 2222
@@ -84,7 +84,7 @@ spec:
               name: paperless-sftp
               protocol: TCP
             - containerPort: 9000
-              hostIP: localhost
+              hostIP: node.k8s.lan
               name: traefik
               protocol: TCP
             - containerPort: 80
@@ -96,7 +96,7 @@ spec:
           readinessProbe:
             failureThreshold: 1
             httpGet:
-              host: localhost
+              host: node.k8s.lan
               path: /ping
               port: 9000
               scheme: HTTP

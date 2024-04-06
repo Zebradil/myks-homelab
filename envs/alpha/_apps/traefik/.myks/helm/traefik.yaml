@@ -10,7 +10,7 @@ deployment:
 ports:
   metrics:
     port: 19100
-    hostIP: localhost
+    hostIP: node.k8s.lan
   web:
     port: 80
     redirectTo:
@@ -18,7 +18,7 @@ ports:
   websecure:
     port: 443
   traefik:
-    hostIP: localhost
+    hostIP: node.k8s.lan
   paperless-sftp:
     port: 2222
     hostIP: 0.0.0.0

@@ -1,8 +1,21 @@
+#! When Traefik is configured to use the host network, it binds all andpoints
+#! to all interfaces by default. This is a security risk, as it exposes the
+#! internal services to the public internet. To avoid this, we bind the
+#! internal services to a non-public interface.
+#! We can't use localhost for this purpose, because it is not available for
+#! other containers (such as metric scrapers) that are not using the host
+#! network. Instead, on every node in /etc/hosts, we define a custom hostname
+#! resolving to the node's IP address of the interface of our choice. Example:
+#!
+#!    echo 'node.k8s.lan	192.168.69.69' | sudo tee -a /etc/hosts
+#!
+#@ node_host = "node.k8s.lan"
+---
 ports:
   traefik:
-    hostIP: localhost
+    hostIP: #@ node_host
   metrics:
-    hostIP: localhost
+    hostIP: #@ node_host
   paperless-sftp:
     port: 2222
     hostIP: 0.0.0.0
