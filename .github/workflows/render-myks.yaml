@@ -36,7 +36,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Render
-        run: myks all --smart-mode.base-revision=${{ github.base_ref && 'origin/' + github.base_ref || env.NX_BASE }}
+        run: myks all --smart-mode.base-revision=${{ github.base_ref && format('origin/{0}', github.base_ref) || env.NX_BASE }}
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v6
         with:
