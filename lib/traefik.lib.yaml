@@ -1,8 +1,6 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:struct", "struct")
 
-#@ t = data.values.environment.traefik
-
 #@ def gen_host_matches(name, hosts):
 #@   matches = []
 #@   for host in hosts:
@@ -49,6 +47,7 @@ spec:
 
 ---
 #@ def gen_default_routes(name):
+#@   t = data.values.environment.traefik
 #@   return [
 #@     gen_protected_ingress_route(name, t.hosts.web, ["web", "websecure"]),
 #@     gen_ingress_route(name, t.hosts.vpn, ["vpn-web", "vpn-websecure"]),
