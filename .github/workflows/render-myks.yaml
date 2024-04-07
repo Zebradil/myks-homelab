@@ -7,11 +7,6 @@ name: Render with myks
     branches:
       - main
 
-permissions:
-  pull-requests: write
-  contents: write
-  statuses: write
-
 jobs:
   render:
     runs-on: ubuntu-latest
@@ -19,8 +14,10 @@ jobs:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
     permissions:
-      contents: read
       actions: read
+      contents: write
+      pull-requests: write
+      statuses: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -28,11 +25,7 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.head_ref || github.ref_name }}
           # use more powerful token on the default branch, otherwise use the default GITHUB_TOKEN
-          token: "${{
-            github.ref_name == github.event.repository.default_branch
-            && secrets.ZEBRADIL_BOT_GITHUB_TOKEN
-            || github.token
-          }}"
+          token: "${{ github.ref_name == github.event.repository.default_branch && secrets.ZEBRADIL_BOT_GITHUB_TOKEN || github.token }}"
       - name: Derive appropriate SHAs for base and head for myks Smart Mode
         uses: nrwl/nx-set-shas@v4
       - run: |
@@ -43,7 +36,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Render
-        run: myks all --smart-mode.base-revision=${{ github.base_ref || env.NX_BASE }}
+        run: myks all --smart-mode.base-revision=${{ github.base_ref && "origin/" + github.base_ref || env.NX_BASE }}
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v6
         with:
