@@ -41,7 +41,7 @@ spec:
             - |
               npm run build
               cp -vr public/. /static/
-          image: jordanroher/starbase-80:1.5.1
+          image: jordanroher/starbase-80:1.5.2
           name: builder
           volumeMounts:
             - mountPath: /static
