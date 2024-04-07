@@ -4,7 +4,7 @@
 application:
   builder:
     #! renovate: datasource=docker
-    image: jordanroher/starbase-80:1.5.1
+    image: jordanroher/starbase-80:1.5.2
   server:
     #! renovate: datasource=docker
     image: nginx:1.25.4
