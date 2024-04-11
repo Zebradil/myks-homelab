@@ -24,6 +24,17 @@ ports:
   paperless-sftp:
     port: 2222
     hostIP: node.k8s.lan
+  lan-web:
+    port: 80
+    hostIP: node.k8s.lan
+    redirectTo:
+      port: lan-websecure
+  lan-websecure:
+    port: 443
+    exposedPort: 443
+    hostIP: node.k8s.lan
+    tls:
+      enabled: true
   vpn-web:
     port: 80
     hostIP: node.k8s.vpn

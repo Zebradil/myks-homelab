@@ -3,14 +3,14 @@ kind: IngressRoute
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
-  name: starbase80
+  name: httpbingo-lan
 spec:
   entryPoints:
-    - vpn-web
-    - vpn-websecure
+    - lan-web
+    - lan-websecure
   routes:
     - kind: Rule
-      match: Host(`starbase80.ts.zebradil.dev`) || Host(`starbase80.gray.ts.zebradil.dev`) || Host(`starbase80.junior.ts.zebradil.dev`)
+      match: Host(`httpbingo.lan.zebradil.dev`) || Host(`httpbingo.gray.lan.zebradil.dev`) || Host(`httpbingo.junior.lan.zebradil.dev`)
       services:
-        - name: starbase80
+        - name: httpbingo
           port: http

@@ -29,11 +29,11 @@ spec:
 #@ end
 
 ---
-#@ def gen_ingress_route(name, hosts, entrypoints=[]):
+#@ def gen_ingress_route(name, hosts, entrypoints=[], suffix=""):
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
-  name: #@ name
+  name: #@ name + suffix
 spec:
   #@ if/end entrypoints:
   entryPoints: #@ entrypoints
@@ -50,7 +50,8 @@ spec:
 #@   t = data.values.environment.traefik
 #@   return [
 #@     gen_protected_ingress_route(name, t.hosts.web, ["web", "websecure"]),
-#@     gen_ingress_route(name, t.hosts.vpn, ["vpn-web", "vpn-websecure"]),
+#@     gen_ingress_route(name, t.hosts.lan, ["lan-web", "lan-websecure"], "-lan"),
+#@     gen_ingress_route(name, t.hosts.vpn, ["vpn-web", "vpn-websecure"], "-vpn"),
 #@   ]
 #@ end
 

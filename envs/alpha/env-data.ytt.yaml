@@ -2,23 +2,24 @@
 
 #@ nodes = ["gray", "junior"]
 #@ base_domain = "zebradil.dev"
+#@ lan_domain = "lan." + base_domain
 #@ vpn_domain = "ts." + base_domain
 
 #@ base_hosts = [base_domain]
+#@ vpn_hosts = [vpn_domain]
+#@ lan_hosts = [lan_domain]
 #@ for node in nodes:
 #@   base_hosts.append(node + "." + base_domain)
-#@ end
-#@
-#@ vpn_hosts = [vpn_domain]
-#@ for node in nodes:
 #@   vpn_hosts.append(node + "." + vpn_domain)
+#@   lan_hosts.append(node + "." + lan_domain)
 #@ end
 
 ---
 environment:
-  hosts: #@ base_hosts + vpn_hosts
+  hosts: #@ base_hosts + vpn_hosts + lan_hosts
   traefik:
     hosts:
+      lan: #@ lan_hosts
       vpn: #@ vpn_hosts
       web: #@ base_hosts
   id: alpha

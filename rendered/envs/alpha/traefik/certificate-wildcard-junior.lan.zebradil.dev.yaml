@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: wildcard-junior.lan.zebradil.dev
+spec:
+  dnsNames:
+    - junior.lan.zebradil.dev
+    - '*.junior.lan.zebradil.dev'
+  issuerRef:
+    kind: ClusterIssuer
+    name: cloudflare-zerossl
+  secretName: wildcard-junior.lan.zebradil.dev-tls

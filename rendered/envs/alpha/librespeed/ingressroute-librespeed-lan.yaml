@@ -3,14 +3,14 @@ kind: IngressRoute
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
-  name: httpbingo
+  name: librespeed-lan
 spec:
   entryPoints:
-    - vpn-web
-    - vpn-websecure
+    - lan-web
+    - lan-websecure
   routes:
     - kind: Rule
-      match: Host(`httpbingo.ts.zebradil.dev`) || Host(`httpbingo.gray.ts.zebradil.dev`) || Host(`httpbingo.junior.ts.zebradil.dev`)
+      match: Host(`librespeed.lan.zebradil.dev`) || Host(`librespeed.gray.lan.zebradil.dev`) || Host(`librespeed.junior.lan.zebradil.dev`)
       services:
-        - name: httpbingo
+        - name: librespeed
           port: http

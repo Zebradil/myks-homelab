@@ -30,6 +30,8 @@ spec:
     spec:
       containers:
         - args:
+            - --entrypoints.lan-web.address=node.k8s.lan:80/tcp
+            - --entrypoints.lan-websecure.address=node.k8s.lan:443/tcp
             - --entrypoints.metrics.address=node.k8s.lan:19100/tcp
             - --entrypoints.paperless-sftp.address=node.k8s.lan:2222/tcp
             - --entrypoints.traefik.address=node.k8s.lan:9000/tcp
@@ -44,6 +46,9 @@ spec:
             - --providers.kubernetescrd
             - --providers.kubernetescrd.allowCrossNamespace=true
             - --providers.kubernetesingress
+            - --entrypoints.lan-web.http.redirections.entryPoint.to=:443
+            - --entrypoints.lan-web.http.redirections.entryPoint.scheme=https
+            - --entrypoints.lan-websecure.http.tls=true
             - --entrypoints.vpn-web.http.redirections.entryPoint.to=:443
             - --entrypoints.vpn-web.http.redirections.entryPoint.scheme=https
             - --entrypoints.vpn-websecure.http.tls=true

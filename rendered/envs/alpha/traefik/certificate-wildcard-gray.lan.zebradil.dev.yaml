@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: wildcard-gray.lan.zebradil.dev
+spec:
+  dnsNames:
+    - gray.lan.zebradil.dev
+    - '*.gray.lan.zebradil.dev'
+  issuerRef:
+    kind: ClusterIssuer
+    name: cloudflare-zerossl
+  secretName: wildcard-gray.lan.zebradil.dev-tls

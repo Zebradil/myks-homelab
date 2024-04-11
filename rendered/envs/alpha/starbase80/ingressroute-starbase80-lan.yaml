@@ -1,0 +1,16 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: starbase80-lan
+spec:
+  entryPoints:
+    - lan-web
+    - lan-websecure
+  routes:
+    - kind: Rule
+      match: Host(`starbase80.lan.zebradil.dev`) || Host(`starbase80.gray.lan.zebradil.dev`) || Host(`starbase80.junior.lan.zebradil.dev`)
+      services:
+        - name: starbase80
+          port: http

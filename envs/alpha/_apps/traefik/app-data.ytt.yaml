@@ -7,8 +7,11 @@ application:
     baseDomains:
       - zebradil.dev
       - ts.zebradil.dev
+      - lan.zebradil.dev
       - gray.zebradil.dev
       - gray.ts.zebradil.dev
+      - gray.lan.zebradil.dev
       - junior.zebradil.dev
       - junior.ts.zebradil.dev
+      - junior.lan.zebradil.dev
     issuer: cloudflare-zerossl

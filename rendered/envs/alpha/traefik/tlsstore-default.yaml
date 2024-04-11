@@ -8,9 +8,12 @@ spec:
   certificates:
     - secretName: wildcard-zebradil.dev-tls
     - secretName: wildcard-ts.zebradil.dev-tls
+    - secretName: wildcard-lan.zebradil.dev-tls
     - secretName: wildcard-gray.zebradil.dev-tls
     - secretName: wildcard-gray.ts.zebradil.dev-tls
+    - secretName: wildcard-gray.lan.zebradil.dev-tls
     - secretName: wildcard-junior.zebradil.dev-tls
     - secretName: wildcard-junior.ts.zebradil.dev-tls
+    - secretName: wildcard-junior.lan.zebradil.dev-tls
   defaultCertificate:
     secretName: wildcard-zebradil.dev-tls

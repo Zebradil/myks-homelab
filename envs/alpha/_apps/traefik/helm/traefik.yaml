@@ -24,6 +24,20 @@ ports:
     hostIP: "[$NODE_IPV6]"
   websecure:
     hostIP: "[$NODE_IPV6]"
+  #! Dedicated ports for connection from the LAN network.
+  lan-web:
+    port: 80
+    hostIP: #@ node_lan_host
+    redirectTo:
+      port: lan-websecure
+  lan-websecure:
+    port: 443
+    #! This is only needed for the redirect, as the helm template uses values
+    #! of this field to generate the redirect arguments.
+    exposedPort: 443
+    hostIP: #@ node_lan_host
+    tls:
+      enabled: true
   #! Dedicated ports for connection from the VPN network.
   vpn-web:
     port: 80
