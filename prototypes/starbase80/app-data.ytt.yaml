@@ -5,6 +5,20 @@ application:
   builder:
     #! renovate: datasource=docker
     image: jordanroher/starbase-80:1.5.2
+    #! See https://github.com/notclickable-jordan/starbase-80?tab=readme-ov-file#configuration
+    config:
+      - category: Category
+        bubble: true
+        services:
+          - name: Arch
+            uri: https://archlinux.org/
+            description: Operating system
+            icon: arch
+            iconBubble: true
+            newWindow: false
+    #! See https://github.com/notclickable-jordan/starbase-80?tab=readme-ov-file#environment-variables
+    env:
+      TITLE: Starbase 80
   server:
     #! renovate: datasource=docker
     image: nginx:1.25.4

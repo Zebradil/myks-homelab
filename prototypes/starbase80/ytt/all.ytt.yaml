@@ -14,46 +14,11 @@
 #@ config_name = "config.json"
 
 ---
-#@ def get_config():
-#! See https://github.com/notclickable-jordan/starbase-80?tab=readme-ov-file#configuration
-- category: Services
-  services:
-    - name: Archivebox
-      uri: https://archivebox.mywebsite.com
-      description: Backup webpages
-      icon: /icons/archivebox.jpg
-    - name: Authelia
-      uri: https://auth.mywebsite.com
-      description: Authentication
-      icon: /icons/authelia.png
-    - name: Calibre
-      uri: https://calibre.mywebsite.com
-      description: eBook library
-      icon: /icons/calibre.png
-- category: Devices
-  bubble: true
-  services:
-    - name: Router
-      uri: http://192.168.1.1/
-      description: Netgear Orbi
-      icon: /icons/router.png
-    - name: Home Assistant
-      uri: http://homeassistant.local:8123/
-      description: Home automation
-      icon: home-assistant
-      iconBubble: false
-    - name: Synology
-      uri: http://synology:5000
-      description: Network storage
-      icon: /icons/synology.png
-#@ end
-
----
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: #@ cm_name
-data: #@ { config_name: json.encode(get_config()) }
+data: #@ { config_name: json.encode(a.builder.config) }
 
 ---
 apiVersion: apps/v1
@@ -82,6 +47,10 @@ spec:
             - |
               npm run build
               cp -vr public/. /static/
+          env:
+            #@ for/end k in a.builder.env:
+            - name: #@ k
+              value: #@ a.builder.env[k]
           volumeMounts:
             - name: static
               mountPath: /static

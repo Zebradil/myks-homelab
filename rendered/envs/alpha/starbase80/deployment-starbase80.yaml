@@ -41,6 +41,9 @@ spec:
             - |
               npm run build
               cp -vr public/. /static/
+          env:
+            - name: TITLE
+              value: Zebrdil's Dashboard
           image: jordanroher/starbase-80:1.5.2
           name: builder
           volumeMounts:
