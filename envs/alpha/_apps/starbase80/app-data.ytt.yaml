@@ -1,37 +1,26 @@
 #@data/values
+
+#@ def get_uri(service):
+#@   return "https://"+service+".zebradil.dev"
+#@ end
+
 ---
 application:
   builder:
     config:
       - category: Services
         services:
-          - name: Archivebox
-            uri: https://archivebox.mywebsite.com
-            description: Backup webpages
-            icon: /icons/archivebox.jpg
-          - name: Authelia
-            uri: https://auth.mywebsite.com
-            description: Authentication
-            icon: /icons/authelia.png
-          - name: Calibre
-            uri: https://calibre.mywebsite.com
-            description: eBook library
-            icon: /icons/calibre.png
-      - category: Devices
-        bubble: true
-        services:
-          - name: Router
-            uri: http://192.168.1.1/
-            description: Netgear Orbi
-            icon: /icons/router.png
-          - name: Home Assistant
-            uri: http://homeassistant.local:8123/
-            description: Home automation
-            icon: home-assistant
-            iconBubble: false
-          - name: Synology
-            uri: http://synology:5000
-            description: Network storage
-            icon: /icons/synology.png
+          - name: Paperless
+            uri: #@ get_uri("paperless")
+            description: Document management
+            icon: paperless
+          - name: Librespeed
+            uri: #@ get_uri("librespeed")
+            description: Internet speed test
+            icon: librespeed
+          - name: Httpbingo
+            uri: #@ get_uri("httpbingo")
+            description: HTTP request/response service
+            icon: webtools
     env:
-      TITLE: Zebrdil's Dashboard
+      TITLE: ""

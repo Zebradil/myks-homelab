@@ -43,7 +43,7 @@ spec:
               cp -vr public/. /static/
           env:
             - name: TITLE
-              value: Zebrdil's Dashboard
+              value: ""
           image: jordanroher/starbase-80:1.5.2
           name: builder
           volumeMounts:
