@@ -26,5 +26,9 @@ application:
             uri: #@ get_uri("auth")
             description: Authentication and authorization server
             icon: authelia
+          - name: ArgoCD
+            uri: #@ get_uri("argocd")
+            description: GitOps continuous delivery
+            icon: argocd
     env:
       TITLE: ""
