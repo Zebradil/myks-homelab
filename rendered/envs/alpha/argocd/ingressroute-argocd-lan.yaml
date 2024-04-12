@@ -1,0 +1,17 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: argocd-lan
+  namespace: argocd
+spec:
+  entryPoints:
+    - lan-web
+    - lan-websecure
+  routes:
+    - kind: Rule
+      match: Host(`argocd.lan.zebradil.dev`) || Host(`argocd.gray.lan.zebradil.dev`) || Host(`argocd.junior.lan.zebradil.dev`)
+      services:
+        - name: argocd
+          port: http
