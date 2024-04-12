@@ -27,6 +27,10 @@ ports:
 service:
   enabled: false
 
+ingressRoute:
+  dashboard:
+    enabled: false
+
 #! nodeSelector:
 #!   kubernetes.io/hostname: #@ data.values.application.nodeSelector.hostname
 

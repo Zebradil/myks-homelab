@@ -48,6 +48,9 @@ ports:
       enabled: true
 service:
   enabled: false
+ingressRoute:
+  dashboard:
+    enabled: false
 updateStrategy:
   rollingUpdate:
     maxSurge: 0
