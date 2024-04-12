@@ -13,5 +13,5 @@ spec:
     - kind: Rule
       match: Host(`argocd.ts.zebradil.dev`) || Host(`argocd.gray.ts.zebradil.dev`) || Host(`argocd.junior.ts.zebradil.dev`)
       services:
-        - name: argocd
+        - name: argocd-server
           port: http

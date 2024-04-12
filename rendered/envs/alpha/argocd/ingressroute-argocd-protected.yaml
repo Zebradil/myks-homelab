@@ -16,5 +16,5 @@ spec:
         - name: chain-authelia-auth
           namespace: authelia
       services:
-        - name: argocd
+        - name: argocd-server
           port: http
