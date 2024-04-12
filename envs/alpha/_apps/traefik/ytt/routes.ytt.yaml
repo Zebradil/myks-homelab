@@ -11,7 +11,7 @@ spec:
   routes:
     #@overlay/match by=overlay.all
     - services:
-        #@overlay/match by=overlay.all
-        - name: api@internal
-          #@overlay/remove
-          port:
+      #@overlay/match by=overlay.all
+      - #@overlay/replace
+        kind: TraefikService
+        name: api@internal

@@ -12,4 +12,5 @@ spec:
     - kind: Rule
       match: Host(`traefik.ts.zebradil.dev`) || Host(`traefik.gray.ts.zebradil.dev`) || Host(`traefik.junior.ts.zebradil.dev`)
       services:
-        - name: api@internal
+        - kind: TraefikService
+          name: api@internal

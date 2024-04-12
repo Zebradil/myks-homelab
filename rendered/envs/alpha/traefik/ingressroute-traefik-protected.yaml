@@ -15,4 +15,5 @@ spec:
         - name: chain-authelia-auth
           namespace: authelia
       services:
-        - name: api@internal
+        - kind: TraefikService
+          name: api@internal
