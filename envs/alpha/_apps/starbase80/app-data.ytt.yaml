@@ -30,5 +30,9 @@ application:
             uri: #@ get_uri("argocd")
             description: GitOps continuous delivery
             icon: argocd
+          - name: Traefik
+            uri: #@ get_uri("traefik")
+            description: HTTP reverse proxy and load balancer
+            icon: traefik
     env:
       TITLE: ""
