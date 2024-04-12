@@ -1,5 +1,6 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:json", "json")
+#@ load("@ytt:md5", "md5")
 #@ load("traefik.lib.yaml", "route")
 
 #@ a = data.values.application
@@ -31,6 +32,8 @@ spec:
   template:
     metadata:
       labels: #@ pod_labels
+      annotations:
+        checksum/config: #@ md5.sum(json.encode(a.builder.config))
     spec:
       volumes:
         - name: static
