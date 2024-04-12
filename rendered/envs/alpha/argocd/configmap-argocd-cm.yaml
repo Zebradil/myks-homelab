@@ -1,6 +1,7 @@
 apiVersion: v1
 data:
   application.instanceLabelKey: argocd.argoproj.io/instance
+  server.insecure: "true"
 kind: ConfigMap
 metadata:
   annotations:
