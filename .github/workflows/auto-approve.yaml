@@ -1,0 +1,38 @@
+# This workflow approves pull requests automatically if the diff of the rendered manifests is insignificant.
+---
+name: Auto-approve
+
+"on":
+  pull_request:
+    types:
+      - converted_to_draft
+      - opened
+      - ready_for_review
+      - reopened
+      - synchronize
+    branches:
+      - main
+    paths:
+      - "rendered/**"
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  auto-approve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Approve or dismiss approval
+        run: |
+          export GIT_CONFIG_SYSTEM="$GITHUB_WORKSPACE/hack/git/gitconfig"
+          if git diff --exit-code origin/$GITHUB_BASE_REF...origin/$GITHUB_HEAD_REF -- rendered; then
+            echo "::notice::No significant changes in rendered manifests detected, approving the pull request"
+            gh pr review --approve --body "No significant changes in rendered manifests detected"
+          else
+            echo "::notice::Significant changes in rendered manifests detected, dismissing the approval"
+            gh pr review --dismiss --body "Significant changes in rendered manifests detected. @zebradil please review"
+          fi
