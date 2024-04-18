@@ -29,6 +29,7 @@ jobs:
       - name: Approve or dismiss approval
         run: |
           export GIT_CONFIG_SYSTEM="$GITHUB_WORKSPACE/hack/git/gitconfig"
+          export GH_TOKEN="${{ secrets.ZEBRADIL_BOT_GITHUB_TOKEN }}"
           if git diff --exit-code origin/$GITHUB_BASE_REF...origin/$GITHUB_HEAD_REF -- rendered; then
             echo "::notice::No significant changes in rendered manifests detected, approving the pull request"
             gh pr review --approve --body "No significant changes in rendered manifests detected"
