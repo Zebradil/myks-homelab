@@ -28,6 +28,8 @@ jobs:
           export GH_TOKEN="${{ secrets.ZEBRADIL_BOT_GITHUB_TOKEN }}"
           gh pr checkout ${{ github.event.number }}
           set -x
+          ls -l
+          pwd
           if git diff --exit-code origin/$GITHUB_BASE_REF...origin/$GITHUB_HEAD_REF -- rendered; then
             echo "::notice::No significant changes in rendered manifests detected, approving the pull request"
             # gh pr review --approve --body "No significant changes in rendered manifests detected"
