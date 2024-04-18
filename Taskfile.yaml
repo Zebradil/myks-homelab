@@ -30,8 +30,8 @@ tasks:
       Accepts the number of pull request and git diff arguments.
       Example:
 
-        # shows diff for pull request #123 in kubernetes/rendered directory
-        task git:diff:pr -- 123 kubernetes/rendered
+        # shows diff for pull request #123 in rendered directory
+        task git:diff:pr -- 123 rendered
 
       Tip: you can use `gh pr list` to get the list of pull requests.
     cmds:
