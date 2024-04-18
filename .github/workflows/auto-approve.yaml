@@ -10,10 +10,10 @@ name: Auto-approve
       - ready_for_review
       - reopened
       - synchronize
-    branches:
-      - main
-    paths:
-      - "rendered/**"
+    # branches:
+    #   - main
+    # paths:
+    #   - "rendered/**"
 
 defaults:
   run:
