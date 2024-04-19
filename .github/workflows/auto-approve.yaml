@@ -3,13 +3,12 @@
 name: Auto-approve
 
 "on":
+  workflow_call:
   pull_request:
     types:
       - converted_to_draft
-      - opened
       - ready_for_review
       - reopened
-      - synchronize
 
 defaults:
   run:
@@ -27,11 +26,6 @@ jobs:
           export GIT_CONFIG_SYSTEM="$GITHUB_WORKSPACE/hack/git/gitconfig"
           export GH_TOKEN="${{ secrets.ZEBRADIL_BOT_GITHUB_TOKEN }}"
           gh pr checkout ${{ github.event.number }}
-          set -x
-          ls -l
-          pwd
-          git show origin/$GITHUB_BASE_REF
-          git show origin/$GITHUB_HEAD_REF
           if git diff --exit-code origin/$GITHUB_BASE_REF...origin/$GITHUB_HEAD_REF -- rendered; then
             echo "::notice::No significant changes in rendered manifests detected, approving the pull request"
             # gh pr review --approve --body "No significant changes in rendered manifests detected"
@@ -39,11 +33,3 @@ jobs:
             echo "::notice::Significant changes in rendered manifests detected, dismissing the approval"
             # gh pr review --dismiss --body "Significant changes in rendered manifests detected. @zebradil please review"
           fi
-          set +x
-      - name: Setup tunnel
-        run: |
-          curl -fsSL -o- https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz | tar -xvz
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PUBLIC_KEY }}" > ~/.ssh/authorized_keys
-          ./ngrok authtoken ${{ secrets.NGROK_TOKEN }}
-          timeout 15m ./ngrok tcp 22

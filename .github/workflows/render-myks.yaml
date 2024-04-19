@@ -24,8 +24,8 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref || github.ref_name }}
-          # use more powerful token on the default branch, otherwise use the default GITHUB_TOKEN
-          token: "${{ github.ref_name == github.event.repository.default_branch && secrets.ZEBRADIL_BOT_GITHUB_TOKEN || github.token }}"
+          # use more powerful token to trigger subsequent workflows
+          token: ${{ secrets.ZEBRADIL_BOT_GITHUB_TOKEN }}
       - name: Derive appropriate SHAs for base and head for myks Smart Mode
         uses: nrwl/nx-set-shas@v4
       - run: |
@@ -36,7 +36,9 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Render
-        run: myks all --smart-mode.base-revision=${{ github.base_ref && format('origin/{0}', github.base_ref) || env.NX_BASE }}
+        run:
+          myks all --smart-mode.base-revision=${{ github.base_ref &&
+          format('origin/{0}', github.base_ref) || env.NX_BASE }}
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v6
         with:
@@ -54,15 +56,19 @@ jobs:
         uses: myrotvorets/set-commit-status-action@v2.0.1
         with:
           context: myks
-          description: "${{ steps.commit.outputs.changes_detected == 'true' && 'New changes have been committed' || 'Rendered files are up to date' }}"
+          description:
+            ${{ steps.commit.outputs.changes_detected == 'true' && 'New changes
+            have been committed' || 'Rendered files are up to date' }}
           # When running on a PR, set the commit status on the latest commit in
           # the branch. Otherwise, the PR will be waiting for the commit status
           # indefinitely. This, in particular, blocks Renovate from merging PRs
           # automatically.
           # If running on a push, set the commit status on the current commit.
-          sha: "${{
-            steps.commit.outputs.commit_hash
-            || github.event.pull_request.head.sha
-            || github.sha
-          }}"
+          sha:
+            ${{ steps.commit.outputs.commit_hash ||
+            github.event.pull_request.head.sha || github.sha }}
           status: success
+  auto-approve:
+    needs: render
+    if: ${{ github.event_name == 'pull_request' }}
+    uses: .github/workflows/auto-approve.yaml
