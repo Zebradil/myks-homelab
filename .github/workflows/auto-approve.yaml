@@ -27,26 +27,75 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Make decision
+      - name: Approve or dismiss approval
         id: decision
         run: |
-          export GIT_CONFIG_SYSTEM="$GITHUB_WORKSPACE/hack/git/gitconfig"
-          gh pr checkout ${{ github.event.number }}
+          function gh_api() {
+            gh api \
+              --header "Accept: application/vnd.github+json" \
+              --header "X-GitHub-Api-Version: 2022-11-28" \
+              "$@"
+          }
 
-          if git diff --exit-code origin/$GITHUB_BASE_REF...origin/$GITHUB_HEAD_REF -- rendered; then
-            echo "::notice::No significant changes in rendered manifests detected"
-            echo "CHANGE_DETECTED=false" >> $GITHUB_ENV
+          function get_approval_id() {
+            user_id=$(gh api user --jq '.id')
+            pr_id=${{ github.event.number }}
+            gh_api /repos/{owner}/{repo}/pulls/$pr_id/reviews \
+              --jq ".[] | select(.user.id == $user_id and .state == \"APPROVED\") | .id"
+          }
+
+          function decide() {
+            OK=🟢
+            NO=🔴
+
+            if [[ ${{ github.event.pull_request.state }} == "closed" ]]; then
+              echo "::notice::$NO Pull request is closed"
+              return 1
+            fi
+            echo "::notice::$OK Pull request is open"
+
+            if [[ ${{ github.event.pull_request.draft }} == true ]]; then
+              echo "::notice::$NO Pull request is a draft"
+              return 1
+            fi
+            echo "::notice::$OK Pull request is not a draft"
+
+            if [[ ${{ github.event.pull_request.mergeable }} == false ]]; then
+              echo "::notice::$NO Pull request is not mergeable"
+              return 1
+            fi
+            echo "::notice::$OK Pull request is mergeable"
+
+            export GIT_CONFIG_SYSTEM="$GITHUB_WORKSPACE/hack/git/gitconfig"
+            gh pr checkout ${{ github.event.number }}
+            if ! git diff --exit-code origin/$GITHUB_BASE_REF...origin/$GITHUB_HEAD_REF -- rendered; then
+              echo "::notice::$NO Significant changes in rendered manifests"
+              return 1
+            fi
+            echo "::notice::$OK No significant changes in rendered manifests"
+
+            return 0
+          }
+
+          approval_id=$(get_approval_id)
+
+          if decide
+          then
+            echo "::notice::Approving the pull request..."
+            if [[ -n $approval_id ]]; then
+              echo "::notice::Approval already exists, nothing to do"
+            else
+              gh pr review --approve --body "LGTM"
+              echo "::notice::Approved!"
+            fi
           else
-            echo "::notice::Significant changes in rendered manifests detected"
-            echo "CHANGE_DETECTED=true" >> $GITHUB_ENV
+            echo "::notice::Dismissing the approval..."
+            if [[ -n $approval_id ]]; then
+              gh_api --method PUT \
+                /repos/{owner}/{repo}/pulls/${{ github.event.number }}/reviews/$approval_id/dismissals \
+                --raw-field message="Review dismissed (TODO: add details)"
+              echo "::notice::Dismissed!"
+            else
+              echo "::notice::No approval to dismiss"
+            fi
           fi
-
-      # - name: Approve or dismiss approval
-      #   run: |
-      #     if git diff --exit-code origin/$GITHUB_BASE_REF...origin/$GITHUB_HEAD_REF -- rendered; then
-      #       echo "::notice::No significant changes in rendered manifests detected, approving the pull request"
-      #       gh pr review --approve --body "No significant changes in rendered manifests detected"
-      #     else
-      #       echo "::notice::Significant changes in rendered manifests detected, dismissing the approval"
-      #       gh pr review --dismiss --body "Significant changes in rendered manifests detected. @zebradil please review"
-      #     fi
