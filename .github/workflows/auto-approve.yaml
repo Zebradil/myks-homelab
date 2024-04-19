@@ -48,19 +48,19 @@ jobs:
             OK=🟢
             NO=🔴
 
-            if [[ ${{ github.event.pull_request.state }} == "closed" ]]; then
+            if [[ "${{ github.event.pull_request.state }}" == closed ]]; then
               echo "::notice::$NO Pull request is closed"
               return 1
             fi
             echo "::notice::$OK Pull request is open"
 
-            if [[ ${{ github.event.pull_request.draft }} == true ]]; then
+            if [[ "${{ github.event.pull_request.draft }}" == true ]]; then
               echo "::notice::$NO Pull request is a draft"
               return 1
             fi
             echo "::notice::$OK Pull request is not a draft"
 
-            if [[ ${{ github.event.pull_request.mergeable }} == false ]]; then
+            if [[ "${{ github.event.pull_request.mergeable }}" == false ]]; then
               echo "::notice::$NO Pull request is not mergeable"
               return 1
             fi
