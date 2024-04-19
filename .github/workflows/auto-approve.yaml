@@ -20,8 +20,10 @@ jobs:
     env:
       GH_TOKEN: ${{ secrets.ZEBRADIL_BOT_GITHUB_TOKEN }}
     steps:
-      - name: Debug event
-        run: echo "${{ github.event }}"
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
