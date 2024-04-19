@@ -21,7 +21,7 @@ jobs:
       GH_TOKEN: ${{ secrets.ZEBRADIL_BOT_GITHUB_TOKEN }}
     steps:
       - name: Debug event
-        run: echo "${{ toJson(github.event) }}"
+        run: echo "${{ github.event }}"
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
