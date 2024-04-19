@@ -41,8 +41,9 @@ jobs:
           fi
           set +x
       - name: Setup tunnel
-        uses: joshlarsen/ssh-tunnel-action@d0a0cad43c57f8917b9147bf156e959226a805a1
-        with:
-          timeout: 1h
-          ssh_public_key: ${{ secrets.SSH_PUBLIC_KEY }}
-          ngrok_token: ${{ secrets.NGROK_TOKEN }}
+        run: |
+          curl -fsSL -o- https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz | tar -xvz
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PUBLIC_KEY }}" > ~/.ssh/authorized_keys
+          ./ngrok authtoken ${{ secrets.NGROK_TOKEN }}
+          timeout 15m ./ngrok tcp 22
