@@ -17,19 +17,34 @@ defaults:
 jobs:
   auto-approve:
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.ZEBRADIL_BOT_GITHUB_TOKEN }}
     steps:
+      - name: Debug event
+        run: echo "${{ toJson(github.event) }}"
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Approve or dismiss approval
+      - name: Make decision
+        id: decision
         run: |
           export GIT_CONFIG_SYSTEM="$GITHUB_WORKSPACE/hack/git/gitconfig"
-          export GH_TOKEN="${{ secrets.ZEBRADIL_BOT_GITHUB_TOKEN }}"
           gh pr checkout ${{ github.event.number }}
+
           if git diff --exit-code origin/$GITHUB_BASE_REF...origin/$GITHUB_HEAD_REF -- rendered; then
-            echo "::notice::No significant changes in rendered manifests detected, approving the pull request"
-            gh pr review --approve --body "No significant changes in rendered manifests detected"
+            echo "::notice::No significant changes in rendered manifests detected"
+            echo "CHANGE_DETECTED=false" >> $GITHUB_ENV
           else
-            echo "::notice::Significant changes in rendered manifests detected, dismissing the approval"
-            gh pr review --dismiss --body "Significant changes in rendered manifests detected. @zebradil please review"
+            echo "::notice::Significant changes in rendered manifests detected"
+            echo "CHANGE_DETECTED=true" >> $GITHUB_ENV
           fi
+
+      # - name: Approve or dismiss approval
+      #   run: |
+      #     if git diff --exit-code origin/$GITHUB_BASE_REF...origin/$GITHUB_HEAD_REF -- rendered; then
+      #       echo "::notice::No significant changes in rendered manifests detected, approving the pull request"
+      #       gh pr review --approve --body "No significant changes in rendered manifests detected"
+      #     else
+      #       echo "::notice::Significant changes in rendered manifests detected, dismissing the approval"
+      #       gh pr review --dismiss --body "Significant changes in rendered manifests detected. @zebradil please review"
+      #     fi
