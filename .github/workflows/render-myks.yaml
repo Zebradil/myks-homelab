@@ -71,4 +71,4 @@ jobs:
   auto-approve:
     needs: render
     if: ${{ github.event_name == 'pull_request' }}
-    uses: .github/workflows/auto-approve.yaml
+    uses: ./.github/workflows/auto-approve.yaml
