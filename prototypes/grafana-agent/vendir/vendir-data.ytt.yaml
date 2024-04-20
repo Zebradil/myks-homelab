@@ -11,4 +11,4 @@ application:
       #! renovate: datasource=helm
       name: k8s-monitoring
       url: https://grafana.github.io/helm-charts
-      version: 0.13.4
+      version: 1.0.1
