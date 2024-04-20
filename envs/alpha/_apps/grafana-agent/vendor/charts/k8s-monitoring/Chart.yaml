@@ -1,24 +1,24 @@
 apiVersion: v2
-appVersion: 2.2.0
+appVersion: 2.2.2
 dependencies:
-- name: grafana-agent
+- name: alloy
   repository: https://grafana.github.io/helm-charts
-  version: 0.38.0
-- alias: grafana-agent-events
+  version: 0.1.1
+- alias: alloy-events
   condition: logs.cluster_events.enabled
-  name: grafana-agent
+  name: alloy
   repository: https://grafana.github.io/helm-charts
-  version: 0.38.0
-- alias: grafana-agent-logs
+  version: 0.1.1
+- alias: alloy-logs
   condition: logs.pod_logs.enabled
-  name: grafana-agent
+  name: alloy
   repository: https://grafana.github.io/helm-charts
-  version: 0.38.0
-- alias: grafana-agent-profiles
+  version: 0.1.1
+- alias: alloy-profiles
   condition: profiles.enabled
-  name: grafana-agent
+  name: alloy
   repository: https://grafana.github.io/helm-charts
-  version: 0.38.0
+  version: 0.1.1
 - condition: kube-state-metrics.enabled
   name: kube-state-metrics
   repository: https://prometheus-community.github.io/helm-charts
@@ -38,7 +38,7 @@ dependencies:
 - condition: opencost.enabled
   name: opencost
   repository: https://opencost.github.io/opencost-helm-chart
-  version: 1.33.3
+  version: 1.34.0
 description: A Helm chart for gathering, scraping, and forwarding Kubernetes telemetry
   data to a Grafana Stack.
 icon: https://raw.githubusercontent.com/grafana/grafana/main/public/img/grafana_icon.svg
@@ -51,4 +51,4 @@ name: k8s-monitoring
 sources:
 - https://github.com/grafana/k8s-monitoring-helm/tree/main/charts/k8s-monitoring
 type: application
-version: 0.13.4
+version: 1.0.1
