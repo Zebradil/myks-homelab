@@ -10,7 +10,8 @@ VALIDATION_MSG="Environment variable must be set"
 : "${PR_NUMBER:?$VALIDATION_MSG}"
 : "${PR_STATE:?$VALIDATION_MSG}"
 : "${PR_DRAFT:?$VALIDATION_MSG}"
-: "${PR_MERGEABLE:?$VALIDATION_MSG}"
+# This is boolean, but also can be null, do not error on empty value
+: "${PR_MERGEABLE?$VALIDATION_MSG}"
 
 function gh_api() {
   gh api \
