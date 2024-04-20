@@ -6,6 +6,6 @@ directories:
   - path: .
     helmChart:
       name: k8s-monitoring
-      version: 0.13.4
+      version: 1.0.1
       repository:
         url: https://grafana.github.io/helm-charts

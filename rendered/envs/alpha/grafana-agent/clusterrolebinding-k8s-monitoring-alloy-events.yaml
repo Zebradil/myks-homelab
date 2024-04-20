@@ -1,0 +1,20 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    app.kubernetes.io/instance: k8s-monitoring
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: alloy-events
+    app.kubernetes.io/version: v1.0.0
+    helm.sh/chart: alloy-events-0.1.1
+  name: k8s-monitoring-alloy-events
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: k8s-monitoring-alloy-events
+subjects:
+  - kind: ServiceAccount
+    name: k8s-monitoring-alloy-events
+    namespace: grafana-agent

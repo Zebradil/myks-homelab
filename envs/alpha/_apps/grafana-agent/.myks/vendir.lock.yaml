@@ -2,8 +2,8 @@ apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
   - helmChart:
-      appVersion: 2.2.0
-      version: 0.13.4
+      appVersion: 2.2.2
+      version: 1.0.1
     path: .
   path: envs/alpha/_apps/grafana-agent/vendor/charts/k8s-monitoring
 kind: LockConfig
