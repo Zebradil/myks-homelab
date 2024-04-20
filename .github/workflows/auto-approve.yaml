@@ -17,6 +17,9 @@ defaults:
 jobs:
   auto-approve:
     runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}'
+      cancel-in-progress: true
     env:
       GH_TOKEN: ${{ secrets.ZEBRADIL_BOT_GITHUB_TOKEN }}
     steps:
