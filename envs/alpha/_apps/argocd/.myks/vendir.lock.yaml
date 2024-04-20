@@ -1,12 +1,13 @@
 apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
-  - configDigest: 75b533fa7e8c0c83ea459385594dff533a036958c12f0119c40b9de2f655cdd1
+  - configDigest: 9bac6eb5c107097ec42bc579aeb10c9445731f24caaf2e8d24ae1f941492052a
     git:
-      commitTitle: Bump version to 2.10.6 (#17744)...
-      sha: d504d2b1d92f0cf831a124a5fd1a96ee29fa7679
+      commitTitle: 'fix: docker build fails due to "The repository ''http://deb.debian.org/debian
+        buster-backports Release'' does not have a Release file."...'
+      sha: b060053b099b4c81c1e635839a309c9c8c1863e9
       tags:
-      - stable
+      - v2.10.7
     path: .
   path: envs/alpha/_apps/argocd/vendor/ytt/argocd
 kind: LockConfig
