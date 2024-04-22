@@ -1,5 +1,6 @@
 #@ load("secrets.star", "sec")
 ---
+#! General purpose storage class
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -14,3 +15,18 @@ parameters:
   formatOptions: --nodiscard
   fsType: btrfs
   location: /volume3
+
+---
+#! Storage class for media, bigger volume
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: synology-iscsi-btrfs-retain-media-v1
+allowVolumeExpansion: true
+provisioner: csi.san.synology.com
+reclaimPolicy: Retain
+parameters:
+  dsm: #@ sec.sops("dsm-1", "host")
+  formatOptions: --nodiscard
+  fsType: btrfs
+  location: /volume1
