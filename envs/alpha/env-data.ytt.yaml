@@ -29,6 +29,7 @@ environment:
     - proto: cert-manager
     - proto: grafana-agent
     - proto: httpbingo
+    - proto: jellyfin
     - proto: librespeed
     - proto: paperless
     - proto: starbase80

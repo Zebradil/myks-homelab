@@ -1,0 +1,16 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: jellyfin-lan
+spec:
+  entryPoints:
+    - lan-web
+    - lan-websecure
+  routes:
+    - kind: Rule
+      match: Host(`jellyfin.lan.zebradil.dev`) || Host(`jellyfin.gray.lan.zebradil.dev`) || Host(`jellyfin.junior.lan.zebradil.dev`)
+      services:
+        - name: jellyfin
+          port: http
