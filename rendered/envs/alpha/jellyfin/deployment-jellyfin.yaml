@@ -49,21 +49,21 @@ spec:
             failureThreshold: 3
             httpGet:
               path: /health
-              port: http
+              port: http-fb
           name: filebrowser
           ports:
             - containerPort: 80
-              name: http-fs
+              name: http-fb
           readinessProbe:
             failureThreshold: 3
             httpGet:
               path: /health
-              port: http
+              port: http-fb
           startupProbe:
             failureThreshold: 30
             httpGet:
               path: /health
-              port: http
+              port: http-fb
             periodSeconds: 5
           volumeMounts:
             - mountPath: /database

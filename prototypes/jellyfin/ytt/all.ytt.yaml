@@ -4,6 +4,7 @@
 #@ ap = d.application
 #@ name = d.myks.context.app
 #@ pvcs = dict(ap.storage)
+#@ fb_port = "http-fb"
 
 #@ for/end id, cfg in pvcs.items():
 ---
@@ -66,7 +67,7 @@ spec:
             - name: FB_DATABASE
               value: /database/database.db
           ports:
-            - name: http-fs
+            - name: #@ fb_port
               containerPort: 80
           volumeMounts:
             - name: filebrowser-db
@@ -76,17 +77,17 @@ spec:
           livenessProbe:
             httpGet:
               path: /health
-              port: http
+              port: #@ fb_port
             failureThreshold: 3
           readinessProbe:
             httpGet:
               path: /health
-              port: http
+              port: #@ fb_port
             failureThreshold: 3
           startupProbe:
             httpGet:
               path: /health
-              port: http
+              port: #@ fb_port
             failureThreshold: 30
             periodSeconds: 5
       volumes:
@@ -133,7 +134,7 @@ spec:
   ports:
     - name: http
       port: 80
-      targetPort: http-fs
+      targetPort: #@ fb_port
   selector:
     app: #@ name
 #@ end
