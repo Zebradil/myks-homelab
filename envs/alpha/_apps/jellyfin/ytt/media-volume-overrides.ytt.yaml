@@ -1,4 +1,4 @@
-#! This file contains a ytt overlay that sets the storage class and access mode for the media volume.
+#! This file contains a ytt overlay that sets the storage class for the media volume.
 
 #@ load("@ytt:overlay", "overlay")
 
@@ -11,6 +11,3 @@
 spec:
   #@overlay/match missing_ok=True
   storageClassName: synology-iscsi-btrfs-retain-media-v1
-  #@overlay/replace
-  accessModes:
-    - ReadWriteMany
