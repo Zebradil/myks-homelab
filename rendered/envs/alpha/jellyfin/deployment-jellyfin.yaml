@@ -53,7 +53,7 @@ spec:
           name: filebrowser
           ports:
             - containerPort: 80
-              name: http-filebrowser
+              name: http-fs
           readinessProbe:
             failureThreshold: 3
             httpGet:

@@ -8,6 +8,6 @@ spec:
   ports:
     - name: http
       port: 80
-      targetPort: http-filebrowser
+      targetPort: http-fs
   selector:
     app: jellyfin

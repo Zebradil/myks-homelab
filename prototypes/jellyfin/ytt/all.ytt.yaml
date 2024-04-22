@@ -68,7 +68,7 @@ spec:
             - name: FB_DATABASE
               value: /database/database.db
           ports:
-            - name: http-filebrowser
+            - name: http-fs
               containerPort: 80
           volumeMounts:
             - name: filebrowser-db
@@ -135,7 +135,7 @@ spec:
   ports:
     - name: http
       port: 80
-      targetPort: http-filebrowser
+      targetPort: http-fs
   selector:
     app: #@ name
 #@ end
