@@ -11,7 +11,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: ef55a3429eeb1e592c7ae0dad75c0cf8
+        checksum/config: bc0b36b762b20de188f2fb191e710b57
       labels:
         app.kubernetes.io/name: starbase80
     spec:
