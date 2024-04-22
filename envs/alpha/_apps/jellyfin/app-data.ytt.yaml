@@ -1,0 +1,6 @@
+#@data/values
+---
+application:
+  storage:
+    media:
+      size: 500Gi
