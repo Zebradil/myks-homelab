@@ -16,7 +16,10 @@ spec:
         app: jellyfin-filebrowser
     spec:
       containers:
-        - image: filebrowser/filebrowser:v2.28.0
+        - env:
+            - name: FB_DATABASE
+              value: /database/database.db
+          image: filebrowser/filebrowser:v2.28.0
           livenessProbe:
             failureThreshold: 3
             httpGet:

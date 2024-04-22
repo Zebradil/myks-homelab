@@ -39,6 +39,9 @@ spec:
       containers:
         - name: filebrowser
           image: #@ ap.image
+          env:
+            - name: FB_DATABASE
+              value: /database/database.db
           ports:
             - name: http
               containerPort: 80
