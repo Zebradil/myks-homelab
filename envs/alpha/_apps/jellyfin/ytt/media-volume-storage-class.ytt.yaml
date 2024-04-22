@@ -1,0 +1,13 @@
+#! This file contains a ytt overlay that sets the storage class for the media volume.
+
+#@ load("@ytt:overlay", "overlay")
+
+#@ def match_media_pvc(idx, left, right):
+#@   return left["kind"] == "PersistentVolumeClaim" and left["metadata"]["name"].endswith("-media")
+#@ end
+
+#@overlay/match by=match_media_pvc
+---
+spec:
+  #@overlay/match missing_ok=True
+  storageClassName: synology-iscsi-btrfs-retain-media-v1
