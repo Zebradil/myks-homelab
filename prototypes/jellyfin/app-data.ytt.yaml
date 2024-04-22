@@ -22,3 +22,10 @@ application:
   #! video:x:44:
   #! render:x:109:
   supplementalGroups: [0]
+
+  #! Optional FileBrowser deployment for media management
+  #! https://filebrowser.org
+  filebrowser:
+    enabled: true
+    #! renovate: datasource=docker
+    image: filebrowser/filebrowser:v2.28.0

@@ -3,17 +3,17 @@ kind: Deployment
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
-  name: filebrowser
+  name: jellyfin-filebrowser
 spec:
   selector:
     matchLabels:
-      app: filebrowser
+      app: jellyfin-filebrowser
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: filebrowser
+        app: jellyfin-filebrowser
     spec:
       containers:
         - image: filebrowser/filebrowser:v2.28.0
@@ -41,7 +41,12 @@ spec:
           volumeMounts:
             - mountPath: /database
               name: database
+            - mountPath: /srv/media
+              name: jellyfin-media
       volumes:
         - name: database
           persistentVolumeClaim:
-            claimName: filebrowser-database
+            claimName: jellyfin-filebrowser-db
+        - name: jellyfin-media
+          persistentVolumeClaim:
+            claimName: jellyfin-media

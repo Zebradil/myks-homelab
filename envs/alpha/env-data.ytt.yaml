@@ -27,7 +27,6 @@ environment:
     - proto: argocd
     - proto: authelia
     - proto: cert-manager
-    - proto: filebrowser
     - proto: grafana-agent
     - proto: httpbingo
     - proto: jellyfin

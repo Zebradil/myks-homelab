@@ -1,25 +1,24 @@
 #@ load("@ytt:data", "data")
-#@ load("util.star", "util")
 
 #@ d = data.values
-#@ ap = d.application
-#@ name = d.myks.context.app
-#@ pvcs = dict(ap.storage)
+#@ ap = d.application.filebrowser
+#@ name = d.myks.context.app + "-filebrowser"
 
-#@ for id, cfg in pvcs.items():
-#@   if/end cfg.existingName == "":
+#@ media_name = d.myks.context.app + "-media"
+
+#@ if ap.enabled:
+
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: #@ name + "-" + id
+  name: #@ name + "-db"
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: #@ cfg.size
-#@ end
+      storage: 1Gi
 
 ---
 apiVersion: apps/v1
@@ -45,9 +44,10 @@ spec:
               containerPort: 80
               protocol: TCP
           volumeMounts:
-            #@ for/end id, cfg in pvcs.items():
-            - name: #@ id
-              mountPath: #@ cfg.path
+            - name: database
+              mountPath: /database
+            - name: jellyfin-media
+              mountPath: /srv/media
           livenessProbe:
             httpGet:
               path: /health
@@ -65,10 +65,12 @@ spec:
             failureThreshold: 30
             periodSeconds: 5
       volumes:
-        #@ for/end id, cfg in pvcs.items():
-        - name: #@ id
+        - name: database
           persistentVolumeClaim:
-            claimName: #@ cfg.existingName or name + "-" + id
+            claimName: #@ name + "-db"
+        - name: jellyfin-media
+          persistentVolumeClaim:
+            claimName: #@ media_name
 
 ---
 apiVersion: v1
@@ -82,3 +84,5 @@ spec:
       targetPort: http
   selector:
     app: #@ name
+
+#@ end

@@ -1,5 +1,4 @@
 #@ load("@ytt:data", "data")
-#@ load("util.star", "util")
 
 #@ d = data.values
 #@ ap = d.application
