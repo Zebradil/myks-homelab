@@ -19,21 +19,24 @@ spec:
         - image: ghcr.io/linuxserver/jellyfin:10.8.13
           livenessProbe:
             failureThreshold: 3
-            tcpSocket:
-              port: 8096
+            httpGet:
+              path: /health
+              port: http
           name: jellyfin
           ports:
             - containerPort: 8096
               name: http
           readinessProbe:
             failureThreshold: 3
-            tcpSocket:
-              port: 8096
+            httpGet:
+              path: /health
+              port: http
           startupProbe:
             failureThreshold: 30
+            httpGet:
+              path: /health
+              port: http
             periodSeconds: 5
-            tcpSocket:
-              port: 8096
           volumeMounts:
             - mountPath: /cache
               name: cache
