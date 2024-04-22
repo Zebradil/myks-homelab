@@ -1,0 +1,84 @@
+#@ load("@ytt:data", "data")
+#@ load("util.star", "util")
+
+#@ d = data.values
+#@ ap = d.application
+#@ name = d.myks.context.app
+#@ pvcs = dict(ap.storage)
+
+#@ for id, cfg in pvcs.items():
+#@   if/end cfg.existingName == "":
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: #@ name + "-" + id
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: #@ cfg.size
+#@ end
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: #@ name
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: #@ name
+  template:
+    metadata:
+      labels:
+        app: #@ name
+    spec:
+      containers:
+        - name: filebrowser
+          image: #@ ap.image
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            #@ for/end id, cfg in pvcs.items():
+            - name: #@ id
+              mountPath: #@ cfg.path
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            failureThreshold: 3
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+            failureThreshold: 30
+            periodSeconds: 5
+      volumes:
+        #@ for/end id, cfg in pvcs.items():
+        - name: #@ id
+          persistentVolumeClaim:
+            claimName: #@ cfg.existingName or name + "-" + id
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #@ name
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+  selector:
+    app: #@ name
