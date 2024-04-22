@@ -69,7 +69,7 @@ spec:
             - mountPath: /database
               name: filebrowser-db
             - mountPath: /srv/media
-              name: jellyfin-media
+              name: media
       volumes:
         - name: cache
           persistentVolumeClaim:

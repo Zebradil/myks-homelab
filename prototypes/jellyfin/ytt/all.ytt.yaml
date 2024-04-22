@@ -5,8 +5,6 @@
 #@ name = d.myks.context.app
 #@ pvcs = dict(ap.storage)
 
-#@ media_name = d.myks.context.app + "-media"
-
 #@ for/end id, cfg in pvcs.items():
 ---
 apiVersion: v1
@@ -73,7 +71,7 @@ spec:
           volumeMounts:
             - name: filebrowser-db
               mountPath: /database
-            - name: #@ media_name
+            - name: media
               mountPath: /srv/media
           livenessProbe:
             httpGet:
