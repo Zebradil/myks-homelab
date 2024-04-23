@@ -140,7 +140,7 @@ spec:
           command:
             - sh
             - -c
-            - echo $WG0_CONF > /config/wg0.conf
+            - echo "$WG0_CONF" > /config/wg0.conf
           env:
             - name: WG0_CONF
               valueFrom:
