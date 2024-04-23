@@ -106,6 +106,22 @@ spec:
           volumeMounts:
             - mountPath: /config
               name: wireguard-config
+      initContainers:
+        - command:
+            - sh
+            - -c
+            - echo $WG0_CONF > /config/wg0.conf
+          env:
+            - name: WG0_CONF
+              valueFrom:
+                secretKeyRef:
+                  key: wg0.conf
+                  name: wireguard-config
+          image: busybox:1.36.1
+          name: wireguard-config
+          volumeMounts:
+            - mountPath: /config
+              name: wireguard-config
       nodeName: junior
       securityContext:
         fsGroup: 1000

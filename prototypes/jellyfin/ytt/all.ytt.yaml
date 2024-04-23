@@ -134,6 +134,23 @@ spec:
           volumeMounts:
             - name: wireguard-config
               mountPath: /config
+      #@ if/end ap.wireguard.enabled:
+      initContainers:
+        - name: wireguard-config
+          command:
+            - sh
+            - -c
+            - echo $WG0_CONF > /config/wg0.conf
+          env:
+            - name: WG0_CONF
+              valueFrom:
+                secretKeyRef:
+                  key: wg0.conf
+                  name: #@ name + "-wireguard-config"
+          image: busybox:1.36.1
+          volumeMounts:
+            - name: wireguard-config
+              mountPath: /config
       volumes:
         - name: render-device
           hostPath:
@@ -153,8 +170,7 @@ spec:
             claimName: #@ name + "-torrent-config"
         #@ if/end ap.wireguard.enabled:
         - name: wireguard-config
-          secret:
-            secretName: #@ name + "-wireguard-config"
+          emptyDir: {}
 
 ---
 apiVersion: v1
