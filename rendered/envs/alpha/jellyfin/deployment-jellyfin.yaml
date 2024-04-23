@@ -16,7 +16,7 @@ spec:
         app: jellyfin
     spec:
       containers:
-        - image: ghcr.io/linuxserver/jellyfin:10.8.13
+        - image: ghcr.io/linuxserver/jellyfin:2021.12.16
           livenessProbe:
             failureThreshold: 3
             httpGet:
