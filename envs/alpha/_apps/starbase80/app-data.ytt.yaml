@@ -14,30 +14,6 @@ application:
             uri: #@ get_uri("paperless")
             description: Document management
             icon: paperless
-          - name: Librespeed
-            uri: #@ get_uri("librespeed")
-            description: Internet speed test
-            icon: librespeed
-          - name: Httpbingo
-            uri: #@ get_uri("httpbingo")
-            description: HTTP request/response service
-            icon: webtools
-          - name: Authelia
-            uri: #@ get_uri("auth")
-            description: Authentication and authorization server
-            icon: authelia
-          - name: ArgoCD
-            uri: #@ get_uri("argocd")
-            description: GitOps continuous delivery
-            icon: argocd
-          - name: Traefik
-            uri: #@ get_uri("traefik")
-            description: HTTP reverse proxy and load balancer
-            icon: traefik
-          - name: Grafana
-            uri: https://zebradil.grafana.net/
-            description: Metrics dashboard
-            icon: grafana
           - name: Jellyfin
             uri: #@ get_uri("jellyfin")
             description: Media server
@@ -46,5 +22,33 @@ application:
             uri: #@ get_uri("jellyfin-filebrowser")
             description: Jellyfin media files manager
             icon: filebrowser
+      - category: Infra
+        services:
+          - name: ArgoCD
+            uri: #@ get_uri("argocd")
+            description: GitOps continuous delivery
+            icon: argocd
+          - name: Authelia
+            uri: #@ get_uri("auth")
+            description: Authentication and authorization server
+            icon: authelia
+          - name: Traefik
+            uri: #@ get_uri("traefik")
+            description: HTTP reverse proxy and load balancer
+            icon: traefik
+          - name: Grafana
+            uri: https://zebradil.grafana.net/
+            description: Metrics dashboard
+            icon: grafana
+      - category: Tools
+        services:
+          - name: Librespeed
+            uri: #@ get_uri("librespeed")
+            description: Internet speed test
+            icon: librespeed
+          - name: Httpbingo
+            uri: #@ get_uri("httpbingo")
+            description: HTTP request/response service
+            icon: webtools
     env:
       TITLE: ""
