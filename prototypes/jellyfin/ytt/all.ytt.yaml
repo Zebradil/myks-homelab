@@ -36,15 +36,17 @@ spec:
         app: #@ name
     spec:
       nodeName: #@ ap.nodeName
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+        supplementalGroups: #@ ap.supplementalGroups
       containers:
         - name: jellyfin
           image: #@ ap.image
           securityContext:
             privileged: true
-            runAsGroup: 1000
-            runAsNonRoot: true
-            runAsUser: 1000
-            supplementalGroups: #@ ap.supplementalGroups
           ports:
             - name: http
               containerPort: 8096
@@ -73,10 +75,6 @@ spec:
         #@ if/end ap.filebrowser.enabled:
         - name: filebrowser
           image: #@ ap.filebrowser.image
-          securityContext:
-            runAsGroup: 1000
-            runAsNonRoot: true
-            runAsUser: 1000
           env:
             - name: FB_DATABASE
               value: /database/database.db
@@ -108,6 +106,7 @@ spec:
         - name: render-device
           hostPath:
             path: /dev/dri/renderD128
+            type: CharDevice
         #@ for/end id, cfg in pvcs.items():
         - name: #@ id
           persistentVolumeClaim:

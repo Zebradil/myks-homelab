@@ -33,11 +33,6 @@ spec:
               port: http
           securityContext:
             privileged: true
-            runAsGroup: 1000
-            runAsNonRoot: true
-            runAsUser: 1000
-            supplementalGroups:
-              - 105
           startupProbe:
             failureThreshold: 30
             httpGet:
@@ -71,10 +66,6 @@ spec:
             httpGet:
               path: /health
               port: http-fb
-          securityContext:
-            runAsGroup: 1000
-            runAsNonRoot: true
-            runAsUser: 1000
           startupProbe:
             failureThreshold: 30
             httpGet:
@@ -87,9 +78,17 @@ spec:
             - mountPath: /srv/media
               name: media
       nodeName: junior
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+        supplementalGroups:
+          - 105
       volumes:
         - hostPath:
             path: /dev/dri/renderD128
+            type: CharDevice
           name: render-device
         - name: cache
           persistentVolumeClaim:
