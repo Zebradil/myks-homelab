@@ -8,3 +8,8 @@
 #@   for/end route_doc in route.default(data.values.myks.context.app + "-filebrowser"):
 --- #@ route_doc
 #@ end
+
+#@ if data.values.application.torrent.enabled:
+#@   for/end route_doc in route.default(data.values.myks.context.app + "-torrent"):
+--- #@ route_doc
+#@ end

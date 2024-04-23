@@ -32,3 +32,8 @@ application:
     enabled: true
     #! renovate: datasource=docker
     image: filebrowser/filebrowser:v2.28.0
+
+  torrent:
+    enabled: true
+    #! renovate: datasource=docker
+    image: ghcr.io/hotio/qbittorrent:release-4.6.4

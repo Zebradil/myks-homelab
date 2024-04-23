@@ -1,0 +1,16 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: jellyfin-torrent-vpn
+spec:
+  entryPoints:
+    - vpn-web
+    - vpn-websecure
+  routes:
+    - kind: Rule
+      match: Host(`jellyfin-torrent.ts.zebradil.dev`) || Host(`jellyfin-torrent.gray.ts.zebradil.dev`) || Host(`jellyfin-torrent.junior.ts.zebradil.dev`)
+      services:
+        - name: jellyfin-torrent
+          port: http

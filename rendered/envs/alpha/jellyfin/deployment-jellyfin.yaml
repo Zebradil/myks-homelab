@@ -77,6 +77,19 @@ spec:
               name: filebrowser-db
             - mountPath: /srv/media
               name: media
+        - env:
+            - name: WEBUI_PORT
+              value: "8080"
+          image: ghcr.io/hotio/qbittorrent:release-4.6.4
+          name: torrent
+          ports:
+            - containerPort: 8080
+              name: http-tr
+          volumeMounts:
+            - mountPath: /data
+              name: media
+            - mountPath: /config
+              name: torrent-config
       nodeName: junior
       securityContext:
         fsGroup: 1000
@@ -102,3 +115,6 @@ spec:
         - name: filebrowser-db
           persistentVolumeClaim:
             claimName: jellyfin-filebrowser-db
+        - name: torrent-config
+          persistentVolumeClaim:
+            claimName: jellyfin-torrent-config

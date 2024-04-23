@@ -5,6 +5,7 @@
 #@ name = d.myks.context.app
 #@ pvcs = dict(ap.storage)
 #@ fb_port = "http-fb"
+#@ tr_port = "http-tr"
 
 #@ for/end id, cfg in pvcs.items():
 ---
@@ -102,6 +103,20 @@ spec:
               port: #@ fb_port
             failureThreshold: 30
             periodSeconds: 5
+        #@ if/end ap.torrent.enabled:
+        - name: torrent
+          image: #@ ap.torrent.image
+          env:
+            - name: WEBUI_PORT
+              value: "8080"
+          ports:
+            - name: #@ tr_port
+              containerPort: 8080
+          volumeMounts:
+            - name: media
+              mountPath: /data
+            - name: torrent-config
+              mountPath: /config
       volumes:
         - name: render-device
           hostPath:
@@ -112,9 +127,13 @@ spec:
           persistentVolumeClaim:
             claimName: #@ name + "-" + id
         #@ if/end ap.filebrowser.enabled:
-        - name: "filebrowser-db"
+        - name: filebrowser-db
           persistentVolumeClaim:
             claimName: #@ name + "-filebrowser-db"
+        #@ if/end ap.torrent.enabled:
+        - name: torrent-config
+          persistentVolumeClaim:
+            claimName: #@ name + "-torrent-config"
 
 ---
 apiVersion: v1
@@ -151,6 +170,32 @@ spec:
     - name: http
       port: 80
       targetPort: #@ fb_port
+  selector:
+    app: #@ name
+#@ end
+
+#@ if ap.torrent.enabled:
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: #@ name + "-torrent-config"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #@ name + "-torrent"
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: #@ tr_port
   selector:
     app: #@ name
 #@ end

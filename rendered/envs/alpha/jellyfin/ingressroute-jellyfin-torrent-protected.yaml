@@ -1,0 +1,19 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: jellyfin-torrent-protected
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`jellyfin-torrent.zebradil.dev`) || Host(`jellyfin-torrent.gray.zebradil.dev`) || Host(`jellyfin-torrent.junior.zebradil.dev`)
+      middlewares:
+        - name: chain-authelia-auth
+          namespace: authelia
+      services:
+        - name: jellyfin-torrent
+          port: http
