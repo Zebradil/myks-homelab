@@ -35,8 +35,9 @@ spec:
       labels:
         app: #@ name
     spec:
-      #!securityContext:
-      #!  supplementalGroups: #@ ap.supplementalGroups
+      nodeName: #@ ap.nodeName
+      securityContext:
+        supplementalGroups: #@ ap.supplementalGroups
       containers:
         - name: jellyfin
           image: #@ ap.image
@@ -44,6 +45,8 @@ spec:
             - name: http
               containerPort: 8096
           volumeMounts:
+            - name: render-devices
+              mountPath: /dev/dri
             #@ for/end id, cfg in pvcs.items():
             - name: #@ id
               mountPath: #@ cfg.path
@@ -94,6 +97,9 @@ spec:
             failureThreshold: 30
             periodSeconds: 5
       volumes:
+        - name: render-devices
+          hostPath:
+            path: /dev/dri
         #@ for/end id, cfg in pvcs.items():
         - name: #@ id
           persistentVolumeClaim:

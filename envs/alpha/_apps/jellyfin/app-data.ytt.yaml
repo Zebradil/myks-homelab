@@ -1,6 +1,8 @@
 #@data/values
 ---
 application:
+  nodeName: junior
+  supplementalGroups: [105]
   storage:
     media:
       size: 500Gi

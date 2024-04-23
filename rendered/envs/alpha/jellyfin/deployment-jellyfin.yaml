@@ -16,7 +16,7 @@ spec:
         app: jellyfin
     spec:
       containers:
-        - image: ghcr.io/linuxserver/jellyfin:10.8.13
+        - image: jellyfin/jellyfin:10.8.13
           livenessProbe:
             failureThreshold: 3
             httpGet:
@@ -38,6 +38,8 @@ spec:
               port: http
             periodSeconds: 5
           volumeMounts:
+            - mountPath: /dev/dri
+              name: render-devices
             - mountPath: /cache
               name: cache
             - mountPath: /config
@@ -73,7 +75,14 @@ spec:
               name: filebrowser-db
             - mountPath: /srv/media
               name: media
+      nodeName: junior
+      securityContext:
+        supplementalGroups:
+          - 105
       volumes:
+        - hostPath:
+            path: /dev/dri
+          name: render-devices
         - name: cache
           persistentVolumeClaim:
             claimName: jellyfin-cache
