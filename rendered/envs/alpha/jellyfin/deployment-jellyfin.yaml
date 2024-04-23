@@ -31,6 +31,13 @@ spec:
             httpGet:
               path: /health
               port: http
+          securityContext:
+            privileged: true
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
+            supplementalGroups:
+              - 105
           startupProbe:
             failureThreshold: 30
             httpGet:
@@ -38,8 +45,8 @@ spec:
               port: http
             periodSeconds: 5
           volumeMounts:
-            - mountPath: /dev/dri
-              name: render-devices
+            - mountPath: /dev/dri/renderD128
+              name: render-device
             - mountPath: /cache
               name: cache
             - mountPath: /config
@@ -64,6 +71,10 @@ spec:
             httpGet:
               path: /health
               port: http-fb
+          securityContext:
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
           startupProbe:
             failureThreshold: 30
             httpGet:
@@ -76,13 +87,10 @@ spec:
             - mountPath: /srv/media
               name: media
       nodeName: junior
-      securityContext:
-        supplementalGroups:
-          - 105
       volumes:
         - hostPath:
-            path: /dev/dri
-          name: render-devices
+            path: /dev/dri/renderD128
+          name: render-device
         - name: cache
           persistentVolumeClaim:
             claimName: jellyfin-cache
