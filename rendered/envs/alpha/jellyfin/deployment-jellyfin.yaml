@@ -90,6 +90,22 @@ spec:
               name: media
             - mountPath: /config
               name: torrent-config
+        - env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: Etc/UTC
+          image: ghcr.io/linuxserver/wireguard:v1.0.20210914-ls31
+          name: wireguard
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+          volumeMounts:
+            - mountPath: /config
+              name: wireguard-config
       nodeName: junior
       securityContext:
         fsGroup: 1000
@@ -118,3 +134,6 @@ spec:
         - name: torrent-config
           persistentVolumeClaim:
             claimName: jellyfin-torrent-config
+        - name: wireguard-config
+          secret:
+            secretName: jellyfin-wireguard-config

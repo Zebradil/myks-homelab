@@ -1,3 +1,5 @@
+#@ load("secrets.star", "sec")
+
 #@data/values
 ---
 application:
@@ -6,3 +8,5 @@ application:
   storage:
     media:
       size: 500Gi
+  wireguard:
+    config: #@ sec.sops("0", "wireguard_config")

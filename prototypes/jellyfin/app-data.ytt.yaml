@@ -37,3 +37,9 @@ application:
     enabled: true
     #! renovate: datasource=docker
     image: ghcr.io/hotio/qbittorrent:release-4.6.4
+
+  wireguard:
+    enabled: true
+    #! renovate: datasource=docker
+    image: ghcr.io/linuxserver/wireguard:v1.0.20210914-ls31
+    config: ""
