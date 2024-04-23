@@ -116,7 +116,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: wg0.conf
-                  name: wireguard-config
+                  name: jellyfin-wireguard-config
           image: busybox:1.36.1
           name: wireguard-config
           volumeMounts:
@@ -150,6 +150,5 @@ spec:
         - name: torrent-config
           persistentVolumeClaim:
             claimName: jellyfin-torrent-config
-        - name: wireguard-config
-          secret:
-            secretName: jellyfin-wireguard-config
+        - emptyDir: {}
+          name: wireguard-config
