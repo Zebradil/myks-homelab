@@ -3,7 +3,7 @@
 #@overlay/match-child-defaults missing_ok=True
 application:
   #! renovate: datasource=docker
-  image: ghcr.io/linuxserver/jellyfin:10.8.13
+  image: ghcr.io/linuxserver/jellyfin:2021.12.16
   storage:
     cache:
       size: 1Gi
