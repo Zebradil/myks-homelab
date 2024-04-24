@@ -117,24 +117,7 @@ spec:
               mountPath: /data
             - name: torrent-config
               mountPath: /config
-        #@ if/end ap.wireguard.enabled:
-        - name: wireguard
-          image: #@ ap.wireguard.image
-          env:
-            - name: PUID
-              value: "1000"
-            - name: PGID
-              value: "1000"
-            - name: TZ
-              value: Etc/UTC
-          securityContext:
-            capabilities:
-              add:
-                - NET_ADMIN
-          volumeMounts:
-            - name: wireguard-config
-              mountPath: /config
-      #@ if/end ap.wireguard.enabled:
+      #@ if ap.wireguard.enabled:
       initContainers:
         - name: wireguard-config
           command:
@@ -151,6 +134,26 @@ spec:
           volumeMounts:
             - name: wireguard-config
               mountPath: /config
+        - name: wireguard
+          #! NOTE: Experimental SidecarContainers feature gate, requires k8s 1.29
+          #! https://kubernetes.io/docs/concepts/workloads/pods/sidecar-containers/
+          restartPolicy: Always
+          image: #@ ap.wireguard.image
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: Etc/UTC
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+          volumeMounts:
+            - name: wireguard-config
+              mountPath: /config
+      #@ end
       volumes:
         - name: render-device
           hostPath:
