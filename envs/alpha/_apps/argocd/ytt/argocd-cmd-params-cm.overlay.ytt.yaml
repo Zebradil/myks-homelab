@@ -1,0 +1,10 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
+
+#@overlay/match by=overlay.subset({"kind": "ConfigMap", "metadata": {"name": "argocd-cmd-params-cm"}})
+---
+#@overlay/match missing_ok=True
+data:
+  #! This disables redirect form http to https, which is not needed because
+  #! we are using traefik with TLS termination.
+  server.insecure: "true"
