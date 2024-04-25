@@ -3,7 +3,7 @@ directories:
 - contents:
   - helmChart:
       appVersion: 2.2.4
-      version: 1.0.2
+      version: 1.0.3
     path: .
   path: envs/alpha/_apps/grafana-agent/vendor/charts/k8s-monitoring
 kind: LockConfig

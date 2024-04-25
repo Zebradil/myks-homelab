@@ -803,6 +803,12 @@ data:
         }
       }
     }
+
+
+    logging {
+      level  = "info"
+      format = "logfmt"
+    }
 kind: ConfigMap
 metadata:
   annotations:
