@@ -22,6 +22,10 @@ application:
             uri: #@ get_uri("jellyfin-filebrowser")
             description: Jellyfin media files manager
             icon: filebrowser
+          - name: Jellyfin qBittorrent
+            uri: #@ get_uri("jellyfin-torrent")
+            description: Jellyfin torrent manager
+            icon: qbittorrent
       - category: Infra
         services:
           - name: ArgoCD
@@ -40,6 +44,10 @@ application:
             uri: https://zebradil.grafana.net/
             description: Metrics dashboard
             icon: grafana
+          - name: Synology
+            uri: https://quickconnect.to/zebradil
+            description: Synology NAS
+            icon: synology
       - category: Tools
         services:
           - name: Librespeed
