@@ -73,7 +73,8 @@ spec:
               for arg in "$@"; do
                 ARGS="${ARGS} ${arg/\$NODE_IPV6/$NODE_IPV6}"
               done
-              exec /entrypoint.sh $ARGS
+              exec $0 $ARGS
+            - /entrypoint.sh
           env:
             - name: POD_NAME
               valueFrom:
