@@ -48,7 +48,7 @@ spec:
                   key: notificationscontroller.selfservice.enabled
                   name: argocd-cmd-params-cm
                   optional: true
-          image: quay.io/argoproj/argocd:v2.10.8
+          image: quay.io/argoproj/argocd:v2.10.9
           imagePullPolicy: Always
           livenessProbe:
             tcpSocket:
