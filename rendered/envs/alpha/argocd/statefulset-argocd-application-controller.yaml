@@ -221,7 +221,7 @@ spec:
                   key: controller.ignore.normalizer.jq.timeout
                   name: argocd-cmd-params-cm
                   optional: true
-          image: quay.io/argoproj/argocd:v2.10.8
+          image: quay.io/argoproj/argocd:v2.10.9
           imagePullPolicy: Always
           name: argocd-application-controller
           ports:
