@@ -90,7 +90,7 @@ yttPkg:
 render:
   includeNamespace: false
 myks:
-  gitRepoBranch: renovate/ghcr.io-jimmidyson-configmap-reload-0.x
+  gitRepoBranch: renovate/alloy-0.x
   gitRepoUrl: https://github.com/Zebradil/myks-homelab
   context:
     app: ""
