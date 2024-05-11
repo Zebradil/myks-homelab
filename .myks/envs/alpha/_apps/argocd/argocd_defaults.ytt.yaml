@@ -1,0 +1,10 @@
+
+#@data/values-schema
+---
+argocd:
+  app:
+    name: "argocd"
+    source:
+      path: "rendered/envs/alpha/argocd"
+      repoURL: "git@github.com:Zebradil/myks-homelab.git"
+      targetRevision: "main"

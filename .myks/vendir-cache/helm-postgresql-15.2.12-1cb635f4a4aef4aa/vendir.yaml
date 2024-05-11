@@ -1,0 +1,13 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+    - contents:
+        - helmChart:
+            name: postgresql
+            repository:
+                url: oci://registry-1.docker.io/bitnamicharts
+            version: 15.2.12
+          lazy: true
+          path: .
+      path: .myks/vendir-cache/helm-postgresql-15.2.12-1cb635f4a4aef4aa/data
+      permissions: null
+kind: Config
