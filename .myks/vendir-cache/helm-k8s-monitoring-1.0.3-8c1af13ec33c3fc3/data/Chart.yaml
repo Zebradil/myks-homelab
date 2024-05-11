@@ -3,22 +3,22 @@ appVersion: 2.2.4
 dependencies:
 - name: alloy
   repository: https://grafana.github.io/helm-charts
-  version: 0.1.1
+  version: 0.2.0
 - alias: alloy-events
   condition: logs.cluster_events.enabled
   name: alloy
   repository: https://grafana.github.io/helm-charts
-  version: 0.1.1
+  version: 0.2.0
 - alias: alloy-logs
   condition: logs.pod_logs.enabled
   name: alloy
   repository: https://grafana.github.io/helm-charts
-  version: 0.1.1
+  version: 0.2.0
 - alias: alloy-profiles
   condition: profiles.enabled
   name: alloy
   repository: https://grafana.github.io/helm-charts
-  version: 0.1.1
+  version: 0.2.0
 - condition: kube-state-metrics.enabled
   name: kube-state-metrics
   repository: https://prometheus-community.github.io/helm-charts
