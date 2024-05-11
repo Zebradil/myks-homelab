@@ -1,0 +1,977 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: postgresql
+  namespace: paperless
+  labels:
+    app.kubernetes.io/instance: postgresql
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/version: 16.3.0
+    helm.sh/chart: postgresql-15.2.12
+    app.kubernetes.io/component: primary
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: postgresql
+      app.kubernetes.io/name: postgresql
+      app.kubernetes.io/component: primary
+  policyTypes:
+  - Ingress
+  - Egress
+  egress:
+  - {}
+  ingress:
+  - ports:
+    - port: 5432
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: postgresql
+  namespace: paperless
+  labels:
+    app.kubernetes.io/instance: postgresql
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/version: 16.3.0
+    helm.sh/chart: postgresql-15.2.12
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+automountServiceAccountToken: false
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgresql
+  namespace: paperless
+  labels:
+    app.kubernetes.io/instance: postgresql
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/version: 16.3.0
+    helm.sh/chart: postgresql-15.2.12
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+type: Opaque
+data:
+  postgres-password: PHBhdGg6c3RhdGljLzAuc29wcy55YW1sI2RhdGFiYXNlUGFzc3dvcmQ+
+  password: PHBhdGg6c3RhdGljLzAuc29wcy55YW1sI2RhdGFiYXNlUGFzc3dvcmQ+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgresql-hl
+  namespace: paperless
+  labels:
+    app.kubernetes.io/instance: postgresql
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/version: 16.3.0
+    helm.sh/chart: postgresql-15.2.12
+    app.kubernetes.io/component: primary
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+spec:
+  type: ClusterIP
+  clusterIP: None
+  publishNotReadyAddresses: true
+  ports:
+  - name: tcp-postgresql
+    port: 5432
+    targetPort: tcp-postgresql
+  selector:
+    app.kubernetes.io/instance: postgresql
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/component: primary
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgresql
+  namespace: paperless
+  labels:
+    app.kubernetes.io/instance: postgresql
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/version: 16.3.0
+    helm.sh/chart: postgresql-15.2.12
+    app.kubernetes.io/component: primary
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+  - name: tcp-postgresql
+    port: 5432
+    targetPort: tcp-postgresql
+    nodePort: null
+  selector:
+    app.kubernetes.io/instance: postgresql
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/component: primary
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgresql
+  namespace: paperless
+  labels:
+    app.kubernetes.io/instance: postgresql
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/version: 16.3.0
+    helm.sh/chart: postgresql-15.2.12
+    app.kubernetes.io/component: primary
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+spec:
+  replicas: 1
+  serviceName: postgresql-hl
+  updateStrategy:
+    rollingUpdate: {}
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: postgresql
+      app.kubernetes.io/name: postgresql
+      app.kubernetes.io/component: primary
+  template:
+    metadata:
+      name: postgresql
+      labels:
+        app.kubernetes.io/instance: postgresql
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: postgresql
+        app.kubernetes.io/version: 16.3.0
+        helm.sh/chart: postgresql-15.2.12
+        app.kubernetes.io/component: primary
+    spec:
+      serviceAccountName: postgresql
+      automountServiceAccountToken: false
+      affinity:
+        podAffinity: null
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: postgresql
+                  app.kubernetes.io/name: postgresql
+                  app.kubernetes.io/component: primary
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+        nodeAffinity: null
+      securityContext:
+        fsGroup: 1001
+        fsGroupChangePolicy: Always
+        supplementalGroups: []
+        sysctls: []
+      hostNetwork: false
+      hostIPC: false
+      containers:
+      - name: postgresql
+        image: docker.io/bitnami/postgresql:13.13.0
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsGroup: 1001
+          runAsNonRoot: true
+          runAsUser: 1001
+          seLinuxOptions: {}
+          seccompProfile:
+            type: RuntimeDefault
+        env:
+        - name: BITNAMI_DEBUG
+          value: "false"
+        - name: POSTGRESQL_PORT_NUMBER
+          value: "5432"
+        - name: POSTGRESQL_VOLUME_DIR
+          value: /bitnami/postgresql
+        - name: PGDATA
+          value: /bitnami/postgresql/data
+        - name: POSTGRES_USER
+          value: paperless
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgresql
+              key: password
+        - name: POSTGRES_POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgresql
+              key: postgres-password
+        - name: POSTGRES_DATABASE
+          value: paperless
+        - name: POSTGRESQL_ENABLE_LDAP
+          value: "no"
+        - name: POSTGRESQL_ENABLE_TLS
+          value: "no"
+        - name: POSTGRESQL_LOG_HOSTNAME
+          value: "false"
+        - name: POSTGRESQL_LOG_CONNECTIONS
+          value: "false"
+        - name: POSTGRESQL_LOG_DISCONNECTIONS
+          value: "false"
+        - name: POSTGRESQL_PGAUDIT_LOG_CATALOG
+          value: "off"
+        - name: POSTGRESQL_CLIENT_MIN_MESSAGES
+          value: error
+        - name: POSTGRESQL_SHARED_PRELOAD_LIBRARIES
+          value: pgaudit
+        ports:
+        - name: tcp-postgresql
+          containerPort: 5432
+        livenessProbe:
+          failureThreshold: 6
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - exec pg_isready -U "paperless" -d "dbname=paperless" -h 127.0.0.1 -p 5432
+        readinessProbe:
+          failureThreshold: 6
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - -e
+            - |
+              exec pg_isready -U "paperless" -d "dbname=paperless" -h 127.0.0.1 -p 5432
+              [ -f /opt/bitnami/postgresql/tmp/.initialized ] || [ -f /bitnami/postgresql/.initialized ]
+        volumeMounts:
+        - name: empty-dir
+          mountPath: /tmp
+          subPath: tmp-dir
+        - name: empty-dir
+          mountPath: /opt/bitnami/postgresql/conf
+          subPath: app-conf-dir
+        - name: empty-dir
+          mountPath: /opt/bitnami/postgresql/tmp
+          subPath: app-tmp-dir
+        - name: dshm
+          mountPath: /dev/shm
+        - name: data
+          mountPath: /bitnami/postgresql
+      volumes:
+      - name: empty-dir
+        emptyDir: {}
+      - name: dshm
+        emptyDir:
+          medium: Memory
+  volumeClaimTemplates:
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: redis
+  namespace: paperless
+  labels:
+    app.kubernetes.io/instance: redis
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/version: 7.2.4
+    helm.sh/chart: redis-19.3.0
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: redis
+      app.kubernetes.io/name: redis
+  policyTypes:
+  - Ingress
+  - Egress
+  egress:
+  - {}
+  ingress:
+  - ports:
+    - port: 6379
+---
+apiVersion: v1
+kind: ServiceAccount
+automountServiceAccountToken: false
+metadata:
+  name: redis-master
+  namespace: paperless
+  labels:
+    app.kubernetes.io/instance: redis
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/version: 7.2.4
+    helm.sh/chart: redis-19.3.0
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-configuration
+  namespace: paperless
+  labels:
+    app.kubernetes.io/instance: redis
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/version: 7.2.4
+    helm.sh/chart: redis-19.3.0
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+data:
+  redis.conf: |-
+    # User-supplied common configuration:
+    # Enable AOF https://redis.io/topics/persistence#append-only-file
+    appendonly yes
+    # Disable RDB persistence, AOF persistence already enabled.
+    save ""
+    # End of common configuration
+  master.conf: |-
+    dir /data
+    # User-supplied master configuration:
+    rename-command FLUSHDB ""
+    rename-command FLUSHALL ""
+    # End of master configuration
+  replica.conf: |-
+    dir /data
+    # User-supplied replica configuration:
+    rename-command FLUSHDB ""
+    rename-command FLUSHALL ""
+    # End of replica configuration
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-health
+  namespace: paperless
+  labels:
+    app.kubernetes.io/instance: redis
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/version: 7.2.4
+    helm.sh/chart: redis-19.3.0
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+data:
+  ping_readiness_local.sh: |-
+    #!/bin/bash
+
+    [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
+    [[ -n "$REDIS_PASSWORD" ]] && export REDISCLI_AUTH="$REDIS_PASSWORD"
+    response=$(
+      timeout -s 15 $1 \
+      redis-cli \
+        -h localhost \
+        -p $REDIS_PORT \
+        ping
+    )
+    if [ "$?" -eq "124" ]; then
+      echo "Timed out"
+      exit 1
+    fi
+    if [ "$response" != "PONG" ]; then
+      echo "$response"
+      exit 1
+    fi
+  ping_liveness_local.sh: |-
+    #!/bin/bash
+
+    [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
+    [[ -n "$REDIS_PASSWORD" ]] && export REDISCLI_AUTH="$REDIS_PASSWORD"
+    response=$(
+      timeout -s 15 $1 \
+      redis-cli \
+        -h localhost \
+        -p $REDIS_PORT \
+        ping
+    )
+    if [ "$?" -eq "124" ]; then
+      echo "Timed out"
+      exit 1
+    fi
+    responseFirstWord=$(echo $response | head -n1 | awk '{print $1;}')
+    if [ "$response" != "PONG" ] && [ "$responseFirstWord" != "LOADING" ] && [ "$responseFirstWord" != "MASTERDOWN" ]; then
+      echo "$response"
+      exit 1
+    fi
+  ping_readiness_master.sh: |-
+    #!/bin/bash
+
+    [[ -f $REDIS_MASTER_PASSWORD_FILE ]] && export REDIS_MASTER_PASSWORD="$(< "${REDIS_MASTER_PASSWORD_FILE}")"
+    [[ -n "$REDIS_MASTER_PASSWORD" ]] && export REDISCLI_AUTH="$REDIS_MASTER_PASSWORD"
+    response=$(
+      timeout -s 15 $1 \
+      redis-cli \
+        -h $REDIS_MASTER_HOST \
+        -p $REDIS_MASTER_PORT_NUMBER \
+        ping
+    )
+    if [ "$?" -eq "124" ]; then
+      echo "Timed out"
+      exit 1
+    fi
+    if [ "$response" != "PONG" ]; then
+      echo "$response"
+      exit 1
+    fi
+  ping_liveness_master.sh: |-
+    #!/bin/bash
+
+    [[ -f $REDIS_MASTER_PASSWORD_FILE ]] && export REDIS_MASTER_PASSWORD="$(< "${REDIS_MASTER_PASSWORD_FILE}")"
+    [[ -n "$REDIS_MASTER_PASSWORD" ]] && export REDISCLI_AUTH="$REDIS_MASTER_PASSWORD"
+    response=$(
+      timeout -s 15 $1 \
+      redis-cli \
+        -h $REDIS_MASTER_HOST \
+        -p $REDIS_MASTER_PORT_NUMBER \
+        ping
+    )
+    if [ "$?" -eq "124" ]; then
+      echo "Timed out"
+      exit 1
+    fi
+    responseFirstWord=$(echo $response | head -n1 | awk '{print $1;}')
+    if [ "$response" != "PONG" ] && [ "$responseFirstWord" != "LOADING" ]; then
+      echo "$response"
+      exit 1
+    fi
+  ping_readiness_local_and_master.sh: |-
+    script_dir="$(dirname "$0")"
+    exit_status=0
+    "$script_dir/ping_readiness_local.sh" $1 || exit_status=$?
+    "$script_dir/ping_readiness_master.sh" $1 || exit_status=$?
+    exit $exit_status
+  ping_liveness_local_and_master.sh: |-
+    script_dir="$(dirname "$0")"
+    exit_status=0
+    "$script_dir/ping_liveness_local.sh" $1 || exit_status=$?
+    "$script_dir/ping_liveness_master.sh" $1 || exit_status=$?
+    exit $exit_status
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-scripts
+  namespace: paperless
+  labels:
+    app.kubernetes.io/instance: redis
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/version: 7.2.4
+    helm.sh/chart: redis-19.3.0
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+data:
+  start-master.sh: |
+    #!/bin/bash
+
+    [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
+    if [[ -f /opt/bitnami/redis/mounted-etc/master.conf ]];then
+        cp /opt/bitnami/redis/mounted-etc/master.conf /opt/bitnami/redis/etc/master.conf
+    fi
+    if [[ -f /opt/bitnami/redis/mounted-etc/redis.conf ]];then
+        cp /opt/bitnami/redis/mounted-etc/redis.conf /opt/bitnami/redis/etc/redis.conf
+    fi
+    ARGS=("--port" "${REDIS_PORT}")
+    ARGS+=("--protected-mode" "no")
+    ARGS+=("--include" "/opt/bitnami/redis/etc/redis.conf")
+    ARGS+=("--include" "/opt/bitnami/redis/etc/master.conf")
+    exec redis-server "${ARGS[@]}"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-headless
+  namespace: paperless
+  labels:
+    app.kubernetes.io/instance: redis
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/version: 7.2.4
+    helm.sh/chart: redis-19.3.0
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - name: tcp-redis
+    port: 6379
+    targetPort: redis
+  selector:
+    app.kubernetes.io/instance: redis
+    app.kubernetes.io/name: redis
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-master
+  namespace: paperless
+  labels:
+    app.kubernetes.io/instance: redis
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/version: 7.2.4
+    helm.sh/chart: redis-19.3.0
+    app.kubernetes.io/component: master
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+spec:
+  type: ClusterIP
+  internalTrafficPolicy: Cluster
+  sessionAffinity: None
+  ports:
+  - name: tcp-redis
+    port: 6379
+    targetPort: redis
+    nodePort: null
+  selector:
+    app.kubernetes.io/instance: redis
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/component: master
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis-master
+  namespace: paperless
+  labels:
+    app.kubernetes.io/instance: redis
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/version: 7.2.4
+    helm.sh/chart: redis-19.3.0
+    app.kubernetes.io/component: master
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: redis
+      app.kubernetes.io/name: redis
+      app.kubernetes.io/component: master
+  serviceName: redis-headless
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: redis
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: redis
+        app.kubernetes.io/version: 7.2.4
+        helm.sh/chart: redis-19.3.0
+        app.kubernetes.io/component: master
+      annotations:
+        checksum/configmap: 86bcc953bb473748a3d3dc60b7c11f34e60c93519234d4c37f42e22ada559d47
+        checksum/health: aff24913d801436ea469d8d374b2ddb3ec4c43ee7ab24663d5f8ff1a1b6991a9
+        checksum/scripts: 43cdf68c28f3abe25ce017a82f74dbf2437d1900fd69df51a55a3edf6193d141
+        checksum/secret: 44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a
+    spec:
+      securityContext:
+        fsGroup: 1001
+        fsGroupChangePolicy: Always
+        supplementalGroups: []
+        sysctls: []
+      serviceAccountName: redis-master
+      automountServiceAccountToken: false
+      affinity:
+        podAffinity: null
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: redis
+                  app.kubernetes.io/name: redis
+                  app.kubernetes.io/component: master
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+        nodeAffinity: null
+      enableServiceLinks: true
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: redis
+        image: docker.io/bitnami/redis:7.2.4-debian-12-r13
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsGroup: 1001
+          runAsNonRoot: true
+          runAsUser: 1001
+          seLinuxOptions: {}
+          seccompProfile:
+            type: RuntimeDefault
+        command:
+        - /bin/bash
+        args:
+        - -c
+        - /opt/bitnami/scripts/start-scripts/start-master.sh
+        env:
+        - name: BITNAMI_DEBUG
+          value: "false"
+        - name: REDIS_REPLICATION_MODE
+          value: master
+        - name: ALLOW_EMPTY_PASSWORD
+          value: "yes"
+        - name: REDIS_TLS_ENABLED
+          value: "no"
+        - name: REDIS_PORT
+          value: "6379"
+        ports:
+        - name: redis
+          containerPort: 6379
+        livenessProbe:
+          initialDelaySeconds: 20
+          periodSeconds: 5
+          timeoutSeconds: 6
+          successThreshold: 1
+          failureThreshold: 5
+          exec:
+            command:
+            - sh
+            - -c
+            - /health/ping_liveness_local.sh 5
+        readinessProbe:
+          initialDelaySeconds: 20
+          periodSeconds: 5
+          timeoutSeconds: 2
+          successThreshold: 1
+          failureThreshold: 5
+          exec:
+            command:
+            - sh
+            - -c
+            - /health/ping_readiness_local.sh 1
+        volumeMounts:
+        - name: start-scripts
+          mountPath: /opt/bitnami/scripts/start-scripts
+        - name: health
+          mountPath: /health
+        - name: redis-data
+          mountPath: /data
+        - name: config
+          mountPath: /opt/bitnami/redis/mounted-etc
+        - name: empty-dir
+          mountPath: /opt/bitnami/redis/etc/
+          subPath: app-conf-dir
+        - name: empty-dir
+          mountPath: /tmp
+          subPath: tmp-dir
+      volumes:
+      - name: start-scripts
+        configMap:
+          name: redis-scripts
+          defaultMode: 493
+      - name: health
+        configMap:
+          name: redis-health
+          defaultMode: 493
+      - name: config
+        configMap:
+          name: redis-configuration
+      - name: empty-dir
+        emptyDir: {}
+      - name: redis-data
+        emptyDir: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: paperless
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+spec:
+  strategy:
+    type: Recreate
+    rollingUpdate: null
+  selector:
+    matchLabels:
+      app: paperless
+  template:
+    metadata:
+      labels:
+        app: paperless
+      annotations:
+        checksum/paperless-sftp-scripts: da7f413cd8288035dc60f8ae76cfa7ed434c0a40f58d4d77be56633e67ac581f
+    spec:
+      enableServiceLinks: false
+      initContainers:
+      - name: copy-scripts
+        image: linuxserver/openssh-server:9.3_p2-r1-ls143
+        command:
+        - /bin/sh
+        - -c
+        args:
+        - cp /mnt/configmap/* /mnt/scripts/
+        volumeMounts:
+        - name: sftp-init-scripts
+          mountPath: /mnt/scripts
+        - name: sftp-init-cm
+          mountPath: /mnt/configmap
+      containers:
+      - name: paperless
+        image: ghcr.io/paperless-ngx/paperless-ngx:2.8.3
+        env:
+        - name: PAPERLESS_DBPASS
+          valueFrom:
+            secretKeyRef:
+              name: postgresql
+              key: password
+        - name: PAPERLESS_URL
+          value: https://paperless.zebradil.dev
+        - name: PAPERLESS_CSRF_TRUSTED_ORIGINS
+          value: https://paperless.zebradil.dev,https://paperless.gray.zebradil.dev,https://paperless.junior.zebradil.dev,https://paperless.ts.zebradil.dev,https://paperless.gray.ts.zebradil.dev,https://paperless.junior.ts.zebradil.dev,https://paperless.lan.zebradil.dev,https://paperless.gray.lan.zebradil.dev,https://paperless.junior.lan.zebradil.dev
+        - name: PAPERLESS_CORS_ALLOWED_HOSTS
+          value: https://paperless.zebradil.dev,https://paperless.gray.zebradil.dev,https://paperless.junior.zebradil.dev,https://paperless.ts.zebradil.dev,https://paperless.gray.ts.zebradil.dev,https://paperless.junior.ts.zebradil.dev,https://paperless.lan.zebradil.dev,https://paperless.gray.lan.zebradil.dev,https://paperless.junior.lan.zebradil.dev
+        - name: PAPERLESS_DBHOST
+          value: postgresql
+        - name: PAPERLESS_DBUSER
+          value: paperless
+        - name: PAPERLESS_REDIS
+          value: redis://redis-master:6379
+        - name: PAPERLESS_OCR_LANGUAGE
+          value: deu+eng+rus
+        - name: PAPERLESS_OCR_LANGUAGES
+          value: deu eng rus
+        - name: PAPERLESS_OCR_OUTPUT_TYPE
+          value: pdf
+        - name: PAPERLESS_OCR_ROTATE_PAGES_THRESHOLD
+          value: "4"
+        - name: PAPERLESS_OCR_USER_ARGS
+          value: '{"invalidate_digital_signatures": true}'
+        - name: PAPERLESS_SECRET_KEY
+          value: <path:static/0.sops.yaml#sessionSecretKey>
+        - name: PAPERLESS_TIME_ZONE
+          value: Europe/Berlin
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        ports:
+        - containerPort: 8000
+          name: http
+        volumeMounts:
+        - name: data
+          mountPath: /usr/src/paperless/data
+        - name: media
+          mountPath: /usr/src/paperless/media
+        - name: consume
+          mountPath: /usr/src/paperless/consume
+      - name: sftp
+        image: linuxserver/openssh-server:9.3_p2-r1-ls143
+        env:
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
+        - name: USER_NAME
+          value: paperless
+        - name: PUBLIC_KEY
+          value: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCnzIKHO6ux0JUuSZGmnrVtukIvvqiPRt3pdwPbvMDQwTSFtW0xdORkYKGsCYhPuzEcLMFfJgUT4JEtMPFdj1TTizo5fDOlQP+pJMoRc4HKmqzTsK4FvmS/7Bl6IvWbhAcceKynGkZmOrQziMo7RINrFy1/sjf9ZVaMoQvbFjLUEGboxuq0gJVfgxlRQX28rHolFZk9YWWbHMJ0Gbw/YLQWqf3EJuQnyAWSrnZsX+a8CsKoCzlgsFne91PgNFA5OhkIMkKQy1Mk4qSXhQ7ZUHhcN7reDhyyDX/E+Y0y87Y5NZ8OxAU6Bzl0wZKcAIhZkE/hvhb6L4hJ98VS04QD7Gpj
+        - name: LOG_STDOUT
+          value: "true"
+        ports:
+        - containerPort: 2222
+          name: sftp
+        volumeMounts:
+        - name: consume
+          mountPath: /srv/consume
+        - name: sftp-init-scripts
+          mountPath: /custom-cont-init.d
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: data
+      - name: media
+        persistentVolumeClaim:
+          claimName: media
+      - name: consume
+        persistentVolumeClaim:
+          claimName: consume
+      - name: sftp-init-scripts
+        emptyDir: {}
+      - name: sftp-init-cm
+        configMap:
+          name: paperless-sftp-scripts
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: paperless-sftp-scripts
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+data:
+  init-sshd_config.sh: |
+    #!/bin/sh
+    {
+        echo HostKeyAlgorithms +ssh-rsa
+        echo KexAlgorithms +diffie-hellman-group14-sha1
+        echo PubkeyAcceptedKeyTypes +ssh-rsa
+    } >> /etc/ssh/sshd_config
+  init-rsa-keys.sh: |
+    #!/bin/sh
+    cat <<EOF > /etc/ssh/ssh_host_rsa_key
+    <path:static/0.sops.yaml#ssh_host_rsa_key>
+    EOF
+    cat <<EOF > /etc/ssh/ssh_host_rsa_key.pub
+    <path:static/0.sops.yaml#ssh_host_rsa_key.pub>
+    EOF
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: data
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: media
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: consume
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: paperless
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+spec:
+  selector:
+    app: paperless
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+  - name: sftp
+    port: 2222
+    targetPort: sftp
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: paperless-protected
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+spec:
+  entryPoints:
+  - web
+  - websecure
+  routes:
+  - match: Host(`paperless.zebradil.dev`) || Host(`paperless.gray.zebradil.dev`) || Host(`paperless.junior.zebradil.dev`)
+    kind: Rule
+    middlewares:
+    - name: chain-authelia-auth
+      namespace: authelia
+    services:
+    - name: paperless
+      port: http
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: paperless-lan
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+spec:
+  entryPoints:
+  - lan-web
+  - lan-websecure
+  routes:
+  - match: Host(`paperless.lan.zebradil.dev`) || Host(`paperless.gray.lan.zebradil.dev`) || Host(`paperless.junior.lan.zebradil.dev`)
+    kind: Rule
+    services:
+    - name: paperless
+      port: http
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: paperless-vpn
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+spec:
+  entryPoints:
+  - vpn-web
+  - vpn-websecure
+  routes:
+  - match: Host(`paperless.ts.zebradil.dev`) || Host(`paperless.gray.ts.zebradil.dev`) || Host(`paperless.junior.ts.zebradil.dev`)
+    kind: Rule
+    services:
+    - name: paperless
+      port: http
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: paperless-sftp
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+spec:
+  entryPoints:
+  - paperless-sftp
+  routes:
+  - match: HostSNI(`*`)
+    services:
+    - name: paperless
+      port: sftp

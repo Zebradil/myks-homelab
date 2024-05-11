@@ -1,0 +1,10 @@
+
+#@data/values-schema
+---
+argocd:
+  app:
+    name: "paperless"
+    source:
+      path: "rendered/envs/alpha/paperless"
+      repoURL: "git@github.com:Zebradil/myks-homelab.git"
+      targetRevision: "main"

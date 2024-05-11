@@ -1,0 +1,10 @@
+
+#@data/values-schema
+---
+argocd:
+  app:
+    name: "librespeed"
+    source:
+      path: "rendered/envs/alpha/librespeed"
+      repoURL: "git@github.com:Zebradil/myks-homelab.git"
+      targetRevision: "main"

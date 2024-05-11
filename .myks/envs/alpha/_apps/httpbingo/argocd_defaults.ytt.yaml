@@ -1,0 +1,10 @@
+
+#@data/values-schema
+---
+argocd:
+  app:
+    name: "httpbingo"
+    source:
+      path: "rendered/envs/alpha/httpbingo"
+      repoURL: "git@github.com:Zebradil/myks-homelab.git"
+      targetRevision: "main"

@@ -1,0 +1,10 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - configDigest: 0384bfb0b580dbe1d7e866eac335789d68f5b5a28427b15872ae032f519a172e
+    helmChart:
+      appVersion: v2.2.2
+      version: 0.1.1
+    path: .
+  path: .myks/vendir-cache/helm-httpbingo-0.1.1-960c6334898c3109/data
+kind: LockConfig

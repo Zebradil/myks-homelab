@@ -1,0 +1,13 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+    - contents:
+        - helmChart:
+            name: cert-manager
+            repository:
+                url: https://charts.jetstack.io
+            version: v1.14.5
+          lazy: true
+          path: .
+      path: .myks/vendir-cache/helm-cert-manager-v1.14.5-cbba4c46196781c7/data
+      permissions: null
+kind: Config
