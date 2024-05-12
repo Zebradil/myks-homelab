@@ -9,8 +9,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: prometheus-node-exporter
     app.kubernetes.io/part-of: prometheus-node-exporter
-    app.kubernetes.io/version: 1.7.0
-    helm.sh/chart: prometheus-node-exporter-4.32.0
+    app.kubernetes.io/version: 1.8.0
+    helm.sh/chart: prometheus-node-exporter-4.34.0
   name: k8s-monitoring-prometheus-node-exporter
   namespace: grafana-agent
 spec:
@@ -29,8 +29,8 @@ spec:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: prometheus-node-exporter
         app.kubernetes.io/part-of: prometheus-node-exporter
-        app.kubernetes.io/version: 1.7.0
-        helm.sh/chart: prometheus-node-exporter-4.32.0
+        app.kubernetes.io/version: 1.8.0
+        helm.sh/chart: prometheus-node-exporter-4.34.0
     spec:
       affinity:
         nodeAffinity:
@@ -52,7 +52,7 @@ spec:
           env:
             - name: HOST_IP
               value: 0.0.0.0
-          image: quay.io/prometheus/node-exporter:v1.7.0
+          image: quay.io/prometheus/node-exporter:v1.8.0
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3
