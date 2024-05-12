@@ -90,7 +90,7 @@ yttPkg:
 render:
   includeNamespace: false
 myks:
-  gitRepoBranch: renovate/opencost-1.x
+  gitRepoBranch: renovate/jellyfin-jellyfin-10.x
   gitRepoUrl: https://github.com/Zebradil/myks-homelab
   context:
     app: ""
