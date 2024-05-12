@@ -90,7 +90,7 @@ yttPkg:
 render:
   includeNamespace: false
 myks:
-  gitRepoBranch: renovate/jellyfin-jellyfin-10.x
+  gitRepoBranch: renovate/prometheus-node-exporter-4.x
   gitRepoUrl: https://github.com/Zebradil/myks-homelab
   context:
     app: ""
