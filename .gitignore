@@ -1,1 +1,2 @@
-**/.myks/tmp/
+.myks/*
+!.myks/vendir-cache
