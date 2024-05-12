@@ -14,6 +14,7 @@
   packageRules: [
     {
       matchUpdateTypes: ["minor", "patch", "pin", "digest"],
+      minimumReleaseAge: "5 days",
       automerge: true,
     },
   ],
