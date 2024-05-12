@@ -40,10 +40,10 @@ tasks:
           CLI_ARGS:
             sh: |
               {{ $pr_number := .CLI_ARGS|splitArgs|first }}
-              {{ $pr_args := .CLI_ARGS|splitArgs|rest|join " " }}
+              {{ $pr_args := .CLI_ARGS|splitArgs|rest }}
               echo "$( \
                 gh pr view \
                   --json baseRefName,headRefName \
                   --jq '"origin/" + .baseRefName + "...origin/" + .headRefName' \
                   {{ $pr_number }} \
-              ) {{ if $pr_args }}{{ $pr_args|shellQuote }}{{ end }}"
+              ){{ range $pr_args }} {{ .|shellQuote }}{{ end }}"
