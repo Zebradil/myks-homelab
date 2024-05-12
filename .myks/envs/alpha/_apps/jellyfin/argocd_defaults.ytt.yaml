@@ -6,5 +6,5 @@ argocd:
     name: "jellyfin"
     source:
       path: "rendered/envs/alpha/jellyfin"
-      repoURL: "git@github.com:Zebradil/myks-homelab.git"
-      targetRevision: "main"
+      repoURL: "https://github.com/Zebradil/myks-homelab"
+      targetRevision: "renovate/jellyfin-jellyfin-10.x"
