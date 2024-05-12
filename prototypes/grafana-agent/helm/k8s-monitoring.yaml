@@ -42,9 +42,9 @@ opencost:
   enabled: true
   opencost:
     exporter:
-      defaultClusterId: "default-cluster"
+      defaultClusterId: default-cluster
     prometheus:
-      secret_name: grafana-cloud-prometheus-endpoint
+      existingSecretName: grafana-cloud-prometheus-endpoint
       external:
         url: #@ sec.sopsy("0", "prometheus.host") + "/api/prom"
     ui:
