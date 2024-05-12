@@ -18,7 +18,7 @@
     },
   ],
   // Ignore all rendered files
-  ignorePaths: ["**/rendered/**", "**/vendor/**"],
+  ignorePaths: ["rendered/**", ".myks/**"],
   regexManagers: [
     {
       fileMatch: ["(^|/)app-data\\.ytt\\.yaml$"],
