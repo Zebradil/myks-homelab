@@ -90,7 +90,7 @@ yttPkg:
 render:
   includeNamespace: false
 myks:
-  gitRepoBranch: renovate/alloy-0.x
+  gitRepoBranch: renovate/opencost-1.x
   gitRepoUrl: https://github.com/Zebradil/myks-homelab
   context:
     app: ""
