@@ -188,6 +188,12 @@ spec:
                   key: reposerver.disable.helm.manifest.max.extracted.size
                   name: argocd-cmd-params-cm
                   optional: true
+            - name: ARGOCD_REVISION_CACHE_LOCK_TIMEOUT
+              valueFrom:
+                configMapKeyRef:
+                  key: reposerver.revision.cache.lock.timeout
+                  name: argocd-cmd-params-cm
+                  optional: true
             - name: ARGOCD_GIT_MODULES_ENABLED
               valueFrom:
                 configMapKeyRef:
@@ -212,7 +218,7 @@ spec:
               value: /helm-working-dir
             - name: HELM_DATA_HOME
               value: /helm-working-dir
-          image: quay.io/argoproj/argocd:v2.10.9
+          image: quay.io/argoproj/argocd:v2.11.0
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 3
@@ -290,7 +296,7 @@ spec:
             - -n
             - /usr/local/bin/argocd
             - /var/run/argocd/argocd-cmp-server
-          image: quay.io/argoproj/argocd:v2.10.9
+          image: quay.io/argoproj/argocd:v2.11.0
           name: copyutil
           securityContext:
             allowPrivilegeEscalation: false
