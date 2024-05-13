@@ -7,7 +7,7 @@ metadata:
     app.kubernetes.io/instance: traefik-traefik
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: traefik
-    helm.sh/chart: traefik-27.0.2
+    helm.sh/chart: traefik-28.0.0
   name: traefik
   namespace: traefik
 spec:
@@ -26,19 +26,19 @@ spec:
         app.kubernetes.io/instance: traefik-traefik
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: traefik
-        helm.sh/chart: traefik-27.0.2
+        helm.sh/chart: traefik-28.0.0
     spec:
       containers:
         - args:
-            - --entrypoints.lan-web.address=node.k8s.lan:80/tcp
-            - --entrypoints.lan-websecure.address=node.k8s.lan:443/tcp
-            - --entrypoints.metrics.address=node.k8s.lan:19100/tcp
-            - --entrypoints.paperless-sftp.address=node.k8s.lan:2222/tcp
-            - --entrypoints.traefik.address=node.k8s.lan:9000/tcp
-            - --entrypoints.vpn-web.address=node.k8s.vpn:80/tcp
-            - --entrypoints.vpn-websecure.address=node.k8s.vpn:443/tcp
-            - --entrypoints.web.address=[$NODE_IPV6]:80/tcp
-            - --entrypoints.websecure.address=[$NODE_IPV6]:443/tcp
+            - --entryPoints.lan-web.address=node.k8s.lan:80/tcp
+            - --entryPoints.lan-websecure.address=node.k8s.lan:443/tcp
+            - --entryPoints.metrics.address=node.k8s.lan:19100/tcp
+            - --entryPoints.paperless-sftp.address=node.k8s.lan:2222/tcp
+            - --entryPoints.traefik.address=node.k8s.lan:9000/tcp
+            - --entryPoints.vpn-web.address=node.k8s.vpn:80/tcp
+            - --entryPoints.vpn-websecure.address=node.k8s.vpn:443/tcp
+            - --entryPoints.web.address=[$NODE_IPV6]:80/tcp
+            - --entryPoints.websecure.address=[$NODE_IPV6]:443/tcp
             - --api.dashboard=true
             - --ping=true
             - --metrics.prometheus=true
@@ -46,15 +46,15 @@ spec:
             - --providers.kubernetescrd
             - --providers.kubernetescrd.allowCrossNamespace=true
             - --providers.kubernetesingress
-            - --entrypoints.lan-web.http.redirections.entryPoint.to=:443
-            - --entrypoints.lan-web.http.redirections.entryPoint.scheme=https
-            - --entrypoints.lan-websecure.http.tls=true
-            - --entrypoints.vpn-web.http.redirections.entryPoint.to=:443
-            - --entrypoints.vpn-web.http.redirections.entryPoint.scheme=https
-            - --entrypoints.vpn-websecure.http.tls=true
-            - --entrypoints.web.http.redirections.entryPoint.to=:443
-            - --entrypoints.web.http.redirections.entryPoint.scheme=https
-            - --entrypoints.websecure.http.tls=true
+            - --entryPoints.lan-web.http.redirections.entryPoint.to=:443
+            - --entryPoints.lan-web.http.redirections.entryPoint.scheme=https
+            - --entryPoints.lan-websecure.http.tls=true
+            - --entryPoints.vpn-web.http.redirections.entryPoint.to=:443
+            - --entryPoints.vpn-web.http.redirections.entryPoint.scheme=https
+            - --entryPoints.vpn-websecure.http.tls=true
+            - --entryPoints.web.http.redirections.entryPoint.to=:443
+            - --entryPoints.web.http.redirections.entryPoint.scheme=https
+            - --entryPoints.websecure.http.tls=true
             - --log.level=DEBUG
             - --accesslog=true
             - --accesslog.fields.defaultmode=keep
