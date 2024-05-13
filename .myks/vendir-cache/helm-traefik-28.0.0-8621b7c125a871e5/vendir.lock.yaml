@@ -1,0 +1,10 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - configDigest: ded53f363ff4e0caec8232e1f3d3b21c5ac40ff7d1ede8ea9235f4681ab49a7b
+    helmChart:
+      appVersion: v3.0.0
+      version: 28.0.0
+    path: .
+  path: .myks/vendir-cache/helm-traefik-28.0.0-8621b7c125a871e5/data
+kind: LockConfig
