@@ -1,0 +1,98 @@
+application: {}
+argocd:
+  enabled: true
+  namespace: argocd
+  app:
+    name: ""
+    prefix: app-
+    finalizers:
+    - resources-finalizer.argocd.argoproj.io
+    destination:
+      name: in-cluster
+      server: ""
+      namespace: ""
+    source:
+      path: ""
+      plugin:
+        name: argocd-vault-plugin
+      repoURL: https://github.com/Zebradil/myks-homelab
+      targetRevision: main
+  env:
+    name: ""
+    prefix: ""
+    generateSecret: false
+  project:
+    name: ""
+    prefix: env-
+    destination:
+      name: in-cluster
+      server: ""
+      namespace: '*'
+environment:
+  id: alpha
+  applications:
+  - proto: argocd
+    name: ""
+  - proto: authelia
+    name: ""
+  - proto: cert-manager
+    name: ""
+  - proto: grafana-agent
+    name: ""
+  - proto: httpbingo
+    name: ""
+  - proto: jellyfin
+    name: ""
+  - proto: librespeed
+    name: ""
+  - proto: paperless
+    name: ""
+  - proto: starbase80
+    name: ""
+  - proto: synology-csi
+    name: ""
+  - proto: traefik
+    name: ""
+  - proto: webapp
+    name: pacoloco
+  hosts:
+  - zebradil.dev
+  - gray.zebradil.dev
+  - junior.zebradil.dev
+  - ts.zebradil.dev
+  - gray.ts.zebradil.dev
+  - junior.ts.zebradil.dev
+  - lan.zebradil.dev
+  - gray.lan.zebradil.dev
+  - junior.lan.zebradil.dev
+  traefik:
+    hosts:
+      lan:
+      - lan.zebradil.dev
+      - gray.lan.zebradil.dev
+      - junior.lan.zebradil.dev
+      vpn:
+      - ts.zebradil.dev
+      - gray.ts.zebradil.dev
+      - junior.ts.zebradil.dev
+      web:
+      - zebradil.dev
+      - gray.zebradil.dev
+      - junior.zebradil.dev
+helm:
+  capabilities: []
+  includeCRDs: true
+  kubeVersion: "1.29"
+  namespace: ""
+  buildDependencies: false
+yttPkg:
+  dirs: []
+render:
+  includeNamespace: false
+myks:
+  gitRepoBranch: main
+  gitRepoUrl: https://github.com/Zebradil/myks-homelab
+  context:
+    app: ""
+    prototype: ""
+    step: ""
