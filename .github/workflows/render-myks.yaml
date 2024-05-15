@@ -36,9 +36,11 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Render
-        run:
-          myks all --smart-mode.base-revision=${{ github.base_ref &&
-          format('origin/{0}', github.base_ref) || env.NX_BASE }}
+        env:
+          MYKS_SMART_MODE_BASE_REVISION: ${{ github.base_ref && format('origin/{0}', github.base_ref) || env.NX_BASE }}
+        run: |
+          myks all
+          myks cleanup --cache
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@01dd5d3ca463c7f10f7f4f7b4f177225ac661ee4 # v6
         with:
@@ -57,16 +59,14 @@ jobs:
         with:
           context: myks
           description:
-            ${{ steps.commit.outputs.changes_detected == 'true' && 'New changes
-            have been committed' || 'Rendered files are up to date' }}
+            ${{ steps.commit.outputs.changes_detected == 'true' && 'New changes have been committed' || 'Rendered files
+            are up to date' }}
           # When running on a PR, set the commit status on the latest commit in
           # the branch. Otherwise, the PR will be waiting for the commit status
           # indefinitely. This, in particular, blocks Renovate from merging PRs
           # automatically.
           # If running on a push, set the commit status on the current commit.
-          sha:
-            ${{ steps.commit.outputs.commit_hash ||
-            github.event.pull_request.head.sha || github.sha }}
+          sha: ${{ steps.commit.outputs.commit_hash || github.event.pull_request.head.sha || github.sha }}
           status: success
   auto-approve:
     needs: render
