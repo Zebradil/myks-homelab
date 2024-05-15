@@ -16,3 +16,6 @@ environment:
       lan: [""]
       vpn: [""]
       web: [""]
+myks:
+  #! Explicitly set the main branch to avoid extra diff in PRs.
+  gitRepoBranch: main
