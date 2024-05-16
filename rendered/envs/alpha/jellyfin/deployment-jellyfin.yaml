@@ -5,7 +5,6 @@ metadata:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   name: jellyfin
 spec:
-  replicas: 0
   selector:
     matchLabels:
       app: jellyfin
