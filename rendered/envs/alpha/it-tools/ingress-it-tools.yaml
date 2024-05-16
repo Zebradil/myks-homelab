@@ -1,0 +1,98 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: it-tools
+spec:
+  rules:
+    - host: it-tools.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: it-tools
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: it-tools.gray.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: it-tools
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: it-tools.junior.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: it-tools
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: it-tools.ts.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: it-tools
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: it-tools.gray.ts.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: it-tools
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: it-tools.junior.ts.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: it-tools
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: it-tools.lan.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: it-tools
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: it-tools.gray.lan.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: it-tools
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: it-tools.junior.lan.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: it-tools
+                port:
+                  name: http
+            path: /
+            pathType: Prefix

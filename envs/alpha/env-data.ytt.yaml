@@ -38,6 +38,8 @@ environment:
     #! - proto: webapp
     #!   name: iperf
     - proto: webapp
+      name: it-tools
+    - proto: webapp
       name: pacoloco
 argocd:
   app:

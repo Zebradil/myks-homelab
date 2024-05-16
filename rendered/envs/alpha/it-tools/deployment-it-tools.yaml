@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: it-tools
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: it-tools
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: it-tools
+    spec:
+      containers:
+        - image: ghcr.io/corentinth/it-tools:2023.12.21-5ed3693
+          name: it-tools
+          ports:
+            - containerPort: 80
+              name: http
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+            privileged: false

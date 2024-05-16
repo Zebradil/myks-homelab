@@ -54,6 +54,8 @@ environment:
   - proto: traefik
     name: ""
   - proto: webapp
+    name: it-tools
+  - proto: webapp
     name: pacoloco
   hosts:
   - zebradil.dev

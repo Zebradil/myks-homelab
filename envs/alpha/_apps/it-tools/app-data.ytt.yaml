@@ -1,0 +1,5 @@
+#@data/values
+---
+application:
+  #! renovate: datasource=docker
+  image: ghcr.io/corentinth/it-tools:2023.12.21-5ed3693
