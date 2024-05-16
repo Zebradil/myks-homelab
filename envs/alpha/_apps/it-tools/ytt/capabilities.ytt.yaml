@@ -1,0 +1,28 @@
+#! This file contains an overlay that adds some capabilities required to run nginx container in it's default
+#! configuration (with root user, port 80, etc.).
+
+#@ load("@ytt:overlay", "overlay")
+#@ load("@ytt:data", "data")
+
+#! TODO: move name generation to a function
+
+#@ a = data.values.application
+#@ m = data.values.myks
+#@ name = a.name or m.context.app
+
+#@overlay/match by=overlay.subset({"kind":"Deployment"})
+---
+spec:
+  template:
+    spec:
+      containers:
+        #@overlay/match by="name"
+        - name: #@ name
+          securityContext:
+            capabilities:
+              #@overlay/match missing_ok=True
+              add:
+                - NET_BIND_SERVICE
+                - CHOWN
+                - SETGID
+                - SETUID
