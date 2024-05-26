@@ -1,2 +1,2 @@
 charts/postgresql: helm-postgresql-15.3.5-4cffea9325b327af
-charts/redis: helm-redis-19.3.0-db8ac335f834e21b
+charts/redis: helm-redis-19.3.4-db7c8335f82837ff
