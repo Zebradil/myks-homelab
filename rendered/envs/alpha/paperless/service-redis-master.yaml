@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: redis
     app.kubernetes.io/version: 7.2.5
-    helm.sh/chart: redis-19.3.4
+    helm.sh/chart: redis-19.4.0
   name: redis-master
   namespace: paperless
 spec:

@@ -16,6 +16,6 @@ directories:
     lazy: true
     helmChart:
       name: redis
-      version: 19.3.4
+      version: 19.4.0
       repository:
         url: oci://registry-1.docker.io/bitnamicharts
