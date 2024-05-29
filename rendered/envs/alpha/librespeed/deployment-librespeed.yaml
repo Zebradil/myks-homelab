@@ -20,7 +20,7 @@ spec:
                 secretKeyRef:
                   key: password
                   name: librespeed
-          image: linuxserver/librespeed:5.3.2
+          image: linuxserver/librespeed:5.3.3
           name: librespeed
           ports:
             - containerPort: 80
