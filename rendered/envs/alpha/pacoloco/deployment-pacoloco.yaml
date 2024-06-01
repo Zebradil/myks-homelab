@@ -14,7 +14,7 @@ spec:
         app.kubernetes.io/name: pacoloco
     spec:
       containers:
-        - image: ghcr.io/anatol/pacoloco:1.6
+        - image: ghcr.io/anatol/pacoloco:1.7
           name: pacoloco
           ports:
             - containerPort: 9129
