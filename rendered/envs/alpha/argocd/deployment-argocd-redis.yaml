@@ -39,6 +39,13 @@ spec:
             - ""
             - --appendonly
             - "no"
+            - --requirepass $(REDIS_PASSWORD)
+          env:
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: auth
+                  name: argocd-redis
           image: redis:7.0.14-alpine
           imagePullPolicy: Always
           name: redis
@@ -50,6 +57,23 @@ spec:
               drop:
                 - ALL
             readOnlyRootFilesystem: true
+      initContainers:
+        - command:
+            - argocd
+            - admin
+            - redis-initial-password
+          image: quay.io/argoproj/argocd:v2.11.3
+          imagePullPolicy: IfNotPresent
+          name: secret-init
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
       securityContext:
         runAsNonRoot: true
         runAsUser: 999
