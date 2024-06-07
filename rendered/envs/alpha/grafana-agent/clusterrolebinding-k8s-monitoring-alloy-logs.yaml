@@ -4,11 +4,13 @@ metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
+    app.kubernetes.io/component: rbac
     app.kubernetes.io/instance: k8s-monitoring
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: alloy-logs
-    app.kubernetes.io/version: v1.0.0
-    helm.sh/chart: alloy-logs-0.1.1
+    app.kubernetes.io/part-of: alloy
+    app.kubernetes.io/version: v1.1.0
+    helm.sh/chart: alloy-logs-0.3.0
   name: k8s-monitoring-alloy-logs
 roleRef:
   apiGroup: rbac.authorization.k8s.io

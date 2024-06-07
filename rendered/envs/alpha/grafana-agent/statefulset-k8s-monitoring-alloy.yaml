@@ -7,8 +7,9 @@ metadata:
     app.kubernetes.io/instance: k8s-monitoring
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: alloy
-    app.kubernetes.io/version: v1.0.0
-    helm.sh/chart: alloy-0.1.1
+    app.kubernetes.io/part-of: alloy
+    app.kubernetes.io/version: v1.1.0
+    helm.sh/chart: alloy-0.3.0
   name: k8s-monitoring-alloy
 spec:
   minReadySeconds: 10
@@ -44,7 +45,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
-          image: docker.io/grafana/alloy:v1.0.0
+          image: docker.io/grafana/alloy:v1.1.0
           imagePullPolicy: IfNotPresent
           name: alloy
           ports:
