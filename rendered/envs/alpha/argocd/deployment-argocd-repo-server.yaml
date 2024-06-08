@@ -38,6 +38,11 @@ spec:
         - args:
             - /usr/local/bin/argocd-repo-server
           env:
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: auth
+                  name: argocd-redis
             - name: ARGOCD_RECONCILIATION_TIMEOUT
               valueFrom:
                 configMapKeyRef:
@@ -218,7 +223,7 @@ spec:
               value: /helm-working-dir
             - name: HELM_DATA_HOME
               value: /helm-working-dir
-          image: quay.io/argoproj/argocd:v2.11.0
+          image: quay.io/argoproj/argocd:v2.11.3
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 3
@@ -296,7 +301,7 @@ spec:
             - -n
             - /usr/local/bin/argocd
             - /var/run/argocd/argocd-cmp-server
-          image: quay.io/argoproj/argocd:v2.11.0
+          image: quay.io/argoproj/argocd:v2.11.3
           name: copyutil
           securityContext:
             allowPrivilegeEscalation: false

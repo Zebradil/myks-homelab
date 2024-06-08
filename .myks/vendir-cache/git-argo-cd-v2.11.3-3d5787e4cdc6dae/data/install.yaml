@@ -20910,6 +20910,30 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   labels:
+    app.kubernetes.io/component: redis
+    app.kubernetes.io/name: argocd-redis
+    app.kubernetes.io/part-of: argocd
+  name: argocd-redis
+rules:
+- apiGroups:
+  - ""
+  resourceNames:
+  - argocd-redis
+  resources:
+  - secrets
+  verbs:
+  - get
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - create
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  labels:
     app.kubernetes.io/component: server
     app.kubernetes.io/name: argocd-server
     app.kubernetes.io/part-of: argocd
@@ -21174,6 +21198,22 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: argocd-notifications-controller
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/component: redis
+    app.kubernetes.io/name: argocd-redis
+    app.kubernetes.io/part-of: argocd
+  name: argocd-redis
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: argocd-redis
+subjects:
+- kind: ServiceAccount
+  name: argocd-redis
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -21642,7 +21682,7 @@ spec:
               key: applicationsetcontroller.enable.scm.providers
               name: argocd-cmd-params-cm
               optional: true
-        image: quay.io/argoproj/argocd:v2.11.0
+        image: quay.io/argoproj/argocd:v2.11.3
         imagePullPolicy: Always
         name: argocd-applicationset-controller
         ports:
@@ -21765,7 +21805,7 @@ spec:
         - -n
         - /usr/local/bin/argocd
         - /shared/argocd-dex
-        image: quay.io/argoproj/argocd:v2.11.0
+        image: quay.io/argoproj/argocd:v2.11.3
         imagePullPolicy: Always
         name: copyutil
         securityContext:
@@ -21847,7 +21887,7 @@ spec:
               key: notificationscontroller.selfservice.enabled
               name: argocd-cmd-params-cm
               optional: true
-        image: quay.io/argoproj/argocd:v2.11.0
+        image: quay.io/argoproj/argocd:v2.11.3
         imagePullPolicy: Always
         livenessProbe:
           tcpSocket:
@@ -21924,6 +21964,13 @@ spec:
         - ""
         - --appendonly
         - "no"
+        - --requirepass $(REDIS_PASSWORD)
+        env:
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: auth
+              name: argocd-redis
         image: redis:7.0.14-alpine
         imagePullPolicy: Always
         name: redis
@@ -21935,6 +21982,23 @@ spec:
             drop:
             - ALL
           readOnlyRootFilesystem: true
+      initContainers:
+      - command:
+        - argocd
+        - admin
+        - redis-initial-password
+        image: quay.io/argoproj/argocd:v2.11.3
+        imagePullPolicy: IfNotPresent
+        name: secret-init
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
       securityContext:
         runAsNonRoot: true
         runAsUser: 999
@@ -21979,6 +22043,11 @@ spec:
       - args:
         - /usr/local/bin/argocd-repo-server
         env:
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: auth
+              name: argocd-redis
         - name: ARGOCD_RECONCILIATION_TIMEOUT
           valueFrom:
             configMapKeyRef:
@@ -22159,7 +22228,7 @@ spec:
           value: /helm-working-dir
         - name: HELM_DATA_HOME
           value: /helm-working-dir
-        image: quay.io/argoproj/argocd:v2.11.0
+        image: quay.io/argoproj/argocd:v2.11.3
         imagePullPolicy: Always
         livenessProbe:
           failureThreshold: 3
@@ -22211,7 +22280,7 @@ spec:
         - -n
         - /usr/local/bin/argocd
         - /var/run/argocd/argocd-cmp-server
-        image: quay.io/argoproj/argocd:v2.11.0
+        image: quay.io/argoproj/argocd:v2.11.3
         name: copyutil
         securityContext:
           allowPrivilegeEscalation: false
@@ -22294,6 +22363,11 @@ spec:
       - args:
         - /usr/local/bin/argocd-server
         env:
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: auth
+              name: argocd-redis
         - name: ARGOCD_SERVER_INSECURE
           valueFrom:
             configMapKeyRef:
@@ -22528,7 +22602,7 @@ spec:
               key: server.api.content.types
               name: argocd-cmd-params-cm
               optional: true
-        image: quay.io/argoproj/argocd:v2.11.0
+        image: quay.io/argoproj/argocd:v2.11.3
         imagePullPolicy: Always
         livenessProbe:
           httpGet:
@@ -22640,6 +22714,11 @@ spec:
       - args:
         - /usr/local/bin/argocd-application-controller
         env:
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: auth
+              name: argocd-redis
         - name: ARGOCD_CONTROLLER_REPLICAS
           value: "1"
         - name: ARGOCD_RECONCILIATION_TIMEOUT
@@ -22822,7 +22901,7 @@ spec:
               key: controller.ignore.normalizer.jq.timeout
               name: argocd-cmd-params-cm
               optional: true
-        image: quay.io/argoproj/argocd:v2.11.0
+        image: quay.io/argoproj/argocd:v2.11.3
         imagePullPolicy: Always
         name: argocd-application-controller
         ports:
@@ -22951,12 +23030,6 @@ kind: NetworkPolicy
 metadata:
   name: argocd-redis-network-policy
 spec:
-  egress:
-  - ports:
-    - port: 53
-      protocol: UDP
-    - port: 53
-      protocol: TCP
   ingress:
   - from:
     - podSelector:
@@ -22976,7 +23049,6 @@ spec:
       app.kubernetes.io/name: argocd-redis
   policyTypes:
   - Ingress
-  - Egress
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
