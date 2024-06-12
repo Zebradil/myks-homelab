@@ -5,6 +5,6 @@ application:
   namespace: argocd
   argocdVaultPlugin:
     #! renovate: datasource=github-releases depName=argoproj-labs/argocd-vault-plugin
-    version: v1.18.0
+    version: v1.18.1
   _:
     sopsAgeKeySecretName: sops-age-key
