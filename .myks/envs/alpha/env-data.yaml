@@ -82,11 +82,12 @@ environment:
       - gray.zebradil.dev
       - junior.zebradil.dev
 helm:
+  buildDependencies: false
   capabilities: []
   includeCRDs: true
   kubeVersion: "1.29"
   namespace: ""
-  buildDependencies: false
+  charts: []
 yttPkg:
   dirs: []
 render:
