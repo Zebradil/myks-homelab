@@ -9,8 +9,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: alloy-logs
     app.kubernetes.io/part-of: alloy
-    app.kubernetes.io/version: v1.1.0
-    helm.sh/chart: alloy-logs-0.3.0
+    app.kubernetes.io/version: v1.1.1
+    helm.sh/chart: alloy-logs-0.3.2
   name: k8s-monitoring-alloy-logs
 spec:
   internalTrafficPolicy: Cluster
