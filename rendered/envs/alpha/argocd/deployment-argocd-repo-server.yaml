@@ -320,7 +320,7 @@ spec:
               BIN=/custom-tools/argocd-vault-plugin
               ARTEFACT="argocd-vault-plugin_${AVP_VERSION#v}_linux_amd64"
               URL="https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/$AVP_VERSION/$ARTEFACT"
-              curl --location --output "$BIN" "$URL" \
+              curl --show-error --location --output "$BIN" "$URL" \
                 && chmod 0755 "$BIN"
           command:
             - bash
