@@ -7,6 +7,6 @@ application:
   supplementalGroups: [105]
   storage:
     media:
-      size: 500Gi
+      size: 1000Gi
   wireguard:
     config: #@ sec.sops("0", "wireguard_config")
