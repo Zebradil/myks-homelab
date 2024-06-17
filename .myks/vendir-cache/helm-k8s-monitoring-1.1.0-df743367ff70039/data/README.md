@@ -5,7 +5,7 @@
 
 # k8s-monitoring
 
-![Version: 1.0.13](https://img.shields.io/badge/Version-1.0.13-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.3.4](https://img.shields.io/badge/AppVersion-2.3.4-informational?style=flat-square)
+![Version: 1.1.0](https://img.shields.io/badge/Version-1.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.3.5](https://img.shields.io/badge/AppVersion-2.3.5-informational?style=flat-square)
 
 A Helm chart for gathering, scraping, and forwarding Kubernetes telemetry data to a Grafana Stack.
 
@@ -142,7 +142,7 @@ The Prometheus and Loki services may be hosted on the same cluster, or remotely 
 | https://grafana.github.io/helm-charts | alloy-profiles(alloy) | 0.3.2 |
 | https://opencost.github.io/opencost-helm-chart | opencost | 1.35.0 |
 | https://prometheus-community.github.io/helm-charts | kube-state-metrics | 5.20.0 |
-| https://prometheus-community.github.io/helm-charts | prometheus-node-exporter | 4.34.0 |
+| https://prometheus-community.github.io/helm-charts | prometheus-node-exporter | 4.36.0 |
 | https://prometheus-community.github.io/helm-charts | prometheus-operator-crds | 12.0.0 |
 | https://prometheus-community.github.io/helm-charts | prometheus-windows-exporter | 0.3.1 |
 <!-- markdownlint-enable no-bare-urls -->
@@ -190,7 +190,8 @@ The Prometheus and Loki services may be hosted on the same cluster, or remotely 
 | externalServices.loki.basicAuth.passwordKey | string | `"password"` | The key for the password property in the secret |
 | externalServices.loki.basicAuth.username | string | `""` | Loki basic auth username |
 | externalServices.loki.basicAuth.usernameKey | string | `"username"` | The key for the username property in the secret |
-| externalServices.loki.externalLabels | object | `{}` | Custom labels to be added to all logs and events |
+| externalServices.loki.externalLabels | object | `{}` | Custom labels to be added to all logs and events, all values are treated as strings and automatically quoted. |
+| externalServices.loki.externalLabelsFrom | object | `{}` | Custom labels to be added to all logs and events through a dynamic reference, all values are treated as raw strings and not quoted. |
 | externalServices.loki.host | string | `""` | Loki host where logs and events will be sent |
 | externalServices.loki.hostKey | string | `"host"` | The key for the host property in the secret |
 | externalServices.loki.processors.batch.maxSize | int | `0` | Upper limit of a batch size. When set to 0, there is no upper limit. |
@@ -219,7 +220,8 @@ The Prometheus and Loki services may be hosted on the same cluster, or remotely 
 | externalServices.prometheus.basicAuth.passwordKey | string | `"password"` | The key for the password property in the secret |
 | externalServices.prometheus.basicAuth.username | string | `""` | Prometheus basic auth username |
 | externalServices.prometheus.basicAuth.usernameKey | string | `"username"` | The key for the username property in the secret |
-| externalServices.prometheus.externalLabels | object | `{}` | Custom labels to be added to all time series |
+| externalServices.prometheus.externalLabels | object | `{}` | Custom labels to be added to all time series, all values are treated as strings and automatically quoted. |
+| externalServices.prometheus.externalLabelsFrom | object | `{}` | Custom labels to be added to all time series through a dynamic reference, all values are treated as raw strings and not quoted. |
 | externalServices.prometheus.host | string | `""` | Prometheus host where metrics will be sent |
 | externalServices.prometheus.hostKey | string | `"host"` | The key for the host property in the secret |
 | externalServices.prometheus.processors.batch.maxSize | int | `0` | Upper limit of a batch size. When set to 0, there is no upper limit. |
@@ -231,6 +233,15 @@ The Prometheus and Loki services may be hosted on the same cluster, or remotely 
 | externalServices.prometheus.protocol | string | `"remote_write"` | The type of server protocol for writing metrics. Valid options:  "remote_write" will use Prometheus Remote Write,  "otlp" will use OTLP,  "otlphttp" will use OTLP HTTP |
 | externalServices.prometheus.proxyURL | string | `""` | HTTP proxy to proxy requests to Prometheus through. |
 | externalServices.prometheus.queryEndpoint | string | `"/api/prom/api/v1/query"` | Prometheus metrics query endpoint. Preset for Grafana Cloud Metrics instances. |
+| externalServices.prometheus.queue_config.batch_send_deadline | string | 5s | Maximum time samples will wait in the buffer before sending. |
+| externalServices.prometheus.queue_config.capacity | int | 10000 | Number of samples to buffer per shard. |
+| externalServices.prometheus.queue_config.max_backoff | string | 5s | Maximum retry delay. |
+| externalServices.prometheus.queue_config.max_samples_per_send | int | 2000 | Maximum number of samples per send. |
+| externalServices.prometheus.queue_config.max_shards | int | 50 | Maximum number of concurrent shards sending samples to the endpoint. |
+| externalServices.prometheus.queue_config.min_backoff | string | 30ms | Initial retry delay. The backoff time gets doubled for each retry. |
+| externalServices.prometheus.queue_config.min_shards | int | 1 | Minimum amount of concurrent shards sending samples to the endpoint. |
+| externalServices.prometheus.queue_config.retry_on_http_429 | bool | true | Retry when an HTTP 429 status code is received. |
+| externalServices.prometheus.queue_config.sample_age_limit | string | 0s | Maximum age of samples to send. |
 | externalServices.prometheus.secret.create | bool | `true` | Should this Helm chart create the secret. If false, you must define the name and namespace values. |
 | externalServices.prometheus.secret.name | string | `""` | The name of the secret. |
 | externalServices.prometheus.secret.namespace | string | `""` | The namespace of the secret. Only used if secret.create = "false" |
@@ -253,7 +264,8 @@ The Prometheus and Loki services may be hosted on the same cluster, or remotely 
 | externalServices.pyroscope.basicAuth.passwordKey | string | `"password"` | The key for the password property in the secret |
 | externalServices.pyroscope.basicAuth.username | string | `""` | Pyroscope basic auth username |
 | externalServices.pyroscope.basicAuth.usernameKey | string | `"username"` | The key for the username property in the secret |
-| externalServices.pyroscope.externalLabels | object | `{}` | Custom labels to be added to all profiles |
+| externalServices.pyroscope.externalLabels | object | `{}` | Custom labels to be added to all profiles, all values are treated as strings and automatically quoted. |
+| externalServices.pyroscope.externalLabelsFrom | object | `{}` | Custom labels to be added to all profiles through a dynamic reference, all values are treated as raw strings and not quoted. |
 | externalServices.pyroscope.host | string | `""` | Pyroscope host where profiles will be sent |
 | externalServices.pyroscope.hostKey | string | `"host"` | The key for the host property in the secret |
 | externalServices.pyroscope.proxyURL | string | `""` | HTTP proxy to proxy requests to Pyroscope through. |
