@@ -5,7 +5,7 @@
 
 # k8s-monitoring
 
-![Version: 1.1.0](https://img.shields.io/badge/Version-1.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.3.5](https://img.shields.io/badge/AppVersion-2.3.5-informational?style=flat-square)
+![Version: 1.1.1](https://img.shields.io/badge/Version-1.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.3.5](https://img.shields.io/badge/AppVersion-2.3.5-informational?style=flat-square)
 
 A Helm chart for gathering, scraping, and forwarding Kubernetes telemetry data to a Grafana Stack.
 
@@ -140,7 +140,7 @@ The Prometheus and Loki services may be hosted on the same cluster, or remotely 
 | https://grafana.github.io/helm-charts | alloy-events(alloy) | 0.3.2 |
 | https://grafana.github.io/helm-charts | alloy-logs(alloy) | 0.3.2 |
 | https://grafana.github.io/helm-charts | alloy-profiles(alloy) | 0.3.2 |
-| https://opencost.github.io/opencost-helm-chart | opencost | 1.35.0 |
+| https://opencost.github.io/opencost-helm-chart | opencost | 1.38.1 |
 | https://prometheus-community.github.io/helm-charts | kube-state-metrics | 5.20.0 |
 | https://prometheus-community.github.io/helm-charts | prometheus-node-exporter | 4.36.0 |
 | https://prometheus-community.github.io/helm-charts | prometheus-operator-crds | 12.0.0 |
@@ -313,7 +313,7 @@ The Prometheus and Loki services may be hosted on the same cluster, or remotely 
 | kube-state-metrics.enabled | bool | `true` | Should this helm chart deploy Kube State Metrics to the cluster. Set this to false if your cluster already has Kube State Metrics, or if you do not want to scrape metrics from Kube State Metrics. |
 | opencost.enabled | bool | `true` | Should this Helm chart deploy OpenCost to the cluster. Set this to false if your cluster already has OpenCost, or if you do not want to scrape metrics from OpenCost. |
 | opencost.opencost.prometheus.existingSecretName | string | `"prometheus-k8s-monitoring"` | The name of the secret containing the username and password for the metrics service. This must be in the same namespace as the OpenCost deployment. |
-| opencost.opencost.prometheus.external.url | string | `"https://prom.example.com/api/prom"` | The URL for Prometheus queries. It should match externalService.prometheus.host + "/api/prom" |
+| opencost.opencost.prometheus.external.url | string | `"https://prom.example.com/api/prom"` | The URL for Prometheus queries. It should match externalServices.prometheus.host + "/api/prom" |
 | opencost.opencost.prometheus.password_key | string | `"password"` | The key for the password property in the secret. |
 | opencost.opencost.prometheus.username_key | string | `"username"` | The key for the username property in the secret. |
 | prometheus-node-exporter.enabled | bool | `true` | Should this helm chart deploy Node Exporter to the cluster. Set this to false if your cluster already has Node Exporter, or if you do not want to scrape metrics from Node Exporter. |
@@ -658,6 +658,18 @@ The Prometheus and Loki services may be hosted on the same cluster, or remotely 
 |-----|------|---------|-------------|
 | receivers.deployGrafanaAgentService | bool | `true` | Deploy a service named for Grafana Agent that matches the Alloy service. This is useful for applications that are configured to send telemetry to a service named "grafana-agent" and not yet updated to send to "alloy". |
 
+### OTEL Receivers (Processors)
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| receivers.grafanaCloudMetrics.enabled | bool | `true` | Generate host info metrics from telemetry data, used in Application Observability in Grafana Cloud. |
+| receivers.processors.batch.maxSize | int | `0` | The upper limit of the amount of data contained in a single batch, in bytes. When set to 0, batches can be any size. |
+| receivers.processors.batch.size | int | `16384` | What batch size to use, in bytes |
+| receivers.processors.batch.timeout | string | `"2s"` | How long before sending (Processors) |
+| receivers.processors.k8sattributes.annotations | list | `[]` | Kubernetes annotations to extract and add to the attributes of the received telemetry data. |
+| receivers.processors.k8sattributes.labels | list | `[]` | Kubernetes labels to extract and add to the attributes of the received telemetry data. |
+| receivers.processors.k8sattributes.metadata | list | `["k8s.namespace.name","k8s.pod.name","k8s.deployment.name","k8s.statefulset.name","k8s.daemonset.name","k8s.cronjob.name","k8s.job.name","k8s.node.name","k8s.pod.uid","k8s.pod.start_time"]` | Kubernetes metadata to extract and add to the attributes of the received telemetry data. |
+
 ### OTEL Receivers (gRPC)
 
 | Key | Type | Default | Description |
@@ -687,17 +699,6 @@ The Prometheus and Loki services may be hosted on the same cluster, or remotely 
 | receivers.jaeger.thriftCompact.port | int | `6831` | Which port to use for the Thrift compact receiver. This port needs to be opened in the alloy section below. |
 | receivers.jaeger.thriftHttp.enabled | bool | `false` | Receive Jaeger signals via Thrift HTTP protocol. |
 | receivers.jaeger.thriftHttp.port | int | `14268` | Which port to use for the Thrift HTTP receiver. This port needs to be opened in the alloy section below. |
-
-### OTEL Receivers (Processors)
-
-| Key | Type | Default | Description |
-|-----|------|---------|-------------|
-| receivers.processors.batch.maxSize | int | `0` | The upper limit of the amount of data contained in a single batch, in bytes. When set to 0, batches can be any size. |
-| receivers.processors.batch.size | int | `16384` | What batch size to use, in bytes |
-| receivers.processors.batch.timeout | string | `"2s"` | How long before sending (Processors) |
-| receivers.processors.k8sattributes.annotations | list | `[]` | Kubernetes annotations to extract and add to the attributes of the received telemetry data. |
-| receivers.processors.k8sattributes.labels | list | `[]` | Kubernetes labels to extract and add to the attributes of the received telemetry data. |
-| receivers.processors.k8sattributes.metadata | list | `["k8s.namespace.name","k8s.pod.name","k8s.deployment.name","k8s.statefulset.name","k8s.daemonset.name","k8s.cronjob.name","k8s.job.name","k8s.node.name","k8s.pod.uid","k8s.pod.start_time"]` | Kubernetes metadata to extract and add to the attributes of the received telemetry data. |
 
 ### OTEL Receivers (Prometheus)
 
@@ -759,8 +760,8 @@ useful ones like these:
 -   `discovery.kubernetes.nodes` - Discovers all nodes in the cluster
 -   `discovery.kubernetes.pods` - Discovers all pods in the cluster
 -   `discovery.kubernetes.services` - Discovers all services in the cluster
--   `prometheus.relabel.metrics_service` - Sends metrics to the metrics service defined by `.externalService.prometheus`
--   `loki.process.logs_service` - Sends logs to the logs service defined by `.externalService.loki`
+-   `prometheus.relabel.metrics_service` - Sends metrics to the metrics service defined by `.externalServices.prometheus`
+-   `loki.process.logs_service` - Sends logs to the logs service defined by `.externalServices.loki`
 
 Example:
 
