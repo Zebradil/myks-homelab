@@ -15,4 +15,4 @@ charts:
     #! renovate: datasource=docker
     name: redis
     url: oci://registry-1.docker.io/bitnamicharts
-    version: 19.5.4
+    version: 19.5.5
