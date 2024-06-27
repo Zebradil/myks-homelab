@@ -5,7 +5,7 @@
 
 # k8s-monitoring
 
-![Version: 1.1.1](https://img.shields.io/badge/Version-1.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.3.5](https://img.shields.io/badge/AppVersion-2.3.5-informational?style=flat-square)
+![Version: 1.2.0](https://img.shields.io/badge/Version-1.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.4.0](https://img.shields.io/badge/AppVersion-2.4.0-informational?style=flat-square)
 
 A Helm chart for gathering, scraping, and forwarding Kubernetes telemetry data to a Grafana Stack.
 
@@ -169,6 +169,7 @@ The Prometheus and Loki services may be hosted on the same cluster, or remotely 
 | configAnalysis.image.registry | string | `"ghcr.io"` | Config Analysis image registry. |
 | configAnalysis.image.tag | string | `""` | Config Analysis image tag. Default is the chart version. |
 | configAnalysis.nodeSelector | object | `{"kubernetes.io/os":"linux"}` | nodeSelector to apply to the config analysis pod. |
+| configAnalysis.serviceAccount | object | `{"name":""}` | Service Account to use for the config analysis pod. |
 | configAnalysis.tolerations | list | `[]` | Tolerations to apply to the config analysis pod. |
 
 ### Config Validator Job
@@ -179,6 +180,7 @@ The Prometheus and Loki services may be hosted on the same cluster, or remotely 
 | configValidator.extraAnnotations | object | `{}` | Extra annotations to add to the test config validator job. |
 | configValidator.extraLabels | object | `{}` | Extra labels to add to the test config validator job. |
 | configValidator.nodeSelector | object | `{"kubernetes.io/os":"linux"}` | nodeSelector to apply to the config validator job. |
+| configValidator.serviceAccount | object | `{"name":""}` | Service Account to use for the config validator job. |
 | configValidator.tolerations | list | `[]` | Tolerations to apply to the config validator job. |
 
 ### External Services (Loki)
@@ -677,6 +679,7 @@ The Prometheus and Loki services may be hosted on the same cluster, or remotely 
 | receivers.grpc.disable_debug_metrics | bool | `true` | It removes attributes which could cause high cardinality metrics. For example, attributes with IP addresses and port numbers in metrics about HTTP and gRPC connections will be removed. |
 | receivers.grpc.enabled | bool | `true` | Receive OpenTelemetry signals over OTLP/gRPC? |
 | receivers.grpc.port | int | `4317` | Which port to use for the OTLP/gRPC receiver. This port needs to be opened in the alloy section below. |
+| receivers.grpc.tls | object | `{}` | [TLS settings](https://grafana.com/docs/alloy/latest/reference/components/otelcol.receiver.otlp/#tls-block) to configure for the OTLP/gRPC receiver. |
 
 ### OTEL Receivers (HTTP)
 
@@ -685,6 +688,7 @@ The Prometheus and Loki services may be hosted on the same cluster, or remotely 
 | receivers.http.disable_debug_metrics | bool | `true` | It removes attributes which could cause high cardinality metrics. For example, attributes with IP addresses and port numbers in metrics about HTTP and gRPC connections will be removed. |
 | receivers.http.enabled | bool | `true` | Receive OpenTelemetry signals over OTLP/HTTP? |
 | receivers.http.port | int | `4318` | Which port to use for the OTLP/HTTP receiver. This port needs to be opened in the alloy section below. |
+| receivers.http.tls | object | `{}` | [TLS settings](https://grafana.com/docs/alloy/latest/reference/components/otelcol.receiver.otlp/#tls-block) to configure for the OTLP/HTTP receiver. |
 
 ### OTEL Receivers (Jaeger)
 
@@ -699,6 +703,7 @@ The Prometheus and Loki services may be hosted on the same cluster, or remotely 
 | receivers.jaeger.thriftCompact.port | int | `6831` | Which port to use for the Thrift compact receiver. This port needs to be opened in the alloy section below. |
 | receivers.jaeger.thriftHttp.enabled | bool | `false` | Receive Jaeger signals via Thrift HTTP protocol. |
 | receivers.jaeger.thriftHttp.port | int | `14268` | Which port to use for the Thrift HTTP receiver. This port needs to be opened in the alloy section below. |
+| receivers.jaeger.tls | object | `{}` | [TLS settings](https://grafana.com/docs/alloy/latest/reference/components/otelcol.receiver.jaeger/#tls-block) to configure for the Jaeger receiver. |
 
 ### OTEL Receivers (Prometheus)
 
@@ -714,6 +719,7 @@ The Prometheus and Loki services may be hosted on the same cluster, or remotely 
 | receivers.zipkin.disable_debug_metrics | bool | `true` | It removes attributes which could cause high cardinality metrics. For example, attributes with IP addresses and port numbers in metrics about HTTP and gRPC connections will be removed. |
 | receivers.zipkin.enabled | bool | `false` | Receive Zipkin traces |
 | receivers.zipkin.port | int | `9411` | Which port to use for the Zipkin receiver. This port needs to be opened in the alloy section below. |
+| receivers.zipkin.tls | object | `{}` | [TLS settings](https://grafana.com/docs/alloy/latest/reference/components/otelcol.receiver.zipkin/#tls-block) to configure for the Zipkin receiver. |
 
 ### Test Job
 
@@ -730,6 +736,7 @@ The Prometheus and Loki services may be hosted on the same cluster, or remotely 
 | test.image.registry | string | `"ghcr.io"` | Test job image registry. |
 | test.image.tag | string | `""` | Test job image tag. Default is the chart version. |
 | test.nodeSelector | object | `{"kubernetes.io/os":"linux"}` | nodeSelector to apply to the test job. |
+| test.serviceAccount | object | `{"name":""}` | Service Account to use for the test job. |
 | test.tolerations | list | `[]` | Tolerations to apply to the test job. |
 
 ### Traces
