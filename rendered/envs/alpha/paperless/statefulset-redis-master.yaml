@@ -9,11 +9,12 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: redis
     app.kubernetes.io/version: 7.2.5
-    helm.sh/chart: redis-19.5.5
+    helm.sh/chart: redis-19.6.0
   name: redis-master
   namespace: paperless
 spec:
   replicas: 1
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
       app.kubernetes.io/component: master
@@ -33,7 +34,7 @@ spec:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: redis
         app.kubernetes.io/version: 7.2.5
-        helm.sh/chart: redis-19.5.5
+        helm.sh/chart: redis-19.6.0
     spec:
       affinity:
         nodeAffinity: null
