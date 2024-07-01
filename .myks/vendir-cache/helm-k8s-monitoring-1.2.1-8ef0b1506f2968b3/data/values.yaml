@@ -438,6 +438,12 @@ metrics:
     # @section -- Metrics Job: Auto-Discovery
     enabled: true
 
+    # -- How frequently to scrape metrics from auto-discovered entities.
+    # Overrides metrics.scrapeInterval
+    # @default -- 60s
+    # @section -- Metrics Job: Auto-Discovery
+    scrapeInterval: ""
+
     # -- Rule blocks to be added to the discovery.relabel component for auto-discovered entities.
     # These relabeling rules are applied pre-scrape against the targets from service discovery.
     # Before the scrape, any remaining target labels that start with `__` (i.e. `__meta_kubernetes*`) are dropped.
@@ -484,6 +490,10 @@ metrics:
       # -- Annotation for setting the metrics scheme, default: http.
       # @section -- Metrics Job: Auto-Discovery
       metricsScheme: "k8s.grafana.com/metrics.scheme"
+      # -- Annotation for overriding the scrape interval for this service or pod. Value should be a duration like "15s, 1m".
+      # Overrides metrics.autoDiscover.scrapeInterval
+      # @section -- Metrics Job: Auto-Discovery
+      metricsScrapeInterval: "k8s.grafana.com/metrics.scrapeInterval"
 
     # -- Sets the max_cache_size for cadvisor prometheus.relabel component.
     # This should be at least 2x-5x your largest scrape target or samples appended rate.
@@ -527,7 +537,7 @@ metrics:
     # Adjustments to the scraped metrics to filter the amount of data sent to storage.
     metricsTuning:
       # -- Filter the list of metrics from Grafana Alloy to the minimal set required for Kubernetes Monitoring.
-      # See [Allow List for Grafana Alloy](#allow-list-for-grafana-alloy)
+      # See [Metrics Tuning and Allow Lists](#metrics-tuning-and-allow-lists)
       # @section -- Metrics Job: Alloy
       useDefaultAllowList: true
       # -- Filter the list of metrics from Grafana Alloy to the minimal set required for Kubernetes Monitoring as well as the Grafana Alloy integration.
@@ -590,7 +600,7 @@ metrics:
     # Adjustments to the scraped metrics to filter the amount of data sent to storage.
     metricsTuning:
       # -- Filter the list of metrics from Kube State Metrics to a useful, minimal set.
-      # See [Allow List for Kube State Metrics](#allow-list-for-kube-state-metrics)
+      # See [Metrics Tuning and Allow Lists](#metrics-tuning-and-allow-lists)
       # @section -- Metrics Job: Kube State Metrics
       useDefaultAllowList: true
       # -- Metrics to keep. Can use regex.
@@ -648,7 +658,7 @@ metrics:
     # Adjustments to the scraped metrics to filter the amount of data sent to storage.
     metricsTuning:
       # -- Filter the list of metrics from Node Exporter to the minimal set required for Kubernetes Monitoring.
-      # See [Allow List for Node Exporter](#allow-list-for-node-exporter)
+      # See [Metrics Tuning and Allow Lists](#metrics-tuning-and-allow-lists)
       # @section -- Metrics Job: Node Exporter
       useDefaultAllowList: true
       # -- Filter the list of metrics from Node Exporter to the minimal set required for Kubernetes Monitoring as well as the Node Exporter integration.
@@ -705,7 +715,7 @@ metrics:
     # Adjustments to the scraped metrics to filter the amount of data sent to storage.
     metricsTuning:
       # -- Filter the list of metrics from Windows Exporter to the minimal set required for Kubernetes Monitoring.
-      # See [Allow List for Windows Exporter](#allow-list-for-windows-exporter)
+      # See [Metrics Tuning and Allow Lists](#metrics-tuning-and-allow-lists)
       # @section -- Metrics Job: Windows Exporter
       useDefaultAllowList: true
       # -- Metrics to keep. Can use regex.
@@ -755,7 +765,7 @@ metrics:
     # Adjustments to the scraped metrics to filter the amount of data sent to storage.
     metricsTuning:
       # -- Filter the list of metrics from the Kubelet to the minimal set required for Kubernetes Monitoring.
-      # See [Allow List for Kubelet](#allow-list-for-kubelet)
+      # See [Metrics Tuning and Allow Lists](#metrics-tuning-and-allow-lists)
       # @section -- Metrics Job: Kubelet
       useDefaultAllowList: true
       # -- Metrics to keep. Can use regex.
@@ -806,7 +816,7 @@ metrics:
     metricsTuning:
       # -- Filter the list of metrics from cAdvisor to the minimal set required for Kubernetes Monitoring.
       # @section -- Metrics Job: cAdvisor
-      # See [Allow List for cAdvisor](#allow-list-for-cadvisor)
+      # See [Metrics Tuning and Allow Lists](#metrics-tuning-and-allow-lists)
       useDefaultAllowList: true
       # -- Metrics to keep. Can use regex.
       # @section -- Metrics Job: cAdvisor
@@ -1057,7 +1067,7 @@ metrics:
     # Adjustments to the scraped metrics to filter the amount of data sent to storage.
     metricsTuning:
       # -- Filter the list of metrics from OpenCost to the minimal set required for Kubernetes Monitoring.
-      # See [Allow List for OpenCost](#allow-list-for-opencost)
+      # See [Metrics Tuning and Allow Lists](#metrics-tuning-and-allow-lists)
       # @section -- Metrics Job: OpenCost
       useDefaultAllowList: true
       # -- Metrics to keep. Can use regex.
@@ -1959,9 +1969,25 @@ opencost:
         # @section -- Chart
         CLOUD_PROVIDER_API_KEY: AIzaSyD29bGxmHAVEOBYtgd8sYM2gM2ekfxQX4U
         CURRENT_CLUSTER_ID_FILTER_ENABLED: "true"
-        EMIT_KSM_V1_METRICS: "false"
-        EMIT_KSM_V1_METRICS_ONLY: "true"
         PROM_CLUSTER_ID_LABEL: cluster
+
+      # Pin version until "/var/configs/cloud-configurations.json: no such file or directory" issue in OpenCost Helm chart is fixed
+      image:
+        tag: 1.109.0
+
+    # @ignored -- This skips including these values in README.md
+    carbonCost:
+      enabled: false
+
+    # @ignored -- This skips including these values in README.md
+    cloudCost:
+      enabled: false
+
+    # @ignored -- This skips including these values in README.md
+    metrics:
+      kubeStateMetrics:
+        emitKsmV1Metrics: false
+        emitKsmV1MetricsOnly: true
 
     prometheus:
       # -- The name of the secret containing the username and password for the metrics service. This must be in the same namespace as the OpenCost deployment.
