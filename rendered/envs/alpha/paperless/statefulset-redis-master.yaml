@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: redis
     app.kubernetes.io/version: 7.2.5
-    helm.sh/chart: redis-19.6.0
+    helm.sh/chart: redis-19.6.1
   name: redis-master
   namespace: paperless
 spec:
@@ -34,7 +34,7 @@ spec:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: redis
         app.kubernetes.io/version: 7.2.5
-        helm.sh/chart: redis-19.6.0
+        helm.sh/chart: redis-19.6.1
     spec:
       affinity:
         nodeAffinity: null
@@ -67,7 +67,7 @@ spec:
               value: "no"
             - name: REDIS_PORT
               value: "6379"
-          image: docker.io/bitnami/redis:7.2.5-debian-12-r0
+          image: docker.io/bitnami/redis:7.2.5-debian-12-r2
           imagePullPolicy: IfNotPresent
           livenessProbe:
             exec:
