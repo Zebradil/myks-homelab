@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/name: kube-state-metrics
     app.kubernetes.io/part-of: kube-state-metrics
     app.kubernetes.io/version: 2.12.0
-    helm.sh/chart: kube-state-metrics-5.20.1
+    helm.sh/chart: kube-state-metrics-5.21.0
   name: k8s-monitoring-kube-state-metrics
   namespace: grafana-agent
 spec:
@@ -31,8 +31,9 @@ spec:
         app.kubernetes.io/name: kube-state-metrics
         app.kubernetes.io/part-of: kube-state-metrics
         app.kubernetes.io/version: 2.12.0
-        helm.sh/chart: kube-state-metrics-5.20.1
+        helm.sh/chart: kube-state-metrics-5.21.0
     spec:
+      automountServiceAccountToken: true
       containers:
         - args:
             - --port=8080
