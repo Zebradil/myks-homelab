@@ -7,9 +7,17 @@ metadata:
     app.kubernetes.io/instance: traefik-traefik
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: traefik
-    helm.sh/chart: traefik-28.3.0
+    helm.sh/chart: traefik-29.0.1
   name: traefik-traefik
 rules:
+  - apiGroups:
+      - ""
+    resources:
+      - nodes
+    verbs:
+      - get
+      - list
+      - watch
   - apiGroups:
       - extensions
       - networking.k8s.io
@@ -23,10 +31,17 @@ rules:
   - apiGroups:
       - ""
     resources:
+      - nodes
       - services
-      - endpoints
     verbs:
       - get
+      - list
+      - watch
+  - apiGroups:
+      - discovery.k8s.io
+    resources:
+      - endpointslices
+    verbs:
       - list
       - watch
   - apiGroups:
