@@ -32,6 +32,24 @@ spec:
               subPath: pacoloco.yaml
             - mountPath: /var/cache/pacoloco
               name: cache
+            - mountPath: /etc/pacman.d/mirrorlist
+              name: reflector
+              readOnly: true
+              subPath: mirrorlist
+        - command:
+            - /bin/sh
+            - -c
+            - |
+              cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
+              sed -i 's/^#Server/Server/' /etc/pacman.d/mirrorlist
+              pacoloco -c /etc/pacoloco/pacoloco.yaml
+              cp /etc/pacman.d/mirrorlist.bak /etc/pacman.d/mirrorlist
+          image: anatol/pacoloco:latest
+          name: reflector
+          volumeMounts:
+            - mountPath: /etc/pacman.d/mirrorlist
+              name: reflector
+              subPath: mirrorlist
       volumes:
         - configMap:
             name: config
@@ -39,3 +57,5 @@ spec:
         - name: cache
           persistentVolumeClaim:
             claimName: cache
+        - emptyDir: {}
+          name: reflector
