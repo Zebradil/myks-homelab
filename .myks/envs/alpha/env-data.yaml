@@ -45,6 +45,8 @@ environment:
     name: ""
   - proto: librespeed
     name: ""
+  - proto: pacoloco
+    name: ""
   - proto: paperless
     name: ""
   - proto: starbase80
@@ -55,8 +57,6 @@ environment:
     name: ""
   - proto: webapp
     name: it-tools
-  - proto: webapp
-    name: pacoloco
   hosts:
   - zebradil.dev
   - gray.zebradil.dev

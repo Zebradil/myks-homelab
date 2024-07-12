@@ -31,6 +31,7 @@ environment:
     - proto: httpbingo
     - proto: jellyfin
     - proto: librespeed
+    - proto: pacoloco
     - proto: paperless
     - proto: starbase80
     - proto: synology-csi
@@ -39,8 +40,6 @@ environment:
     #!   name: iperf
     - proto: webapp
       name: it-tools
-    - proto: webapp
-      name: pacoloco
 argocd:
   app:
     prefix: app-
