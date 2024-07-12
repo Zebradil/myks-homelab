@@ -10,6 +10,8 @@ spec:
       app.kubernetes.io/name: pacoloco
   template:
     metadata:
+      annotations:
+        checksum/config: fadd462f983319b6934e79af964ddc46
       labels:
         app.kubernetes.io/name: pacoloco
     spec:

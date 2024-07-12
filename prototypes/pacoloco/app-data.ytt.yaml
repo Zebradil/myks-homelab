@@ -8,4 +8,14 @@ application:
   image: ghcr.io/anatol/pacoloco:1.7
   storageSize: 20Gi
   name: ""
-  #! See additional configuration in ytt/config.ytt.yaml
+  config:
+    #! See https://github.com/anatol/pacoloco/blob/master/pacoloco.yaml.sample
+    download_timeout: #@ 60 * 10
+    purge_files_after: #@ 60 * 60 * 24 * 30
+    repos:
+      archlinux:
+        urls: [""]
+    prefetch:
+      #! Prefetch every day at 3:00 AM
+      #! See https://github.com/gorhill/cronexpr#implementation
+      cron: 0 0 3 * * * *

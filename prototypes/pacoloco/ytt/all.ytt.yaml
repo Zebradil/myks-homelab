@@ -1,4 +1,5 @@
 #@ load("@ytt:data", "data")
+#@ load("@ytt:md5", "md5")
 #@ load("@ytt:yaml", "yaml")
 
 #@ a = data.values.application
@@ -13,30 +14,15 @@
 #@ cache_path = "/var/cache/pacoloco"
 
 #@ cm_name = "config"
-#@ pacoloco_config_name = "pacoloco.yaml"
-
----
-#@ def get_config():
-#! See https://github.com/anatol/pacoloco/blob/master/pacoloco.yaml.sample
-download_timeout: #@ 60 * 10
-purge_files_after: #@ 60 * 60 * 24 * 30
-repos:
-  archlinux:
-    urls:
-      - https://geo.mirror.pkgbuild.com/$repo/os/$arch
-      - https://archlinux.thaller.ws/$repo/os/$arch
-prefetch:
-  #! Prefetch every day at 3:00 AM
-  #! See https://github.com/gorhill/cronexpr#implementation
-  cron: 0 0 3 * * * *
-#@ end
+#@ config_name = "pacoloco.yaml"
+#@ config_yaml = yaml.encode(a.config)
 
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: #@ cm_name
-data: #@ { pacoloco_config_name: yaml.encode(get_config()) }
+data: #@ { config_name: config_yaml }
 
 ---
 apiVersion: v1
@@ -62,6 +48,8 @@ spec:
   template:
     metadata:
       labels: #@ pod_labels
+      annotations:
+        checksum/config: #@ md5.sum(config_yaml)
     spec:
       containers:
         - image: #@ a.image
@@ -80,8 +68,8 @@ spec:
             #!runAsUser: 1000
           volumeMounts:
             - name: #@ cm_name
-              mountPath: #@ "/etc/" + pacoloco_config_name
-              subPath: #@ pacoloco_config_name
+              mountPath: #@ "/etc/" + config_name
+              subPath: #@ config_name
               readOnly: true
             - name: #@ pvc_name
               mountPath: #@ cache_path
