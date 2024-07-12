@@ -23,8 +23,8 @@ purge_files_after: #@ 60 * 60 * 24 * 30
 repos:
   archlinux:
     urls:
-      - http://mirror.lty.me/archlinux
-      - http://mirrors.kernel.org/archlinux
+      - https://geo.mirror.pkgbuild.com/$repo/os/$arch
+      - https://archlinux.thaller.ws/$repo/os/$arch
 prefetch:
   #! Prefetch every day at 3:00 AM
   #! See https://github.com/gorhill/cronexpr#implementation
