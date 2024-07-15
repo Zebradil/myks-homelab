@@ -5,5 +5,5 @@ application:
     repos:
       archlinux:
         urls:
-          - https://geo.mirror.pkgbuild.com/$repo/os/$arch
-          - https://archlinux.thaller.ws/$repo/os/$arch
+          - https://geo.mirror.pkgbuild.com
+          - https://archlinux.thaller.ws
