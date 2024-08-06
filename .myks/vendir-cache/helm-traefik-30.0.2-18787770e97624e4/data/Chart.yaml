@@ -1,11 +1,6 @@
 annotations:
-  artifacthub.io/changes: "- \"fix: \U0001F41B ingressroute default name\"\n- \"fix:
-    namespaced RBACs hub api gateway\"\n- \"fix: can't set gateway name\"\n- \"fix(Gateway
-    API): provide expected roles when using namespaced RBAC\"\n- \"fix(Gateway API)!:
-    revamp Gateway implementation\"\n- \"feat: ✨ display release name and image full
-    path in installation notes\"\n- \"feat: use single ingressRoute template\"\n-
-    \"feat: handle log filePath and noColor\"\n- \"chore(release): \U0001F680 publish
-    v30.0.0\"\n- \"chore(deps): update traefik docker tag to v3.1.0\"\n"
+  artifacthub.io/changes: "- \"fix(Traefik Hub): missing RBACs for Traefik Hub\"\n-
+    \"chore(release): \U0001F680 publish v30.0.2\"\n"
 apiVersion: v2
 appVersion: v3.1.0
 description: A Traefik based Kubernetes ingress controller
@@ -29,4 +24,4 @@ sources:
 - https://github.com/traefik/traefik
 - https://github.com/traefik/traefik-helm-chart
 type: application
-version: 30.0.0
+version: 30.0.2
