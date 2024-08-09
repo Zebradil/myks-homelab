@@ -217,13 +217,25 @@ spec:
                   key: reposerver.git.request.timeout
                   name: argocd-cmd-params-cm
                   optional: true
+            - name: ARGOCD_GRPC_MAX_SIZE_MB
+              valueFrom:
+                configMapKeyRef:
+                  key: reposerver.grpc.max.size
+                  name: argocd-cmd-params-cm
+                  optional: true
+            - name: ARGOCD_REPO_SERVER_INCLUDE_HIDDEN_DIRECTORIES
+              valueFrom:
+                configMapKeyRef:
+                  key: reposerver.include.hidden.directories
+                  name: argocd-cmd-params-cm
+                  optional: true
             - name: HELM_CACHE_HOME
               value: /helm-working-dir
             - name: HELM_CONFIG_HOME
               value: /helm-working-dir
             - name: HELM_DATA_HOME
               value: /helm-working-dir
-          image: quay.io/argoproj/argocd:v2.11.7
+          image: quay.io/argoproj/argocd:v2.12.0
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 3
@@ -301,7 +313,7 @@ spec:
             - -n
             - /usr/local/bin/argocd
             - /var/run/argocd/argocd-cmp-server
-          image: quay.io/argoproj/argocd:v2.11.7
+          image: quay.io/argoproj/argocd:v2.12.0
           name: copyutil
           securityContext:
             allowPrivilegeEscalation: false
