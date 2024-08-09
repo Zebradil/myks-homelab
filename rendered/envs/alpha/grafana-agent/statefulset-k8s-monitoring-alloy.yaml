@@ -23,6 +23,7 @@ spec:
   template:
     metadata:
       annotations:
+        k8s.grafana.com/logs.job: integrations/alloy
         kubectl.kubernetes.io/default-container: alloy
       labels:
         app.kubernetes.io/instance: k8s-monitoring
