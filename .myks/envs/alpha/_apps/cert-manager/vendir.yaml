@@ -7,7 +7,7 @@ directories:
     lazy: true
     helmChart:
       name: cert-manager
-      version: v1.15.2
+      version: v1.15.3
       repository:
         url: https://charts.jetstack.io
 - path: ytt
@@ -15,4 +15,4 @@ directories:
   - path: .
     lazy: true
     http:
-      url: https://github.com/cert-manager/cert-manager/releases/download/v1.15.2/cert-manager.crds.yaml
+      url: https://github.com/cert-manager/cert-manager/releases/download/v1.15.3/cert-manager.crds.yaml
