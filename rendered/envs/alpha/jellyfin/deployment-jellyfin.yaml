@@ -16,7 +16,7 @@ spec:
         app: jellyfin
     spec:
       containers:
-        - image: jellyfin/jellyfin:10.9.9
+        - image: jellyfin/jellyfin:10.9.10
           livenessProbe:
             failureThreshold: 3
             httpGet:
