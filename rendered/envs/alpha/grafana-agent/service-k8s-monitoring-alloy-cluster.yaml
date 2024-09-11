@@ -9,8 +9,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: alloy
     app.kubernetes.io/part-of: alloy
-    app.kubernetes.io/version: v1.2.0
-    helm.sh/chart: alloy-0.5.0
+    app.kubernetes.io/version: v1.3.1
+    helm.sh/chart: alloy-0.6.1
   name: k8s-monitoring-alloy-cluster
 spec:
   clusterIP: None
@@ -51,6 +51,7 @@ spec:
       port: 9411
       protocol: TCP
       targetPort: 9411
+  publishNotReadyAddresses: true
   selector:
     app.kubernetes.io/instance: k8s-monitoring
     app.kubernetes.io/name: alloy

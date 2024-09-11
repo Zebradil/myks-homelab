@@ -9,8 +9,9 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: prometheus-node-exporter
     app.kubernetes.io/part-of: prometheus-node-exporter
-    app.kubernetes.io/version: 1.8.1
-    helm.sh/chart: prometheus-node-exporter-4.37.0
+    app.kubernetes.io/version: 1.8.2
+    helm.sh/chart: prometheus-node-exporter-4.39.0
+    release: k8s-monitoring
   name: k8s-monitoring-prometheus-node-exporter
   namespace: grafana-agent
 spec:
@@ -23,14 +24,16 @@ spec:
     metadata:
       annotations:
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+        k8s.grafana.com/logs.job: integrations/node_exporter
       labels:
         app.kubernetes.io/component: metrics
         app.kubernetes.io/instance: k8s-monitoring
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: prometheus-node-exporter
         app.kubernetes.io/part-of: prometheus-node-exporter
-        app.kubernetes.io/version: 1.8.1
-        helm.sh/chart: prometheus-node-exporter-4.37.0
+        app.kubernetes.io/version: 1.8.2
+        helm.sh/chart: prometheus-node-exporter-4.39.0
+        release: k8s-monitoring
     spec:
       affinity:
         nodeAffinity:
@@ -52,7 +55,7 @@ spec:
           env:
             - name: HOST_IP
               value: 0.0.0.0
-          image: quay.io/prometheus/node-exporter:v1.8.1
+          image: quay.io/prometheus/node-exporter:v1.8.2
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3
@@ -94,6 +97,7 @@ spec:
               mountPropagation: HostToContainer
               name: root
               readOnly: true
+      hostIPC: false
       hostNetwork: true
       hostPID: true
       nodeSelector:
