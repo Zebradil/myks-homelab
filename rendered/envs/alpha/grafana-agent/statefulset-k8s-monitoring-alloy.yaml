@@ -8,8 +8,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: alloy
     app.kubernetes.io/part-of: alloy
-    app.kubernetes.io/version: v1.2.0
-    helm.sh/chart: alloy-0.5.0
+    app.kubernetes.io/version: v1.3.1
+    helm.sh/chart: alloy-0.6.1
   name: k8s-monitoring-alloy
 spec:
   minReadySeconds: 10
@@ -23,6 +23,7 @@ spec:
   template:
     metadata:
       annotations:
+        k8s.grafana.com/logs.job: integrations/alloy
         kubectl.kubernetes.io/default-container: alloy
       labels:
         app.kubernetes.io/instance: k8s-monitoring
@@ -45,7 +46,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
-          image: docker.io/grafana/alloy:v1.2.0
+          image: docker.io/grafana/alloy:v1.3.1
           imagePullPolicy: IfNotPresent
           name: alloy
           ports:
@@ -85,8 +86,6 @@ spec:
           volumeMounts:
             - mountPath: /etc/alloy
               name: config
-            - mountPath: /etc/kubernetes-monitoring-telemetry
-              name: kubernetes-monitoring-telemetry
         - args:
             - --volume-dir=/etc/alloy
             - --webhook-url=http://localhost:12345/-/reload
@@ -107,6 +106,3 @@ spec:
         - configMap:
             name: k8s-monitoring-alloy
           name: config
-        - configMap:
-            name: kubernetes-monitoring-telemetry
-          name: kubernetes-monitoring-telemetry
