@@ -70,7 +70,11 @@ spec:
               # Get the IPv6 address of the node and use it in the traefik command
               # to bind to this exact address, leaving ports available for other endpoints.
               set -euo pipefail
-              NODE_IPV6=$(ip -6 -o addr show scope global | head -n1 | awk '{print $4}' | cut -d/ -f1)
+              NODE_IPV6=$( \
+                nslookup -type=aaaa $HOSTNAME.zebradil.dev 1.1.1.1 \
+                | grep '^Address:' \
+                | tail -1 \
+                | cut -d' ' -f2)
               echo "Selected IPv6: $NODE_IPV6"
               ARGS=""
               for arg in "$@"; do

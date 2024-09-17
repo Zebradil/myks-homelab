@@ -1,7 +1,9 @@
+#@ load("@ytt:data", "data")
 #@ load("@ytt:overlay", "overlay")
 
 #@ deployments = overlay.subset({"kind":"Deployment"})
 #@ daemonsets = overlay.subset({"kind":"DaemonSet"})
+#@ base_domain = data.values.environment.traefik.hosts.web[0]
 
 #! This overlay adds a custom command to the traefik container and removes the
 #! ports field from the container spec, as it is not needed when using hostNetwork.
@@ -14,6 +16,7 @@ spec:
         #@overlay/match by="name"
         - name: traefik
           #@overlay/match missing_ok=True
+          #@yaml/text-templated-strings
           command:
             - sh
             - -c
@@ -21,7 +24,11 @@ spec:
               # Get the IPv6 address of the node and use it in the traefik command
               # to bind to this exact address, leaving ports available for other endpoints.
               set -euo pipefail
-              NODE_IPV6=$(ip -6 -o addr show scope global | head -n1 | awk '{print $4}' | cut -d/ -f1)
+              NODE_IPV6=$( \
+                nslookup -type=aaaa $HOSTNAME.(@= base_domain @) 1.1.1.1 \
+                | grep '^Address:' \
+                | tail -1 \
+                | cut -d' ' -f2)
               echo "Selected IPv6: $NODE_IPV6"
               ARGS=""
               for arg in "$@"; do
