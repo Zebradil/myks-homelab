@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/name: alloy
     app.kubernetes.io/part-of: alloy
     app.kubernetes.io/version: v1.3.1
-    helm.sh/chart: alloy-0.6.1
+    helm.sh/chart: alloy-0.7.0
   name: k8s-monitoring-grafana-agent
 spec:
   internalTrafficPolicy: Cluster

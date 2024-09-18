@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/name: alloy-events
     app.kubernetes.io/part-of: alloy
     app.kubernetes.io/version: v1.3.1
-    helm.sh/chart: alloy-events-0.6.1
+    helm.sh/chart: alloy-events-0.7.0
   name: k8s-monitoring-alloy-events
 spec:
   minReadySeconds: 10
@@ -74,6 +74,11 @@ spec:
       nodeSelector:
         kubernetes.io/os: linux
       serviceAccountName: k8s-monitoring-alloy-events
+      tolerations:
+        - effect: NoSchedule
+          key: kubernetes.io/arch
+          operator: Equal
+          value: arm64
       volumes:
         - configMap:
             name: k8s-monitoring-alloy-events
