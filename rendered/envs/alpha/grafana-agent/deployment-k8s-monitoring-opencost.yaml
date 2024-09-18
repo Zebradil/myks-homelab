@@ -113,3 +113,8 @@ spec:
       nodeSelector:
         kubernetes.io/os: linux
       serviceAccountName: k8s-monitoring-opencost
+      tolerations:
+        - effect: NoSchedule
+          key: kubernetes.io/arch
+          operator: Equal
+          value: arm64
