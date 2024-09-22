@@ -7,8 +7,8 @@ metadata:
     app.kubernetes.io/instance: authelia
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: authelia
-    app.kubernetes.io/version: 4.37.5
-    helm.sh/chart: authelia-0.8.58
+    app.kubernetes.io/version: 4.38.9
+    helm.sh/chart: authelia-0.9.5
   name: authelia
 spec:
   minReadySeconds: 0
@@ -26,35 +26,37 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 6e80215eb7b320069bce8eebf898ab7a0fa00fd77fab32fd0ea87d1f676b08c5
+        authelia.com/checksum-config: 515f08e21a154d5501ce76b05159c01e7f796bb9287eaba836959a4230ab9d38
       labels:
         app.kubernetes.io/instance: authelia
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: authelia
-        app.kubernetes.io/version: 4.37.5
-        helm.sh/chart: authelia-0.8.58
+        app.kubernetes.io/version: 4.38.9
+        helm.sh/chart: authelia-0.9.5
     spec:
       affinity:
         nodeAffinity: {}
         podAffinity: {}
         podAntiAffinity: {}
       containers:
-        - args:
-            - --config=/configuration.yaml
-          command:
+        - command:
             - authelia
           env:
             - name: AUTHELIA_SERVER_DISABLE_HEALTHCHECK
               value: "true"
-            - name: AUTHELIA_JWT_SECRET_FILE
-              value: /secrets/JWT_TOKEN
+            - name: AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET_FILE
+              value: /secrets/internal/identity_validation.reset_password.jwt.hmac.key
             - name: AUTHELIA_SESSION_SECRET_FILE
-              value: /secrets/SESSION_ENCRYPTION_KEY
+              value: /secrets/internal/session.encryption.key
             - name: AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE
-              value: /secrets/SMTP_PASSWORD
+              value: /secrets/internal/notifier.smtp.password.txt
             - name: AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE
-              value: /secrets/STORAGE_ENCRYPTION_KEY
-          image: ghcr.io/authelia/authelia:4.37.5
+              value: /secrets/internal/storage.encryption.key
+            - name: X_AUTHELIA_CONFIG
+              value: /configuration.yaml
+            - name: X_AUTHELIA_CONFIG_FILTERS
+              value: template
+          image: ghcr.io/authelia/authelia:4.38.9
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 5
@@ -102,7 +104,7 @@ spec:
               name: config
               readOnly: true
               subPath: configuration.yaml
-            - mountPath: /secrets
+            - mountPath: /secrets/internal
               name: secrets
               readOnly: true
       enableServiceLinks: false
@@ -122,12 +124,12 @@ spec:
         - name: secrets
           secret:
             items:
-              - key: JWT_TOKEN
-                path: JWT_TOKEN
-              - key: SESSION_ENCRYPTION_KEY
-                path: SESSION_ENCRYPTION_KEY
-              - key: STORAGE_ENCRYPTION_KEY
-                path: STORAGE_ENCRYPTION_KEY
-              - key: SMTP_PASSWORD
-                path: SMTP_PASSWORD
+              - key: identity_validation.reset_password.jwt.hmac.key
+                path: identity_validation.reset_password.jwt.hmac.key
+              - key: session.encryption.key
+                path: session.encryption.key
+              - key: notifier.smtp.password.txt
+                path: notifier.smtp.password.txt
+              - key: storage.encryption.key
+                path: storage.encryption.key
             secretName: authelia
