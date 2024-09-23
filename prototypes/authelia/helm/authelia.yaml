@@ -22,14 +22,10 @@ configMap:
   enabled: true
 
   authentication_backend:
-    ldap:
-      enabled: false
     file:
       enabled: true
 
   session:
-    redis:
-      enabled: false
     cookies:
       - domain: #@ d.environment.hosts[0]
         subdomain: auth
@@ -37,8 +33,6 @@ configMap:
   storage:
     local:
       enabled: true
-    postgres:
-      enabled: false
 
   notifier:
     smtp:
