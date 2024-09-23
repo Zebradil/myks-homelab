@@ -1,0 +1,41 @@
+apiVersion: v2
+appVersion: 4.38.9
+dependencies:
+- condition: configMap.storage.postgres.deploy
+  name: postgresql
+  repository: https://charts.bitnami.com/bitnami
+  version: ~15.5.11
+- condition: configMap.storage.mysql.deploy
+  name: mariadb
+  repository: https://charts.bitnami.com/bitnami
+  version: ~18.2.4
+- condition: configMap.session.redis.deploy
+  name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: ~19.6.0
+description: Authelia is a Single Sign-On Multi-Factor portal for web apps
+home: https://www.authelia.com
+icon: https://avatars2.githubusercontent.com/u/59122411?s=200&v=4
+keywords:
+- SSO
+- Authentication
+- Security
+- Two-Factor
+- YubiKey
+- Webauthn
+- Duo
+- TOTP
+- Time-based One Time Password
+- Push Notifications
+- LDAP
+kubeVersion: '>= 1.13.0-0'
+maintainers:
+- email: james-d-elliott@users.noreply.github.com
+  name: james-d-elliott
+  url: https://github.com/james-d-elliott
+name: authelia
+sources:
+- https://github.com/authelia/chartrepo/tree/master/charts/authelia
+- https://www.github.com/authelia/authelia
+type: application
+version: 0.9.5

@@ -1,0 +1,13 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+    - contents:
+        - helmChart:
+            name: authelia
+            repository:
+                url: https://charts.authelia.com
+            version: 0.9.5
+          lazy: true
+          path: .
+      path: .myks/vendir-cache/helm-authelia-0.9.5-bb888c2417b7ac5e/data
+      permissions: null
+kind: Config

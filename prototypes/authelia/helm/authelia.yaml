@@ -3,11 +3,8 @@
 
 #@ d = data.values
 ---
-domain: #@ d.environment.hosts[0]
-
 ingress:
   enabled: true
-  subdomain: auth
 
   traefikCRD:
     enabled: true
@@ -25,30 +22,29 @@ configMap:
   enabled: true
 
   authentication_backend:
-    ldap:
-      enabled: false
     file:
       enabled: true
 
   session:
-    redis:
-      enabled: false
+    cookies:
+      - domain: #@ d.environment.hosts[0]
+        subdomain: auth
 
   storage:
     local:
       enabled: true
-    postgres:
-      enabled: false
+
+  totp:
+    issuer: #@ d.environment.hosts[0]
 
   notifier:
     smtp:
+      address: 'submissions://smtp.gmail.com:465'
       enabled: true
       enabledSecret: true
       username: #@ sec.sops("smtp", "username")
       #! NOTE: this has no effect as GMail replaces the sender with the authenticated user.
       sender: #@ "authelia@mail." + d.environment.hosts[0]
-      host: smtp.gmail.com
-      port: 587
 
   identity_providers:
     oidc:

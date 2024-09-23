@@ -1,6 +1,161 @@
 apiVersion: v1
 data:
-  configuration.yaml: "---\ntheme: light\ndefault_redirection_url: https://www.zebradil.dev\ndefault_2fa_method: ''\nserver:\n  host: 0.0.0.0\n  port: 9091\n  asset_path: ''\n  headers:\n    csp_template: ''\n  buffers:\n    read: 4096\n    write: 4096\n  timeouts:\n    read: 6s\n    write: 6s\n    idle: 30s\n  enable_pprof: false\n  enable_expvars: false\nlog:\n  level: info\n  format: text\n  file_path: ''\n  keep_stdout: true\ntotp:\n  disable: false\n  issuer: zebradil.dev\n  algorithm: sha1\n  digits: 6\n  period: 30\n  skew: 1\n  secret_size: 32\nwebauthn:\n  disable: false\n  display_name: Authelia\n  attestation_conveyance_preference: indirect\n  user_verification: preferred\n  timeout: 60s\nntp:\n  address: time.cloudflare.com:123\n  version: 4\n  max_desync: 3s\n  disable_startup_check: false\n  disable_failure: false\nauthentication_backend:\n  password_reset:\n    disable: false\n    custom_url: ''\n  file:\n    path: /config/users_database.yml\n    watch: true\n    search:\n      email: false\n      case_insensitive: false\n    password:\n      algorithm: 'argon2'\n      argon2:\n        variant: 'argon2id'\n        iterations: 3\n        memory: 65536\n        parallelism: 4\n        key_length: 32\n        salt_length: 16\n      scrypt:\n        iterations: 16\n        block_size: 8\n        parallelism: 1\n        key_length: 32\n        salt_length: 16\n      pbkdf2:\n        variant: 'sha512'\n        iterations: 310000\n        salt_length: 16\n      sha2crypt:\n        variant: 'sha512'\n        iterations: 50000\n        salt_length: 16\n      bcrypt:\n        variant: 'standard'\n        cost: 12\npassword_policy:\n  standard:\n    enabled: false\n    min_length: 8\n    max_length: 0\n    require_uppercase: true\n    require_lowercase: true\n    require_number: true\n    require_special: true\n  zxcvbn:\n    enabled: false\n    min_score: 0\nsession:\n  name: 'authelia_session'\n  domain: 'zebradil.dev'\n  same_site: 'lax'\n  expiration: 1h\n  inactivity: 5m\n  remember_me_duration: 1M\nregulation: \n  ban_time: 5m\n  find_time: 2m\n  max_retries: 3\nstorage:\n  local:\n    path: /config/db.sqlite3\nnotifier:\n  disable_startup_check: false\n  smtp:\n    host: smtp.gmail.com\n    port: 587\n    timeout: 5s\n    username: <path:static/smtp.sops.yaml#username>\n    sender: authelia@mail.zebradil.dev\n    identifier: localhost\n    subject: '[Authelia] {title}'\n    startup_check_address: test@authelia.com\n    disable_html_emails: false\n    disable_require_tls: false\n    disable_starttls: false\n    tls:\n      server_name: smtp.gmail.com\n      skip_verify: false\n      minimum_version: TLS1.2\n      maximum_version: TLS1.3\naccess_control:\n  default_policy: two_factor\n...\n"
+  configuration.yaml: |
+    ---
+    # yaml-language-server: $schema=https://www.authelia.com/schemas/v4.38/json-schema/configuration.json
+    theme: 'light'
+    default_2fa_method: ''
+    server:
+      address: 'tcp://0.0.0.0:9091/'
+      asset_path: ''
+      headers:
+        csp_template: ''
+      buffers:
+        read: 4096
+        write: 4096
+      timeouts:
+        read: '6 seconds'
+        write: '6 seconds'
+        idle: '30 seconds'
+      endpoints:
+        enable_pprof: false
+        enable_expvars: false
+        authz:
+          auth-request:
+            implementation: 'AuthRequest'
+          ext-authz:
+            implementation: 'ExtAuthz'
+          forward-auth:
+            implementation: 'ForwardAuth'
+    log:
+      level: 'info'
+      format: 'text'
+      file_path: ''
+      keep_stdout: true
+    telemetry:
+      metrics:
+        enabled: false
+    identity_validation:
+      elevated_session:
+        code_lifespan: '5 minutes'
+        elevation_lifespan: '10 minutes'
+        characters: 8
+        require_second_factor: false
+        skip_second_factor: false
+      reset_password:
+        jwt_lifespan: '5 minutes'
+        jwt_algorithm: 'HS256'
+    totp:
+      disable: false
+      issuer: 'zebradil.dev'
+      skew: 1
+      secret_size: 32
+      algorithm: 'SHA1'
+      digits: 6
+      period: 30
+      allowed_algorithms:
+        - 'SHA1'
+      allowed_digits:
+        - 6
+      allowed_periods:
+        - 30
+    webauthn:
+      disable: false
+      display_name: 'Authelia'
+      attestation_conveyance_preference: 'indirect'
+      user_verification: 'preferred'
+      timeout: '60 seconds'
+    ntp:
+      address: 'udp://time.cloudflare.com:123'
+      version: 4
+      max_desync: '3 seconds'
+      disable_startup_check: false
+      disable_failure: false
+    authentication_backend:
+      password_reset:
+        disable: false
+        custom_url: ''
+      file:
+        path: '/config/users_database.yml'
+        watch: false
+        search:
+          email: false
+          case_insensitive: false
+        password:
+          algorithm: 'argon2'
+          argon2:
+            variant: 'argon2id'
+            iterations: 3
+            memory: 65536
+            parallelism: 4
+            key_length: 32
+            salt_length: 16
+          scrypt:
+            iterations: 16
+            block_size: 8
+            parallelism: 1
+            key_length: 32
+            salt_length: 16
+          pbkdf2:
+            variant: 'sha512'
+            iterations: 310000
+            salt_length: 16
+          sha2crypt:
+            variant: 'sha512'
+            iterations: 50000
+            salt_length: 16
+          bcrypt:
+            variant: 'standard'
+            cost: 12
+    password_policy:
+      standard:
+        enabled: false
+        min_length: 8
+        max_length: 0
+        require_uppercase: false
+        require_lowercase: false
+        require_number: false
+        require_special: false
+      zxcvbn:
+        enabled: false
+        min_score: 0
+    session:
+      name: 'authelia_session'
+      same_site: 'lax'
+      inactivity: '5 minutes'
+      expiration: '1 hour'
+      remember_me: '1 month'
+      cookies:
+        - domain: 'zebradil.dev'
+          authelia_url: 'https://auth.zebradil.dev'
+    regulation:
+      max_retries: 3
+      find_time: '2 minutes'
+      ban_time: '5 minutes'
+    storage:
+      local:
+        path: '/config/db.sqlite3'
+    notifier:
+      disable_startup_check: false
+      smtp:
+        address: 'submissions://smtp.gmail.com:465'
+        timeout: '5 seconds'
+        username: '<path:static/smtp.sops.yaml#username>'
+        sender: 'authelia@mail.zebradil.dev'
+        identifier: 'localhost'
+        subject: '[Authelia] {title}'
+        startup_check_address: 'test@authelia.com'
+        disable_html_emails: false
+        disable_require_tls: false
+        disable_starttls: false
+        tls:
+          server_name: ''
+          skip_verify: false
+          minimum_version: 'TLS1.2'
+          maximum_version: 'TLS1.3'
+    access_control:
+      default_policy: 'two_factor'
+    ...
 kind: ConfigMap
 metadata:
   annotations:
@@ -9,6 +164,6 @@ metadata:
     app.kubernetes.io/instance: authelia
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: authelia
-    app.kubernetes.io/version: 4.37.5
-    helm.sh/chart: authelia-0.8.58
+    app.kubernetes.io/version: 4.38.9
+    helm.sh/chart: authelia-0.9.5
   name: authelia
