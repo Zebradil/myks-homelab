@@ -47,7 +47,7 @@ data:
         jwt_algorithm: 'HS256'
     totp:
       disable: false
-      issuer: 'Authelia'
+      issuer: 'zebradil.dev'
       skew: 1
       secret_size: 32
       algorithm: 'SHA1'
@@ -138,7 +138,7 @@ data:
     notifier:
       disable_startup_check: false
       smtp:
-        address: 'submission://smtp.mail.svc.cluster.local:587'
+        address: 'submissions://smtp.gmail.com:465'
         timeout: '5 seconds'
         username: '<path:static/smtp.sops.yaml#username>'
         sender: 'authelia@mail.zebradil.dev'
