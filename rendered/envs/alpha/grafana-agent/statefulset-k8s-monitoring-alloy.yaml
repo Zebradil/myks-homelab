@@ -36,6 +36,7 @@ spec:
             - --storage.path=/tmp/alloy
             - --server.http.listen-addr=0.0.0.0:12345
             - --server.http.ui-path-prefix=/
+            - --disable-reporting
             - --cluster.enabled=true
             - --cluster.join-addresses=k8s-monitoring-alloy-cluster
             - --cluster.name="alloy"

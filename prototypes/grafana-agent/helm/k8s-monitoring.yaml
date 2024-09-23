@@ -1,5 +1,8 @@
 #@ load("secrets.star", "sec")
 ---
+alloy:
+  alloy:
+    enableReporting: false
 cluster:
   name: alpha
 configValidator:
