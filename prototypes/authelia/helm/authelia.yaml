@@ -3,11 +3,8 @@
 
 #@ d = data.values
 ---
-domain: #@ d.environment.hosts[0]
-
 ingress:
   enabled: true
-  subdomain: auth
 
   traefikCRD:
     enabled: true
@@ -33,6 +30,9 @@ configMap:
   session:
     redis:
       enabled: false
+    cookies:
+      - domain: #@ d.environment.hosts[0]
+        subdomain: auth
 
   storage:
     local:

@@ -126,6 +126,8 @@ data:
       expiration: '1 hour'
       remember_me: '1 month'
       cookies:
+        - domain: 'zebradil.dev'
+          authelia_url: 'https://auth.zebradil.dev'
     regulation:
       max_retries: 3
       find_time: '2 minutes'

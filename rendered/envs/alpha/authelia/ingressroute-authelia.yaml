@@ -13,4 +13,21 @@ metadata:
 spec:
   entryPoints:
     - websecure
-  routes: null
+  routes:
+    - kind: Rule
+      match: Host(`auth.zebradil.dev`) && PathPrefix(`/`)
+      middlewares:
+        - name: chain-authelia
+          namespace: authelia
+      priority: 10
+      services:
+        - kind: Service
+          name: authelia
+          namespace: authelia
+          passHostHeader: true
+          port: 80
+          responseForwarding:
+            flushInterval: 100ms
+          scheme: http
+          strategy: RoundRobin
+          weight: 10
