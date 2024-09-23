@@ -1,0 +1,49 @@
+{{- if gt (len .Alerts.Firing) 0 }}
+🔴 *Firing*
+
+{{-   template "z__text_alert_list" .Alerts.Firing }}
+{{- end }}
+{{- if gt (len .Alerts.Resolved) 0 }}
+
+🟢 *Resolved*
+
+{{-   template "z__text_alert_list" .Alerts.Resolved }}
+{{- end }}
+
+
+{{- define "z__text_alert_list" }}
+{{- range . }}
+Value: {{ template "z__text_values_list" . }}
+Labels:
+{{- range .Labels.SortedPairs }}
+ - {{ .Name }} = {{ .Value }}
+{{- end }}
+Annotations:
+{{- range .Annotations.SortedPairs }}
+ - {{ .Name }} = {{ .Value }}
+{{- end }}
+{{- with .GeneratorURL }}
+[Source]({{ . }})
+{{- end }}
+{{- with .SilenceURL   }}
+[Silence]({{ . }})
+{{- end }}
+{{- with .DashboardURL }}
+[Dashboard]({{ . }})
+{{- end }}
+{{- with .PanelURL     }}
+[Panel]({{ . }})
+{{- end }}
+{{- end }}
+{{- end }}
+
+
+{{- define "z__text_values_list" }}
+{{-   if len .Values }}
+{{-     $first := true }}
+{{-     range $refID, $value := .Values -}}
+{{-       if $first }}{{ $first = false }}{{ else }}, {{ end }}{{ $refID }}={{ $value }}
+{{-     end }}
+{{-   else }}[no value]
+{{-   end }}
+{{- end }}
