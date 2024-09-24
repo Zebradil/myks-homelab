@@ -171,6 +171,10 @@ data:
         action = "keepequal"
         target_label = "__tmp_port"
       }
+      rule {
+        action = "labeldrop"
+        regex = "__tmp_port"
+      }
 
       // If the metrics port number annotation has a value, override the target address to use it, regardless whether it is
       // one of the declared ports on that Pod.
@@ -252,6 +256,10 @@ data:
         source_labels = ["__meta_kubernetes_service_port_number"]
         action = "keepequal"
         target_label = "__tmp_port"
+      }
+      rule {
+        action = "labeldrop"
+        regex = "__tmp_port"
       }
 
       rule {
@@ -827,7 +835,7 @@ data:
   k8s-monitoring-build-info-metric.prom: |
     # HELP grafana_kubernetes_monitoring_build_info A metric to report the version of the Kubernetes Monitoring Helm chart as well as a summary of enabled features
     # TYPE grafana_kubernetes_monitoring_build_info gauge
-    grafana_kubernetes_monitoring_build_info{version="1.5.1", namespace="grafana-agent", metrics="enabled,alloy,autoDiscover,kube-state-metrics,node-exporter,kubelet,cadvisor,cost", logs="enabled,events,pod_logs", traces="disabled", deployments="kube-state-metrics,prometheus-node-exporter,prometheus-operator-crds,opencost"} 1
+    grafana_kubernetes_monitoring_build_info{version="1.5.2", namespace="grafana-agent", metrics="enabled,alloy,autoDiscover,kube-state-metrics,node-exporter,kubelet,cadvisor,cost", logs="enabled,events,pod_logs", traces="disabled", deployments="kube-state-metrics,prometheus-node-exporter,prometheus-operator-crds,opencost"} 1
 kind: ConfigMap
 metadata:
   annotations:
