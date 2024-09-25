@@ -1,11 +1,9 @@
 annotations:
-  artifacthub.io/changes: "- \"fix: \U0001F41B update CRD to v3.1\"\n- \"feat: ✨ input
-    validation using schema\"\n- \"feat: ✨ add AllowACMEByPass and improve schema/doc
-    on ports values\"\n- \"feat: add new webhooks and removes unnecessary ones\"\n-
-    \"feat(deps): update traefik docker tag to v3.1.3\"\n- \"chore(release): \U0001F680
-    publish v31.1.0\"\n"
+  artifacthub.io/changes: "- \"fix: \U0001F41B updateStrategy behavior\"\n- \"feat(deps):
+    update traefik docker tag to v3.1.4\"\n- \"chore(release): \U0001F680 publish
+    v31.1.1\"\n"
 apiVersion: v2
-appVersion: v3.1.3
+appVersion: v3.1.4
 description: A Traefik based Kubernetes ingress controller
 home: https://traefik.io/
 icon: https://raw.githubusercontent.com/traefik/traefik/v2.3/docs/content/assets/img/traefik.logo.png
@@ -27,4 +25,4 @@ sources:
 - https://github.com/traefik/traefik
 - https://github.com/traefik/traefik-helm-chart
 type: application
-version: 31.1.0
+version: 31.1.1

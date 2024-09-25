@@ -1,6 +1,6 @@
 # traefik
 
-![Version: 31.1.0](https://img.shields.io/badge/Version-31.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v3.1.3](https://img.shields.io/badge/AppVersion-v3.1.3-informational?style=flat-square)
+![Version: 31.1.1](https://img.shields.io/badge/Version-31.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v3.1.4](https://img.shields.io/badge/AppVersion-v3.1.4-informational?style=flat-square)
 
 A Traefik based Kubernetes ingress controller
 
@@ -309,7 +309,7 @@ Kubernetes: `>=1.22.0-0`
 | tracing.otlp.http.tls.key | string | `""` | The path to the private key. When using this option, setting the cert option is required. |
 | updateStrategy.rollingUpdate.maxSurge | int | `1` |  |
 | updateStrategy.rollingUpdate.maxUnavailable | int | `0` |  |
-| updateStrategy.type | string | `"RollingUpdate"` | Customize updateStrategy: RollingUpdate or OnDelete |
+| updateStrategy.type | string | `"RollingUpdate"` | Customize updateStrategy of Deployment or DaemonSet |
 | volumes | list | `[]` | Add volumes to the traefik pod. The volume name will be passed to tpl. This can be used to mount a cert pair or a configmap that holds a config.toml file. After the volume has been mounted, add the configs into traefik by using the `additionalArguments` list below, eg: `additionalArguments: - "--providers.file.filename=/config/dynamic.toml" - "--ping" - "--ping.entrypoint=web"` |
 
 ----------------------------------------------
