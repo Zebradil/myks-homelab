@@ -470,6 +470,14 @@ externalServices:
     # @section -- External Services (Tempo)
     tlsOptions: ""
 
+    # -- Size of the read buffer the gRPC client to use for reading server responses.
+    # @section -- External Services (Tempo)
+    readBufferSize: ""
+
+    # -- Size of the write buffer the gRPC client to use for writing requests.
+    # @section -- External Services (Tempo)
+    writeBufferSize: ""
+
   # Connection information for Grafana Pyroscope
   pyroscope:
     # -- Pyroscope host where profiles will be sent
@@ -1524,7 +1532,7 @@ metrics:
 
 # Settings related to capturing and forwarding logs
 logs:
-  # -- Capture and forward logs
+  # -- Capture and forward logs from sources like receivers and PodLogs objects.
   # @section -- Logs Global
   enabled: true
 

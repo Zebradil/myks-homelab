@@ -5,7 +5,7 @@
 
 # k8s-monitoring
 
-![Version: 1.5.2](https://img.shields.io/badge/Version-1.5.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.8.2](https://img.shields.io/badge/AppVersion-2.8.2-informational?style=flat-square)
+![Version: 1.5.4](https://img.shields.io/badge/Version-1.5.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.8.3](https://img.shields.io/badge/AppVersion-2.8.3-informational?style=flat-square)
 
 A Helm chart for gathering, scraping, and forwarding Kubernetes telemetry data to a Grafana Stack.
 
@@ -367,6 +367,7 @@ The Prometheus and Loki services may be hosted on the same cluster, or remotely 
 | externalServices.tempo.host | string | `""` | Tempo host where traces will be sent |
 | externalServices.tempo.hostKey | string | `"host"` | The key for the host property in the secret |
 | externalServices.tempo.protocol | string | `"otlp"` | The type of server protocol for writing metrics Options:   * "otlp" will use OTLP   * "otlphttp" will use OTLP HTTP |
+| externalServices.tempo.readBufferSize | string | `""` | Size of the read buffer the gRPC client to use for reading server responses. |
 | externalServices.tempo.searchEndpoint | string | `"/api/search"` | Tempo search endpoint. |
 | externalServices.tempo.secret.create | bool | `true` | Should this Helm chart create the secret. If false, you must define the name and namespace values. |
 | externalServices.tempo.secret.name | string | `""` | The name of the secret. |
@@ -375,6 +376,7 @@ The Prometheus and Loki services may be hosted on the same cluster, or remotely 
 | externalServices.tempo.tenantIdKey | string | `"tenantId"` | The key for the tenant ID property in the secret |
 | externalServices.tempo.tls | object | `{}` | [TLS settings](https://grafana.com/docs/alloy/latest/reference/components/otelcol.exporter.otlp/#tls-block) to configure for the traces service. |
 | externalServices.tempo.tlsOptions | string | `""` | Define the [TLS block](https://grafana.com/docs/alloy/latest/reference/components/otelcol.exporter.otlp/#tls-block). Example: `tlsOptions: insecure = true` This option will be deprecated and removed soon. Please switch to `tls` and use yaml format. |
+| externalServices.tempo.writeBufferSize | string | `""` | Size of the write buffer the gRPC client to use for writing requests. |
 
 ### Metrics Global
 
@@ -417,7 +419,7 @@ The Prometheus and Loki services may be hosted on the same cluster, or remotely 
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| logs.enabled | bool | `true` | Capture and forward logs |
+| logs.enabled | bool | `true` | Capture and forward logs from sources like receivers and PodLogs objects. |
 | logs.extraConfig | string | `""` | Extra configuration that will be added to the Grafana Alloy for Logs configuration file. This value is templated so that you can refer to other values from this file. This cannot be used to modify the generated configuration values, only append new components. See [Adding custom Flow configuration](#adding-custom-flow-configuration) for an example. |
 
 ### Logs Scrape: Journal
