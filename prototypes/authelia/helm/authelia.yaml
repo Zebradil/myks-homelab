@@ -17,6 +17,8 @@ ingress:
 pod:
   kind: Deployment
   replicas: 1
+  strategy:
+    type: Recreate
 
 configMap:
   enabled: true
