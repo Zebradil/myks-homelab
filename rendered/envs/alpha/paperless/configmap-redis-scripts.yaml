@@ -23,7 +23,7 @@ metadata:
     app.kubernetes.io/instance: redis
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: redis
-    app.kubernetes.io/version: 7.4.0
-    helm.sh/chart: redis-20.1.5
+    app.kubernetes.io/version: 7.4.1
+    helm.sh/chart: redis-20.1.7
   name: redis-scripts
   namespace: paperless
