@@ -1,5 +1,5 @@
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: RoleBinding
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
@@ -11,22 +11,13 @@ metadata:
     app.kubernetes.io/name: cert-manager
     app.kubernetes.io/version: v1.16.0
     helm.sh/chart: cert-manager-v1.16.0
-  name: cert-manager:leaderelection
-  namespace: kube-system
-rules:
-  - apiGroups:
-      - coordination.k8s.io
-    resourceNames:
-      - cert-manager-controller
-    resources:
-      - leases
-    verbs:
-      - get
-      - update
-      - patch
-  - apiGroups:
-      - coordination.k8s.io
-    resources:
-      - leases
-    verbs:
-      - create
+  name: cert-manager-cert-manager-tokenrequest
+  namespace: cert-manager
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: cert-manager-tokenrequest
+subjects:
+  - kind: ServiceAccount
+    name: cert-manager
+    namespace: cert-manager
