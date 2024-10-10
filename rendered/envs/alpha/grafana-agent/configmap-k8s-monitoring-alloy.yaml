@@ -39,7 +39,6 @@ data:
 
     // Processors
     otelcol.processor.transform "add_metric_datapoint_attributes" {
-      // Grafana Cloud Kubernetes monitoring expects Loki labels `cluster`, `pod`, and `namespace`
       error_mode = "ignore"
       metric_statements {
         context = "datapoint"
@@ -52,13 +51,12 @@ data:
         metrics = [otelcol.processor.k8sattributes.default.input]
       }
     }
-
     otelcol.processor.resourcedetection "default" {
-      detectors = ["env", "system"]
-
       system {
         hostname_sources = ["os"]
       }
+
+      detectors = ["env","system"]
 
       output {
         metrics = [otelcol.processor.transform.add_metric_datapoint_attributes.input]
@@ -835,7 +833,7 @@ data:
   k8s-monitoring-build-info-metric.prom: |
     # HELP grafana_kubernetes_monitoring_build_info A metric to report the version of the Kubernetes Monitoring Helm chart as well as a summary of enabled features
     # TYPE grafana_kubernetes_monitoring_build_info gauge
-    grafana_kubernetes_monitoring_build_info{version="1.5.4", namespace="grafana-agent", metrics="enabled,alloy,autoDiscover,kube-state-metrics,node-exporter,kubelet,cadvisor,cost", logs="enabled,events,pod_logs", traces="disabled", deployments="kube-state-metrics,prometheus-node-exporter,prometheus-operator-crds,opencost"} 1
+    grafana_kubernetes_monitoring_build_info{version="1.5.5", namespace="grafana-agent", metrics="enabled,alloy,autoDiscover,kube-state-metrics,node-exporter,kubelet,cadvisor,cost", logs="enabled,events,pod_logs", traces="disabled", deployments="kube-state-metrics,prometheus-node-exporter,prometheus-operator-crds,opencost"} 1
 kind: ConfigMap
 metadata:
   annotations:
