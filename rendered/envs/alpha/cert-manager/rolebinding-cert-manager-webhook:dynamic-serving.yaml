@@ -9,8 +9,8 @@ metadata:
     app.kubernetes.io/instance: cert-manager
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: webhook
-    app.kubernetes.io/version: v1.15.3
-    helm.sh/chart: cert-manager-v1.15.3
+    app.kubernetes.io/version: v1.16.0
+    helm.sh/chart: cert-manager-v1.16.0
   name: cert-manager-webhook:dynamic-serving
   namespace: cert-manager
 roleRef:
@@ -18,7 +18,6 @@ roleRef:
   kind: Role
   name: cert-manager-webhook:dynamic-serving
 subjects:
-  - apiGroup: ""
-    kind: ServiceAccount
+  - kind: ServiceAccount
     name: cert-manager-webhook
     namespace: cert-manager
