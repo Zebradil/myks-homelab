@@ -7,8 +7,8 @@ metadata:
     app.kubernetes.io/instance: authelia
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: authelia
-    app.kubernetes.io/version: 4.38.14
-    helm.sh/chart: authelia-0.9.6
+    app.kubernetes.io/version: 4.38.15
+    helm.sh/chart: authelia-0.9.8
   name: authelia
 spec:
   minReadySeconds: 0
@@ -23,13 +23,13 @@ spec:
   template:
     metadata:
       annotations:
-        authelia.com/checksum-config: af20a2ec0dbb28687f29b0685a09e8a475fdb96c3c96430d81af6511b849993b
+        authelia.com/checksum-config: 5ee7bbcd32e332e91a8863c70506481be12b70469b425edd60e47b78673d0739
       labels:
         app.kubernetes.io/instance: authelia
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: authelia
-        app.kubernetes.io/version: 4.38.14
-        helm.sh/chart: authelia-0.9.6
+        app.kubernetes.io/version: 4.38.15
+        helm.sh/chart: authelia-0.9.8
     spec:
       affinity:
         nodeAffinity: {}
@@ -53,7 +53,7 @@ spec:
               value: /configuration.yaml
             - name: X_AUTHELIA_CONFIG_FILTERS
               value: template
-          image: ghcr.io/authelia/authelia:4.38.14
+          image: ghcr.io/authelia/authelia:4.38.15
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 5
