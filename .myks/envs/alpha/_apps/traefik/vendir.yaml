@@ -7,6 +7,6 @@ directories:
     lazy: true
     helmChart:
       name: traefik
-      version: 32.1.0
+      version: 32.1.1
       repository:
         url: https://traefik.github.io/charts
