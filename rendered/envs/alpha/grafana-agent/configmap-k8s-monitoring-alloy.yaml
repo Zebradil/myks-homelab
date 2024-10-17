@@ -39,7 +39,6 @@ data:
 
     // Processors
     otelcol.processor.transform "add_metric_datapoint_attributes" {
-      // Grafana Cloud Kubernetes monitoring expects Loki labels `cluster`, `pod`, and `namespace`
       error_mode = "ignore"
       metric_statements {
         context = "datapoint"
@@ -52,13 +51,12 @@ data:
         metrics = [otelcol.processor.k8sattributes.default.input]
       }
     }
-
     otelcol.processor.resourcedetection "default" {
-      detectors = ["env", "system"]
-
       system {
         hostname_sources = ["os"]
       }
+
+      detectors = ["env","system"]
 
       output {
         metrics = [otelcol.processor.transform.add_metric_datapoint_attributes.input]
@@ -89,6 +87,7 @@ data:
         context = "resource"
         statements = [
           "set(attributes[\"k8s.cluster.name\"], \"alpha\") where attributes[\"k8s.cluster.name\"] == nil",
+          "set(attributes[\"service.instance.id\"], attributes[\"k8s.pod.uid\"]) where attributes[\"service.instance.id\"] == nil",
         ]
       }
       log_statements {
@@ -98,6 +97,7 @@ data:
           "set(attributes[\"namespace\"], attributes[\"k8s.namespace.name\"])",
           "set(attributes[\"loki.resource.labels\"], \"cluster, namespace, job, pod\")",
           "set(attributes[\"k8s.cluster.name\"], \"alpha\") where attributes[\"k8s.cluster.name\"] == nil",
+          "set(attributes[\"service.instance.id\"], attributes[\"k8s.pod.uid\"]) where attributes[\"service.instance.id\"] == nil",
         ]
       }
       output {
@@ -427,6 +427,40 @@ data:
       rule {
         source_labels = ["__name__"]
         regex = "up|go_goroutines|kubelet_certificate_manager_client_expiration_renew_errors|kubelet_certificate_manager_client_ttl_seconds|kubelet_certificate_manager_server_ttl_seconds|kubelet_cgroup_manager_duration_seconds_bucket|kubelet_cgroup_manager_duration_seconds_count|kubelet_node_config_error|kubelet_node_name|kubelet_pleg_relist_duration_seconds_bucket|kubelet_pleg_relist_duration_seconds_count|kubelet_pleg_relist_interval_seconds_bucket|kubelet_pod_start_duration_seconds_bucket|kubelet_pod_start_duration_seconds_count|kubelet_pod_worker_duration_seconds_bucket|kubelet_pod_worker_duration_seconds_count|kubelet_running_container_count|kubelet_running_containers|kubelet_running_pod_count|kubelet_running_pods|kubelet_runtime_operations_errors_total|kubelet_runtime_operations_total|kubelet_server_expiration_renew_errors|kubelet_volume_stats_available_bytes|kubelet_volume_stats_capacity_bytes|kubelet_volume_stats_inodes|kubelet_volume_stats_inodes_free|kubelet_volume_stats_inodes_used|kubelet_volume_stats_used_bytes|kubernetes_build_info|namespace_workload_pod|process_cpu_seconds_total|process_resident_memory_bytes|rest_client_requests_total|storage_operation_duration_seconds_count|storage_operation_errors_total|volume_manager_total_volumes"
+        action = "keep"
+      }
+      forward_to = [prometheus.relabel.metrics_service.receiver]
+    }
+
+    // Kubelet Resource
+    discovery.relabel "kubelet_resource" {
+      targets = discovery.kubernetes.nodes.targets
+      rule {
+        replacement   = "/metrics/resource"
+        target_label  = "__metrics_path__"
+      }
+    }
+
+    prometheus.scrape "kubelet_resource" {
+      job_name   = "integrations/kubernetes/resources"
+      targets  = discovery.relabel.kubelet_resource.output
+      scheme   = "https"
+      scrape_interval = "60s"
+      bearer_token_file = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+      tls_config {
+        insecure_skip_verify = true
+      }
+      clustering {
+        enabled = true
+      }
+      forward_to = [prometheus.relabel.kubelet_resource.receiver]
+    }
+
+    prometheus.relabel "kubelet_resource" {
+      max_cache_size = 100000
+      rule {
+        source_labels = ["__name__"]
+        regex = "up|node_cpu_usage_seconds_total|node_memory_working_set_bytes"
         action = "keep"
       }
       forward_to = [prometheus.relabel.metrics_service.receiver]
@@ -835,7 +869,7 @@ data:
   k8s-monitoring-build-info-metric.prom: |
     # HELP grafana_kubernetes_monitoring_build_info A metric to report the version of the Kubernetes Monitoring Helm chart as well as a summary of enabled features
     # TYPE grafana_kubernetes_monitoring_build_info gauge
-    grafana_kubernetes_monitoring_build_info{version="1.5.4", namespace="grafana-agent", metrics="enabled,alloy,autoDiscover,kube-state-metrics,node-exporter,kubelet,cadvisor,cost", logs="enabled,events,pod_logs", traces="disabled", deployments="kube-state-metrics,prometheus-node-exporter,prometheus-operator-crds,opencost"} 1
+    grafana_kubernetes_monitoring_build_info{version="1.6.0", namespace="grafana-agent", metrics="enabled,alloy,autoDiscover,kube-state-metrics,node-exporter,kubelet,kubeletResource,cadvisor,cost", logs="enabled,events,pod_logs", traces="disabled", deployments="kube-state-metrics,prometheus-node-exporter,prometheus-operator-crds,opencost"} 1
 kind: ConfigMap
 metadata:
   annotations:
