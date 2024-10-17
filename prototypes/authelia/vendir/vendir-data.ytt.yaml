@@ -8,4 +8,4 @@ application:
   #! renovate: datasource=helm
   name: authelia
   url: https://charts.authelia.com
-  version: 0.9.6
+  version: 0.9.9
