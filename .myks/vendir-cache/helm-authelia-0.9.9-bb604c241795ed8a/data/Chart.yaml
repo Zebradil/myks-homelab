@@ -1,5 +1,5 @@
 apiVersion: v2
-appVersion: 4.38.14
+appVersion: 4.38.16
 dependencies:
 - condition: configMap.storage.postgres.deploy
   name: postgresql
@@ -38,4 +38,4 @@ sources:
 - https://github.com/authelia/chartrepo/tree/master/charts/authelia
 - https://www.github.com/authelia/authelia
 type: application
-version: 0.9.6
+version: 0.9.9
