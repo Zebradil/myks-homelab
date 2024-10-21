@@ -27,7 +27,7 @@
         // #! renovate: datasource=docker
         // image: some-registry.io/some-image:1.2.3
         //
-        // #! renovate: datasource=docker versioning=semver
+        // #! renovate: datasource=docker versioning=semver-coerced
         // image: some-registry.io/some-image:1.2.3-alpha.1
         //
         // By default, the `versioning` option is set to `docker`, which keeps the compatibility suffix: e.g. 1.2-slim.

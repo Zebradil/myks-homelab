@@ -1,5 +1,5 @@
 #@data/values
 ---
 application:
-  #! renovate: datasource=docker
+  #! renovate: datasource=docker versioning=semver-coerced
   image: ghcr.io/corentinth/it-tools:2023.12.21-5ed3693
