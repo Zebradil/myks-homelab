@@ -1,5 +1,0 @@
-#@ load("@ytt:data", "data")
-#@ load("traefik.lib.yaml", "route")
-
-#@ for/end route_doc in route.default(data.values.myks.context.app):
---- #@ route_doc

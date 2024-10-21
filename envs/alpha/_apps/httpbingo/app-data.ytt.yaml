@@ -1,0 +1,6 @@
+#@data/values
+---
+application:
+  #! renovate: datasource=docker
+  image: mccutchen/go-httpbin:v2.2.2
+  containerPort: 8080

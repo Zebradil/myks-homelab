@@ -39,8 +39,6 @@ environment:
     name: ""
   - proto: grafana-agent
     name: ""
-  - proto: httpbingo
-    name: ""
   - proto: jellyfin
     name: ""
   - proto: librespeed
@@ -55,6 +53,8 @@ environment:
     name: ""
   - proto: traefik
     name: ""
+  - proto: webapp
+    name: httpbingo
   - proto: webapp
     name: it-tools
   hosts:
