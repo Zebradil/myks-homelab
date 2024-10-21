@@ -26,7 +26,14 @@
       matchStrings: [
         // #! renovate: datasource=docker
         // image: some-registry.io/some-image:1.2.3
-        "#!\\s+renovate:\\s+datasource=(?<datasource>docker)\\s+image:\\s+['\"]?(?<depName>\\S+):(?<currentValue>[^'\"\\s]+)['\"]?",
+        //
+        // #! renovate: datasource=docker versioning=semver
+        // image: some-registry.io/some-image:1.2.3-alpha.1
+        //
+        // By default, the `versioning` option is set to `docker`, which keeps the compatibility suffix: e.g. 1.2-slim.
+        // This won't work with versions like 1.2-alpha.1 or 1.2-abcd123.
+        // See https://docs.renovatebot.com/modules/versioning/docker/
+        "#!\\s+renovate:\\s+datasource=(?<datasource>docker)(?: versioning=(?<versioning>[a-z-]+?))?\\s+image:\\s+['\"]?(?<depName>\\S+):(?<currentValue>[^'\"\\s]+)['\"]?",
         // #! renovate: datasource=github-releases depName=argoproj-labs/argocd-vault-plugin
         // version: 1.14.0
         "#!\\s+renovate:\\s+datasource=(?<datasource>\\S+)\\s+depName=(?<depName>\\S+)\\s+version:\\s+['\"]?(?<currentValue>[^'\"\\s]+)['\"]?",
