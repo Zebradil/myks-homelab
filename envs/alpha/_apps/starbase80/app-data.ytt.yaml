@@ -65,6 +65,6 @@ application:
           - name: IT Tools
             uri: #@ get_uri("it-tools")
             description: IT tools
-            icon: in-tools
+            icon: it-tools
     env:
       TITLE: ""
