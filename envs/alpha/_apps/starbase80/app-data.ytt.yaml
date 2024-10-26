@@ -48,6 +48,10 @@ application:
             uri: https://quickconnect.to/zebradil
             description: Synology NAS
             icon: synology
+          - name: Uptime Kuma
+            uri: #@ get_uri("uptime-kuma")
+            description: Uptime monitoring
+            icon: uptime-kuma
       - category: Tools
         services:
           - name: Librespeed
