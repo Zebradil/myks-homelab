@@ -35,6 +35,7 @@ spec:
           volumeMounts:
             - mountPath: /app/data
               name: data
+      enableServiceLinks: false
       volumes:
         - name: data
           persistentVolumeClaim:
