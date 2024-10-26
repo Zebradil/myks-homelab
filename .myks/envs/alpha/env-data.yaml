@@ -57,6 +57,8 @@ environment:
     name: httpbingo
   - proto: webapp
     name: it-tools
+  - proto: webapp
+    name: uptime-kuma
   hosts:
   - zebradil.dev
   - gray.zebradil.dev

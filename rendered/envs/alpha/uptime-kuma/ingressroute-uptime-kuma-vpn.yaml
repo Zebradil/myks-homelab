@@ -1,0 +1,16 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: uptime-kuma-vpn
+spec:
+  entryPoints:
+    - vpn-web
+    - vpn-websecure
+  routes:
+    - kind: Rule
+      match: Host(`uptime-kuma.ts.zebradil.dev`) || Host(`uptime-kuma.gray.ts.zebradil.dev`) || Host(`uptime-kuma.junior.ts.zebradil.dev`)
+      services:
+        - name: uptime-kuma
+          port: http

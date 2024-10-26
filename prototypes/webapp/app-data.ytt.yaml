@@ -5,5 +5,6 @@ application:
   host: ""
   #@schema/validation min_len=1
   image: ""
+  ingress: true
   name: ""
   containerPort: 80

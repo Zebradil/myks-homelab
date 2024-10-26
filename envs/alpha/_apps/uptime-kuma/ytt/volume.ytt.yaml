@@ -1,0 +1,39 @@
+#! This file contains an overlay that adds a persistent volume to the deployment.
+
+#@ load("@ytt:overlay", "overlay")
+#@ load("@ytt:data", "data")
+
+#! TODO: move name generation to a function
+
+#@ a = data.values.application
+#@ m = data.values.myks
+#@ name = a.name or m.context.app
+
+#@overlay/match by=overlay.subset({"kind":"Deployment"})
+---
+spec:
+  template:
+    spec:
+      containers:
+        #@overlay/match by="name"
+        - name: #@ name
+          #@overlay/match missing_ok=True
+          volumeMounts:
+            - mountPath: /app/data
+              name: data
+      #@overlay/match missing_ok=True
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

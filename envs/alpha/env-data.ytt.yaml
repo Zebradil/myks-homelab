@@ -41,6 +41,8 @@ environment:
       name: httpbingo
     - proto: webapp
       name: it-tools
+    - proto: webapp
+      name: uptime-kuma
 argocd:
   app:
     prefix: app-

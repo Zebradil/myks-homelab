@@ -1,0 +1,19 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: uptime-kuma-protected
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`uptime-kuma.zebradil.dev`) || Host(`uptime-kuma.gray.zebradil.dev`) || Host(`uptime-kuma.junior.zebradil.dev`)
+      middlewares:
+        - name: chain-authelia-auth
+          namespace: authelia
+      services:
+        - name: uptime-kuma
+          port: http

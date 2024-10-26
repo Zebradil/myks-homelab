@@ -1,0 +1,6 @@
+#@data/values
+---
+application:
+  #! renovate: datasource=docker
+  image: loustler/uptime-kuma:1.9.2
+  ingress: false
