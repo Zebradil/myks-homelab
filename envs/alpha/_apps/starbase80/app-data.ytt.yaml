@@ -62,5 +62,9 @@ application:
             uri: #@ get_uri("httpbingo")
             description: HTTP request/response service
             icon: webtools
+          - name: IT Tools
+            uri: #@ get_uri("it-tools")
+            description: IT tools
+            icon: in-tools
     env:
       TITLE: ""
