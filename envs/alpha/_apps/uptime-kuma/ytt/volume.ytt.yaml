@@ -12,6 +12,10 @@
 #@overlay/match by=overlay.subset({"kind":"Deployment"})
 ---
 spec:
+  #! Replace the pod on update
+  #@overlay/match missing_ok=True
+  strategy:
+    type: Recreate
   template:
     spec:
       containers:

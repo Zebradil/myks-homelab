@@ -8,6 +8,8 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: uptime-kuma
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
