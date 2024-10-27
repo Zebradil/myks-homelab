@@ -20,21 +20,7 @@ spec:
           command:
             - sh
             - -c
-            - |
-              # Get the IPv6 address of the node and use it in the traefik command
-              # to bind to this exact address, leaving ports available for other endpoints.
-              set -euo pipefail
-              NODE_IPV6=$( \
-                nslookup -type=aaaa $HOSTNAME.(@= base_domain @) 1.1.1.1 \
-                | grep '^Address:' \
-                | tail -1 \
-                | cut -d' ' -f2)
-              echo "Selected IPv6: $NODE_IPV6"
-              ARGS=""
-              for arg in "$@"; do
-                ARGS="${ARGS} ${arg/\$NODE_IPV6/$NODE_IPV6}"
-              done
-              exec $0 $ARGS
+            -  #@ data.read("entrypoint-wrapper.sh")
             #! Pass an additional argument that takes the place of $0 in the script above.
             #! This is necessary because the `for arg in "$@"` loop will not include the
             #! command name itself (will skip the first argument from the `arguments` list).
