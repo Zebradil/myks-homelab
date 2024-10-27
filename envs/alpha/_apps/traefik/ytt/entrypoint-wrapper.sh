@@ -24,7 +24,7 @@ PID=$!
 trap 'kill -TERM $PID' TERM INT
 
 while true; do
-  if ps -p $PID >/dev/null; then
+  if kill -0 $PID; then
     CURRENT_IPV6="$(get_ipv6)"
     if [[ $NODE_IPV6 != "$CURRENT_IPV6" ]]; then
       echo "IPv6 address changed, restarting traefik"
