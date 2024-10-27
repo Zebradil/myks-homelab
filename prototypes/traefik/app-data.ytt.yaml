@@ -2,10 +2,6 @@
 ---
 #@overlay/match-child-defaults missing_ok=True
 application:
-  #! At the moment, the default traefik version is 2, but we want to use version 3.
-  #! TODO: Remove this when traefik 3 is the default.
-  #! renovate: datasource=docker depName=docker.io/traefik
-  version: v3.1.0-rc3
   ingress:
     #! Hostname for the ingress endpoint.
     #! See https://doc.traefik.io/traefik/providers/kubernetes-ingress/#hostname
