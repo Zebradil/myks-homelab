@@ -25,5 +25,8 @@ spec:
             #! This is necessary because the `for arg in "$@"` loop will not include the
             #! command name itself (will skip the first argument from the `arguments` list).
             - /entrypoint.sh
+          env:
+            - name: BASE_DOMAIN
+              value: #@ base_domain
           #@overlay/remove
           ports:

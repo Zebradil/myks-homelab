@@ -94,7 +94,7 @@ spec:
 
               while true; do
                 if ps -p $PID >/dev/null; then
-                  CURRENT_IPV6=$(get_ipv6)
+                  CURRENT_IPV6="$(get_ipv6)"
                   if [[ $NODE_IPV6 != "$CURRENT_IPV6" ]]; then
                     echo "IPv6 address changed, restarting traefik"
                     echo "New IPv6: $CURRENT_IPV6"
@@ -117,6 +117,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            - name: BASE_DOMAIN
+              value: zebradil.dev
           image: docker.io/traefik:v3.1.6
           imagePullPolicy: IfNotPresent
           lifecycle: null
