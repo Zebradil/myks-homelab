@@ -50,8 +50,6 @@ kind: Deployment
 metadata:
   name: #@ name
 spec:
-  securityContext:
-    fsGroup: 1000
   selector:
     matchLabels: #@ pod_labels
   strategy:
@@ -95,6 +93,8 @@ spec:
               readOnly: true
             - name: #@ pvc_name
               mountPath: #@ data_path
+      securityContext:
+        fsGroup: 1000
       volumes:
         - name: #@ secret_name
           secret:
