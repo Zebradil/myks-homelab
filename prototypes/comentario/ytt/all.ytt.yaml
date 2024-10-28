@@ -69,7 +69,7 @@ spec:
             - name: HOST
               value: 0.0.0.0
             - name: PORT
-              value: #@ a.containerPort
+              value: #@ str(a.containerPort)
             - name: SECRETS_FILE
               value: #@ secrets_path
           ports:

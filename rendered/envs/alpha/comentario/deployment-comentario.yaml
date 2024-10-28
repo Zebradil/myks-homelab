@@ -24,7 +24,7 @@ spec:
             - name: HOST
               value: 0.0.0.0
             - name: PORT
-              value: 8080
+              value: "8080"
             - name: SECRETS_FILE
               value: /etc/comentario/secrets.yaml
           image: registry.gitlab.com/comentario/comentario:v3.11.0
