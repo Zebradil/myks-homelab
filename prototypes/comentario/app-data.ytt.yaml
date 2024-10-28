@@ -6,7 +6,7 @@
 application:
   containerPort: 8080
   #! renovate: datasource=docker
-  image: registry.gitlab.com/comentario/comentario:v3.11.0
+  image: registry.gitlab.com/comentario/comentario:v3.11.0-ubuntu
   storageSize: 2Gi
   name: ""
   secretsVersion: #@ sec.sops("0", "version")
