@@ -51,7 +51,7 @@ spec:
       volumes:
         - name: secrets
           secret:
-            name: secrets
+            secretName: secrets
         - name: data
           persistentVolumeClaim:
             claimName: data

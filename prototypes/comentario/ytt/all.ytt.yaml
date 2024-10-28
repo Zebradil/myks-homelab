@@ -94,7 +94,7 @@ spec:
       volumes:
         - name: #@ secret_name
           secret:
-            name: #@ secret_name
+            secretName: #@ secret_name
         - name: #@ pvc_name
           persistentVolumeClaim:
             claimName: #@ pvc_name
