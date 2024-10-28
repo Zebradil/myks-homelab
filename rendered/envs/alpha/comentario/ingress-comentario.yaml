@@ -1,0 +1,98 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: comentario
+spec:
+  rules:
+    - host: comentario.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: comentario
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: comentario.gray.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: comentario
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: comentario.junior.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: comentario
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: comentario.ts.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: comentario
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: comentario.gray.ts.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: comentario
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: comentario.junior.ts.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: comentario
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: comentario.lan.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: comentario
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: comentario.gray.lan.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: comentario
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: comentario.junior.lan.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: comentario
+                port:
+                  name: http
+            path: /
+            pathType: Prefix

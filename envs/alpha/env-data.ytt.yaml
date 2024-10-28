@@ -27,6 +27,7 @@ environment:
     - proto: argocd
     - proto: authelia
     - proto: cert-manager
+    - proto: comentario
     - proto: grafana-agent
     - proto: jellyfin
     - proto: librespeed

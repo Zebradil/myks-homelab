@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: comentario
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: comentario
+  template:
+    metadata:
+      annotations:
+        checksum/secrets: 657b5fcb55419e0d5f82484f7c1b9eb5
+      labels:
+        app.kubernetes.io/name: comentario
+    spec:
+      containers:
+        - args:
+            - --verbose
+          command:
+            - /comentario/comentario
+          env:
+            - name: HOST
+              value: 0.0.0.0
+            - name: PORT
+              value: 8080
+            - name: SECRETS_FILE
+              value: /etc/comentario/secrets.yaml
+          image: registry.gitlab.com/comentario/comentario:v3.11.0
+          name: comentario
+          ports:
+            - containerPort: 8080
+              name: http
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+            privileged: false
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
+          volumeMounts:
+            - mountPath: /etc/comentario/secrets.yaml
+              name: secrets
+              readOnly: true
+              subPath: secrets.yaml
+            - mountPath: /data
+              name: data
+      volumes:
+        - name: secrets
+          secret:
+            name: secrets
+        - name: data
+          persistentVolumeClaim:
+            claimName: data

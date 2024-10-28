@@ -1,0 +1,57 @@
+version: ENC[AES256_GCM,data:3P2UmabrC60zy7dSIAerBz4Q4w==,iv:kmROT2WVtw4+OByfYlpBfIftLyfSPYkvp0coBTaaNbc=,tag:sEWvKGLV88BB/2KeBa0fgg==,type:str]
+extensions:
+    akismet:
+        key: ENC[AES256_GCM,data:HFEHUggzGRoi44I3,iv:uRmMFBG7Qz0sR+bCxER4qTU1/nOkM5rPjZLGLgPir3g=,tag:lnRxTmhmAqsvAqzWkTsrfg==,type:str]
+idp:
+    github:
+        key: ENC[AES256_GCM,data:qiwgG4QC/cVCogcUk3tviXbFJME=,iv:8UjEhBJ0VzCDH3Ufziekc2hEhcjN4QjviCHBYPWZmFs=,tag:2Ww5cqezJ3c1ZSbZVg21gA==,type:str]
+        secret: ENC[AES256_GCM,data:UzwxyiasWEpYk2+lPWyvNdJJ8rK0g6xb6eDeciULoYlxqwpyLiroMw==,iv:cTiF1K6UnVDHSJza/5XSMR0jyBHBTT1Mb12s8IL71gE=,tag:c5rsPTFYGbP8SUFV+xLJuA==,type:str]
+    google:
+        key: ENC[AES256_GCM,data:BhoerArp/QEihWAQxAcByDSEOuGkwBBGjx9UEPEfgnEYruZMfSGa2VkII+QxeH0e/EPz/NLC9fZiDKkhe8oYb/DXA9JVhdPW,iv:Rq/gXwwjHtAUW7GXHpJ/4P7V0PVnMETzsp2o0Y6WQZ4=,tag:dMH50ZNUpL1w+GXmmZPftw==,type:str]
+        secret: ENC[AES256_GCM,data:jTYQ5Vzi9TAV5D8ZKxisTyvTNAng3hvy,iv:dQZYfPOS9RjHpsO7yk8mC3IF3u7ndKuxb/R5U3UCc24=,tag:xAcPcH/Z2Hl+zt/hDYYYGA==,type:str]
+    twitter:
+        key: ENC[AES256_GCM,data:0Nq/BfaYEkrC31pQVVDV4mX0PskjT42vHw==,iv:7nTG4kTJrfjdWhYAObdE5iKi8yQIg3WmC7L+rQyG7Q4=,tag:kwaC/2AQd51AoFB9usgN1A==,type:str]
+        secret: ENC[AES256_GCM,data:xX1fgrPCB2EQiJEs4eKmvWg2bfj8aVv8QHenow/mtPiuyXvZ0ziKquoeDXUGaksFn6E=,iv:p9LyXDRGk17zVftfLFdTWj63FtzUiCJp/1Q39JWjA40=,tag:3iV14WpY09QHSKdam28D+A==,type:str]
+smtpServer:
+    host: ENC[AES256_GCM,data:ZQWavWr/ZoSVk8x+xOw=,iv:l4al7wl0WI/aVI0ainQcuXADdZGMm9M/ihEqAiqFGUU=,tag:HNazNoyzY9O8BPbWrbhq3Q==,type:str]
+    port: ENC[AES256_GCM,data:387e,iv:u4zw041OVEUpbUn3O9jzUYdG12lp9Fd7AGiEs5Lw08k=,tag:Lan/QaRLPNAwF4lDTkXORg==,type:int]
+    username: ENC[AES256_GCM,data:QOvWx/5HYJieAZiqcFrO0Y6CcodBUhPFLT4=,iv:HrB4XTdBK8ThSAV5cPgesGTzTw/rwnwCFAu0q5CiA+A=,tag:NrcJnw/Hc/JxMcnSbJD55A==,type:str]
+    password: ENC[AES256_GCM,data:PlVIMh9HPskftju0YQGw2Q==,iv:4tnC2bkMxIVRLiFIdxKLOF2MV/7nJe7tUw5jzv6i/Zs=,tag:BVntyYMYIAK8RPpuLVElLA==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age13hxx3dgpjcp0v2z5xx07nwm4zvdy78rc9xra6lujzzrl7c657ekq2vgwnk
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBSb1Vhd0NXNFppdEFrWEx0
+            VHJDcHBPKzYxaWpFUXBOdjUveWpUcGdLdlVRCm9tc1pDZUxFazBGc3AwREN6S0Uz
+            ZlNMYjJmTnovZWRnbkY1aklBNXZUMzAKLS0tIGEvY0hWcHQxSTdYbjN2QXRXQkR6
+            ZFNUcTl3dzcyZEMrQW5NcnRxOHpDMkkKf8gqpLxkfhuIpTkEyU3Y2Lm4A6EHkQJZ
+            e8IkTidaJryhKGAZDFogQzyEa5feCk+b8aCza1AUsuRUIv9HYUGzkw==
+            -----END AGE ENCRYPTED FILE-----
+        - recipient: age188h98rs643kglmetvqt3hhnllw0ga45jg94p8xar2qe0c987k59q9qxv3v
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBoZUNqMzlwSzdMVHhjR2N0
+            dFNZWkRHVy9nRGtZL1EyVFQyazhGdFgwZzFFCkxWMURLVnc5NE9PMGJpbG9MMGl6
+            QWNyaURwNk1zZVl3Mk9Hd2UzLzRpcWcKLS0tIE9vYzdLSmxsWS9Zb1lLWjJ1cHZD
+            MVg3SUlDcm5LSWp0bjRVS3E2ZlYzY00K5w3Xt5jgv4CDF8XfpLGxX2y7jarmtUZ+
+            osXoBMWtZ2AV1dCLMGXhTZzJRolRWX7QI+tNvwlcA+FJlDOZteOdTg==
+            -----END AGE ENCRYPTED FILE-----
+        - recipient: age13vh8ef8lgqfgr7aljd2y9c82syxlf7u35lxwrr9yxlhrhjdxfptsc9uk7v
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB0OUZJK3BYcW9GNjdSN083
+            MGt5UjlKWG1WODN3azM0WEpsY2p2Y0Q1Z2lrCnIrcUFVRC9sT2o3SFg5TUZIeEJI
+            V0kwWTZSamJQZFdtUzRQZ09PbUptb1kKLS0tIFJQa2tYcXBNMXRobXUya3pwNFov
+            RFFjSml0T0U5VmkreGJvNFJCMlFObncK44brJHYT+Sr16sHH2XcUEmSfwxc2TSDv
+            +bAQsUMO5UZvnDlaSxNF9r8wvpskl67NvMH1odKucPxdIGG1ZRXG6A==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2024-10-28T21:34:01Z"
+    mac: ENC[AES256_GCM,data:FMqKF7zqFJ8l2KQHrES9Kg8uMg4i2E5rmxfqo+r9m8MRADMNXUM3rTeaDj95it/fS89cAI+nx9P1Kz3bYiGFJ/ngZqqBmksqe0RT9ITpovHD1MA7haxC+ao3N9dWXASf+CSJulh6E8vMetw43M6uF79w51r5l74vb5KfKVVKAg8=,iv:s2tzjNPYsfy3nfSGvFjEXDHragZbgLFQhLGJ+8ii7Hw=,tag:DuoatPvbLvnhHjk9pgM4Gw==,type:str]
+    pgp: []
+    encrypted_regex: .
+    version: 3.9.1

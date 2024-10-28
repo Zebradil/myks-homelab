@@ -37,6 +37,8 @@ environment:
     name: ""
   - proto: cert-manager
     name: ""
+  - proto: comentario
+    name: ""
   - proto: grafana-agent
     name: ""
   - proto: jellyfin

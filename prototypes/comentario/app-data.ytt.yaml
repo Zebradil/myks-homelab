@@ -1,0 +1,31 @@
+#@ load("secrets.star", "sec")
+
+#@data/values-schema
+---
+#@overlay/match-child-defaults missing_ok=True
+application:
+  containerPort: 8080
+  #! renovate: datasource=docker
+  image: registry.gitlab.com/comentario/comentario:v3.11.0
+  storageSize: 2Gi
+  name: ""
+  secretsVersion: #@ sec.sops("0", "version")
+  secrets:
+    extensions:
+      akismet:
+        key: #@ sec.sopsy("0", "extensions.akismet.key")
+    idp:
+      github:
+        key: #@ sec.sopsy("0", "idp.github.key")
+        secret: #@ sec.sopsy("0", "idp.github.secret")
+      google:
+        key: #@ sec.sopsy("0", "idp.google.key")
+        secret: #@ sec.sopsy("0", "idp.google.secret")
+      twitter:
+        key: #@ sec.sopsy("0", "idp.twitter.key")
+        secret: #@ sec.sopsy("0", "idp.twitter.secret")
+    smtpServer:
+      host: smtp.gmail.com
+      port: 587
+      username: #@ sec.sopsy("0", "smtpServer.username")
+      password: #@ sec.sopsy("0", "smtpServer.password")
