@@ -50,6 +50,8 @@ kind: Deployment
 metadata:
   name: #@ name
 spec:
+  securityContext:
+    fsGroup: 1000
   selector:
     matchLabels: #@ pod_labels
   strategy:

@@ -5,6 +5,8 @@ metadata:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   name: comentario
 spec:
+  securityContext:
+    fsGroup: 1000
   selector:
     matchLabels:
       app.kubernetes.io/name: comentario
