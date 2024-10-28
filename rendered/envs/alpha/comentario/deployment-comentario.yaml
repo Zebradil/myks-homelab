@@ -8,6 +8,8 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: comentario
+  strategy:
+    type: Recreate
   template:
     metadata:
       annotations:

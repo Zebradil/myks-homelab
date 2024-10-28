@@ -52,6 +52,8 @@ metadata:
 spec:
   selector:
     matchLabels: #@ pod_labels
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels: #@ pod_labels
