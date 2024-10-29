@@ -74,6 +74,8 @@ spec:
               value: #@ str(a.containerPort)
             - name: SECRETS_FILE
               value: #@ secrets_path
+            - name: BASE_URL
+              value: #@ "https://" + name + "." + e.hosts[0]
           ports:
             - containerPort: #@ a.containerPort
               name: http

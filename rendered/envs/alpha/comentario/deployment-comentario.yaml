@@ -29,6 +29,8 @@ spec:
               value: "8080"
             - name: SECRETS_FILE
               value: /etc/comentario/secrets.yaml
+            - name: BASE_URL
+              value: https://comentario.zebradil.dev
           image: registry.gitlab.com/comentario/comentario:v3.11.0-ubuntu
           name: comentario
           ports:
