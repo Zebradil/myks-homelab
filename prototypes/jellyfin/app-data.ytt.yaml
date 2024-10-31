@@ -3,7 +3,7 @@
 #@overlay/match-child-defaults missing_ok=True
 application:
   #! renovate: datasource=docker
-  image: jellyfin/jellyfin:10.9.11
+  image: jellyfin/jellyfin:10.10.0
   #! DOCKER_MODS=linuxserver/mods:jellyfin-opencl-intel
   #! FIXME: This is for tests only, replace with node selector
   nodeName: ""
