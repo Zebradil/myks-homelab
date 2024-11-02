@@ -1,0 +1,33 @@
+#@ load("secrets.star", "sec")
+
+#@ port = 8080
+
+#@ def default_env():
+- name: IP_HEADER
+  value: X-Forwarded-For
+- name: SIGNUPS_ALLOWED
+  value: "false"
+- name: ROCKET_PORT
+  value: #@ str(port)
+#@ end
+
+#@data/values-schema
+---
+#@overlay/match-child-defaults missing_ok=True
+application:
+  containerPort: #@ port
+  #! renovate: datasource=docker
+  image: ghcr.io/dani-garcia/vaultwarden:1.32.3
+  storageSize: 1Gi
+  name: ""
+  #! NOTE: The secrets checksum is used to trigger pods restart whin secrets
+  #! are updated. YTT doesn't have access to actual secrets values during the
+  #! calculation of the checksum, so we use the version of the secrets file to
+  #! signify that the secrets have changed.
+  secretsVersion: 1
+  #! See https://github.com/dani-garcia/vaultwarden/wiki/Configuration-overview#using-an-env_file
+  envFile: #@ sec.sops("0", "envFile")
+  #@schema/default default_env()
+  env:
+    - name: ""
+      value: ""

@@ -55,6 +55,8 @@ environment:
     name: ""
   - proto: traefik
     name: ""
+  - proto: vaultwarden
+    name: ""
   - proto: webapp
     name: httpbingo
   - proto: webapp

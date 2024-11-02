@@ -36,6 +36,7 @@ environment:
     - proto: starbase80
     - proto: synology-csi
     - proto: traefik
+    - proto: vaultwarden
     #! - proto: webapp
     #!   name: iperf
     - proto: webapp
