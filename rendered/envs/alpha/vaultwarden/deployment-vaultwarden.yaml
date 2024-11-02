@@ -42,7 +42,7 @@ spec:
             runAsNonRoot: true
             runAsUser: 1000
           volumeMounts:
-            - mountPath: /
+            - mountPath: /.env
               name: config
               readOnly: true
               subPath: .env

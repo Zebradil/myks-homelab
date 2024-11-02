@@ -73,7 +73,7 @@ spec:
             runAsUser: 1000
           volumeMounts:
             - name: #@ secret_name
-              mountPath: /
+              mountPath: /.env
               subPath: .env
               readOnly: true
             - name: #@ pvc_name
