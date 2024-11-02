@@ -58,7 +58,7 @@ spec:
     metadata:
       labels: #@ pod_labels
       annotations:
-        checksum/secrets: #@ md5.sum(secrets_yaml + a.secretsVersion)
+        checksum/secrets: #@ md5.sum(secrets_yaml) + "-" + str(a.secretsVersion)
     spec:
       containers:
         - image: #@ a.image

@@ -9,7 +9,11 @@ application:
   image: registry.gitlab.com/comentario/comentario:v3.11.0-ubuntu
   storageSize: 2Gi
   name: ""
-  secretsVersion: #@ sec.sops("0", "version")
+  #! NOTE: The secrets checksum is used to trigger pods restart whin secrets
+  #! are updated. YTT doesn't have access to actual secrets values during the
+  #! calculation of the checksum, so we use the version of the secrets file to
+  #! signify that the secrets have changed.
+  secretsVersion: 1
   secrets:
     extensions:
       akismet:

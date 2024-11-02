@@ -1,4 +1,3 @@
-version: ENC[AES256_GCM,data:3P2UmabrC60zy7dSIAerBz4Q4w==,iv:kmROT2WVtw4+OByfYlpBfIftLyfSPYkvp0coBTaaNbc=,tag:sEWvKGLV88BB/2KeBa0fgg==,type:str]
 extensions:
     akismet:
         key: ENC[AES256_GCM,data:HFEHUggzGRoi44I3,iv:uRmMFBG7Qz0sR+bCxER4qTU1/nOkM5rPjZLGLgPir3g=,tag:lnRxTmhmAqsvAqzWkTsrfg==,type:str]
@@ -50,8 +49,8 @@ sops:
             RFFjSml0T0U5VmkreGJvNFJCMlFObncK44brJHYT+Sr16sHH2XcUEmSfwxc2TSDv
             +bAQsUMO5UZvnDlaSxNF9r8wvpskl67NvMH1odKucPxdIGG1ZRXG6A==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2024-10-28T21:34:01Z"
-    mac: ENC[AES256_GCM,data:FMqKF7zqFJ8l2KQHrES9Kg8uMg4i2E5rmxfqo+r9m8MRADMNXUM3rTeaDj95it/fS89cAI+nx9P1Kz3bYiGFJ/ngZqqBmksqe0RT9ITpovHD1MA7haxC+ao3N9dWXASf+CSJulh6E8vMetw43M6uF79w51r5l74vb5KfKVVKAg8=,iv:s2tzjNPYsfy3nfSGvFjEXDHragZbgLFQhLGJ+8ii7Hw=,tag:DuoatPvbLvnhHjk9pgM4Gw==,type:str]
+    lastmodified: "2024-11-02T21:35:54Z"
+    mac: ENC[AES256_GCM,data:HUcf/tJrAFMp3okyfRGb1K8IeyIK5Hy+MP8VBJiN5kSPffMMtF4znETO0O9nKzlymKQuaGTQGRSDF4E5StJuFUBPswYfY9uESVQLgbccEsoRCsBi7Oez6zkaIOUseHcC+fi2w8Q7F02PGha1YnPrxeEbqh+Kfl/GSCB7cRHcsnI=,iv:nx18NB/5lvuxBvId0gHnj75URhFdS4NTd0SyBH1NVHw=,tag:LhXw6PVMaj943+aSgjsghw==,type:str]
     pgp: []
     encrypted_regex: .
     version: 3.9.1
