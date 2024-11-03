@@ -13,22 +13,23 @@
 apiVersion: vendir.k14s.io/v1alpha1
 kind: Config
 directories:
-#@ for myApp in app.managed:
-- path: #@ pathForKind(myApp.kind, myApp.name)
-  contents:
-    - path: .
-      #@ if/end myApp.source == "git":
-      git:
-        url: #@ myApp.url
-        ref: #@ myApp.version
-      #@ if/end myApp.source == "helmChart":
-      helmChart:
-        name: #@ myApp.name
-        version: #@ myApp.version
-        repository:
+  #@ for myApp in app.managed:
+  - path: #@ pathForKind(myApp.kind, myApp.name)
+    contents:
+      - path: .
+        #@ if/end myApp.source == "git":
+        git:
           url: #@ myApp.url
-      #@ if/end myApp.newRootPath:
-      newRootPath: #@ myApp.newRootPath
-      #@ if/end myApp.includePaths:
-      includePaths: #@ myApp.includePaths
+          ref: #@ "origin/" + myApp.version
+          depth: 1
+        #@ if/end myApp.source == "helmChart":
+        helmChart:
+          name: #@ myApp.name
+          version: #@ myApp.version
+          repository:
+            url: #@ myApp.url
+        #@ if/end myApp.newRootPath:
+        newRootPath: #@ myApp.newRootPath
+        #@ if/end myApp.includePaths:
+        includePaths: #@ myApp.includePaths
 #@ end

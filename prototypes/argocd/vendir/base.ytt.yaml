@@ -9,7 +9,8 @@ directories:
         lazy: true
         git:
           url: #@ data.values.application.url
-          ref: #@ data.values.application.version
+          ref: #@ "origin/" + data.values.application.version
+          depth: 1
         includePaths:
           - manifests/install.yaml
         newRootPath: manifests
