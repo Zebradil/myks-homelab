@@ -10,6 +10,10 @@ application:
     config:
       - category: Services
         services:
+          - name: Bitwarden
+            uri: #@ get_uri("vaultwarden")
+            description: Password manager
+            icon: bitwarden
           - name: Paperless
             uri: #@ get_uri("paperless")
             description: Document management
