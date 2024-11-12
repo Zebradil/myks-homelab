@@ -1,0 +1,12 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+    - contents:
+        - helmChart:
+            name: k8s-monitoring
+            repository:
+                url: https://grafana.github.io/helm-charts
+            version: 1.6.6
+          path: .
+      path: .myks/vendir-cache/helm-k8s-monitoring-1.6.6-543f9171ef5577b8/data
+      permissions: null
+kind: Config
