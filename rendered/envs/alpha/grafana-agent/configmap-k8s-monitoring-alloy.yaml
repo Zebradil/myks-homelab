@@ -75,6 +75,14 @@ data:
       }
 
       output {
+        metrics = [otelcol.processor.attributes.default.input]
+        logs    = [otelcol.processor.attributes.default.input]
+      }
+    }
+
+    otelcol.processor.attributes "default" {
+
+      output {
         metrics = [otelcol.processor.transform.default.input]
         logs    = [otelcol.processor.transform.default.input]
       }
@@ -398,6 +406,15 @@ data:
       scrape_interval = "60s"
       clustering {
         enabled = true
+      }
+      forward_to = [prometheus.relabel.kubernetes_monitoring_telemetry.receiver]
+    }
+
+    prometheus.relabel "kubernetes_monitoring_telemetry" {
+      rule {
+        source_labels = ["__name__"]
+        regex = "grafana_kubernetes_monitoring_build_info"
+        action = "keep"
       }
       forward_to = [prometheus.relabel.metrics_service.receiver]
     }
@@ -869,7 +886,7 @@ data:
   k8s-monitoring-build-info-metric.prom: |
     # HELP grafana_kubernetes_monitoring_build_info A metric to report the version of the Kubernetes Monitoring Helm chart as well as a summary of enabled features
     # TYPE grafana_kubernetes_monitoring_build_info gauge
-    grafana_kubernetes_monitoring_build_info{version="1.6.0", namespace="grafana-agent", metrics="enabled,alloy,autoDiscover,kube-state-metrics,node-exporter,kubelet,kubeletResource,cadvisor,cost", logs="enabled,events,pod_logs", traces="disabled", deployments="kube-state-metrics,prometheus-node-exporter,prometheus-operator-crds,opencost"} 1
+    grafana_kubernetes_monitoring_build_info{version="1.6.6", namespace="grafana-agent", metrics="enabled,alloy,autoDiscover,kube-state-metrics,node-exporter,kubelet,kubeletResource,cadvisor,cost", logs="enabled,events,pod_logs", traces="disabled", deployments="kube-state-metrics,prometheus-node-exporter,prometheus-operator-crds,opencost"} 1
 kind: ConfigMap
 metadata:
   annotations:
