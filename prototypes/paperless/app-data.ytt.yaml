@@ -10,7 +10,7 @@ application:
     image: ghcr.io/paperless-ngx/paperless-ngx:2.13.5
     storage:
       consume: 1Gi
-      data: 1Gi
+      data: 2Gi
       media: 5Gi
     env:
       PAPERLESS_DBHOST: postgresql
