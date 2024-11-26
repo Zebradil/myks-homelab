@@ -8,8 +8,8 @@ metadata:
     app.kubernetes.io/instance: postgresql
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: postgresql
-    app.kubernetes.io/version: 17.1.0
-    helm.sh/chart: postgresql-16.2.1
+    app.kubernetes.io/version: 17.2.0
+    helm.sh/chart: postgresql-16.2.2
   name: postgresql
   namespace: paperless
 spec:
