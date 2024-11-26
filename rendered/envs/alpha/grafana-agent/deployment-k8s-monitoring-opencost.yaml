@@ -8,8 +8,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: opencost
     app.kubernetes.io/part-of: opencost
-    app.kubernetes.io/version: 1.112.1
-    helm.sh/chart: opencost-1.42.2
+    app.kubernetes.io/version: 1.113.0
+    helm.sh/chart: opencost-1.42.3
   name: k8s-monitoring-opencost
   namespace: grafana-agent
 spec:
@@ -76,7 +76,7 @@ spec:
               value: "true"
             - name: PROM_CLUSTER_ID_LABEL
               value: cluster
-          image: ghcr.io/opencost/opencost:1.112.1@sha256:d3c56b0d6c3ded6513724cec8c777a2f4395a6ebde2d1fe27200a56112e3b9c3
+          image: ghcr.io/opencost/opencost:1.113.0@sha256:b313d6d320058bbd3841a948fb636182f49b46df2368d91e2ae046ed03c0f83c
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3
