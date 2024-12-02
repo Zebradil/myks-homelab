@@ -282,7 +282,11 @@ Returns the number of replicas
       {{- if (include "authelia.stateful" .) }}
         {{- 1 -}}
       {{- else -}}
-        {{- default 1 .Values.pod.replicas -}}
+        {{- if (eq 0 (int .Values.pod.replicas))}}
+        {{- 0 -}}
+        {{- else }}
+        {{- .Values.pod.replicas | default 1 -}}
+        {{- end }}
       {{- end -}}
 {{- end -}}
 
@@ -474,6 +478,19 @@ Renders a probe
             {{ toYaml (dict "readinessProbe" $probe) }}
         {{- end -}}
     {{- end -}}
+{{- end -}}
+
+{{/*
+Renders a value that contains template.
+Usage:
+{{ include "authelia.snippets.render" ( dict "value" .Values.path.to.the.Value "context" $) }}
+*/}}
+{{- define "authelia.snippets.render" -}}
+    {{- if typeIs "string" .value }}
+        {{- tpl .value .context }}
+    {{- else }}
+        {{- tpl (.value | toYaml) .context }}
+    {{- end }}
 {{- end -}}
 
 {{/*
