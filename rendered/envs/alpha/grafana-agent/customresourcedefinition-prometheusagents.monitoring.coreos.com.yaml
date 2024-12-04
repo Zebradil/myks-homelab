@@ -4,7 +4,7 @@ metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
     controller-gen.kubebuilder.io/version: v0.16.4
-    operator.prometheus.io/version: 0.78.1
+    operator.prometheus.io/version: 0.78.2
   name: prometheusagents.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
