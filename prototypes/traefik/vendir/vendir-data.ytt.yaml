@@ -10,4 +10,4 @@ application:
       #! renovate: datasource=helm
       name: traefik
       url: https://traefik.github.io/charts
-      version: 33.0.0
+      version: 33.1.0
