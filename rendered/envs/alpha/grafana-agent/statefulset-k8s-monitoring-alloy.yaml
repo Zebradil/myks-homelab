@@ -8,8 +8,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: alloy
     app.kubernetes.io/part-of: alloy
-    app.kubernetes.io/version: v1.5.0
-    helm.sh/chart: alloy-0.10.0
+    app.kubernetes.io/version: v1.5.1
+    helm.sh/chart: alloy-0.10.1
   name: k8s-monitoring-alloy
 spec:
   minReadySeconds: 10
@@ -39,7 +39,7 @@ spec:
             - --disable-reporting
             - --cluster.enabled=true
             - --cluster.join-addresses=k8s-monitoring-alloy-cluster
-            - --cluster.name="alloy"
+            - --cluster.name=alloy
             - --stability.level=generally-available
           env:
             - name: ALLOY_DEPLOY_MODE
@@ -48,7 +48,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
-          image: docker.io/grafana/alloy:v1.5.0
+          image: docker.io/grafana/alloy:v1.5.1
           imagePullPolicy: IfNotPresent
           name: alloy
           ports:
