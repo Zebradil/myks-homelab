@@ -5,8 +5,8 @@ directories:
             name: k8s-monitoring
             repository:
                 url: https://grafana.github.io/helm-charts
-            version: 1.6.12
+            version: 1.6.13
           path: .
-      path: .myks/vendir-cache/helm-k8s-monitoring-1.6.12-4069ae998b83bf21/data
+      path: .myks/vendir-cache/helm-k8s-monitoring-1.6.13-406cea998b865aec/data
       permissions: null
 kind: Config
