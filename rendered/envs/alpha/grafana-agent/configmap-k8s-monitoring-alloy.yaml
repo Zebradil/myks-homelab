@@ -717,11 +717,6 @@ data:
       scrape {
         default_scrape_interval = "60s"
       }
-      forward_to = [prometheus.relabel.podmonitors.receiver]
-    }
-
-    prometheus.relabel "podmonitors" {
-      max_cache_size = 100000
       forward_to = [prometheus.relabel.metrics_service.receiver]
     }
 
@@ -733,11 +728,6 @@ data:
       scrape {
         default_scrape_interval = "60s"
       }
-      forward_to = [prometheus.relabel.probes.receiver]
-    }
-
-    prometheus.relabel "probes" {
-      max_cache_size = 100000
       forward_to = [prometheus.relabel.metrics_service.receiver]
     }
 
@@ -749,11 +739,6 @@ data:
       scrape {
         default_scrape_interval = "60s"
       }
-      forward_to = [prometheus.relabel.servicemonitors.receiver]
-    }
-
-    prometheus.relabel "servicemonitors" {
-      max_cache_size = 100000
       forward_to = [prometheus.relabel.metrics_service.receiver]
     }
 
@@ -887,7 +872,7 @@ data:
   k8s-monitoring-build-info-metric.prom: |
     # HELP grafana_kubernetes_monitoring_build_info A metric to report the version of the Kubernetes Monitoring Helm chart as well as a summary of enabled features
     # TYPE grafana_kubernetes_monitoring_build_info gauge
-    grafana_kubernetes_monitoring_build_info{version="1.6.14", namespace="grafana-agent", metrics="enabled,alloy,autoDiscover,kube-state-metrics,node-exporter,kubelet,kubeletResource,cadvisor,cost", logs="enabled,events,pod_logs", traces="disabled", deployments="kube-state-metrics,prometheus-node-exporter,prometheus-operator-crds,opencost"} 1
+    grafana_kubernetes_monitoring_build_info{version="1.6.15", namespace="grafana-agent", metrics="enabled,alloy,autoDiscover,kube-state-metrics,node-exporter,kubelet,kubeletResource,cadvisor,cost", logs="enabled,events,pod_logs", traces="disabled", deployments="kube-state-metrics,prometheus-node-exporter,prometheus-operator-crds,opencost"} 1
 kind: ConfigMap
 metadata:
   annotations:
