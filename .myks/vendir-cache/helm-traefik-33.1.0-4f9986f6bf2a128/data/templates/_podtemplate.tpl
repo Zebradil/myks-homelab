@@ -383,33 +383,6 @@
           - "--tracing.addinternals"
           {{- end }}
 
-          {{- with .Values.tracing }}
-            {{- with .sampleRate }}
-          - "--tracing.sampleRate={{ . }}"
-            {{- end }}
-
-            {{- with .serviceName }}
-          - "--tracing.serviceName={{ . }}"
-            {{- end }}
-
-            {{- range $name, $value := .globalAttributes }}
-          - "--tracing.globalAttributes.{{ $name }}={{ $value }}"
-            {{- end }}
-
-            {{- range $index, $value := .capturedRequestHeaders }}
-          - "--tracing.capturedRequestHeaders[{{ $index }}]={{ $value }}"
-            {{- end }}
-
-            {{- range $index, $value := .capturedResponseHeaders }}
-          - "--tracing.capturedResponseHeaders[{{ $index }}]={{ $value }}"
-            {{- end }}
-
-            {{- if .safeQueryParams }}
-          - "--tracing.safeQueryParams={{- .safeQueryParams | join "," -}}"
-            {{- end }}
-
-          {{- end }}
-
           {{- with .Values.tracing.otlp }}
           {{- if .enabled }}
           - "--tracing.otlp=true"
@@ -475,7 +448,7 @@
           - "--experimental.plugins.{{ $pluginName }}.moduleName={{ $plugin.moduleName }}"
           - "--experimental.plugins.{{ $pluginName }}.version={{ $plugin.version }}"
           {{- end }}
-          {{- if and (semverCompare ">=v3.3.0-0" $version) (.Values.experimental.abortOnPluginFailure)}}
+          {{- if and (semverCompare ">=3.2.1-0" $version) (.Values.experimental.abortOnPluginFailure)}}
           - "--experimental.abortonpluginfailure={{ .Values.experimental.abortOnPluginFailure }}"
           {{- end }}
           {{- if .Values.providers.kubernetesCRD.enabled }}
@@ -497,7 +470,7 @@
           - "--providers.kubernetescrd.allowEmptyServices={{ . }}"
             {{- end }}
            {{- end }}
-           {{- if and .Values.rbac.namespaced (semverCompare ">=v3.1.2-0" $version) }}
+           {{- if and .Values.rbac.namespaced (semverCompare ">=3.1.2-0" $version) }}
           - "--providers.kubernetescrd.disableClusterScopeResources=true"
            {{- end }}
            {{- if .Values.providers.kubernetesCRD.nativeLBByDefault }}
@@ -524,9 +497,9 @@
           - "--providers.kubernetesingress.ingressClass={{ .Values.providers.kubernetesIngress.ingressClass }}"
            {{- end }}
            {{- if .Values.rbac.namespaced }}
-            {{- if semverCompare "<v3.1.5-0" $version }}
+            {{- if semverCompare "<3.1.5-0" $version }}
           - "--providers.kubernetesingress.disableIngressClassLookup=true"
-              {{- if semverCompare ">=v3.1.2-0" $version }}
+              {{- if semverCompare ">=3.1.2-0" $version }}
           - "--providers.kubernetesingress.disableClusterScopeResources=true"
               {{- end }}
             {{- else }}
@@ -559,9 +532,6 @@
           - "--providers.kubernetesgateway.statusaddress.service.name={{ tpl .name $ }}"
           - "--providers.kubernetesgateway.statusaddress.service.namespace={{ tpl .namespace $ }}"
              {{- end }}
-            {{- end }}
-            {{- if .nativeLBByDefault }}
-          - "--providers.kubernetesgateway.nativeLBByDefault=true"
             {{- end }}
             {{- if or .namespaces (and $.Values.rbac.enabled $.Values.rbac.namespaced) }}
           - "--providers.kubernetesgateway.namespaces={{ template "providers.kubernetesGateway.namespaces" $ }}"
@@ -633,7 +603,7 @@
               {{- end }}
             {{- end }}
             {{- if $config.allowACMEByPass }}
-              {{- if (semverCompare "<v3.1.3-0" $version) }}
+              {{- if (semverCompare "<3.1.3-0" $version) }}
                 {{- fail "ERROR: allowACMEByPass has been introduced with Traefik v3.1.3+" -}}
               {{- end }}
           - "--entryPoints.{{ $entrypoint }}.allowACMEByPass=true"
@@ -878,7 +848,7 @@
         {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- if .Values.topologySpreadConstraints }}
-      {{- if (semverCompare "<v1.19.0-0" .Capabilities.KubeVersion.Version) }}
+      {{- if (semverCompare "<1.19.0-0" .Capabilities.KubeVersion.Version) }}
         {{- fail "ERROR: topologySpreadConstraints are supported only on kubernetes >= v1.19" -}}
       {{- end }}
       topologySpreadConstraints:
