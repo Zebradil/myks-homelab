@@ -1,10 +1,6 @@
 annotations:
-  artifacthub.io/changes: "- \"fix(Traefik Proxy): :bug: abortOnPluginFailure not
-    released yet\"\n- \"feat(deps): update traefik docker tag to v3.2.2\"\n- \"feat(Traefik
-    Proxy): support NativeLB option in GatewayAPI provider\"\n- \"feat(Traefik Proxy):
-    add `tracing`parameters to helm chart values\"\n- \"feat(Traefik Proxy): :art:
-    harmonize semverCompare calls\"\n- \"feat(Gateway API): update sigs.k8s.io/gateway-api
-    to v1.2.1\"\n- \"chore(release): \U0001F680 publish v33.2.0\"\n"
+  artifacthub.io/changes: "- \"fix(Gateway API): CRDs should only be defined once\"\n-
+    \"chore(release): \U0001F680 publish v33.2.1\"\n"
 apiVersion: v2
 appVersion: v3.2.2
 description: A Traefik based Kubernetes ingress controller
@@ -28,4 +24,4 @@ sources:
 - https://github.com/traefik/traefik
 - https://github.com/traefik/traefik-helm-chart
 type: application
-version: 33.2.0
+version: 33.2.1
