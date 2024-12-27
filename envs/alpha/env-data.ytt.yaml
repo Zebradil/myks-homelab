@@ -45,6 +45,8 @@ environment:
       name: it-tools
     - proto: webapp
       name: uptime-kuma
+    - proto: webapp
+      name: argo-test
 argocd:
   app:
     prefix: app-
@@ -64,6 +66,6 @@ argocd:
   env:
     generateSecret: false
 helm:
-  kubeVersion: "1.29"
+  kubeVersion: '1.29'
 myks:
   gitRepoUrl: https://github.com/Zebradil/myks-homelab

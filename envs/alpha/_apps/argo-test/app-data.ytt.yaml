@@ -1,0 +1,10 @@
+#@data/values
+---
+application:
+  #! renovate: datasource=docker
+  image: mccutchen/go-httpbin:v2.15.0
+  containerPort: 8080
+argocd:
+  app:
+    source:
+      plugin: null
