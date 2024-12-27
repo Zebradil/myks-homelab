@@ -4,7 +4,7 @@ metadata:
   name: app-alpha-argo-test
   namespace: argocd
   finalizers:
-    - resources-finalizer.argocd.argoproj.io
+  - resources-finalizer.argocd.argoproj.io
   annotations:
     myks.dev/environment: alpha
     app.kubernetes.io/source: https://github.com/Zebradil/myks-homelab
@@ -22,5 +22,5 @@ spec:
       prune: true
       selfHeal: false
     syncOptions:
-      - CreateNamespace=true
-      - ServerSideApply=true
+    - CreateNamespace=true
+    - ServerSideApply=true
