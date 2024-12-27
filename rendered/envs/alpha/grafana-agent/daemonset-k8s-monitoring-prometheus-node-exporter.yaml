@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/name: prometheus-node-exporter
     app.kubernetes.io/part-of: prometheus-node-exporter
     app.kubernetes.io/version: 1.8.2
-    helm.sh/chart: prometheus-node-exporter-4.42.0
+    helm.sh/chart: prometheus-node-exporter-4.43.0
     release: k8s-monitoring
   name: k8s-monitoring-prometheus-node-exporter
   namespace: grafana-agent
@@ -32,7 +32,7 @@ spec:
         app.kubernetes.io/name: prometheus-node-exporter
         app.kubernetes.io/part-of: prometheus-node-exporter
         app.kubernetes.io/version: 1.8.2
-        helm.sh/chart: prometheus-node-exporter-4.42.0
+        helm.sh/chart: prometheus-node-exporter-4.43.0
         release: k8s-monitoring
     spec:
       affinity:
