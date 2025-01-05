@@ -158,7 +158,7 @@ spec:
                   key: applicationsetcontroller.webhook.parallelism.limit
                   name: argocd-cmd-params-cm
                   optional: true
-          image: quay.io/argoproj/argocd:v2.13.2
+          image: quay.io/argoproj/argocd:v2.13.3
           imagePullPolicy: Always
           name: argocd-applicationset-controller
           ports:
