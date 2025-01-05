@@ -235,7 +235,7 @@ spec:
               value: /helm-working-dir
             - name: HELM_DATA_HOME
               value: /helm-working-dir
-          image: quay.io/argoproj/argocd:v2.13.2
+          image: quay.io/argoproj/argocd:v2.13.3
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 3
@@ -313,7 +313,7 @@ spec:
             - -n
             - /usr/local/bin/argocd
             - /var/run/argocd/argocd-cmp-server
-          image: quay.io/argoproj/argocd:v2.13.2
+          image: quay.io/argoproj/argocd:v2.13.3
           name: copyutil
           securityContext:
             allowPrivilegeEscalation: false
