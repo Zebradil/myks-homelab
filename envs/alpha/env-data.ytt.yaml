@@ -45,8 +45,6 @@ environment:
       name: it-tools
     - proto: webapp
       name: uptime-kuma
-    - proto: webapp
-      name: argo-test
 argocd:
   app:
     prefix: app-
