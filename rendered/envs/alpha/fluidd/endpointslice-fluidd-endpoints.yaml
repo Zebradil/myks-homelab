@@ -1,0 +1,16 @@
+addressType: IPv4
+apiVersion: discovery.k8s.io/v1
+endpoints:
+  - addresses:
+      - 192.168.1.170
+kind: EndpointSlice
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    kubernetes.io/service-name: fluidd
+  name: fluidd-endpoints
+ports:
+  - name: http
+    port: 80
+    protocol: TCP

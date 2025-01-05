@@ -37,8 +37,8 @@ environment:
     - proto: synology-csi
     - proto: traefik
     - proto: vaultwarden
-    #! - proto: webapp
-    #!   name: iperf
+    - proto: blank
+      name: fluidd
     - proto: webapp
       name: httpbingo
     - proto: webapp

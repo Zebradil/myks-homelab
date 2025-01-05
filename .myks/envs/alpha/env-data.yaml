@@ -57,6 +57,8 @@ environment:
     name: ""
   - proto: vaultwarden
     name: ""
+  - proto: blank
+    name: fluidd
   - proto: webapp
     name: httpbingo
   - proto: webapp
