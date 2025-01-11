@@ -46,7 +46,7 @@ spec:
           env:
             - name: TITLE
               value: ""
-          image: jordanroher/starbase-80:1.5.2
+          image: jordanroher/starbase-80:1.5.3
           name: builder
           volumeMounts:
             - mountPath: /static
