@@ -4,7 +4,7 @@
 application:
   builder:
     #! renovate: datasource=docker
-    image: jordanroher/starbase-80:1.5.5
+    image: jordanroher/starbase-80:1.6.0
     #! See https://github.com/notclickable-jordan/starbase-80?tab=readme-ov-file#configuration
     config:
       - category: Category
