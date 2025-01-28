@@ -7,7 +7,7 @@
 application:
   paperless:
     #! renovate: datasource=docker
-    image: ghcr.io/paperless-ngx/paperless-ngx:2.14.5
+    image: ghcr.io/paperless-ngx/paperless-ngx:2.14.6
     storage:
       consume: 1Gi
       data: 2Gi
