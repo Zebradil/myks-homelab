@@ -22,6 +22,7 @@ argocd:
     prefix: ""
     generateSecret: false
   project:
+    enabled: true
     name: ""
     prefix: env-
     destination:
