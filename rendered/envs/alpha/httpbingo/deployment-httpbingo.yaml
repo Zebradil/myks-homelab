@@ -14,7 +14,7 @@ spec:
         app.kubernetes.io/name: httpbingo
     spec:
       containers:
-        - image: mccutchen/go-httpbin:v2.15.0
+        - image: mccutchen/go-httpbin:v2.16.0
           name: httpbingo
           ports:
             - containerPort: 8080
