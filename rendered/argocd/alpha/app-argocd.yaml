@@ -1,18 +1,24 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
+  annotations:
+    app.kubernetes.io/source: https://github.com/Zebradil/myks-homelab
+    myks.dev/environment: alpha
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
   name: app-alpha-argocd
   namespace: argocd
-  finalizers:
-  - resources-finalizer.argocd.argoproj.io
-  annotations:
-    myks.dev/environment: alpha
-    app.kubernetes.io/source: https://github.com/Zebradil/myks-homelab
 spec:
-  project: env-alpha
   destination:
     name: in-cluster
     namespace: argocd
+  ignoreDifferences:
+    - jqPathExpressions:
+        - .data.key
+        - .stringData.key
+      kind: Secret
+      name: sops-age-key
+  project: env-alpha
   source:
     path: rendered/envs/alpha/argocd
     plugin:
@@ -24,12 +30,6 @@ spec:
       prune: true
       selfHeal: false
     syncOptions:
-    - CreateNamespace=true
-    - ServerSideApply=true
-    - RespectIgnoreDifferences=true
-  ignoreDifferences:
-  - kind: Secret
-    name: sops-age-key
-    jqPathExpressions:
-    - .data.key
-    - .stringData.key
+      - CreateNamespace=true
+      - ServerSideApply=true
+      - RespectIgnoreDifferences=true
