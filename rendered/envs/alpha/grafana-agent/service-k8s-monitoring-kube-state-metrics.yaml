@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/name: kube-state-metrics
     app.kubernetes.io/part-of: kube-state-metrics
     app.kubernetes.io/version: 2.14.0
-    helm.sh/chart: kube-state-metrics-5.27.0
+    helm.sh/chart: kube-state-metrics-5.28.0
     release: k8s-monitoring
   name: k8s-monitoring-kube-state-metrics
   namespace: grafana-agent

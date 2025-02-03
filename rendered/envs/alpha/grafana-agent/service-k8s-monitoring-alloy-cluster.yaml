@@ -9,8 +9,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: alloy
     app.kubernetes.io/part-of: alloy
-    app.kubernetes.io/version: v1.5.1
-    helm.sh/chart: alloy-0.10.1
+    app.kubernetes.io/version: v1.6.1
+    helm.sh/chart: alloy-0.11.0
   name: k8s-monitoring-alloy-cluster
 spec:
   clusterIP: None

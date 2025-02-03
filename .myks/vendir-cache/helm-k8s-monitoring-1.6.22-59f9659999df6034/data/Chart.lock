@@ -1,0 +1,36 @@
+dependencies:
+- name: alloy
+  repository: https://grafana.github.io/helm-charts
+  version: 0.11.0
+- name: alloy
+  repository: https://grafana.github.io/helm-charts
+  version: 0.11.0
+- name: alloy
+  repository: https://grafana.github.io/helm-charts
+  version: 0.11.0
+- name: alloy
+  repository: https://grafana.github.io/helm-charts
+  version: 0.11.0
+- name: kube-state-metrics
+  repository: https://prometheus-community.github.io/helm-charts
+  version: 5.28.0
+- name: prometheus-node-exporter
+  repository: https://prometheus-community.github.io/helm-charts
+  version: 4.43.1
+- name: prometheus-operator-crds
+  repository: https://prometheus-community.github.io/helm-charts
+  version: 17.0.2
+- name: prometheus-windows-exporter
+  repository: https://prometheus-community.github.io/helm-charts
+  version: 0.8.0
+- name: opencost
+  repository: https://opencost.github.io/opencost-helm-chart
+  version: 1.43.2
+- name: kepler
+  repository: https://sustainable-computing-io.github.io/kepler-helm-chart
+  version: 0.5.12
+- name: beyla
+  repository: https://grafana.github.io/helm-charts
+  version: 1.6.3
+digest: sha256:a4674f81ad574581e09abc777a4198563562a458eee7253c6d99f77a1903a111
+generated: "2025-01-24T13:19:21.851269-06:00"

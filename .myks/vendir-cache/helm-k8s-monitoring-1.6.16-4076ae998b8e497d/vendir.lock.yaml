@@ -1,9 +1,0 @@
-apiVersion: vendir.k14s.io/v1alpha1
-directories:
-- contents:
-  - helmChart:
-      appVersion: 2.10.0
-      version: 1.6.16
-    path: .
-  path: .myks/vendir-cache/helm-k8s-monitoring-1.6.16-4076ae998b8e497d/data
-kind: LockConfig

@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/name: opencost
     app.kubernetes.io/part-of: opencost
     app.kubernetes.io/version: 1.113.0
-    helm.sh/chart: opencost-1.42.3
+    helm.sh/chart: opencost-1.43.2
   name: k8s-monitoring-opencost
 rules:
   - apiGroups:
