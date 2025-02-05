@@ -54,7 +54,7 @@ spec:
                   key: notificationscontroller.repo.server.plaintext
                   name: argocd-cmd-params-cm
                   optional: true
-          image: quay.io/argoproj/argocd:v2.13.4
+          image: quay.io/argoproj/argocd:v2.14.1
           imagePullPolicy: Always
           livenessProbe:
             tcpSocket:
@@ -72,6 +72,8 @@ spec:
             - mountPath: /app/config/reposerver/tls
               name: argocd-repo-server-tls
           workingDir: /app
+      nodeSelector:
+        kubernetes.io/os: linux
       securityContext:
         runAsNonRoot: true
         seccompProfile:

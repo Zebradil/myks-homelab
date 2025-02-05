@@ -306,7 +306,13 @@ spec:
                   key: applicationsetcontroller.enable.scm.providers
                   name: argocd-cmd-params-cm
                   optional: true
-          image: quay.io/argoproj/argocd:v2.13.4
+            - name: ARGOCD_HYDRATOR_ENABLED
+              valueFrom:
+                configMapKeyRef:
+                  key: hydrator.enabled
+                  name: argocd-cmd-params-cm
+                  optional: true
+          image: quay.io/argoproj/argocd:v2.14.1
           imagePullPolicy: Always
           livenessProbe:
             httpGet:
@@ -349,6 +355,8 @@ spec:
               name: tmp
             - mountPath: /home/argocd/params
               name: argocd-cmd-params-cm
+      nodeSelector:
+        kubernetes.io/os: linux
       serviceAccountName: argocd-server
       volumes:
         - emptyDir: {}

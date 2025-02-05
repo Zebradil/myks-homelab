@@ -98,6 +98,12 @@ spec:
                   key: applicationsetcontroller.enable.progressive.syncs
                   name: argocd-cmd-params-cm
                   optional: true
+            - name: ARGOCD_APPLICATIONSET_CONTROLLER_TOKENREF_STRICT_MODE
+              valueFrom:
+                configMapKeyRef:
+                  key: applicationsetcontroller.enable.tokenref.strict.mode
+                  name: argocd-cmd-params-cm
+                  optional: true
             - name: ARGOCD_APPLICATIONSET_CONTROLLER_ENABLE_NEW_GIT_FILE_GLOBBING
               valueFrom:
                 configMapKeyRef:
@@ -158,7 +164,13 @@ spec:
                   key: applicationsetcontroller.webhook.parallelism.limit
                   name: argocd-cmd-params-cm
                   optional: true
-          image: quay.io/argoproj/argocd:v2.13.4
+            - name: ARGOCD_APPLICATIONSET_CONTROLLER_REQUEUE_AFTER
+              valueFrom:
+                configMapKeyRef:
+                  key: applicationsetcontroller.requeue.after
+                  name: argocd-cmd-params-cm
+                  optional: true
+          image: quay.io/argoproj/argocd:v2.14.1
           imagePullPolicy: Always
           name: argocd-applicationset-controller
           ports:
@@ -188,6 +200,8 @@ spec:
               name: tmp
             - mountPath: /app/config/reposerver/tls
               name: argocd-repo-server-tls
+      nodeSelector:
+        kubernetes.io/os: linux
       serviceAccountName: argocd-applicationset-controller
       volumes:
         - configMap:
