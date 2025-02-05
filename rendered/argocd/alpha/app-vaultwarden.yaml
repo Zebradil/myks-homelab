@@ -1,18 +1,18 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
+  annotations:
+    app.kubernetes.io/source: https://github.com/Zebradil/myks-homelab
+    myks.dev/environment: alpha
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
   name: app-alpha-vaultwarden
   namespace: argocd
-  finalizers:
-  - resources-finalizer.argocd.argoproj.io
-  annotations:
-    myks.dev/environment: alpha
-    app.kubernetes.io/source: https://github.com/Zebradil/myks-homelab
 spec:
-  project: env-alpha
   destination:
     name: in-cluster
     namespace: vaultwarden
+  project: env-alpha
   source:
     path: rendered/envs/alpha/vaultwarden
     plugin:
@@ -24,5 +24,5 @@ spec:
       prune: true
       selfHeal: false
     syncOptions:
-    - CreateNamespace=true
-    - ServerSideApply=true
+      - CreateNamespace=true
+      - ServerSideApply=true
