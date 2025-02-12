@@ -1,34 +1,18 @@
-# Copyright 2022 The cert-manager Authors.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-# Source: cert-manager/templates/crds.yaml
-#
-# START crd
+# {{- include "cert-manager.crd-check" . }}
+# START crd {{- if or .Values.crds.enabled .Values.installCRDs }}
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: certificaterequests.cert-manager.io
-  # START annotations
+  # START annotations {{- if .Values.crds.keep }}
   annotations:
     helm.sh/resource-policy: keep
-  # END annotations
+  # END annotations {{- end }}
   labels:
-    app: 'cert-manager'
-    app.kubernetes.io/name: 'cert-manager'
-    app.kubernetes.io/instance: 'cert-manager'
-    # Generated labels
-    app.kubernetes.io/version: "v1.16.3"
+    app: '{{ template "cert-manager.name" . }}'
+    app.kubernetes.io/name: '{{ template "cert-manager.name" . }}'
+    app.kubernetes.io/instance: '{{ .Release.Name }}'
+    # Generated labels {{- include "labels" . | nindent 4 }}
 spec:
   group: cert-manager.io
   names:
@@ -332,24 +316,23 @@ spec:
       served: true
       storage: true
 
-# END crd
+# END crd {{- end }}
+
 ---
-# Source: cert-manager/templates/crds.yaml
-# START crd
+# START crd {{- if or .Values.crds.enabled .Values.installCRDs }}
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: certificates.cert-manager.io
-  # START annotations
+  # START annotations {{- if .Values.crds.keep }}
   annotations:
     helm.sh/resource-policy: keep
-  # END annotations
+  # END annotations {{- end }}
   labels:
-    app: 'cert-manager'
-    app.kubernetes.io/name: 'cert-manager'
-    app.kubernetes.io/instance: 'cert-manager'
-    # Generated labels
-    app.kubernetes.io/version: "v1.16.3"
+    app: '{{ template "cert-manager.name" . }}'
+    app.kubernetes.io/name: '{{ template "cert-manager.name" . }}'
+    app.kubernetes.io/instance: '{{ .Release.Name }}'
+    # Generated labels {{- include "labels" . | nindent 4 }}
 spec:
   group: cert-manager.io
   names:
@@ -531,7 +514,6 @@ spec:
                       type: object
                       required:
                         - create
-                        - passwordSecretRef
                       properties:
                         alias:
                           description: |-
@@ -543,17 +525,25 @@ spec:
                             Create enables JKS keystore creation for the Certificate.
                             If true, a file named `keystore.jks` will be created in the target
                             Secret resource, encrypted using the password stored in
-                            `passwordSecretRef`.
+                            `passwordSecretRef` or `password`.
                             The keystore file will be updated immediately.
                             If the issuer provided a CA certificate, a file named `truststore.jks`
                             will also be created in the target Secret resource, encrypted using the
                             password stored in `passwordSecretRef`
                             containing the issuing Certificate Authority
                           type: boolean
+                        password:
+                          description: |-
+                            Password provides a literal password used to encrypt the JKS keystore.
+                            Mutually exclusive with passwordSecretRef.
+                            One of password or passwordSecretRef must provide a password with a non-zero length.
+                          type: string
                         passwordSecretRef:
                           description: |-
-                            PasswordSecretRef is a reference to a key in a Secret resource
+                            PasswordSecretRef is a reference to a non-empty key in a Secret resource
                             containing the password used to encrypt the JKS keystore.
+                            Mutually exclusive with password.
+                            One of password or passwordSecretRef must provide a password with a non-zero length.
                           type: object
                           required:
                             - name
@@ -576,24 +566,31 @@ spec:
                       type: object
                       required:
                         - create
-                        - passwordSecretRef
                       properties:
                         create:
                           description: |-
                             Create enables PKCS12 keystore creation for the Certificate.
                             If true, a file named `keystore.p12` will be created in the target
                             Secret resource, encrypted using the password stored in
-                            `passwordSecretRef`.
+                            `passwordSecretRef` or in `password`.
                             The keystore file will be updated immediately.
                             If the issuer provided a CA certificate, a file named `truststore.p12` will
                             also be created in the target Secret resource, encrypted using the
                             password stored in `passwordSecretRef` containing the issuing Certificate
                             Authority
                           type: boolean
+                        password:
+                          description: |-
+                            Password provides a literal password used to encrypt the PKCS#12 keystore.
+                            Mutually exclusive with passwordSecretRef.
+                            One of password or passwordSecretRef must provide a password with a non-zero length.
+                          type: string
                         passwordSecretRef:
                           description: |-
-                            PasswordSecretRef is a reference to a key in a Secret resource
-                            containing the password used to encrypt the PKCS12 keystore.
+                            PasswordSecretRef is a reference to a non-empty key in a Secret resource
+                            containing the password used to encrypt the PKCS#12 keystore.
+                            Mutually exclusive with password.
+                            One of password or passwordSecretRef must provide a password with a non-zero length.
                           type: object
                           required:
                             - name
@@ -1101,24 +1098,23 @@ spec:
       served: true
       storage: true
 
-# END crd
+# END crd {{- end }}
+
 ---
-# Source: cert-manager/templates/crds.yaml
-# START crd
+# START crd {{- if or .Values.crds.enabled .Values.installCRDs }}
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: challenges.acme.cert-manager.io
-  # START annotations
+  # START annotations {{- if .Values.crds.keep }}
   annotations:
     helm.sh/resource-policy: keep
-  # END annotations
+  # END annotations {{- end }}
   labels:
-    app: 'cert-manager'
-    app.kubernetes.io/name: 'cert-manager'
-    app.kubernetes.io/instance: 'cert-manager'
-    # Generated labels
-    app.kubernetes.io/version: "v1.16.3"
+    app: '{{ template "cert-manager.name" . }}'
+    app.kubernetes.io/name: '{{ template "cert-manager.name" . }}'
+    app.kubernetes.io/instance: '{{ .Release.Name }}'
+    # Generated labels {{- include "labels" . | nindent 4 }}
 spec:
   group: acme.cert-manager.io
   names:
@@ -1393,6 +1389,9 @@ spec:
                                   description: |-
                                     resource ID of the managed identity, can not be used at the same time as clientID
                                     Cannot be used for Azure Managed Service Identity
+                                  type: string
+                                tenantID:
+                                  description: tenant ID of the managed identity, can not be used at the same time as resourceID
                                   type: string
                             resourceGroupName:
                               description: resource group the DNS zone is located in
@@ -4308,24 +4307,23 @@ spec:
       subresources:
         status: {}
 
-# END crd
+# END crd {{- end }}
+
 ---
-# Source: cert-manager/templates/crds.yaml
-# START crd
+# START crd {{- if or .Values.crds.enabled .Values.installCRDs }}
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: clusterissuers.cert-manager.io
-  # START annotations
+  # START annotations {{- if .Values.crds.keep }}
   annotations:
     helm.sh/resource-policy: keep
-  # END annotations
+  # END annotations {{- end }}
   labels:
-    app: 'cert-manager'
-    app.kubernetes.io/name: 'cert-manager'
-    app.kubernetes.io/instance: 'cert-manager'
-    # Generated labels
-    app.kubernetes.io/version: "v1.16.3"
+    app: '{{ template "cert-manager.name" . }}'
+    app.kubernetes.io/name: '{{ template "cert-manager.name" . }}'
+    app.kubernetes.io/instance: '{{ .Release.Name }}'
+    # Generated labels {{- include "labels" . | nindent 4 }}
 spec:
   group: cert-manager.io
   names:
@@ -4707,6 +4705,9 @@ spec:
                                         description: |-
                                           resource ID of the managed identity, can not be used at the same time as clientID
                                           Cannot be used for Azure Managed Service Identity
+                                        type: string
+                                      tenantID:
+                                        description: tenant ID of the managed identity, can not be used at the same time as resourceID
                                         type: string
                                   resourceGroupName:
                                     description: resource group the DNS zone is located in
@@ -8035,25 +8036,24 @@ spec:
       served: true
       storage: true
 
-# END crd
+# END crd {{- end }}
+
 ---
-# Source: cert-manager/templates/crds.yaml
-# START crd
+# START crd {{- if or .Values.crds.enabled .Values.installCRDs }}
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: issuers.cert-manager.io
-  # START annotations
+  # START annotations {{- if .Values.crds.keep }}
   annotations:
     helm.sh/resource-policy: keep
-  # END annotations
+  # END annotations {{- end }}
   labels:
-    app: 'cert-manager'
-    app.kubernetes.io/name: 'cert-manager'
-    app.kubernetes.io/instance: 'cert-manager'
+    app: '{{ template "cert-manager.name" . }}'
+    app.kubernetes.io/name: '{{ template "cert-manager.name" . }}'
+    app.kubernetes.io/instance: '{{ .Release.Name }}'
     app.kubernetes.io/component: "crds"
-    # Generated labels
-    app.kubernetes.io/version: "v1.16.3"
+    # Generated labels {{- include "labels" . | nindent 4 }}
 spec:
   group: cert-manager.io
   names:
@@ -8434,6 +8434,9 @@ spec:
                                         description: |-
                                           resource ID of the managed identity, can not be used at the same time as clientID
                                           Cannot be used for Azure Managed Service Identity
+                                        type: string
+                                      tenantID:
+                                        description: tenant ID of the managed identity, can not be used at the same time as resourceID
                                         type: string
                                   resourceGroupName:
                                     description: resource group the DNS zone is located in
@@ -11762,25 +11765,24 @@ spec:
       served: true
       storage: true
 
-# END crd
+# END crd {{- end }}
+
 ---
-# Source: cert-manager/templates/crds.yaml
-# START crd
+# START crd {{- if or .Values.crds.enabled .Values.installCRDs }}
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: orders.acme.cert-manager.io
-  # START annotations
+  # START annotations {{- if .Values.crds.keep }}
   annotations:
     helm.sh/resource-policy: keep
-  # END annotations
+  # END annotations {{- end }}
   labels:
-    app: 'cert-manager'
-    app.kubernetes.io/name: 'cert-manager'
-    app.kubernetes.io/instance: 'cert-manager'
+    app: '{{ template "cert-manager.name" . }}'
+    app.kubernetes.io/name: '{{ template "cert-manager.name" . }}'
+    app.kubernetes.io/instance: '{{ .Release.Name }}'
     app.kubernetes.io/component: "crds"
-    # Generated labels
-    app.kubernetes.io/version: "v1.16.3"
+    # Generated labels {{- include "labels" . | nindent 4 }}
 spec:
   group: acme.cert-manager.io
   names:
@@ -12031,4 +12033,4 @@ spec:
       served: true
       storage: true
 
-# END crd
+# END crd {{- end }}
