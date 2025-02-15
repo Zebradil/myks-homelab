@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: authelia
     app.kubernetes.io/version: 4.38.16
-    helm.sh/chart: authelia-0.9.14
+    helm.sh/chart: authelia-0.9.15
   name: authelia
 spec:
   minReadySeconds: 0
@@ -23,13 +23,13 @@ spec:
   template:
     metadata:
       annotations:
-        authelia.com/checksum-config: 82e51ceba754f2e96c4c260aaa49ad5e1494896c762c3b598090137e877c0326
+        authelia.com/checksum-config: 714ba5193c7fcfbba77885c3e7ea4b0fc10255a3276a620ca0ae0215fed3fb19
       labels:
         app.kubernetes.io/instance: authelia
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: authelia
         app.kubernetes.io/version: 4.38.16
-        helm.sh/chart: authelia-0.9.14
+        helm.sh/chart: authelia-0.9.15
     spec:
       affinity:
         nodeAffinity: {}
