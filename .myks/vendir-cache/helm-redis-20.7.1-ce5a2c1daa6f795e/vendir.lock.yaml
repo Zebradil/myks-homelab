@@ -1,0 +1,10 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - configDigest: f2ecbc33dedac8b175bb4d5e4abfc9fc33b2897721f884ec5b96f0efcaea1b45
+    helmChart:
+      appVersion: 7.4.2
+      version: 20.7.1
+    path: .
+  path: .myks/vendir-cache/helm-redis-20.7.1-ce5a2c1daa6f795e/data
+kind: LockConfig
