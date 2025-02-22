@@ -7,6 +7,6 @@ directories:
     lazy: true
     helmChart:
       name: authelia
-      version: 0.9.14
+      version: 0.9.16
       repository:
         url: https://charts.authelia.com
