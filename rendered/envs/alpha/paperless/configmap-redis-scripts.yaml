@@ -10,6 +10,9 @@ data:
     if [[ -f /opt/bitnami/redis/mounted-etc/redis.conf ]];then
         cp /opt/bitnami/redis/mounted-etc/redis.conf /opt/bitnami/redis/etc/redis.conf
     fi
+    if [[ -f /opt/bitnami/redis/mounted-etc/users.acl ]];then
+        cp /opt/bitnami/redis/mounted-etc/users.acl /opt/bitnami/redis/etc/users.acl
+    fi
     ARGS=("--port" "${REDIS_PORT}")
     ARGS+=("--protected-mode" "no")
     ARGS+=("--include" "/opt/bitnami/redis/etc/redis.conf")
@@ -24,6 +27,6 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: redis
     app.kubernetes.io/version: 7.4.2
-    helm.sh/chart: redis-20.6.3
+    helm.sh/chart: redis-20.8.0
   name: redis-scripts
   namespace: paperless
