@@ -27,7 +27,7 @@ jobs:
           # use more powerful token to trigger subsequent workflows
           token: ${{ secrets.ZEBRADIL_BOT_GITHUB_TOKEN }}
       - name: Derive appropriate SHAs for base and head for myks Smart Mode
-        uses: nrwl/nx-set-shas@dca968562d66d775d4d29dea65d252ab7359a2fa # v4.2.0
+        uses: nrwl/nx-set-shas@2fa6769581e1ccf9ca8ce27e305d21b195bdaa7f # v4.2.1
       - run: |
           echo "BASE: ${{ env.NX_BASE }}"
           echo "HEAD: ${{ env.NX_HEAD }}"
