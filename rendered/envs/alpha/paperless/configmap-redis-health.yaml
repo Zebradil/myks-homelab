@@ -103,6 +103,6 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: redis
     app.kubernetes.io/version: 7.4.2
-    helm.sh/chart: redis-20.10.1
+    helm.sh/chart: redis-20.11.0
   name: redis-health
   namespace: paperless
