@@ -7,7 +7,7 @@ directories:
     lazy: true
     helmChart:
       name: postgresql
-      version: 16.4.15
+      version: 16.4.16
       repository:
         url: oci://registry-1.docker.io/bitnamicharts
 - path: charts/redis
