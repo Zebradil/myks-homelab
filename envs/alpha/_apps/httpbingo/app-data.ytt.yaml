@@ -2,5 +2,5 @@
 ---
 application:
   #! renovate: datasource=docker
-  image: mccutchen/go-httpbin:v2.16.1
+  image: mccutchen/go-httpbin:2.17.1
   containerPort: 8080
