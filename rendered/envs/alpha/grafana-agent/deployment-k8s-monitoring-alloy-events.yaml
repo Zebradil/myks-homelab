@@ -8,8 +8,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: alloy-events
     app.kubernetes.io/part-of: alloy
-    app.kubernetes.io/version: v1.7.1
-    helm.sh/chart: alloy-events-0.12.1
+    app.kubernetes.io/version: v1.7.4
+    helm.sh/chart: alloy-events-0.12.5
   name: k8s-monitoring-alloy-events
   namespace: grafana-agent
 spec:
@@ -43,7 +43,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
-          image: docker.io/grafana/alloy:v1.7.1
+          image: docker.io/grafana/alloy:v1.7.4
           imagePullPolicy: IfNotPresent
           name: alloy
           ports:
