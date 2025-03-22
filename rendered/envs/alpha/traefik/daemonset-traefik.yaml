@@ -7,7 +7,7 @@ metadata:
     app.kubernetes.io/instance: traefik-traefik
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: traefik
-    helm.sh/chart: traefik-33.2.1
+    helm.sh/chart: traefik-34.4.1
   name: traefik
   namespace: traefik
 spec:
@@ -26,7 +26,7 @@ spec:
         app.kubernetes.io/instance: traefik-traefik
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: traefik
-        helm.sh/chart: traefik-33.2.1
+        helm.sh/chart: traefik-34.4.1
     spec:
       automountServiceAccountToken: true
       containers:
@@ -51,12 +51,15 @@ spec:
             - --providers.kubernetesingress.allowEmptyServices=true
             - --entryPoints.lan-web.http.redirections.entryPoint.to=:443
             - --entryPoints.lan-web.http.redirections.entryPoint.scheme=https
+            - --entryPoints.lan-web.http.redirections.entryPoint.permanent=true
             - --entryPoints.lan-websecure.http.tls=true
             - --entryPoints.vpn-web.http.redirections.entryPoint.to=:443
             - --entryPoints.vpn-web.http.redirections.entryPoint.scheme=https
+            - --entryPoints.vpn-web.http.redirections.entryPoint.permanent=true
             - --entryPoints.vpn-websecure.http.tls=true
             - --entryPoints.web.http.redirections.entryPoint.to=:443
             - --entryPoints.web.http.redirections.entryPoint.scheme=https
+            - --entryPoints.web.http.redirections.entryPoint.permanent=true
             - --entryPoints.websecure.http.tls=true
             - --log.level=DEBUG
             - --accesslog=true
@@ -119,7 +122,7 @@ spec:
                   fieldPath: metadata.namespace
             - name: BASE_DOMAIN
               value: zebradil.dev
-          image: docker.io/traefik:v3.2.2
+          image: docker.io/traefik:v3.3.4
           imagePullPolicy: IfNotPresent
           lifecycle: null
           livenessProbe:

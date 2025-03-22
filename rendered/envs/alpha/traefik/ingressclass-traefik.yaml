@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/instance: traefik-traefik
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: traefik
-    helm.sh/chart: traefik-33.2.1
+    helm.sh/chart: traefik-34.4.1
   name: traefik
 spec:
   controller: traefik.io/ingress-controller
