@@ -19,8 +19,9 @@
   ],
   // Ignore all rendered files
   ignorePaths: ["rendered/**", ".myks/**"],
-  regexManagers: [
+  customManagers: [
     {
+      customType: "regex",
       fileMatch: ["(^|/)app-data\\.ytt\\.yaml$"],
       matchStrings: [
         // #! renovate: datasource=docker
@@ -39,6 +40,7 @@
       ],
     },
     {
+      customType: "regex",
       fileMatch: ["(^|/)vendir-data\\.ytt\\.yaml$"],
       matchStrings: [
         // #! renovate: datasource=git-tags
@@ -53,6 +55,7 @@
       ],
     },
     {
+      customType: "regex",
       // Helm charts in OCI format require special treatment.
       // In particular, the registry must be a part of the package name.
       // See https://github.com/renovatebot/renovate/discussions/25056#discussioncomment-7200797
