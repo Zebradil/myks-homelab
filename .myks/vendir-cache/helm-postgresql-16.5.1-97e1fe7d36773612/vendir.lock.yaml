@@ -1,0 +1,10 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - configDigest: 15d8973175bf15cad7bb190688ab194ded8d60cda6abd4a2621740c5eb888697
+    helmChart:
+      appVersion: 17.4.0
+      version: 16.5.1
+    path: .
+  path: .myks/vendir-cache/helm-postgresql-16.5.1-97e1fe7d36773612/data
+kind: LockConfig
