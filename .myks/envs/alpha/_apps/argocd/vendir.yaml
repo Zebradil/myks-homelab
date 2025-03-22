@@ -7,7 +7,7 @@ directories:
     lazy: true
     git:
       url: https://github.com/argoproj/argo-cd
-      ref: origin/v2.14.6
+      ref: origin/v2.14.7
       depth: 1
     includePaths:
     - manifests/install.yaml

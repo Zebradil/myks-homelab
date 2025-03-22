@@ -3,13 +3,13 @@ directories:
     - contents:
         - git:
             depth: 1
-            ref: origin/v2.14.6
+            ref: origin/v2.14.7
             url: https://github.com/argoproj/argo-cd
           includePaths:
             - manifests/install.yaml
           lazy: true
           newRootPath: manifests
           path: .
-      path: .myks/vendir-cache/git-argo-cd-origin-v2.14.6-4aa1e878c2b5dd5f/data
+      path: .myks/vendir-cache/git-argo-cd-origin-v2.14.7-f25b799ee35fb4d2/data
       permissions: null
 kind: Config
