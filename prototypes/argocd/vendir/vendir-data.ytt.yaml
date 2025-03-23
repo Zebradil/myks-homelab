@@ -5,6 +5,6 @@ application:
   #! WARNING: The order of the keys (alphabetical) is important for renovate.
   #!          When changed, renovate won't be able to detect the new version.
   #!          See renovate.json for more details.
-  #! renovate: datasource=git-tags
+  #! renovate: datasource=github-releases
   url: https://github.com/argoproj/argo-cd
   version: v2.14.7
