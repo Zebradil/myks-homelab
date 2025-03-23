@@ -32,7 +32,7 @@ jobs:
           echo "BASE: ${{ env.NX_BASE }}"
           echo "HEAD: ${{ env.NX_HEAD }}"
       - name: Setup myks
-        uses: mykso/setup-action@364507111daa4bd012d419baf071f7ea78d1f205 # v3.0.3
+        uses: mykso/setup-action@6d00e6e68146fd4693768122dd22ec2a32a02890 # v3.0.4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Render
