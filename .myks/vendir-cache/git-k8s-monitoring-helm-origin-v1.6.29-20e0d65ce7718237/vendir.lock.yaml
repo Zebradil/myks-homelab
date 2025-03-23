@@ -1,0 +1,12 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - configDigest: 4e8e692719ce13f0af6b9fb50c542facaaec82e6a1a2eff044142fd943f8e51f
+    git:
+      commitTitle: Bump versions to 1.6.29 and 2.0.18...
+      sha: e3f1a7defae863ba55a632741cb2932be4f2509d
+      tags:
+      - v1.6.29
+    path: .
+  path: .myks/vendir-cache/git-k8s-monitoring-helm-origin-v1.6.29-20e0d65ce7718237/data
+kind: LockConfig

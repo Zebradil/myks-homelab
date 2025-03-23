@@ -1,0 +1,15 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+    - contents:
+        - git:
+            depth: 1
+            ref: origin/v1.6.29
+            url: https://github.com/grafana/k8s-monitoring-helm
+          includePaths:
+            - charts/k8s-monitoring-v1/**
+          lazy: true
+          newRootPath: charts/k8s-monitoring-v1
+          path: .
+      path: .myks/vendir-cache/git-k8s-monitoring-helm-origin-v1.6.29-20e0d65ce7718237/data
+      permissions: null
+kind: Config

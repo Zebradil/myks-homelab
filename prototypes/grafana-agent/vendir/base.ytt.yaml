@@ -32,4 +32,5 @@ directories:
         newRootPath: #@ myApp.newRootPath
         #@ if/end myApp.includePaths:
         includePaths: #@ myApp.includePaths
+        lazy: true
 #@ end
