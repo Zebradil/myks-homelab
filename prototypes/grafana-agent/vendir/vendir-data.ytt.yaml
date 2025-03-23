@@ -5,13 +5,15 @@ application:
   managed:
     - kind: helm
       source: git
+      name: k8s-monitoring
+
       #! WARNING: The order of the keys (alphabetical) is important for renovate.
       #!          When changed, renovate won't be able to detect the new version.
       #!          See renovate.json for more details.
       #! renovate: datasource=github-releases
-      name: k8s-monitoring
       url: https://github.com/grafana/k8s-monitoring-helm
       version: v1.6.29
+
       includePaths:
         - charts/k8s-monitoring-v1/**
       newRootPath: charts/k8s-monitoring-v1

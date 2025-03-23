@@ -46,7 +46,7 @@
         // #! renovate: datasource=git-tags
         // url: https://github.com/argoproj/argo-cd
         // version: v2.6.6
-        "#!\\s+renovate:\\s+datasource=(?<datasource>git-tags)\\s+url:\\s+['\"]?(?<depName>[^'\"\\s]+)['\"]?\\s+version:\\s+['\"]?(?<currentValue>[^'\"\\s]+)['\"]?",
+        "#!\\s+renovate:\\s+datasource=(?<datasource>\\w+)\\s+url:\\s+['\"]?(?<depName>[^'\"\\s]+)['\"]?\\s+version:\\s+['\"]?(?<currentValue>[^'\"\\s]+)['\"]?",
         // #! renovate: datasource=helm
         // name: apisix
         // url: https://charts.apiseven.com
