@@ -5,10 +5,7 @@ metadata:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
     app.kubernetes.io/instance: authelia
-    app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: authelia
-    app.kubernetes.io/version: 4.39.1
-    helm.sh/chart: authelia-0.10.4
   name: chain-authelia
 spec:
   chain:
