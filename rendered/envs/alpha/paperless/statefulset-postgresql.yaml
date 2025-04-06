@@ -51,16 +51,10 @@ spec:
               value: /bitnami/postgresql/data
             - name: POSTGRES_USER
               value: paperless
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: password
-                  name: postgresql
-            - name: POSTGRES_POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: postgres-password
-                  name: postgresql
+            - name: POSTGRES_PASSWORD_FILE
+              value: /opt/bitnami/postgresql/secrets/password
+            - name: POSTGRES_POSTGRES_PASSWORD_FILE
+              value: /opt/bitnami/postgresql/secrets/postgres-password
             - name: POSTGRES_DATABASE
               value: paperless
             - name: POSTGRESQL_ENABLE_LDAP
@@ -133,6 +127,8 @@ spec:
             - mountPath: /opt/bitnami/postgresql/tmp
               name: empty-dir
               subPath: app-tmp-dir
+            - mountPath: /opt/bitnami/postgresql/secrets/
+              name: postgresql-password
             - mountPath: /dev/shm
               name: dshm
             - mountPath: /bitnami/postgresql
@@ -148,6 +144,9 @@ spec:
       volumes:
         - emptyDir: {}
           name: empty-dir
+        - name: postgresql-password
+          secret:
+            secretName: postgresql
         - emptyDir:
             medium: Memory
           name: dshm
