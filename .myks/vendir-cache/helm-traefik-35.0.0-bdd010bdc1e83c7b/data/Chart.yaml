@@ -1,11 +1,12 @@
 annotations:
-  artifacthub.io/changes: "- \"fix(Traefik Proxy): headerLabels does not exist for
-    metrics.prometheus\"\n- \"fix(Traefik Hub): add missing consulCatalogEnterprise
-    provider\"\n- \"feat(deps): update traefik docker tag to v3.3.4\"\n- \"docs(Traefik
-    Proxy): fix VALUES.md generation on prometheus values\"\n- \"chore(release): \U0001F680
-    publish v34.4.1\"\n"
+  artifacthub.io/changes: "- \"fix: do not quote protocol on pod ports\"\n- \"fix(tracing):
+    \U0001F41B multiple response or request headers\"\n- \"feat: ✨ Oracle Cloud marketplace
+    integration\"\n- \"feat(deps): update traefik docker tag to v3.3.5\"\n- \"feat!:
+    add port name template functions\"\n- \"chore(release): :rocket: publish traefik
+    35.0.0\"\n- \"chore(helpers): :bookmark: update hub proxy corresponding versions\"\n-
+    \"chore(ci): :bug: should fail on test error\"\n"
 apiVersion: v2
-appVersion: v3.3.4
+appVersion: v3.3.5
 description: A Traefik based Kubernetes ingress controller
 home: https://traefik.io/
 icon: https://raw.githubusercontent.com/traefik/traefik/v2.3/docs/content/assets/img/traefik.logo.png
@@ -27,4 +28,4 @@ sources:
 - https://github.com/traefik/traefik-helm-chart
 - https://github.com/traefik/traefik
 type: application
-version: 34.4.1
+version: 35.0.0
