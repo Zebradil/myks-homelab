@@ -31,7 +31,7 @@ spec:
               value: /etc/comentario/secrets.yaml
             - name: BASE_URL
               value: https://comentario.zebradil.dev
-          image: registry.gitlab.com/comentario/comentario:v3.13.0-ubuntu
+          image: registry.gitlab.com/comentario/comentario:v3.13.1-ubuntu
           name: comentario
           ports:
             - containerPort: 8080
