@@ -1,0 +1,10 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - configDigest: 49971493d3c3c1e91af00c0d8a2c1adaf0b816b44b292f9ceea0aa26fcf2f7dd
+    helmChart:
+      appVersion: 4.39.1
+      version: 0.10.5
+    path: .
+  path: .myks/vendir-cache/helm-authelia-0.10.5-b29e2e1240fdae52/data
+kind: LockConfig

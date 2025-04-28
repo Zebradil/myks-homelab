@@ -9,7 +9,7 @@ data:
       address: 'tcp://0.0.0.0:9091/'
       asset_path: ''
       headers:
-        csp_template: ''
+        csp_template: ""
       buffers:
         read: 4096
         write: 4096
