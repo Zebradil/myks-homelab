@@ -1,12 +1,9 @@
 annotations:
-  artifacthub.io/changes: "- \"fix: do not quote protocol on pod ports\"\n- \"fix(tracing):
-    \U0001F41B multiple response or request headers\"\n- \"feat: ✨ Oracle Cloud marketplace
-    integration\"\n- \"feat(deps): update traefik docker tag to v3.3.5\"\n- \"feat!:
-    add port name template functions\"\n- \"chore(release): :rocket: publish traefik
-    35.0.0\"\n- \"chore(helpers): :bookmark: update hub proxy corresponding versions\"\n-
-    \"chore(ci): :bug: should fail on test error\"\n"
+  artifacthub.io/changes: |
+    - "feat(deps): update traefik docker tag to v3.3.6"
+    - "chore(release): :rocket: publish traefik 35.0.1"
 apiVersion: v2
-appVersion: v3.3.5
+appVersion: v3.3.6
 description: A Traefik based Kubernetes ingress controller
 home: https://traefik.io/
 icon: https://raw.githubusercontent.com/traefik/traefik/v2.3/docs/content/assets/img/traefik.logo.png
@@ -28,4 +25,4 @@ sources:
 - https://github.com/traefik/traefik-helm-chart
 - https://github.com/traefik/traefik
 type: application
-version: 35.0.0
+version: 35.0.1
