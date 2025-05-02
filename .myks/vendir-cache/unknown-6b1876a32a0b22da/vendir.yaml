@@ -1,0 +1,10 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+    - contents:
+        - http:
+            url: https://github.com/cert-manager/cert-manager/releases/download/v1.17.2/cert-manager.crds.yaml
+          lazy: true
+          path: .
+      path: .myks/vendir-cache/unknown-6b1876a32a0b22da/data
+      permissions: null
+kind: Config
