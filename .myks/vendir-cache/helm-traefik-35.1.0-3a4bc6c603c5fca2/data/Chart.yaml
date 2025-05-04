@@ -1,7 +1,9 @@
 annotations:
   artifacthub.io/changes: |
-    - "feat(deps): update traefik docker tag to v3.3.6"
-    - "chore(release): :rocket: publish traefik 35.0.1"
+    - "feat: ✨ versionOverride"
+    - "feat(Traefik Hub): namespaces"
+    - "feat(CRDs): remove APIAccess resource"
+    - "chore(release): :rocket: publish v35.1.0 and CRDs v1.7.0"
 apiVersion: v2
 appVersion: v3.3.6
 description: A Traefik based Kubernetes ingress controller
@@ -25,4 +27,4 @@ sources:
 - https://github.com/traefik/traefik-helm-chart
 - https://github.com/traefik/traefik
 type: application
-version: 35.0.1
+version: 35.1.0
