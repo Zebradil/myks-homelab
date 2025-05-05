@@ -1,5 +1,5 @@
 {{- define "traefik.podTemplate" }}
-  {{- $version := include "proxyVersion" $ }}
+  {{- $version := include "traefik.proxyVersion" $ }}
     metadata:
       annotations:
       {{- if .Values.deployment.podAnnotations }}
@@ -773,6 +773,9 @@
           - "--hub.token=$(HUB_TOKEN)"
             {{- if and (not .apimanagement.enabled) ($.Values.hub.apimanagement.admission.listenAddr) }}
                {{- fail "ERROR: Cannot configure admission without enabling hub.apimanagement" }}
+            {{- end }}
+            {{- if .namespaces }}
+          - "--hub.namespaces={{ join "," (uniq (concat (include "traefik.namespace" $ | list) .namespaces)) }}"
             {{- end }}
             {{- with .apimanagement }}
              {{- if .enabled }}
