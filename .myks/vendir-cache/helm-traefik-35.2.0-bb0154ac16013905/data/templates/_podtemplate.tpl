@@ -817,8 +817,10 @@
               {{- end }}
              {{- end }}
             {{- end }}
-            {{- with .sendlogs }}
+            {{- if ne .sendlogs nil }}
+              {{- with .sendlogs | toString}}
           - "--hub.sendlogs={{ . }}"
+              {{- end }}
             {{- end }}
             {{- if and $.Values.tracing.otlp.enabled .tracing.additionalTraceHeaders.enabled }}
               {{- include "traefik.yaml2CommandLineArgs" (dict "path" "hub.tracing.additionalTraceHeaders.traceContext" "content" $.Values.hub.tracing.additionalTraceHeaders.traceContext) | nindent 10 }}
@@ -858,7 +860,7 @@
           - name: HUB_TOKEN
             valueFrom:
               secretKeyRef:
-                name: {{ . }}
+                name: {{ empty $.Values.hub.createSecret | ternary . "traefik-hub-license" }}
                 key: token
           {{- end }}
         {{- with .Values.env }}
