@@ -46,7 +46,7 @@ spec:
       automountServiceAccountToken: false
       containers:
         - args:
-            - -c
+            - -ec
             - /opt/bitnami/scripts/start-scripts/start-master.sh
           command:
             - /bin/bash
@@ -61,13 +61,13 @@ spec:
               value: "no"
             - name: REDIS_PORT
               value: "6379"
-          image: docker.io/bitnami/redis:7.4.3-debian-12-r0
+          image: docker.io/bitnami/redis:8.0.0-debian-12-r0
           imagePullPolicy: IfNotPresent
           livenessProbe:
             exec:
               command:
-                - sh
-                - -c
+                - /bin/bash
+                - -ec
                 - /health/ping_liveness_local.sh 5
             failureThreshold: 5
             initialDelaySeconds: 20
@@ -81,8 +81,8 @@ spec:
           readinessProbe:
             exec:
               command:
-                - sh
-                - -c
+                - /bin/bash
+                - -ec
                 - /health/ping_readiness_local.sh 1
             failureThreshold: 5
             initialDelaySeconds: 20
