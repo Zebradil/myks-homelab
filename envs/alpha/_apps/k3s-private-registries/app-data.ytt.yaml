@@ -12,5 +12,8 @@ application:
       europe-west3-docker.pkg.dev:
         auth:
           username: _json_key
-          #! Quote the password, as it is a JSON key
-          password: #@ "'{}'".format(sec.sops("0", "password"))
+          #! The workaround with the text-templated-strings is required to ensure that the final value, after it is
+          #! being substituted by ArgoCD Vault Plugin, is a string and not an object.
+          #@yaml/text-templated-strings
+          password: |
+            (@= sec.sops("0", "password") @)
