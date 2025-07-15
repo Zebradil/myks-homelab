@@ -11,6 +11,7 @@ This prototype configures K3s nodes to use private Docker registries by creating
 - Automatically restarts when configuration changes
 - Runs on all nodes with appropriate tolerations
 - Resource-efficient: containers exit after completion
+- Secure: Uses Kubernetes Secret instead of ConfigMap for sensitive registry data
 
 ## Configuration
 
@@ -120,15 +121,15 @@ application:
 
 ## How it Works
 
-1. **ConfigMap**: Contains the exact `registries.yaml` content you provide
-2. **DaemonSet**: Runs on all nodes with a container that:
+1. **Secret**: Contains the exact `registries.yaml` content you provide (stored securely as a Kubernetes Secret)
+2. **DaemonSet**: Runs on all nodes with an init container that:
    - Creates the `/etc/rancher/k3s` directory if needed
    - Compares old vs new configuration and shows diff (with secrets masked)
    - Writes the new `registries.yaml` file to the host
    - Exits after completion (resource-efficient)
-3. **Secret Masking**: Uses `yq` to safely mask `auth.username`, `auth.password`, and `auth.token` in diff output
-4. **Restart Detection**: Uses checksum annotations to restart pods when configuration changes
-5. **Restart Policy**: `OnFailure` means containers only restart if they fail, not on successful completion
+3. **Pause Container**: Minimal container that keeps the pod running with minimal resource usage
+4. **Secret Masking**: Uses `yq` to safely mask `auth.username`, `auth.password`, and `auth.token` in diff output
+5. **Restart Detection**: Uses checksum annotations to restart pods when configuration changes
 
 ## Example Log Output
 
@@ -195,12 +196,13 @@ After deploying this prototype:
 
 - **Check DaemonSet status**: `kubectl get ds <your-app-name>-writer`
 - **View logs**: `kubectl logs -l app=<your-app-name>-writer`
-- **Check ConfigMap**: `kubectl get configmap <your-app-name>-config -o yaml`
+- **Check Secret**: `kubectl get secret <your-app-name>-config -o yaml`
 - **Verify file on host**: `ls -la /etc/rancher/k3s/`
 - **K3s containerd logs**: `sudo journalctl -u k3s -f`
 
 ## Security Features
 
+- **Kubernetes Secret**: Registry configuration stored as Secret instead of ConfigMap for better security
 - **Secret Masking**: All `username`, `password`, and `token` values are masked as `<REDACTED>` in logs
 - **YAML-aware Processing**: Uses `yq` for reliable secret detection and masking
 - **Minimal Privileges**: Runs as root only for filesystem access, no unnecessary capabilities

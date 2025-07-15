@@ -96,9 +96,9 @@ spec:
         - effect: NoExecute
           operator: Exists
       volumes:
-        - configMap:
-            name: k3s-private-registries-config
-          name: config
+        - name: config
+          secret:
+            secretName: k3s-private-registries-config
         - hostPath:
             path: /etc/rancher/k3s
             type: DirectoryOrCreate
