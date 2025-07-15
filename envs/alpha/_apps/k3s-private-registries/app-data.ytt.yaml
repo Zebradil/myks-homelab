@@ -5,11 +5,11 @@
 application:
   registries:
     mirrors:
-      europe-west4-docker.pkg.dev:
+      europe-west3-docker.pkg.dev:
         endpoint:
-          - https://europe-west4-docker.pkg.dev
+          - https://europe-west3-docker.pkg.dev
     configs:
-      europe-west4-docker.pkg.dev:
+      europe-west3-docker.pkg.dev:
         auth:
           username: _json_key
           #! Quote the password, as it is a JSON key
