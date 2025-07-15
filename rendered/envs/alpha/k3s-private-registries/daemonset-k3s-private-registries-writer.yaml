@@ -37,9 +37,9 @@ spec:
               # Function to mask secrets in YAML files using yq
               mask_secrets() {
                 yq eval '
-                  (.. | select(has("auth")) | .auth.username) = "<REDACTED>" |
-                  (.. | select(has("auth")) | .auth.password) = "<REDACTED>" |
-                  (.. | select(has("auth")) | .auth.token) = "<REDACTED>"
+                  (.. | select(has("auth")) | select(.auth | has("username")) | .auth.username) = "<REDACTED>" |
+                  (.. | select(has("auth")) | select(.auth | has("password")) | .auth.password) = "<REDACTED>" |
+                  (.. | select(has("auth")) | select(.auth | has("token")) | .auth.token) = "<REDACTED>"
                 ' "$1"
               }
 
