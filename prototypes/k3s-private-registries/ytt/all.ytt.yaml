@@ -17,6 +17,9 @@
 #! Convert the registries config to YAML as-is
 #@ registries_yaml = yaml.encode(a.registries)
 
+#! Read the script file content
+#@ script_content = data.read("write-registries-config.sh")
+
 ---
 apiVersion: v1
 kind: Secret
@@ -50,63 +53,16 @@ spec:
           image: #@ a.image
           command: ['/bin/sh', '-c']
           args:
-            #@yaml/text-templated-strings
-            - |
-              set -e
-
-              SOURCE_FILE="/config/(@= k3s_registries_filename @)"
-              TARGET_DIR="(@= k3s_registries_path @)"
-              TARGET_FILE="${TARGET_DIR}/(@= k3s_registries_filename @)"
-              TEMP_FILE="/tmp/(@= k3s_registries_filename @).new"
-
-              echo "Creating directory if it doesn't exist..."
-              mkdir -p "${TARGET_DIR}"
-
-              # Copy new config to temp location first
-              cp "${SOURCE_FILE}" "${TEMP_FILE}"
-
-              # Function to mask secrets in YAML files using yq
-              mask_secrets() {
-                yq eval '
-                  (.. | select(has("auth")) | select(.auth | has("username")) | .auth.username) = "<REDACTED>" |
-                  (.. | select(has("auth")) | select(.auth | has("password")) | .auth.password) = "<REDACTED>" |
-                  (.. | select(has("auth")) | select(.auth | has("token")) | .auth.token) = "<REDACTED>"
-                ' "$1"
-              }
-
-              # Show diff if old file exists
-              if [ -f "${TARGET_FILE}" ]; then
-                echo "Comparing old and new configurations..."
-
-                # Create masked versions for diff
-                OLD_MASKED_FILE="/tmp/old_masked.yaml"
-                NEW_MASKED_FILE="/tmp/new_masked.yaml"
-
-                mask_secrets "${TARGET_FILE}" > "${OLD_MASKED_FILE}"
-                mask_secrets "${TEMP_FILE}" > "${NEW_MASKED_FILE}"
-
-                if diff -u --label "OLD ${TARGET_FILE}" "${OLD_MASKED_FILE}" --label "NEW ${TARGET_FILE}" "${NEW_MASKED_FILE}"; then
-                  echo "No changes detected in configuration"
-                else
-                  echo "Configuration changes detected (secrets redacted in diff above)"
-                fi
-
-                # Cleanup temp files
-                rm -f "${OLD_MASKED_FILE}" "${NEW_MASKED_FILE}"
-              else
-                echo "Creating new registries configuration file"
-                echo "New configuration preview (secrets redacted):"
-                mask_secrets "${TEMP_FILE}" | sed 's/^/  /'
-              fi
-
-              # Move new file to final location
-              echo "Writing registries configuration..."
-              mv "${TEMP_FILE}" "${TARGET_FILE}"
-
-              echo "Configuration written successfully to ${TARGET_FILE}"
-              echo "File permissions:"
-              ls -la "${TARGET_FILE}"
-              echo "Task completed successfully"
+            -  #@ script_content
+          env:
+            - name: SOURCE_FILE
+              value: #@ "/config/" + k3s_registries_filename
+            - name: TARGET_DIR
+              value: #@ k3s_registries_path
+            - name: TARGET_FILE
+              value: #@ k3s_registries_path + "/" + k3s_registries_filename
+            - name: REGISTRIES_FILENAME
+              value: #@ k3s_registries_filename
           volumeMounts:
             - name: config
               mountPath: /config

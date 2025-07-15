@@ -21,18 +21,17 @@ spec:
       initContainers:
         - args:
             - |
+              #!/bin/sh
               set -e
 
-              SOURCE_FILE="/config/registries.yaml"
-              TARGET_DIR="/etc/rancher/k3s"
-              TARGET_FILE="${TARGET_DIR}/registries.yaml"
-              TEMP_FILE="/tmp/registries.yaml.new"
+              # Check required environment variables
+              : "${SOURCE_FILE:?Missing SOURCE_FILE}"
+              : "${TARGET_DIR:?Missing TARGET_DIR}"
+              : "${TARGET_FILE:?Missing TARGET_FILE}"
+              : "${REGISTRIES_FILENAME:?Missing REGISTRIES_FILENAME}"
 
               echo "Creating directory if it doesn't exist..."
               mkdir -p "${TARGET_DIR}"
-
-              # Copy new config to temp location first
-              cp "${SOURCE_FILE}" "${TEMP_FILE}"
 
               # Function to mask secrets in YAML files using yq
               mask_secrets() {
@@ -47,38 +46,56 @@ spec:
               if [ -f "${TARGET_FILE}" ]; then
                 echo "Comparing old and new configurations..."
 
-                # Create masked versions for diff
-                OLD_MASKED_FILE="/tmp/old_masked.yaml"
-                NEW_MASKED_FILE="/tmp/new_masked.yaml"
-
-                mask_secrets "${TARGET_FILE}" > "${OLD_MASKED_FILE}"
-                mask_secrets "${TEMP_FILE}" > "${NEW_MASKED_FILE}"
-
-                if diff -u --label "OLD ${TARGET_FILE}" "${OLD_MASKED_FILE}" --label "NEW ${TARGET_FILE}" "${NEW_MASKED_FILE}"; then
+                # Check if files are actually different (not just formatting)
+                if cmp -s "${SOURCE_FILE}" "${TARGET_FILE}"; then
                   echo "No changes detected in configuration"
+                  echo "Skipping file write - configuration is already up to date"
                 else
-                  echo "Configuration changes detected (secrets redacted in diff above)"
-                fi
+                  # Create masked versions for diff display
+                  OLD_MASKED_FILE="/tmp/old_masked.yaml"
+                  NEW_MASKED_FILE="/tmp/new_masked.yaml"
 
-                # Cleanup temp files
-                rm -f "${OLD_MASKED_FILE}" "${NEW_MASKED_FILE}"
+                  mask_secrets "${TARGET_FILE}" > "${OLD_MASKED_FILE}"
+                  mask_secrets "${SOURCE_FILE}" > "${NEW_MASKED_FILE}"
+
+                  echo "Configuration changes detected:"
+                  diff -u --label "OLD ${TARGET_FILE}" "${OLD_MASKED_FILE}" --label "NEW ${TARGET_FILE}" "${NEW_MASKED_FILE}" || true
+                  echo "(secrets redacted in diff above)"
+
+                  # Cleanup temp files
+                  rm -f "${OLD_MASKED_FILE}" "${NEW_MASKED_FILE}"
+
+                  # Copy new file to final location
+                  echo "Writing registries configuration..."
+                  cp "${SOURCE_FILE}" "${TARGET_FILE}"
+                  echo "Configuration written successfully to ${TARGET_FILE}"
+                fi
               else
                 echo "Creating new registries configuration file"
                 echo "New configuration preview (secrets redacted):"
-                mask_secrets "${TEMP_FILE}" | sed 's/^/  /'
+                mask_secrets "${SOURCE_FILE}" | sed 's/^/  /'
+
+                # Copy new file to final location
+                echo "Writing registries configuration..."
+                cp "${SOURCE_FILE}" "${TARGET_FILE}"
+                echo "Configuration written successfully to ${TARGET_FILE}"
               fi
 
-              # Move new file to final location
-              echo "Writing registries configuration..."
-              mv "${TEMP_FILE}" "${TARGET_FILE}"
-
-              echo "Configuration written successfully to ${TARGET_FILE}"
               echo "File permissions:"
               ls -la "${TARGET_FILE}"
               echo "Task completed successfully"
           command:
             - /bin/sh
             - -c
+          env:
+            - name: SOURCE_FILE
+              value: /config/registries.yaml
+            - name: TARGET_DIR
+              value: /etc/rancher/k3s
+            - name: TARGET_FILE
+              value: /etc/rancher/k3s/registries.yaml
+            - name: REGISTRIES_FILENAME
+              value: registries.yaml
           image: mikefarah/yq:4.44.1
           name: registry-config-writer
           securityContext:
