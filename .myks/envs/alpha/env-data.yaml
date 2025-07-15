@@ -44,6 +44,8 @@ environment:
     name: ""
   - proto: jellyfin
     name: ""
+  - proto: k3s-private-registries
+    name: ""
   - proto: librespeed
     name: ""
   - proto: pacoloco
@@ -108,3 +110,5 @@ myks:
     app: ""
     prototype: ""
     step: ""
+    helm:
+      chart: ""

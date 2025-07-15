@@ -30,6 +30,7 @@ environment:
     - proto: comentario
     - proto: grafana-agent
     - proto: jellyfin
+    - proto: k3s-private-registries
     - proto: librespeed
     - proto: pacoloco
     - proto: paperless

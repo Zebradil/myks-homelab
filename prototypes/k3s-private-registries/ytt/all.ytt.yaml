@@ -1,0 +1,134 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:yaml", "yaml")
+#@ load("@ytt:md5", "md5")
+
+#@ a = data.values.application
+#@ e = data.values.environment
+#@ m = data.values.myks
+
+#@ name = m.context.app
+
+#@ k3s_registries_path = "/etc/rancher/k3s"
+#@ k3s_registries_filename = "registries.yaml"
+
+#@ config_map_name = name + "-config"
+#@ daemon_set_name = name + "-writer"
+
+#! Convert the registries config to YAML as-is
+#@ registries_yaml = yaml.encode(a.registries)
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: #@ config_map_name
+data: #@ { k3s_registries_filename: registries_yaml }
+
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: #@ daemon_set_name
+spec:
+  selector:
+    matchLabels:
+      app: #@ daemon_set_name
+  template:
+    metadata:
+      labels:
+        app: #@ daemon_set_name
+      annotations:
+        checksum/config: #@ md5.sum(registries_yaml)
+    spec:
+      tolerations:
+        - operator: Exists
+          effect: NoSchedule
+        - operator: Exists
+          effect: NoExecute
+      containers:
+        - name: registry-config-writer
+          image: #@ a.image
+          command: ['/bin/sh', '-c']
+          args:
+            #@yaml/text-templated-strings
+            - |
+              set -e
+
+              SOURCE_FILE="/config/(@= k3s_registries_filename @)"
+              TARGET_DIR="(@= k3s_registries_path @)"
+              TARGET_FILE="${TARGET_DIR}/(@= k3s_registries_filename @)"
+              TEMP_FILE="/tmp/(@= k3s_registries_filename @).new"
+
+              echo "Creating directory if it doesn't exist..."
+              mkdir -p "${TARGET_DIR}"
+
+              # Copy new config to temp location first
+              cp "${SOURCE_FILE}" "${TEMP_FILE}"
+
+              # Function to mask secrets in YAML files using yq
+              mask_secrets() {
+                yq eval '
+                  (.. | select(has("auth")) | .auth.username) = "<REDACTED>" |
+                  (.. | select(has("auth")) | .auth.password) = "<REDACTED>" |
+                  (.. | select(has("auth")) | .auth.token) = "<REDACTED>"
+                ' "$1"
+              }
+
+              # Show diff if old file exists
+              if [ -f "${TARGET_FILE}" ]; then
+                echo "Comparing old and new configurations..."
+
+                # Create masked versions for diff
+                OLD_MASKED_FILE="/tmp/old_masked.yaml"
+                NEW_MASKED_FILE="/tmp/new_masked.yaml"
+
+                mask_secrets "${TARGET_FILE}" > "${OLD_MASKED_FILE}"
+                mask_secrets "${TEMP_FILE}" > "${NEW_MASKED_FILE}"
+
+                if diff -u --label "OLD ${TARGET_FILE}" "${OLD_MASKED_FILE}" --label "NEW ${TARGET_FILE}" "${NEW_MASKED_FILE}"; then
+                  echo "No changes detected in configuration"
+                else
+                  echo "Configuration changes detected (secrets redacted in diff above)"
+                fi
+
+                # Cleanup temp files
+                rm -f "${OLD_MASKED_FILE}" "${NEW_MASKED_FILE}"
+              else
+                echo "Creating new registries configuration file"
+                echo "New configuration preview (secrets redacted):"
+                mask_secrets "${TEMP_FILE}" | sed 's/^/  /'
+              fi
+
+              # Move new file to final location
+              echo "Writing registries configuration..."
+              mv "${TEMP_FILE}" "${TARGET_FILE}"
+
+              echo "Configuration written successfully to ${TARGET_FILE}"
+              echo "File permissions:"
+              ls -la "${TARGET_FILE}"
+              echo "Task completed successfully"
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
+            - name: host-k3s-config
+              mountPath: #@ k3s_registries_path
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              cpu: 100m
+              memory: 64Mi
+      volumes:
+        - name: config
+          configMap:
+            name: #@ config_map_name
+        - name: host-k3s-config
+          hostPath:
+            path: #@ k3s_registries_path
+            type: DirectoryOrCreate
+      restartPolicy: OnFailure

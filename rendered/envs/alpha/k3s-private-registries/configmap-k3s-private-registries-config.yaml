@@ -1,0 +1,17 @@
+apiVersion: v1
+data:
+  registries.yaml: |
+    mirrors:
+      europe-west4-docker.pkg.dev:
+        endpoint:
+        - https://europe-west4-docker.pkg.dev
+    configs:
+      europe-west4-docker.pkg.dev:
+        auth:
+          username: _json_key
+          password: <path:static/0.sops.yaml#password>
+kind: ConfigMap
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: k3s-private-registries-config

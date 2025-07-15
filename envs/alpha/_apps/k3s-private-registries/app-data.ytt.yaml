@@ -1,0 +1,15 @@
+#@ load("secrets.star", "sec")
+
+#@data/values
+---
+application:
+  registries:
+    mirrors:
+      europe-west4-docker.pkg.dev:
+        endpoint:
+          - https://europe-west4-docker.pkg.dev
+    configs:
+      europe-west4-docker.pkg.dev:
+        auth:
+          username: _json_key
+          password: #@ sec.sops("0", "password")
