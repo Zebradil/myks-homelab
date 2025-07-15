@@ -9,7 +9,7 @@ data:
       europe-west4-docker.pkg.dev:
         auth:
           username: _json_key
-          password: <path:static/0.sops.yaml#password>
+          password: '''<path:static/0.sops.yaml#password>'''
 kind: ConfigMap
 metadata:
   annotations:

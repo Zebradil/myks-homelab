@@ -12,4 +12,5 @@ application:
       europe-west4-docker.pkg.dev:
         auth:
           username: _json_key
-          password: #@ sec.sops("0", "password")
+          #! Quote the password, as it is a JSON key
+          password: #@ "'{}'".format(sec.sops("0", "password"))
