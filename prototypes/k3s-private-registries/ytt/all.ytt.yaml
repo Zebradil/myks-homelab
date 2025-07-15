@@ -45,7 +45,7 @@ spec:
           effect: NoSchedule
         - operator: Exists
           effect: NoExecute
-      containers:
+      initContainers:
         - name: registry-config-writer
           image: #@ a.image
           command: ['/bin/sh', '-c']
@@ -116,13 +116,9 @@ spec:
           securityContext:
             runAsUser: 0
             runAsGroup: 0
-          resources:
-            requests:
-              cpu: 10m
-              memory: 16Mi
-            limits:
-              cpu: 100m
-              memory: 64Mi
+      containers:
+        - name: pause
+          image: registry.k8s.io/pause:3.10.1
       volumes:
         - name: config
           configMap:
@@ -131,4 +127,3 @@ spec:
           hostPath:
             path: #@ k3s_registries_path
             type: DirectoryOrCreate
-      restartPolicy: OnFailure

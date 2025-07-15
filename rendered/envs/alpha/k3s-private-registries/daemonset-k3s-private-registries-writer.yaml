@@ -16,6 +16,9 @@ spec:
         app: k3s-private-registries-writer
     spec:
       containers:
+        - image: registry.k8s.io/pause:3.10.1
+          name: pause
+      initContainers:
         - args:
             - |
               set -e
@@ -78,13 +81,6 @@ spec:
             - -c
           image: mikefarah/yq:4.44.1
           name: registry-config-writer
-          resources:
-            limits:
-              cpu: 100m
-              memory: 64Mi
-            requests:
-              cpu: 10m
-              memory: 16Mi
           securityContext:
             runAsGroup: 0
             runAsUser: 0
@@ -94,7 +90,6 @@ spec:
               readOnly: true
             - mountPath: /etc/rancher/k3s
               name: host-k3s-config
-      restartPolicy: OnFailure
       tolerations:
         - effect: NoSchedule
           operator: Exists
