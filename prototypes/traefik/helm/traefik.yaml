@@ -55,4 +55,6 @@ logs:
   access:
     enabled: true
 
-globalArguments: []
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
