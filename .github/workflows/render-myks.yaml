@@ -31,10 +31,10 @@ jobs:
       - run: |
           echo "BASE: ${{ env.NX_BASE }}"
           echo "HEAD: ${{ env.NX_HEAD }}"
-      - name: Setup myks
-        uses: mykso/setup-action@57bdd84c53f19f95994092bc7f377f0cc410d3a7 # v3.0.5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup tools
+        uses: jdx/mise-action@eb2f5cb41b0a8175dad2f797e3daca6fe7795a19 # v2.4.2
+      - name: Print tools versions
+        run: mise list
       - name: Render
         env:
           MYKS_SMART_MODE_BASE_REVISION: ${{ github.base_ref && format('origin/{0}', github.base_ref) || env.NX_BASE }}
