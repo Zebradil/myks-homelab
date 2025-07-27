@@ -14,7 +14,7 @@ spec:
     server: ""
   project: default
   source:
-    path: rendered/argocd/alpha
+    path: rendered/argocd/private
     repoURL: git@github.com:Zebradil/myks-private.git
     targetRevision: main
   syncPolicy:

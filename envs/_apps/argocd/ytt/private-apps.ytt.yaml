@@ -15,7 +15,7 @@ spec:
   project: default
   destination: #@ d.argocd.app.destination
   source:
-    path: #@ "rendered/argocd/" + d.environment.id
+    path: rendered/argocd/private
     repoURL: #@ repo_url
     targetRevision: #@ d.argocd.app.source.targetRevision
   syncPolicy:
