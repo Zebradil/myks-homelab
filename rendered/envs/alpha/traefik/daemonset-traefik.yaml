@@ -27,7 +27,6 @@ spec:
       automountServiceAccountToken: true
       containers:
         - args:
-            - --global.checkNewVersion
             - --entryPoints.lan-web.address=node.k8s.lan:80/tcp
             - --entryPoints.lan-websecure.address=node.k8s.lan:443/tcp
             - --entryPoints.metrics.address=node.k8s.lan:19100/tcp
