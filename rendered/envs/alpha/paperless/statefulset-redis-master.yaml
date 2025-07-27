@@ -61,7 +61,7 @@ spec:
               value: "no"
             - name: REDIS_PORT
               value: "6379"
-          image: docker.io/bitnami/redis:8.0.0-debian-12-r0
+          image: docker.io/bitnami/redis:8.0.3-debian-12-r1
           imagePullPolicy: IfNotPresent
           livenessProbe:
             exec:
