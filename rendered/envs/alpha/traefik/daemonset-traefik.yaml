@@ -118,7 +118,7 @@ spec:
                   fieldPath: metadata.namespace
             - name: BASE_DOMAIN
               value: zebradil.dev
-          image: docker.io/traefik:v3.3.6
+          image: docker.io/traefik:v3.4.0
           imagePullPolicy: IfNotPresent
           lifecycle: null
           livenessProbe:
