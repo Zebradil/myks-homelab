@@ -7,6 +7,7 @@ metadata:
     app.kubernetes.io/instance: authelia
     app.kubernetes.io/name: authelia
   name: authelia
+  namespace: authelia
 spec:
   minReadySeconds: 0
   replicas: 1
@@ -20,7 +21,7 @@ spec:
   template:
     metadata:
       annotations:
-        authelia.com/checksum-config: 09af7232d548f41eb1973c0b6b2b6346de0ea6ea9fd5ab4dd74d5d9b654ea855
+        authelia.com/checksum-config: ff91d81ceb7f3404d37596e7a3bf87907bc70881afdb0e68fc215daf982bc951
       labels:
         app.kubernetes.io/instance: authelia
         app.kubernetes.io/name: authelia
@@ -47,7 +48,7 @@ spec:
               value: /configuration.yaml
             - name: X_AUTHELIA_CONFIG_FILTERS
               value: template
-          image: ghcr.io/authelia/authelia:4.39.1
+          image: ghcr.io/authelia/authelia:4.39.5
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 5
