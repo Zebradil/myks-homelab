@@ -1,0 +1,11 @@
+#@data/values-schema
+---
+environment:
+  #@overlay/match missing_ok=True
+  hosts: ['']
+  #@overlay/match missing_ok=True
+  traefik:
+    hosts:
+      lan: ['']
+      vpn: ['']
+      web: ['']

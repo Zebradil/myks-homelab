@@ -1,0 +1,26 @@
+#@data/values
+---
+argocd:
+  app:
+    prefix: app-
+    destination:
+      name: in-cluster
+    source:
+      #! Use HTTPS URL to avoid necessity to set up SSH keys.
+      repoURL: https://github.com/Zebradil/myks-homelab
+      #! Explicitly set the target revision to avoid overwriting in CI
+      targetRevision: main
+      plugin:
+        name: argocd-vault-plugin
+  project:
+    prefix: env-
+    destination:
+      name: in-cluster
+  env:
+    generateSecret: false
+helm:
+  kubeVersion: '1.29'
+myks:
+  gitRepoUrl: https://github.com/Zebradil/myks-homelab
+  #! Explicitly set the main branch to avoid extra diff in PRs.
+  gitRepoBranch: main
