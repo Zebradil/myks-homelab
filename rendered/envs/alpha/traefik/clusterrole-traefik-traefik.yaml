@@ -11,14 +11,8 @@ rules:
   - apiGroups:
       - ""
     resources:
+      - configmaps
       - nodes
-    verbs:
-      - get
-      - list
-      - watch
-  - apiGroups:
-      - ""
-    resources:
       - services
     verbs:
       - get
