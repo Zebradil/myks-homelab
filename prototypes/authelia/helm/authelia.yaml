@@ -21,8 +21,6 @@ pod:
     type: Recreate
 
 configMap:
-  enabled: true
-
   authentication_backend:
     file:
       enabled: true
@@ -43,7 +41,6 @@ configMap:
     smtp:
       address: 'submissions://smtp.gmail.com:465'
       enabled: true
-      enabledSecret: true
       username: #@ sec.sops("smtp", "username")
       #! NOTE: this has no effect as GMail replaces the sender with the authenticated user.
       sender: #@ "authelia@mail." + d.environment.hosts[0]
