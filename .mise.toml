@@ -1,0 +1,9 @@
+[settings]
+# Required for the github backend
+experimental = true
+
+[tools]
+helm = "3.18.4"
+kubeconform = "0.7.0"
+task = "3.44.0"
+"github:mykso/myks" = "4.11.2"

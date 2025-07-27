@@ -4,7 +4,6 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
-    myks.url = "github:mykso/myks";
   };
 
   outputs =
@@ -14,22 +13,17 @@
       let
         pkgs = import inputs.nixpkgs {
           inherit system;
-          overlays = [
-            (final: _prev: {
-              myks = inputs.myks.packages.${final.system}.default;
-            })
-          ];
         };
       in
       {
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
-            go-task
-            kubeconform
-            kubernetes-helm
-            myks
-            sops
+            mise
           ];
+          shellHook = ''
+            mise install
+            source <(mise activate)
+          '';
         };
       }
     );
