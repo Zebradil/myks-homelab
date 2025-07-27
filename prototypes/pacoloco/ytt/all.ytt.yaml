@@ -73,6 +73,24 @@ spec:
               readOnly: true
             - name: #@ pvc_name
               mountPath: #@ cache_path
+            - name: reflector
+              mountPath: /etc/pacman.d/mirrorlist
+              subPath: mirrorlist
+              readOnly: true
+        - image: anatol/pacoloco:latest
+          name: reflector
+          command:
+            - /bin/sh
+            - -c
+            - |
+              cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
+              sed -i 's/^#Server/Server/' /etc/pacman.d/mirrorlist
+              pacoloco -c /etc/pacoloco/pacoloco.yaml
+              cp /etc/pacman.d/mirrorlist.bak /etc/pacman.d/mirrorlist
+          volumeMounts:
+            - name: reflector
+              mountPath: /etc/pacman.d/mirrorlist
+              subPath: mirrorlist
       volumes:
         - name: #@ cm_name
           configMap:
@@ -80,6 +98,8 @@ spec:
         - name: #@ pvc_name
           persistentVolumeClaim:
             claimName: #@ pvc_name
+        - name: reflector
+          emptyDir: {}
 
 ---
 apiVersion: v1
