@@ -94,7 +94,7 @@ spec:
               value: /etc/rancher/k3s/registries.yaml
             - name: REGISTRIES_FILENAME
               value: registries.yaml
-          image: mikefarah/yq:4.46.1
+          image: mikefarah/yq:4.47.1
           name: registry-config-writer
           securityContext:
             runAsGroup: 0
