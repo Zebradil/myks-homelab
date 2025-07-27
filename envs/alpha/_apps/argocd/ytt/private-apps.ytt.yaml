@@ -1,0 +1,38 @@
+#@ load("@ytt:data", "data")
+#@ load("secrets.star", "sec")
+
+#@ d = data.values
+#@ repo_url = "git@github.com:Zebradil/myks-private.git"
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: private-apps
+  namespace: #@ d.argocd.namespace
+  finalizers: #@ d.argocd.app.finalizers
+spec:
+  project: default
+  destination: #@ d.argocd.app.destination
+  source:
+    path: #@ "rendered/argocd/" + d.environment.id
+    repoURL: #@ repo_url
+    targetRevision: #@ d.argocd.app.source.targetRevision
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: myks-private-repo
+  namespace: #@ d.argocd.namespace
+  labels:
+    argocd.argoproj.io/secret-type: repository
+stringData:
+  type: git
+  url: #@ repo_url
+  sshPrivateKey: #@ sec.sops("1", "sshPrivateKey")
