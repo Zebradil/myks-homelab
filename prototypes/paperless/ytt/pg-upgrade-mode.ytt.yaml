@@ -1,0 +1,26 @@
+#@ load("@ytt:data", "data")
+#@ load("overlay-matchers.star", "matchers")
+
+#@ old_version = data.values.application.postgresql.upgradeMode.fromVersion
+
+#@overlay/match by=matchers.kind_name("StatefulSet", "postgresql")
+---
+spec:
+  template:
+    spec:
+      containers:
+        #@overlay/match by="name"
+        - name: postgresql
+          #@overlay/match missing_ok=True
+          command:
+            - /bin/sh
+            - -c
+            - tail -f /dev/null
+          volumeMounts:
+            - name: old-postgresql
+              mountPath: /old-postgresql
+      volumes:
+        - name: old-postgresql
+          image:
+            reference: #@ "docker.io/bitnami/postgresql:" + old_version
+            pullPolicy: IfNotPresent
