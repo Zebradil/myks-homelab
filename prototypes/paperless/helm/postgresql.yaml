@@ -8,9 +8,9 @@ auth:
   postgresPassword: #@ pg.password
   username: #@ pg.username
 image:
-  tag: 13.13.0
+  tag: 14.18.0
 primary:
   #! TODO(@zebradil): Perform rightsizing.
-  resourcesPreset: "none"
+  resourcesPreset: 'none'
   persistence:
     size: 1Gi
