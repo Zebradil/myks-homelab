@@ -51,7 +51,7 @@ spec:
         - env:
             - name: FB_DATABASE
               value: /database/database.db
-          image: filebrowser/filebrowser:v2.42.2
+          image: filebrowser/filebrowser:v2.42.3
           livenessProbe:
             failureThreshold: 3
             httpGet:
