@@ -32,7 +32,7 @@ annotations:
     fingerprint: 192085915BD608A458AC58DCE461FA1531286EEA
     url: https://keybase.io/authelia/pgp_keys.asc
 apiVersion: v2
-appVersion: 4.39.5
+appVersion: 4.39.6
 dependencies:
 - condition: configMap.storage.postgres.deploy
   name: postgresql
@@ -84,4 +84,4 @@ sources:
 - https://github.com/authelia/chartrepo/tree/master/charts/authelia
 - https://www.github.com/authelia/authelia
 type: application
-version: 0.10.41
+version: 0.10.42
