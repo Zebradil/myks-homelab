@@ -40,7 +40,11 @@ spec:
               weight: 1
       automountServiceAccountToken: false
       containers:
-        - env:
+        - command:
+            - /bin/sh
+            - -c
+            - tail -f /dev/null
+          env:
             - name: BITNAMI_DEBUG
               value: "false"
             - name: POSTGRESQL_PORT_NUMBER
@@ -133,6 +137,8 @@ spec:
               name: dshm
             - mountPath: /bitnami/postgresql
               name: data
+            - mountPath: /old-postgresql
+              name: old-postgresql
       hostIPC: false
       hostNetwork: false
       securityContext:
@@ -150,6 +156,10 @@ spec:
         - emptyDir:
             medium: Memory
           name: dshm
+        - image:
+            pullPolicy: IfNotPresent
+            reference: docker.io/bitnami/postgresql:13.13.0
+          name: old-postgresql
   updateStrategy:
     rollingUpdate: {}
     type: RollingUpdate

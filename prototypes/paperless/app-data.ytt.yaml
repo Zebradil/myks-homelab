@@ -22,24 +22,27 @@ application:
       PAPERLESS_OCR_LANGUAGES: deu eng rus
       #! The default is "pdfa", which may cause removing a form text
       PAPERLESS_OCR_OUTPUT_TYPE: pdf
-      PAPERLESS_OCR_ROTATE_PAGES_THRESHOLD: "4"
+      PAPERLESS_OCR_ROTATE_PAGES_THRESHOLD: '4'
       #! Allow OCR to process PDFs with digital signatures
       #! It is safe because paperless keeps the original PDFs
       PAPERLESS_OCR_USER_ARGS: '{"invalidate_digital_signatures": true}'
 
       #@schema/validation min_len=1
-      PAPERLESS_SECRET_KEY: ""
+      PAPERLESS_SECRET_KEY: ''
       PAPERLESS_TIME_ZONE: Europe/Berlin
     sftp:
       #! renovate: datasource=docker
       image: linuxserver/openssh-server:9.3_p2-r1-ls143
       user: paperless
       #@schema/validation min_len=1
-      public_key: ""
+      public_key: ''
       #@schema/type any=True
       files: null
   postgresql:
     database: #@ databaseName
     #@schema/validation min_len=1
-    password: ""
+    password: ''
     username: #@ databaseUser
+    upgradeMode:
+      enabled: false
+      fromVersion: 13.13.0
