@@ -141,6 +141,19 @@ spec:
               name: old-postgresql
       hostIPC: false
       hostNetwork: false
+      initContainers:
+        - command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              mkdir -p /old-postgresql
+              cp -r /opt/bitnami/postgresql/bin /old-postgresql/bin
+          image: docker.io/bitnami/postgresql:13.13.0
+          name: download-old-postgresql
+          volumeMounts:
+            - mountPath: /old-postgresql
+              name: old-postgresql
       securityContext:
         fsGroup: 1001
         fsGroupChangePolicy: Always
@@ -156,9 +169,7 @@ spec:
         - emptyDir:
             medium: Memory
           name: dshm
-        - image:
-            pullPolicy: IfNotPresent
-            reference: docker.io/bitnami/postgresql:13.13.0
+        - emptyDir: {}
           name: old-postgresql
   updateStrategy:
     rollingUpdate: {}

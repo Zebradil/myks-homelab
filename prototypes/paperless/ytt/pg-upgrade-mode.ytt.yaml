@@ -3,11 +3,29 @@
 
 #@ old_version = data.values.application.postgresql.upgradeMode.fromVersion
 
+#! /opt/bitnami/postgresql/bin/
+#! pg_upgrade --old-datadir=/old-postgresql/data --new-datadir=/var/lib/postgresql/data --old-bindir=/old-postgresql/bin --new-bindir=/opt/bitnami/postgresql/bin --check || exit 1
+#! pg_upgrade --old-datadir=/old-postgresql/data --new-datadir=/var/lib/postgresql/data --old-bindir=/old-postgresql/bin --new-bindir=/opt/bitnami/postgresql/bin || exit 1
+
 #@overlay/match by=matchers.kind_name("StatefulSet", "postgresql")
 ---
 spec:
   template:
     spec:
+      #@overlay/match missing_ok=True
+      initContainers:
+        - name: download-old-postgresql
+          image: #@ "docker.io/bitnami/postgresql:" + old_version
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              mkdir -p /old-postgresql
+              cp -r /opt/bitnami/postgresql/bin /old-postgresql/bin
+          volumeMounts:
+            - name: old-postgresql
+              mountPath: /old-postgresql
       containers:
         #@overlay/match by="name"
         - name: postgresql
@@ -21,6 +39,4 @@ spec:
               mountPath: /old-postgresql
       volumes:
         - name: old-postgresql
-          image:
-            reference: #@ "docker.io/bitnami/postgresql:" + old_version
-            pullPolicy: IfNotPresent
+          emptyDir: {}
