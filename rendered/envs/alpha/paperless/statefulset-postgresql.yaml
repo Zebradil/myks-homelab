@@ -40,18 +40,7 @@ spec:
               weight: 1
       automountServiceAccountToken: false
       containers:
-        - command:
-            - /bin/sh
-            - -c
-            - |
-              echo "Setting up environment"
-              postgres --version
-              . /opt/bitnami/scripts/libos.sh
-              ensure_group_exists postgres -i 1001
-              ensure_user_exists postgres -i 1001 -g postgres
-              echo "Waiting for user"
-              tail -f /dev/null
-          env:
+        - env:
             - name: BITNAMI_DEBUG
               value: "false"
             - name: POSTGRESQL_PORT_NUMBER
@@ -84,7 +73,7 @@ spec:
               value: error
             - name: POSTGRESQL_SHARED_PRELOAD_LIBRARIES
               value: pgaudit
-          image: docker.io/bitnami/postgresql:14.18.0
+          image: docker.io/bitnami/postgresql:13.13.0
           imagePullPolicy: IfNotPresent
           livenessProbe:
             exec:
@@ -115,6 +104,19 @@ spec:
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 5
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsGroup: 1001
+            runAsNonRoot: true
+            runAsUser: 1001
+            seLinuxOptions: {}
+            seccompProfile:
+              type: RuntimeDefault
           volumeMounts:
             - mountPath: /tmp
               name: empty-dir
@@ -131,25 +133,8 @@ spec:
               name: dshm
             - mountPath: /bitnami/postgresql
               name: data
-            - mountPath: /old-postgresql
-              name: old-postgresql
       hostIPC: false
       hostNetwork: false
-      initContainers:
-        - command:
-            - /bin/sh
-            - -c
-            - |
-              set -e
-              echo "Copying old PostgreSQL binaries..."
-              postgres --version
-              mkdir -p /old-postgresql
-              cp -rv /opt/bitnami/postgresql/bin /old-postgresql/bin
-          image: docker.io/bitnami/postgresql:13.13.0
-          name: download-old-postgresql
-          volumeMounts:
-            - mountPath: /old-postgresql
-              name: old-postgresql
       securityContext:
         fsGroup: 1001
         fsGroupChangePolicy: Always
@@ -165,8 +150,6 @@ spec:
         - emptyDir:
             medium: Memory
           name: dshm
-        - emptyDir: {}
-          name: old-postgresql
   updateStrategy:
     rollingUpdate: {}
     type: RollingUpdate
