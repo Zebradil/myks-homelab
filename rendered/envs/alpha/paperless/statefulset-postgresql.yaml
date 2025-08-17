@@ -43,7 +43,14 @@ spec:
         - command:
             - /bin/sh
             - -c
-            - tail -f /dev/null
+            - |
+              echo "Setting up environment"
+              postgres --version
+              . /opt/bitnami/scripts/libos.sh
+              ensure_group_exists postgres -i 1001
+              ensure_user_exists postgres -i 1001 -g postgres
+              echo "Waiting for user"
+              tail -f /dev/null
           env:
             - name: BITNAMI_DEBUG
               value: "false"
@@ -108,19 +115,6 @@ spec:
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 5
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-                - ALL
-            privileged: false
-            readOnlyRootFilesystem: true
-            runAsGroup: 1001
-            runAsNonRoot: true
-            runAsUser: 1001
-            seLinuxOptions: {}
-            seccompProfile:
-              type: RuntimeDefault
           volumeMounts:
             - mountPath: /tmp
               name: empty-dir
@@ -147,8 +141,10 @@ spec:
             - -c
             - |
               set -e
+              echo "Copying old PostgreSQL binaries..."
+              postgres --version
               mkdir -p /old-postgresql
-              cp -r /opt/bitnami/postgresql/bin /old-postgresql/bin
+              cp -rv /opt/bitnami/postgresql/bin /old-postgresql/bin
           image: docker.io/bitnami/postgresql:13.13.0
           name: download-old-postgresql
           volumeMounts:

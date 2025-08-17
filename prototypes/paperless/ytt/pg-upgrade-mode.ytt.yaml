@@ -7,6 +7,8 @@
 #! pg_upgrade --old-datadir=/old-postgresql/data --new-datadir=/var/lib/postgresql/data --old-bindir=/old-postgresql/bin --new-bindir=/opt/bitnami/postgresql/bin --check || exit 1
 #! pg_upgrade --old-datadir=/old-postgresql/data --new-datadir=/var/lib/postgresql/data --old-bindir=/old-postgresql/bin --new-bindir=/opt/bitnami/postgresql/bin || exit 1
 
+#! pg_upgrade --old-datadir=/bitnami/postgresql/data.13 --new-datadir=/bitnami/postgresql/data --old-bindir=/old-postgresql/bin --new-bindir=/opt/bitnami/postgresql/bin --check || exit 1
+
 #@overlay/match by=matchers.kind_name("StatefulSet", "postgresql")
 ---
 spec:
@@ -21,8 +23,10 @@ spec:
             - -c
             - |
               set -e
+              echo "Copying old PostgreSQL binaries..."
+              postgres --version
               mkdir -p /old-postgresql
-              cp -r /opt/bitnami/postgresql/bin /old-postgresql/bin
+              cp -rv /opt/bitnami/postgresql/bin /old-postgresql/bin
           volumeMounts:
             - name: old-postgresql
               mountPath: /old-postgresql
@@ -33,10 +37,19 @@ spec:
           command:
             - /bin/sh
             - -c
-            - tail -f /dev/null
+            - |
+              echo "Setting up environment"
+              postgres --version
+              . /opt/bitnami/scripts/libos.sh
+              ensure_group_exists postgres -i 1001
+              ensure_user_exists postgres -i 1001 -g postgres
+              echo "Waiting for user"
+              tail -f /dev/null
           volumeMounts:
             - name: old-postgresql
               mountPath: /old-postgresql
+          #@overlay/remove
+          securityContext:
       volumes:
         - name: old-postgresql
           emptyDir: {}
