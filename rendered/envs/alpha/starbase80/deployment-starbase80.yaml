@@ -16,7 +16,7 @@ spec:
         app.kubernetes.io/name: starbase80
     spec:
       containers:
-        - image: nginx:1.29.0
+        - image: nginx:1.29.1
           name: server
           ports:
             - containerPort: 80
