@@ -7,11 +7,16 @@ data:
   CORE_LOCAL_URL: http://127.0.0.1:8080
   CORE_URL: http://harbor-core:80
   DATABASE_TYPE: postgresql
-  EXT_ENDPOINT: https://core.harbor.domain
+  EXT_ENDPOINT: https://oci.zebradil.dev
   HTTP_PROXY: ""
   HTTPS_PROXY: ""
   JOBSERVICE_URL: http://harbor-jobservice
   LOG_LEVEL: info
+  METRIC_ENABLE: "true"
+  METRIC_NAMESPACE: harbor
+  METRIC_PATH: /metrics
+  METRIC_PORT: "8001"
+  METRIC_SUBSYSTEM: core
   NO_PROXY: harbor-core,harbor-jobservice,harbor-database,harbor-registry,harbor-portal,harbor-trivy,harbor-exporter,127.0.0.1,localhost,.local,.internal
   PERMITTED_REGISTRY_TYPES_FOR_PROXY_CACHE: docker-hub,harbor,azure-acr,aws-ecr,google-gcr,quay,docker-registry,github-ghcr,jfrog-artifactory
   PORT: "8080"
@@ -25,7 +30,7 @@ data:
   POSTGRESQL_USERNAME: postgres
   QUOTA_UPDATE_PROVIDER: db
   REGISTRY_CONTROLLER_URL: http://harbor-registry:8080
-  REGISTRY_CREDENTIAL_USERNAME: harbor_registry_user
+  REGISTRY_CREDENTIAL_USERNAME: zebradil
   REGISTRY_STORAGE_PROVIDER_NAME: filesystem
   REGISTRY_URL: http://harbor-registry:5000
   TOKEN_SERVICE_URL: http://harbor-core:80/service/token

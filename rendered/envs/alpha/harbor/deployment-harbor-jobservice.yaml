@@ -25,14 +25,15 @@ spec:
       component: jobservice
       release: harbor
   strategy:
-    type: RollingUpdate
+    rollingUpdate: null
+    type: Recreate
   template:
     metadata:
       annotations:
-        checksum/configmap: 72a88dfd39f0a7c2c7031ac7542f99e3417c76afaa958fa8026cd59144d75f5b
-        checksum/configmap-env: fbc37195fe23839b846e3652ba1254d46dca78f31ac9bffa5f501158fd0d513f
-        checksum/secret: 256abeb9686b8f8abac7ad60441ba684401b72bd94d601aa8a13a0dcd2e2ede3
-        checksum/secret-core: 1ba12d47b86aa5499ec4a2a59488d0bf1b0f39cef2c51c8db93e2c1bf5c5157d
+        checksum/configmap: ae74e5dcb15fa73d4db441118da6f623327dfe627336fbca559f771cbf40088c
+        checksum/configmap-env: 73d24a6b997938dcdc4745c5e577d59d7b5394ec5e9385ea60634e4f36a4d4f1
+        checksum/secret: c49b929b24475abba7e914e7fefb278cc05e1d9686b428e8daea7a900fbe138b
+        checksum/secret-core: cd7d78dd0e1da3b4bdb6eea2b72b2dc1d0c79139f7f59529a38b9f225b7567f4
       labels:
         app: harbor
         app.kubernetes.io/component: jobservice

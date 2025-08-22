@@ -5,16 +5,16 @@ metadata:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
     app: harbor
-    app.kubernetes.io/component: portal
+    app.kubernetes.io/component: exporter
     app.kubernetes.io/instance: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: harbor
     app.kubernetes.io/part-of: harbor
     chart: harbor
-    component: portal
+    component: exporter
     heritage: Helm
     release: harbor
-  name: harbor-portal
+  name: harbor-exporter
   namespace: harbor
 spec:
   replicas: 1
@@ -22,44 +22,52 @@ spec:
   selector:
     matchLabels:
       app: harbor
-      component: portal
+      component: exporter
       release: harbor
   template:
     metadata:
       annotations:
-        checksum/configmap: 466a52bbc32f646877f59735e119b9298f311c2a69e8319964e44c0dcf3b9a2c
+        checksum/configmap: cdf9ef76093b1c6989cd55766072ad88109317e1d913a07a5aadd4714ef7d943
+        checksum/secret: 7164ebccb0934f296fa28333ce8fbc0c7ed603fb1789388491e990a14785d96c
       labels:
         app: harbor
-        app.kubernetes.io/component: portal
+        app.kubernetes.io/component: exporter
         app.kubernetes.io/instance: harbor
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: harbor
         app.kubernetes.io/part-of: harbor
         chart: harbor
-        component: portal
+        component: exporter
         heritage: Helm
         release: harbor
     spec:
       automountServiceAccountToken: false
       containers:
-        - image: goharbor/harbor-portal:v2.13.2
+        - args:
+            - -log-level
+            - info
+          env: null
+          envFrom:
+            - configMapRef:
+                name: harbor-exporter-env
+            - secretRef:
+                name: harbor-exporter
+          image: goharbor/harbor-exporter:v2.13.2
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
               path: /
-              port: 8080
-              scheme: HTTP
+              port: 8001
             initialDelaySeconds: 300
             periodSeconds: 10
-          name: portal
+          name: exporter
           ports:
-            - containerPort: 8080
+            - containerPort: 8001
           readinessProbe:
             httpGet:
               path: /
-              port: 8080
-              scheme: HTTP
-            initialDelaySeconds: 1
+              port: 8001
+            initialDelaySeconds: 30
             periodSeconds: 10
           securityContext:
             allowPrivilegeEscalation: false
@@ -70,14 +78,11 @@ spec:
             runAsNonRoot: true
             seccompProfile:
               type: RuntimeDefault
-          volumeMounts:
-            - mountPath: /etc/nginx/nginx.conf
-              name: portal-config
-              subPath: nginx.conf
+          volumeMounts: null
       securityContext:
         fsGroup: 10000
         runAsUser: 10000
       volumes:
-        - configMap:
-            name: harbor-portal
-          name: portal-config
+        - name: config
+          secret:
+            secretName: harbor-exporter

@@ -25,14 +25,15 @@ spec:
       component: registry
       release: harbor
   strategy:
-    type: RollingUpdate
+    rollingUpdate: null
+    type: Recreate
   template:
     metadata:
       annotations:
-        checksum/configmap: 6c9a1a10e82ec55c4a466f5e7b34e44c68faff9afa27a6ab9d7ce1992a254613
-        checksum/secret: e69ccd2cbd7cbedbf0e7c45bdbcdeae5ba2fe4328711536b8569b17011ba0f6f
-        checksum/secret-core: f724704850e8d6c61c89ac1ab10ecea6cec1daef93bc6e23c2cddf0d35320269
-        checksum/secret-jobservice: 132ef6ea92826dd2fd261e41b9c113802bf1ceddeddfb98ec8d2ed86235877bb
+        checksum/configmap: 906772fb23280a104aaf4bc1cec7700895257cc3ebbea294a19ff1b1ac23931a
+        checksum/secret: 215db9c9455eddd18efe55b1b85b7ae8572900452df6d3c66fe09a43b240e211
+        checksum/secret-core: cd7d78dd0e1da3b4bdb6eea2b72b2dc1d0c79139f7f59529a38b9f225b7567f4
+        checksum/secret-jobservice: c49b929b24475abba7e914e7fefb278cc05e1d9686b428e8daea7a900fbe138b
       labels:
         app: harbor
         app.kubernetes.io/component: registry
@@ -63,7 +64,7 @@ spec:
           name: registry
           ports:
             - containerPort: 5000
-            - containerPort: 5001
+            - containerPort: 8001
           readinessProbe:
             httpGet:
               path: /

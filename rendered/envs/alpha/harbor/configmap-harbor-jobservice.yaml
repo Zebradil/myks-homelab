@@ -21,7 +21,7 @@ data:
           settings: # Customized settings of sweeper
             work_dir: "/var/log/jobs"
     metric:
-      enabled: false
+      enabled: true
       path: /metrics
       port: 8001
     #Loggers for the job service

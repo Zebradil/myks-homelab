@@ -20,7 +20,7 @@ metadata:
   namespace: harbor
 spec:
   rules:
-    - host: core.harbor.domain
+    - host: oci.zebradil.dev
       http:
         paths:
           - backend:
@@ -58,7 +58,3 @@ spec:
                   number: 80
             path: /
             pathType: Prefix
-  tls:
-    - hosts:
-        - core.harbor.domain
-      secretName: harbor-ingress

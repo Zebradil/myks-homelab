@@ -6,9 +6,11 @@ data:
   JOBSERVICE_WEBHOOK_JOB_HTTP_CLIENT_TIMEOUT: "3"
   JOBSERVICE_WEBHOOK_JOB_MAX_RETRY: "3"
   LOG_LEVEL: info
+  METRIC_NAMESPACE: harbor
+  METRIC_SUBSYSTEM: jobservice
   NO_PROXY: harbor-core,harbor-jobservice,harbor-database,harbor-registry,harbor-portal,harbor-trivy,harbor-exporter,127.0.0.1,localhost,.local,.internal
   REGISTRY_CONTROLLER_URL: http://harbor-registry:8080
-  REGISTRY_CREDENTIAL_USERNAME: harbor_registry_user
+  REGISTRY_CREDENTIAL_USERNAME: zebradil
   REGISTRY_URL: http://harbor-registry:5000
   TOKEN_SERVICE_URL: http://harbor-core:80/service/token
 kind: ConfigMap

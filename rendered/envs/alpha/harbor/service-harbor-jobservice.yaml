@@ -19,6 +19,8 @@ spec:
     - name: http-jobservice
       port: 80
       targetPort: 8080
+    - name: http-metrics
+      port: 8001
   selector:
     app: harbor
     component: jobservice

@@ -38,7 +38,10 @@ data:
       # set via environment variable
       # secret: placeholder
       debug:
-        addr: localhost:5001
+        addr: :8001
+        prometheus:
+          enabled: true
+          path: /metrics
     auth:
       htpasswd:
         realm: harbor-registry-basic-realm

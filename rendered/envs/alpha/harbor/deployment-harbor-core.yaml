@@ -27,9 +27,9 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/configmap: 59ba39848aff26cb8a2464f1ad180269ce9bde55755b02156a7b1ae61e3df619
-        checksum/secret: 7c16920f8126afd05bc855f2be9eeefb7beded1d4983eb829dcb177e6104340d
-        checksum/secret-jobservice: aa6ba6b72b1574a8a21f25dcb5da20177a3a78062e365bdfc3e017c4c8eb8ed9
+        checksum/configmap: 6ce24e721408ae1d954ffde09333fb35c86f249474da6c39c854161d5fc32e66
+        checksum/secret: cd7d78dd0e1da3b4bdb6eea2b72b2dc1d0c79139f7f59529a38b9f225b7567f4
+        checksum/secret-jobservice: c49b929b24475abba7e914e7fefb278cc05e1d9686b428e8daea7a900fbe138b
       labels:
         app: harbor
         app.kubernetes.io/component: core
@@ -106,8 +106,6 @@ spec:
             - mountPath: /etc/core/private_key.pem
               name: token-service-private-key
               subPath: tls.key
-            - mountPath: /etc/core/ca
-              name: ca-download
             - mountPath: /etc/core/token
               name: psc
       securityContext:
@@ -130,8 +128,5 @@ spec:
         - name: token-service-private-key
           secret:
             secretName: harbor-core
-        - name: ca-download
-          secret:
-            secretName: harbor-ingress
         - emptyDir: {}
           name: psc

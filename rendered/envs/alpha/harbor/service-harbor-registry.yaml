@@ -20,6 +20,8 @@ spec:
       port: 5000
     - name: http-controller
       port: 8080
+    - name: http-metrics
+      port: 8001
   selector:
     app: harbor
     component: registry
