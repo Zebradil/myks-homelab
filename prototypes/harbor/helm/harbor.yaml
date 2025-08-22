@@ -78,7 +78,7 @@ registry:
   secret: #@ sec.sops("1", "registrySecret")
   credentials:
     username: #@ registry_user
-    htpasswdString: #@ registry_user + ":" + sec.sops("1", "registryPassword")
+    htpasswdString: #@ registry_user + ":" + sec.sops("1", "registryHtpasswd")
 
 database:
   internal:

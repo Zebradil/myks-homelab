@@ -31,7 +31,7 @@ spec:
     metadata:
       annotations:
         checksum/configmap: 906772fb23280a104aaf4bc1cec7700895257cc3ebbea294a19ff1b1ac23931a
-        checksum/secret: 215db9c9455eddd18efe55b1b85b7ae8572900452df6d3c66fe09a43b240e211
+        checksum/secret: 6ea0d45895e01dd89fcc6ba9b31deb659bb9fea28604caebb0368e4be3e6231d
         checksum/secret-core: cd7d78dd0e1da3b4bdb6eea2b72b2dc1d0c79139f7f59529a38b9f225b7567f4
         checksum/secret-jobservice: c49b929b24475abba7e914e7fefb278cc05e1d9686b428e8daea7a900fbe138b
       labels:
