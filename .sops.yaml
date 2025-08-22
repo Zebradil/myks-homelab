@@ -1,6 +1,7 @@
 _:
   - &common
-    mac_only_encrypted: true
+    # This is not supported by AVPs SOPS yet.
+    # mac_only_encrypted: true
     encryption_method: age
     age: >-
       age13hxx3dgpjcp0v2z5xx07nwm4zvdy78rc9xra6lujzzrl7c657ekq2vgwnk,
