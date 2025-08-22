@@ -42,6 +42,8 @@ environment:
     name: ""
   - proto: grafana-agent
     name: ""
+  - proto: harbor
+    name: ""
   - proto: jellyfin
     name: ""
   - proto: k3s-private-registries

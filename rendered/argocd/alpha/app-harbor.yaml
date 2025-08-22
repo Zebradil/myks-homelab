@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    app.kubernetes.io/source: https://github.com/Zebradil/myks-homelab
+    myks.dev/environment: alpha
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: app-alpha-harbor
+  namespace: argocd
+spec:
+  destination:
+    name: in-cluster
+    namespace: harbor
+  project: env-alpha
+  source:
+    path: rendered/envs/alpha/harbor
+    plugin:
+      name: argocd-vault-plugin
+    repoURL: https://github.com/Zebradil/myks-homelab
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

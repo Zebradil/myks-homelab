@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    app: harbor
+    app.kubernetes.io/component: portal
+    app.kubernetes.io/instance: harbor
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: harbor
+    app.kubernetes.io/part-of: harbor
+    chart: harbor
+    component: portal
+    heritage: Helm
+    release: harbor
+  name: harbor-portal
+  namespace: harbor
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: harbor
+      component: portal
+      release: harbor
+  template:
+    metadata:
+      annotations:
+        checksum/configmap: 843c66b6aef4f279a13479226415473c4fef2b270dc7ab8f0576771a2827ad44
+      labels:
+        app: harbor
+        app.kubernetes.io/component: portal
+        app.kubernetes.io/instance: harbor
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: harbor
+        app.kubernetes.io/part-of: harbor
+        chart: harbor
+        component: portal
+        heritage: Helm
+        release: harbor
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - image: goharbor/harbor-portal:v2.13.2
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 300
+            periodSeconds: 10
+          name: portal
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 1
+            periodSeconds: 10
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /etc/nginx/nginx.conf
+              name: portal-config
+              subPath: nginx.conf
+      securityContext:
+        fsGroup: 10000
+        runAsUser: 10000
+      volumes:
+        - configMap:
+            name: harbor-portal
+          name: portal-config

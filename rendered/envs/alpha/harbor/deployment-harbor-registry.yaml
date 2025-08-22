@@ -1,0 +1,166 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    app: harbor
+    app.kubernetes.io/component: registry
+    app.kubernetes.io/instance: harbor
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: harbor
+    app.kubernetes.io/part-of: harbor
+    chart: harbor
+    component: registry
+    heritage: Helm
+    release: harbor
+  name: harbor-registry
+  namespace: harbor
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: harbor
+      component: registry
+      release: harbor
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        checksum/configmap: 6c9a1a10e82ec55c4a466f5e7b34e44c68faff9afa27a6ab9d7ce1992a254613
+        checksum/secret: e69ccd2cbd7cbedbf0e7c45bdbcdeae5ba2fe4328711536b8569b17011ba0f6f
+        checksum/secret-core: f724704850e8d6c61c89ac1ab10ecea6cec1daef93bc6e23c2cddf0d35320269
+        checksum/secret-jobservice: 132ef6ea92826dd2fd261e41b9c113802bf1ceddeddfb98ec8d2ed86235877bb
+      labels:
+        app: harbor
+        app.kubernetes.io/component: registry
+        app.kubernetes.io/instance: harbor
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: harbor
+        app.kubernetes.io/part-of: harbor
+        chart: harbor
+        component: registry
+        heritage: Helm
+        release: harbor
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - env: null
+          envFrom:
+            - secretRef:
+                name: harbor-registry
+          image: goharbor/registry-photon:v2.13.2
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5000
+              scheme: HTTP
+            initialDelaySeconds: 300
+            periodSeconds: 10
+          name: registry
+          ports:
+            - containerPort: 5000
+            - containerPort: 5001
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5000
+              scheme: HTTP
+            initialDelaySeconds: 1
+            periodSeconds: 10
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /storage
+              name: registry-data
+              subPath: null
+            - mountPath: /etc/registry/passwd
+              name: registry-htpasswd
+              subPath: passwd
+            - mountPath: /etc/registry/config.yml
+              name: registry-config
+              subPath: config.yml
+        - env:
+            - name: CORE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: secret
+                  name: harbor-core
+            - name: JOBSERVICE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: JOBSERVICE_SECRET
+                  name: harbor-jobservice
+          envFrom:
+            - configMapRef:
+                name: harbor-registryctl
+            - secretRef:
+                name: harbor-registry
+            - secretRef:
+                name: harbor-registryctl
+          image: goharbor/harbor-registryctl:v2.13.2
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 300
+            periodSeconds: 10
+          name: registryctl
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 1
+            periodSeconds: 10
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /storage
+              name: registry-data
+              subPath: null
+            - mountPath: /etc/registry/config.yml
+              name: registry-config
+              subPath: config.yml
+            - mountPath: /etc/registryctl/config.yml
+              name: registry-config
+              subPath: ctl-config.yml
+      securityContext:
+        fsGroup: 10000
+        fsGroupChangePolicy: OnRootMismatch
+        runAsUser: 10000
+      terminationGracePeriodSeconds: 120
+      volumes:
+        - name: registry-htpasswd
+          secret:
+            items:
+              - key: REGISTRY_HTPASSWD
+                path: passwd
+            secretName: harbor-registry-htpasswd
+        - configMap:
+            name: harbor-registry
+          name: registry-config
+        - name: registry-data
+          persistentVolumeClaim:
+            claimName: harbor-registry

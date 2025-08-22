@@ -29,6 +29,7 @@ environment:
     - proto: cert-manager
     - proto: comentario
     - proto: grafana-agent
+    - proto: harbor
     - proto: jellyfin
     - proto: k3s-private-registries
     - proto: librespeed

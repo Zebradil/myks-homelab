@@ -1,0 +1,10 @@
+#@data/values
+---
+prototype:
+  sources:
+    harbor:
+      helmChart:
+        #! renovate: datasource=helm
+        name: harbor
+        url: https://helm.goharbor.io
+        version: 1.17.2

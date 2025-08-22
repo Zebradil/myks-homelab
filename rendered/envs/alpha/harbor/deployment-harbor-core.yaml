@@ -1,0 +1,137 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    app: harbor
+    app.kubernetes.io/component: core
+    app.kubernetes.io/instance: harbor
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: harbor
+    app.kubernetes.io/part-of: harbor
+    chart: harbor
+    component: core
+    heritage: Helm
+    release: harbor
+  name: harbor-core
+  namespace: harbor
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: harbor
+      component: core
+      release: harbor
+  template:
+    metadata:
+      annotations:
+        checksum/configmap: 59ba39848aff26cb8a2464f1ad180269ce9bde55755b02156a7b1ae61e3df619
+        checksum/secret: 7c16920f8126afd05bc855f2be9eeefb7beded1d4983eb829dcb177e6104340d
+        checksum/secret-jobservice: aa6ba6b72b1574a8a21f25dcb5da20177a3a78062e365bdfc3e017c4c8eb8ed9
+      labels:
+        app: harbor
+        app.kubernetes.io/component: core
+        app.kubernetes.io/instance: harbor
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: harbor
+        app.kubernetes.io/part-of: harbor
+        chart: harbor
+        component: core
+        heritage: Helm
+        release: harbor
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - env:
+            - name: CORE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: secret
+                  name: harbor-core
+            - name: JOBSERVICE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: JOBSERVICE_SECRET
+                  name: harbor-jobservice
+          envFrom:
+            - configMapRef:
+                name: harbor-core
+            - secretRef:
+                name: harbor-core
+          image: goharbor/harbor-core:v2.13.2
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 2
+            httpGet:
+              path: /api/v2.0/ping
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+          name: core
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            failureThreshold: 2
+            httpGet:
+              path: /api/v2.0/ping
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          startupProbe:
+            failureThreshold: 360
+            httpGet:
+              path: /api/v2.0/ping
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          volumeMounts:
+            - mountPath: /etc/core/app.conf
+              name: config
+              subPath: app.conf
+            - mountPath: /etc/core/key
+              name: secret-key
+              subPath: key
+            - mountPath: /etc/core/private_key.pem
+              name: token-service-private-key
+              subPath: tls.key
+            - mountPath: /etc/core/ca
+              name: ca-download
+            - mountPath: /etc/core/token
+              name: psc
+      securityContext:
+        fsGroup: 10000
+        runAsUser: 10000
+      terminationGracePeriodSeconds: 120
+      volumes:
+        - configMap:
+            items:
+              - key: app.conf
+                path: app.conf
+            name: harbor-core
+          name: config
+        - name: secret-key
+          secret:
+            items:
+              - key: secretKey
+                path: key
+            secretName: harbor-core
+        - name: token-service-private-key
+          secret:
+            secretName: harbor-core
+        - name: ca-download
+          secret:
+            secretName: harbor-ingress
+        - emptyDir: {}
+          name: psc

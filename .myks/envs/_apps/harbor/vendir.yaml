@@ -1,0 +1,12 @@
+apiVersion: vendir.k14s.io/v1alpha1
+kind: Config
+directories:
+- path: charts/harbor
+  contents:
+  - path: .
+    lazy: true
+    helmChart:
+      name: harbor
+      version: 1.17.2
+      repository:
+        url: https://helm.goharbor.io
