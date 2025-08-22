@@ -1,0 +1,42 @@
+#@data/values-schema
+---
+#@overlay/match missing_ok=True
+prototype:
+  #@schema/type any=True
+  #@schema/nullable
+  sources:
+    #! Name of the source
+    #! For Helm charts, this is also the name of the values file
+    #! (e.g. `cert-manager` -> `helm/cert-manager.yaml`)
+    sourceName:
+      #! One of: charts, ytt, static
+      #! - charts: if the source is a Helm chart
+      #! - ytt: if the source is a ytt template or raw YAML
+      #! - static: if the source is a static file
+      kind: charts
+      #! The configuration keys below correspond to the vendir spec,
+      #! with some keys omitted.
+      #! See https://carvel.dev/vendir/docs/latest/vendir-spec/
+      #! Only one of [helmChart, git] can be defined
+      git:
+        ref: v2.14.7
+        url: https://github.com/argoproj/argo-cd
+      helmChart:
+        #! Optional, default is <sourceName>
+        name: argocd
+        url: https://argoproj.github.io/argo-helm
+        version: 2.14.7
+      includePaths:
+        - some/path/**/*
+      excludePaths: []
+      newRootPath: some/path
+  #@schema/type any=True
+  #@schema/nullable
+  sourceOverrides:
+    sourceName:
+      - if:
+          tier: stage
+          clusterGroup: tools
+          region: europe-dus1
+        then:
+          #! The rest fields are the same as in `prototype.sources.sourceName`

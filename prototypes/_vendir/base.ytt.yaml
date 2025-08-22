@@ -1,0 +1,34 @@
+#@ load("@ytt:data", "data")
+#@ load("vendir.lib.star", "lib")
+
+#@ proto_cfg = data.values.prototype
+#@ context = {}
+
+#@ if/end proto_cfg.sources:
+---
+apiVersion: vendir.k14s.io/v1alpha1
+kind: Config
+directories:
+  #@ for source in proto_cfg.sources:
+  #@   cfg = lib.get_source(proto_cfg, source, context)
+  - path: #@ lib.get_path(cfg, source)
+    contents:
+      - path: .
+        lazy: true
+        #@ if/end "helmChart" in cfg:
+        helmChart:
+          name: #@ cfg.helmChart.name or source
+          version: #@ cfg.helmChart.version
+          repository:
+            url: #@ cfg.helmChart.url
+        #@ if/end "git" in cfg:
+        git:
+          url: #@ cfg.git.url
+          ref: #@ cfg.git.ref
+        #@ if/end "includePaths" in cfg:
+        includePaths: #@ cfg.includePaths
+        #@ if/end "excludePaths" in cfg:
+        excludePaths: #@ cfg.excludePaths
+        #@ if/end "newRootPath" in cfg:
+        newRootPath: #@ cfg.newRootPath
+  #@ end

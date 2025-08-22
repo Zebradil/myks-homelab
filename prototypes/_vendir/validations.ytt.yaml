@@ -1,0 +1,6 @@
+#@ load("@ytt:overlay", "overlay")
+
+#! Validate that there's only one vendir config provided
+#@overlay/match by=overlay.subset({"kind": "Config"}), missing_ok=True
+---
+kind: Config
