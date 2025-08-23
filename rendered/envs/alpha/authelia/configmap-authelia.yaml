@@ -3,7 +3,7 @@ data:
   configuration.yaml: |
     ---
     # yaml-language-server: $schema=https://www.authelia.com/schemas/v4.39/json-schema/configuration.json
-    theme: 'light'
+    theme: 'auto'
     default_2fa_method: ''
     server:
       address: 'tcp://0.0.0.0:9091/'
@@ -96,7 +96,7 @@ data:
         disable: false
       file:
         path: '/config/users_database.yml'
-        watch: false
+        watch: true
         search:
           email: false
           case_insensitive: false
@@ -176,7 +176,14 @@ data:
           minimum_version: 'TLS1.2'
           maximum_version: 'TLS1.3'
     access_control:
-      default_policy: 'two_factor'
+      default_policy: 'deny'
+      rules:
+        - policy: two_factor
+          domain:
+            - '*'
+          subject:
+            - ['group:dev']
+            - ['group:admins']
     ...
 kind: ConfigMap
 metadata:

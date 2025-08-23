@@ -21,9 +21,11 @@ pod:
     type: Recreate
 
 configMap:
+  theme: auto
   authentication_backend:
     file:
       enabled: true
+      watch: true
 
   session:
     cookies:
@@ -48,6 +50,15 @@ configMap:
   identity_providers:
     oidc:
       enabled: false
+
+  access_control:
+    default_policy: 'deny'
+    rules:
+      - domain: '*'
+        subject:
+          - 'group:dev'
+          - 'group:admins'
+        policy: 'two_factor'
 
 secret:
   existingSecret: authelia
