@@ -1,0 +1,7 @@
+#@ load("secrets.star", "sec")
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: users
+stringData: #@ sec.sops("users", "_")
