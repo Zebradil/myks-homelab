@@ -15,6 +15,11 @@ stringData: #@ {file_name: sec.sops("users", "_")}
 ---
 spec:
   template:
+    metadata:
+      annotations:
+        #! TODO: implement ytt access to static files and calculate checksum from the original content
+        #@overlay/match missing_ok=True
+        zebradil.dev/users-checksum: Sat Aug 23 19:43:09 CEST 2025
     spec:
       containers:
         #@overlay/match by="name"
