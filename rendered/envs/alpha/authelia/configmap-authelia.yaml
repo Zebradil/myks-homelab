@@ -180,7 +180,7 @@ data:
       rules:
         - policy: two_factor
           domain:
-            - '*'
+            - '*.zebradil.dev'
           subject:
             - ['group:dev']
             - ['group:admins']

@@ -2,6 +2,7 @@
 #@ load("secrets.star", "sec")
 
 #@ d = data.values
+#@ host = d.environment.hosts[0]
 ---
 ingress:
   enabled: true
@@ -29,7 +30,7 @@ configMap:
 
   session:
     cookies:
-      - domain: #@ d.environment.hosts[0]
+      - domain: #@ host
         subdomain: auth
 
   storage:
@@ -37,7 +38,7 @@ configMap:
       enabled: true
 
   totp:
-    issuer: #@ d.environment.hosts[0]
+    issuer: #@ host
 
   notifier:
     smtp:
@@ -45,7 +46,7 @@ configMap:
       enabled: true
       username: #@ sec.sops("smtp", "username")
       #! NOTE: this has no effect as GMail replaces the sender with the authenticated user.
-      sender: #@ "authelia@mail." + d.environment.hosts[0]
+      sender: #@ "authelia@mail." + host
 
   identity_providers:
     oidc:
@@ -54,7 +55,7 @@ configMap:
   access_control:
     default_policy: 'deny'
     rules:
-      - domain: '*'
+      - domain: #@ '*.' + host
         subject:
           - 'group:dev'
           - 'group:admins'
