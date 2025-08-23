@@ -99,6 +99,10 @@ spec:
             - mountPath: /secrets/internal
               name: secrets
               readOnly: true
+            - mountPath: /config/users_database.yaml
+              name: users
+              readOnly: true
+              subPath: users_database.yaml
       enableServiceLinks: false
       hostIPC: false
       hostNetwork: false
@@ -125,3 +129,6 @@ spec:
               - key: storage.encryption.key
                 path: storage.encryption.key
             secretName: authelia
+        - name: users
+          secret:
+            secretName: users

@@ -1,8 +1,30 @@
+#@ load("@ytt:overlay", "overlay")
+#@ load("overlay-matchers.star", "matchers")
 #@ load("secrets.star", "sec")
+
+#@ secret_name = "users"
+#@ file_name = "users_database.yaml"
 ---
 apiVersion: v1
 kind: Secret
 metadata:
   name: users
-stringData:
-  users_database.yaml: #@ sec.sops("users", "_")
+stringData: #@ {file_name: sec.sops("users", "_")}
+
+#@overlay/match by=matchers.kind_name("Deployment", "authelia")
+---
+spec:
+  template:
+    spec:
+      containers:
+        #@overlay/match by="name"
+        - name: authelia
+          volumeMounts:
+            - name: #@ secret_name
+              mountPath: #@ "/config/" + file_name
+              subPath: #@ file_name
+              readOnly: true
+      volumes:
+        - name: #@ secret_name
+          secret:
+            secretName: #@ secret_name
