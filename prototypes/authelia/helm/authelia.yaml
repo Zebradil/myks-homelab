@@ -51,6 +51,13 @@ configMap:
   identity_providers:
     oidc:
       enabled: true
+      hmac_secret:
+        value: #@ sec.sops("oidc", "hmac_secret")
+      jwks:
+        - key_id: default
+          algorithm: RS256
+          key:
+            value: #@ sec.sopsy("oidc", "jwks.default.key")
       clients:
         - client_id: #@ sec.sopsy("oidc", "harbor.client_id")
           client_name: Harbor

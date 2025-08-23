@@ -192,6 +192,11 @@ data:
         discovery_signed_response_key_id: ''
         require_pushed_authorization_requests: false
         jwks:
+          - algorithm: 'RS256'
+            use: 'sig'
+            key_id: 'default'
+            key: |
+              <path:static/oidc.sops.yaml#jwks | jsonPath {.default.key}>
         cors:
           allowed_origins_from_client_redirect_uris: false
         clients:
