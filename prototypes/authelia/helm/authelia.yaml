@@ -50,6 +50,7 @@ configMap:
 
   identity_providers:
     oidc:
+      enabled: true
       clients:
         - client_id: #@ sec.sopsy("oidc", "harbor.client_id")
           client_name: Harbor

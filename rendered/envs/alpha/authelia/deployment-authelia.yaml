@@ -21,7 +21,7 @@ spec:
   template:
     metadata:
       annotations:
-        authelia.com/checksum-config: 61052a5b4faebf994db736547fcb55718c6ad9f9e02504699ee220663d14f233
+        authelia.com/checksum-config: 11ad58d9deb720e74a5d2a61cbf371ac0125a64b62473257ea6d53e57274d2a5
       labels:
         app.kubernetes.io/instance: authelia
         app.kubernetes.io/name: authelia
@@ -44,6 +44,8 @@ spec:
               value: /secrets/internal/notifier.smtp.password.txt
             - name: AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE
               value: /secrets/internal/storage.encryption.key
+            - name: AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET_FILE
+              value: /secrets/internal/identity_providers.oidc.hmac.key
             - name: X_AUTHELIA_CONFIG
               value: /configuration.yaml
             - name: X_AUTHELIA_CONFIG_FILTERS
@@ -124,4 +126,6 @@ spec:
                 path: notifier.smtp.password.txt
               - key: storage.encryption.key
                 path: storage.encryption.key
+              - key: identity_providers.oidc.hmac.key
+                path: identity_providers.oidc.hmac.key
             secretName: authelia

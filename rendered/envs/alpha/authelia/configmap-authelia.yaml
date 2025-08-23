@@ -175,6 +175,84 @@ data:
           skip_verify: false
           minimum_version: 'TLS1.2'
           maximum_version: 'TLS1.3'
+    identity_providers:
+      oidc:
+        lifespans:
+          access_token: '1 hour'
+          refresh_token: '1 hour and 30 minutes'
+          id_token: '1 hour'
+          authorize_code: '1 minute'
+          device_code: '10 minutes'
+        enforce_pkce: 'public_clients_only'
+        enable_pkce_plain_challenge: false
+        enable_client_debug_messages: false
+        enable_jwt_access_token_stateless_introspection: false
+        minimum_parameter_entropy: 8
+        discovery_signed_response_alg: ''
+        discovery_signed_response_key_id: ''
+        require_pushed_authorization_requests: false
+        jwks:
+        cors:
+          allowed_origins_from_client_redirect_uris: false
+        clients:
+          - client_id: '<path:static/oidc.sops.yaml#harbor | jsonPath {.client_id}>'
+            client_name: 'Harbor'
+            client_secret: '$pbkdf2-sha512$310000$9DHdvTgaGh3aUcHDMrgAaQ$GGR6taK64IoVw9.xRAtGA1fPfZKvJguYcFlNuiwn1py0ug.A2csjIiqanEBFSO4D.fGGm7KttN.6lc/ngc3wYg'
+            public: false
+            redirect_uris:
+              - 'https://oci.zebradil.dev/c/oidc/callback'
+            scopes:
+              - 'openid'
+              - 'offline_access'
+              - 'profile'
+              - 'groups'
+              - 'email'
+            grant_types:
+              - 'authorization_code'
+              - 'refresh_token'
+            response_types:
+              - 'code'
+            authorization_policy: 'two_factor'
+            consent_mode: 'auto'
+            require_pushed_authorization_requests: false
+            require_pkce: false
+            pkce_challenge_method: ''
+            authorization_signed_response_alg: 'RS256'
+            authorization_signed_response_key_id: ''
+            authorization_encrypted_response_key_id: ''
+            authorization_encrypted_response_alg: ''
+            authorization_encrypted_response_enc: ''
+            id_token_signed_response_alg: 'RS256'
+            id_token_signed_response_key_id: ''
+            id_token_encrypted_response_key_id: ''
+            id_token_encrypted_response_alg: ''
+            id_token_encrypted_response_enc: ''
+            access_token_signed_response_alg: 'none'
+            access_token_signed_response_key_id: ''
+            access_token_encrypted_response_key_id: ''
+            access_token_encrypted_response_alg: ''
+            access_token_encrypted_response_enc: ''
+            userinfo_signed_response_alg: 'none'
+            userinfo_signed_response_key_id: ''
+            userinfo_encrypted_response_key_id: ''
+            userinfo_encrypted_response_alg: ''
+            userinfo_encrypted_response_enc: ''
+            introspection_signed_response_alg: 'none'
+            introspection_signed_response_key_id: ''
+            introspection_encrypted_response_key_id: ''
+            introspection_encrypted_response_alg: ''
+            introspection_encrypted_response_enc: ''
+            introspection_endpoint_auth_method: 'client_secret_basic'
+            introspection_endpoint_auth_signing_alg: 'RS256'
+            request_object_signing_alg: ''
+            request_object_encryption_alg: 'none'
+            request_object_encryption_enc: ''
+            token_endpoint_auth_method: 'client_secret_basic'
+            token_endpoint_auth_signing_alg: ''
+            revocation_endpoint_auth_method: 'client_secret_basic'
+            revocation_endpoint_auth_signing_alg: 'RS256'
+            pushed_authorization_request_endpoint_auth_method: 'client_secret_basic'
+            pushed_authorization_request_endpoint_auth_signing_alg: 'RS256'
     access_control:
       default_policy: 'deny'
       rules:
