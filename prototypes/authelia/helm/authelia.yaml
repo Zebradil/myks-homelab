@@ -42,7 +42,7 @@ configMap:
 
   notifier:
     smtp:
-      address: 'submissions://smtp.gmail.com:465'
+      address: submissions://smtp.gmail.com:465
       enabled: true
       username: #@ sec.sops("smtp", "username")
       #! NOTE: this has no effect as GMail replaces the sender with the authenticated user.
@@ -50,16 +50,40 @@ configMap:
 
   identity_providers:
     oidc:
-      enabled: false
+      clients:
+        - client_id: #@ sec.sopsy("oidc", "harbor.client_id")
+          client_name: Harbor
+          #! The chart has a validation preventing usage of a placeholder here.
+          client_secret: $pbkdf2-sha512$310000$9DHdvTgaGh3aUcHDMrgAaQ$GGR6taK64IoVw9.xRAtGA1fPfZKvJguYcFlNuiwn1py0ug.A2csjIiqanEBFSO4D.fGGm7KttN.6lc/ngc3wYg
+          public: false
+          authorization_policy: two_factor
+          require_pkce: false
+          pkce_challenge_method:
+          redirect_uris:
+            - https://oci.zebradil.dev/c/oidc/callback
+          scopes:
+            - openid
+            - offline_access
+            - profile
+            - groups
+            - email
+          response_types:
+            - code
+          grant_types:
+            - authorization_code
+            - refresh_token
+          access_token_signed_response_alg: none
+          userinfo_signed_response_alg: none
+          token_endpoint_auth_method: client_secret_basic
 
   access_control:
-    default_policy: 'deny'
+    default_policy: deny
     rules:
-      - domain: #@ '*.' + host
+      - domain: #@ "*." + host
         subject:
-          - 'group:dev'
-          - 'group:admins'
-        policy: 'two_factor'
+          - group:dev
+          - group:admins
+        policy: two_factor
 
 secret:
   existingSecret: authelia
