@@ -54,7 +54,7 @@ configMap:
         - key_id: default
           algorithm: RS256
           key:
-            value: #@ sec.sopsy("oidc", "jwks.default.key", ["indent 14"])
+            value: #@ sec.sopsy("oidc", "jwks.default.key", ["indent 10"])
       clients:
         - client_id: #@ sec.sopsy("oidc", "harbor.client_id")
           client_name: Harbor
