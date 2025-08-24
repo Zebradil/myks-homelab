@@ -51,8 +51,6 @@ configMap:
   identity_providers:
     oidc:
       enabled: true
-      hmac_secret:
-        value: #@ sec.sops("oidc", "hmac_secret")
       jwks:
         - key_id: default
           algorithm: RS256
