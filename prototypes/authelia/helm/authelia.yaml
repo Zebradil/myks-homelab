@@ -54,12 +54,13 @@ configMap:
         - key_id: default
           algorithm: RS256
           key:
-            value: #@ sec.sopsy("oidc", "jwks.default.key")
+            value: #@ sec.sopsy("oidc", "jwks.default.key", ["indent 14"])
       clients:
         - client_id: #@ sec.sopsy("oidc", "harbor.client_id")
           client_name: Harbor
           #! The chart has a validation preventing usage of a placeholder here.
           client_secret: $pbkdf2-sha512$310000$9DHdvTgaGh3aUcHDMrgAaQ$GGR6taK64IoVw9.xRAtGA1fPfZKvJguYcFlNuiwn1py0ug.A2csjIiqanEBFSO4D.fGGm7KttN.6lc/ngc3wYg
+          pre_configured_consent_duration: 1y
           public: false
           authorization_policy: two_factor
           require_pkce: false
