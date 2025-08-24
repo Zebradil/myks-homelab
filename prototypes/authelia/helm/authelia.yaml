@@ -9,8 +9,7 @@ ingress:
 
   traefikCRD:
     enabled: true
-    entryPoints:
-      - websecure
+    disableIngressRoute: true
 
   tls:
     enabled: false

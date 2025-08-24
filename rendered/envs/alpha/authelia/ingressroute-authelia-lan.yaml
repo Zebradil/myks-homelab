@@ -3,17 +3,14 @@ kind: IngressRoute
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
-  name: authelia
+  name: authelia-lan
 spec:
   entryPoints:
-    - web
-    - websecure
+    - lan-web
+    - lan-websecure
   routes:
     - kind: Rule
-      match: Host(`authelia.zebradil.dev`) || Host(`authelia.gray.zebradil.dev`) || Host(`authelia.junior.zebradil.dev`)
-      middlewares:
-        - name: chain-authelia
-          namespace: authelia
+      match: Host(`authelia.lan.zebradil.dev`) || Host(`authelia.gray.lan.zebradil.dev`) || Host(`authelia.junior.lan.zebradil.dev`)
       services:
         - name: authelia
           port: http

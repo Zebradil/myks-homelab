@@ -1,0 +1,26 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
+#@ load("overlay-matchers.star", "matchers")
+#@ load("traefik.lib.yaml", "route")
+
+#@ def gen_routes(name):
+#@   t = data.values.environment.traefik
+#@   return [
+#@     route.unprotected(name, t.hosts.web, ["web", "websecure"]),
+#@     route.unprotected(name, t.hosts.lan, ["lan-web", "lan-websecure"], "-lan"),
+#@     route.unprotected(name, t.hosts.vpn, ["vpn-web", "vpn-websecure"], "-vpn"),
+#@   ]
+#@ end
+
+#@ for/end route_doc in gen_routes(data.values.myks.context.app):
+--- #@ route_doc
+
+#@overlay/match by=matchers.kind_name("IngressRoute", "authelia")
+---
+spec:
+  routes:
+    - #@overlay/match by=overlay.all
+      #@overlay/match missing_ok=True
+      middlewares:
+        - name: chain-authelia
+          namespace: authelia

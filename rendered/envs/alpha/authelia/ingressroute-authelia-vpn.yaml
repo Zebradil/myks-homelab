@@ -3,17 +3,14 @@ kind: IngressRoute
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
-  name: authelia
+  name: authelia-vpn
 spec:
   entryPoints:
-    - web
-    - websecure
+    - vpn-web
+    - vpn-websecure
   routes:
     - kind: Rule
-      match: Host(`authelia.zebradil.dev`) || Host(`authelia.gray.zebradil.dev`) || Host(`authelia.junior.zebradil.dev`)
-      middlewares:
-        - name: chain-authelia
-          namespace: authelia
+      match: Host(`authelia.ts.zebradil.dev`) || Host(`authelia.gray.ts.zebradil.dev`) || Host(`authelia.junior.ts.zebradil.dev`)
       services:
         - name: authelia
           port: http
