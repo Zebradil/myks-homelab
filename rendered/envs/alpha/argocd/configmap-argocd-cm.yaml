@@ -1,6 +1,18 @@
 apiVersion: v1
 data:
   application.instanceLabelKey: argocd.argoproj.io/instance
+  oidc.config: |
+    name: Authelia
+    issuer: https://auth.zebradil.dev
+    clientID: <path:static/oidc.sops.yaml#argocd | jsonPath {.client_id}>
+    clientSecret: <path:static/oidc.sops.yaml#argocd | jsonPath {.client_secret}>
+    cliClientID: <path:static/oidc.sops.yaml#argocd-cli | jsonPath {.client_id}>
+    requestedScopes:
+    - openid
+    - email
+    - groups
+    enableUserInfoGroups: true
+    userInfoPath: /api/oidc/userinfo
   resource.customizations.ignoreDifferences.apps_Deployment: |
     jqPathExpressions:
       - .spec.template.spec.initContainers[].restartPolicy
