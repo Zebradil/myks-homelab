@@ -82,6 +82,48 @@ configMap:
           userinfo_signed_response_alg: none
           token_endpoint_auth_method: client_secret_basic
 
+        - client_id: #@ sec.sopsy("oidc", "argocd.client_id")
+          client_name: 'Argo CD'
+          #! The chart has a validation preventing usage of a placeholder here.
+          client_secret: $pbkdf2-sha512$310000$fHljICwmWYJUU1clgDqrqg$X2z6OFvOd2PTz.O3aDD1EdXZsZW/2u1./.r1DlUG7Rcel/rya3HoKuopX3JFW002/oEn8jIn.hEhpCeQyuDfwg
+          public: false
+          authorization_policy: two_factor
+          require_pkce: false
+          redirect_uris:
+            - https://argocd.zebradil.dev/auth/callback
+          scopes:
+            - openid
+            - groups
+            - email
+          response_types:
+            - code
+          grant_types:
+            - authorization_code
+          access_token_signed_response_alg: none
+          userinfo_signed_response_alg: none
+          token_endpoint_auth_method: client_secret_basic
+        - client_id: #@ sec.sopsy("oidc", "argocd-cli.client_id")
+          client_name: Argo CD (CLI)
+          public: true
+          authorization_policy: two_factor
+          require_pkce: true
+          pkce_challenge_method: S256
+          redirect_uris:
+            - http://localhost:8085/auth/callback
+          scopes:
+            - openid
+            - offline_access
+            - groups
+            - email
+          response_types:
+            - code
+          grant_types:
+            - authorization_code
+            - refresh_token
+          access_token_signed_response_alg: none
+          userinfo_signed_response_alg: none
+          token_endpoint_auth_method: none
+
   access_control:
     default_policy: deny
     rules:
