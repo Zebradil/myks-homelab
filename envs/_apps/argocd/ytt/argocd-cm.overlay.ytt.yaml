@@ -22,6 +22,7 @@ userInfoPath: /api/oidc/userinfo
 ---
 data:
   application.instanceLabelKey: argocd.argoproj.io/instance
+  url: https://argocd.zebradil.dev
   #! workaround for https://github.com/argoproj/gitops-engine/issues/558
   resource.customizations.ignoreDifferences.apps_Deployment: |
     jqPathExpressions:

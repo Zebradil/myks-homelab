@@ -16,6 +16,7 @@ data:
   resource.customizations.ignoreDifferences.apps_Deployment: |
     jqPathExpressions:
       - .spec.template.spec.initContainers[].restartPolicy
+  url: https://argocd.zebradil.dev
 kind: ConfigMap
 metadata:
   annotations:
