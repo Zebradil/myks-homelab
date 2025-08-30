@@ -8,6 +8,9 @@ application:
       europe-west3-docker.pkg.dev:
         endpoint:
           - https://europe-west3-docker.pkg.dev
+      oci.zebradil.dev:
+        endpoint:
+          - https://oci.zebradil.dev
     configs:
       europe-west3-docker.pkg.dev:
         auth:
@@ -17,3 +20,7 @@ application:
           #@yaml/text-templated-strings
           password: |
             (@= sec.sops("0", "password") @)
+      oci.zebradil.dev:
+        auth:
+          username: #@ sec.sops("1", "username")
+          password: #@ sec.sops("1", "password")
