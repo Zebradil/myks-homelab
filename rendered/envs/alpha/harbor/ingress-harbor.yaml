@@ -1,0 +1,351 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: harbor
+  namespace: harbor
+spec:
+  rules:
+    - host: oci.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /api/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /service/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /v2/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /c/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-portal
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+    - host: oci.gray.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /api/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /service/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /v2/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /c/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-portal
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+    - host: oci.junior.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /api/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /service/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /v2/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /c/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-portal
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+    - host: oci.lan.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /api/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /service/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /v2/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /c/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-portal
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+    - host: oci.gray.lan.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /api/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /service/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /v2/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /c/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-portal
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+    - host: oci.junior.lan.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /api/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /service/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /v2/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /c/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-portal
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+    - host: oci.ts.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /api/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /service/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /v2/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /c/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-portal
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+    - host: oci.gray.ts.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /api/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /service/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /v2/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /c/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-portal
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+    - host: oci.junior.ts.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /api/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /service/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /v2/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-core
+                port:
+                  number: 80
+            path: /c/
+            pathType: Prefix
+          - backend:
+              service:
+                name: harbor-portal
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix

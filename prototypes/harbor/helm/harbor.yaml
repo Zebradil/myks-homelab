@@ -5,9 +5,6 @@
 expose:
   tls:
     enabled: false
-  ingress:
-    hosts:
-      core: #@ host
 externalURL: #@ "https://" + host
 persistence:
   persistentVolumeClaim:

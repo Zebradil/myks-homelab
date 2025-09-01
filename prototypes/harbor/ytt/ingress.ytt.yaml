@@ -1,0 +1,39 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
+#@ load("overlay-matchers.star", "matchers")
+
+#@overlay/match by=matchers.kind_name("Ingress", "harbor-ingress")
+#@overlay/remove
+---
+#@ d = data.values
+#@ name = d.myks.context.app
+#@ ns = name
+#@ hosts_map = d.environment.traefik.hosts
+#@ hosts = ["oci." + host for host in hosts_map.web + hosts_map.lan + hosts_map.vpn]
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: #@ name
+  namespace: #@ ns
+spec:
+  rules:
+    #@ for/end host in hosts:
+    - host: #@ host
+      http:
+        paths:
+          #@ for/end path in ["/api/", "/service/", "/v2/", "/c/"]:
+          - backend:
+              service:
+                name: #@ name + "-core"
+                port:
+                  number: 80
+            path: #@ path
+            pathType: Prefix
+          - backend:
+              service:
+                name: #@ name + "-portal"
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
