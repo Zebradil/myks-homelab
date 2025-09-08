@@ -9,6 +9,7 @@ metadata:
   name: authelia
   namespace: authelia
 spec:
+  externalTrafficPolicy: Cluster
   ports:
     - name: http
       port: 80
