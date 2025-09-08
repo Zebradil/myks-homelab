@@ -3,17 +3,12 @@
 # yaml-language-server: $schema=values.schema.json
 
 ## @formatter:off
-## values.local.yaml
+## values.yaml
 ##
 ## Repository: authelia https://charts.authelia.com
 ## Chart: authelia
 ##
-## This values file is designed for a StatefulSet deployment with a single pod. It is not intended for production environments
-## It uses the following providers:
-##   - authentication: file (yaml)
-##   - storage: local (SQLite3)
-##   - session: memory
-##   - notification: filesystem (yaml)
+# -- This values file is a baseline for other values files.
 
 # @schema
 # required: false
@@ -186,6 +181,13 @@ service:
   # @schema
   # -- (string) Cluster IP for the Authelia service manifest.
   clusterIP: ~
+
+  # @schema
+  # type: [string, null]
+  # required: false
+  # @schema
+  # -- (string) Use value Local to get external IP addresses.
+  externalTrafficPolicy: Cluster
 
 # @schema
 # required: false
@@ -2514,7 +2516,7 @@ configMap:
       # required: false
       # @schema
       # -- Enable File Backend (Authentication).
-      enabled: true
+      enabled: false
 
       # @schema
       # required: false
@@ -3311,7 +3313,7 @@ configMap:
       # required: false
       # @schema
       # -- Enable the Local Provider (Storage / SQL)
-      enabled: true
+      enabled: false
 
       # @schema
       # required: false
@@ -3582,7 +3584,7 @@ configMap:
       # required: false
       # @schema
       # -- Enables the File System Provider (Notifier).
-      enabled: true
+      enabled: false
 
       # @schema
       # required: false
@@ -4037,6 +4039,30 @@ configMap:
       # @schema
       # -- Enables the plain PKCE challenge which is not recommended for security reasons but may be necessary for some clients.
       enable_pkce_plain_challenge: false
+
+      # @schema
+      # required: false
+      # @schema
+      # -- Enables introspecting JWT Profile Access Tokens using stateless checks. This is strongly discouraged.
+      enable_jwt_access_token_stateless_introspection: false
+
+      # @schema
+      # required: false
+      # @schema
+      # -- The JSON Web Algorithm used for signing the discovery metadata.
+      discovery_signed_response_alg: ''
+
+      # @schema
+      # required: false
+      # @schema
+      # -- The JSON Web Key ID used for signing the discovery metadata.
+      discovery_signed_response_key_id: ''
+
+      # @schema
+      # required: false
+      # @schema
+      # -- Enables requiring all Authorization Requests to be initiated using a Pushed Authorization Request.
+      require_pushed_authorization_requests: false
 
       # @schema
       # required: false
