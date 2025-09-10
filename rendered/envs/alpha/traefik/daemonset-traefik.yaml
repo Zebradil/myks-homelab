@@ -27,6 +27,7 @@ spec:
       automountServiceAccountToken: true
       containers:
         - args:
+            - --global.checkNewVersion=false
             - --entryPoints.lan-web.address=node.k8s.lan:80/tcp
             - --entryPoints.lan-websecure.address=node.k8s.lan:443/tcp
             - --entryPoints.metrics.address=node.k8s.lan:19100/tcp
@@ -118,7 +119,7 @@ spec:
                   fieldPath: metadata.namespace
             - name: BASE_DOMAIN
               value: zebradil.dev
-          image: docker.io/traefik:v3.5.0
+          image: docker.io/traefik:v3.5.1
           imagePullPolicy: IfNotPresent
           lifecycle: null
           livenessProbe:
