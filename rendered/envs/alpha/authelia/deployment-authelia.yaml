@@ -21,7 +21,7 @@ spec:
   template:
     metadata:
       annotations:
-        authelia.com/checksum-config: 41e53ad3aacfa765e4dad719ed2bf4b43d1f52b4e2d0529f319efb7fa0bbd21e
+        authelia.com/checksum-config: afc1c8f77d538bfc0f60eb2d203600341010a505cdd702bcf2cf9fd948b60504
       labels:
         app.kubernetes.io/instance: authelia
         app.kubernetes.io/name: authelia
