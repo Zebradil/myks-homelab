@@ -756,9 +756,6 @@
           {{- end }}
           {{- end }}
           {{- with .Values.logs }}
-            {{- if and .general.format (not (has .general.format (list "common" "json"))) }}
-              {{- fail "ERROR: .Values.logs.general.format must be either common or json"  }}
-            {{- end }}
             {{- with .general.format }}
           - "--log.format={{ . }}"
             {{- end }}
@@ -830,7 +827,7 @@
           - "--hub.namespaces={{ join "," (uniq (concat (include "traefik.namespace" $ | list) .namespaces)) }}"
             {{- end }}
             {{- with .apimanagement }}
-             {{- if .enabled }}
+            {{- if .enabled }}
               {{- $listenAddr := default ":9943" .admission.listenAddr }}
           - "--hub.apimanagement"
               {{- if not $.Values.hub.offline }}

@@ -1,6 +1,6 @@
 # traefik
 
-![Version: 37.1.0](https://img.shields.io/badge/Version-37.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v3.5.1](https://img.shields.io/badge/AppVersion-v3.5.1-informational?style=flat-square)
+![Version: 37.1.1](https://img.shields.io/badge/Version-37.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v3.5.2](https://img.shields.io/badge/AppVersion-v3.5.2-informational?style=flat-square)
 
 A Traefik based Kubernetes ingress controller
 
@@ -98,6 +98,7 @@ Kubernetes: `>=1.22.0-0`
 | hub.apimanagement.admission.listenAddr | string | `""` | WebHook admission server listen address. Default: "0.0.0.0:9943". |
 | hub.apimanagement.admission.restartOnCertificateChange | bool | `true` | Set it to false if you need to disable Traefik Hub pod restart when mutating webhook certificate is updated. It's done with a label update. |
 | hub.apimanagement.admission.secretName | string | `"hub-agent-cert"` | Certificate name of the WebHook admission server. Default: "hub-agent-cert". |
+| hub.apimanagement.admission.selfManagedCertificate | bool | `false` | By default, this chart handles directly the tls certificate required for the admission webhook. It's possible to disable this behavior and handle it outside of the chart. See EXAMPLES.md for more details. |
 | hub.apimanagement.enabled | bool | `false` | Set to true in order to enable API Management. Requires a valid license token. |
 | hub.apimanagement.openApi.validateRequestMethodAndPath | bool | `false` | When set to true, it will only accept paths and methods that are explicitly defined in its OpenAPI specification |
 | hub.namespaces | list | `[]` | By default, Traefik Hub provider watches all namespaces. When using `rbac.namespaced`, it will watch helm release namespace and namespaces listed in this array. |
