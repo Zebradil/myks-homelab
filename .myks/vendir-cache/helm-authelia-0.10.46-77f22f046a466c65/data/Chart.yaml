@@ -2,7 +2,7 @@ annotations:
   artifacthub.io/category: security
   artifacthub.io/changes: |
     - kind: fixed
-      description: Only render service's externalTrafficPolicy if user configured it.
+      description: Refresh interval of auth backend is now rendered in configMap
       links: []
   artifacthub.io/images: |
     - name: authelia/authelia
@@ -84,4 +84,4 @@ sources:
 - https://github.com/authelia/chartrepo/tree/master/charts/authelia
 - https://www.github.com/authelia/authelia
 type: application
-version: 0.10.45
+version: 0.10.46
