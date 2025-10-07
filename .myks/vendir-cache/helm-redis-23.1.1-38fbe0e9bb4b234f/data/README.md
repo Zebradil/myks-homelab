@@ -11,7 +11,7 @@ Disclaimer: Redis is a registered trademark of Redis Ltd. Any rights therein are
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/redis
+helm install my-release oci://MY-OCI-REGISTRY/redis
 ```
 
 > Tip: Did you know that this app is also available as a Kubernetes App on the Azure Marketplace? Kubernetes Apps are the easiest way to deploy Bitnami on AKS. Click [here](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/bitnami.redis-cnab) to see the listing on Azure Marketplace.
@@ -114,6 +114,7 @@ commonConfiguration: |
   loadmodule /opt/bitnami/redis/lib/redis/modules/redisearch.so
   loadmodule /opt/bitnami/redis/lib/redis/modules/rejson.so
   loadmodule /opt/bitnami/redis/lib/redis/modules/redistimeseries.so
+```
 
 ### Bootstrapping with an External Cluster
 
