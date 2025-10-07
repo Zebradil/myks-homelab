@@ -1,6 +1,12 @@
-# Bitnami Common Library Chart
+<!--- app-name: Common -->
 
-A [Helm Library Chart](https://helm.sh/docs/topics/library_charts/#helm) for grouping common logic between Bitnami charts.
+# Common library for Bitnami packages
+
+A Library Helm Chart for grouping common logic between bitnami charts. This chart is not deployable by itself.
+
+[Overview of Common](https://github.com/bitnami/charts/tree/main/bitnami/common)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
 ## TL;DR
 
@@ -8,7 +14,7 @@ A [Helm Library Chart](https://helm.sh/docs/topics/library_charts/#helm) for gro
 dependencies:
   - name: common
     version: 2.x.x
-    repository: oci://registry-1.docker.io/bitnamicharts
+    repository: oci://MY-OCI-REGISTRY
 ```
 
 ```console
@@ -190,6 +196,13 @@ The following table lists the helpers available in the library which are scoped 
 | `common.warnings.rollingTag`     | Warning about using rolling tag.                                  | `ImageRoot` see [ImageRoot](#imageroot) for the structure. |
 | `common.warnings.modifiedImages` | Warning about replaced images from the original.                  | `ImageRoot` see [ImageRoot](#imageroot) for the structure. |
 | `common.warnings.resources`      | Warning about not setting the resource object in all deployments. | `dict "sections" (list "path1" "path2") context $`         |
+
+### FIPS
+
+| Helper identifier     | Description         | Expected Input                                                                  |
+| --------------------  | ------------------- | ------------------------------------------------------------------------------- |
+| `common.fips.enabled` | Enable FIPS mode    | `.` Chart context                                                               |
+| `common.fips.config`  | Configure FIPS mode | `dict "tech" "openssl|java|golang" "fips" .Values.fips "global" .Values.global` |
 
 ## Special input schemas
 
