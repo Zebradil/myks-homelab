@@ -1,0 +1,5 @@
+---
+global:
+  imageRegistry: oci.zebradil.dev/hub.docker.com-cache
+  security:
+    allowInsecureImages: true

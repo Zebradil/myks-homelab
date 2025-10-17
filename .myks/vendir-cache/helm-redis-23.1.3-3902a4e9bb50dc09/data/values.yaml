@@ -112,9 +112,9 @@ diagnosticMode:
 ## @param image.debug Enable image debug mode
 ##
 image:
-  registry: docker.io
+  registry: registry-1.docker.io
   repository: bitnami/redis
-  tag: 8.2.1-debian-12-r0
+  tag: latest
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -193,6 +193,9 @@ auth:
 ## ref: https://redis.io/topics/config
 ##
 commonConfiguration: |-
+  # Enable ReJSON y Redisearch
+  loadmodule /opt/bitnami/redis/lib/redis/modules/redisearch.so
+  loadmodule /opt/bitnami/redis/lib/redis/modules/rejson.so
   # Enable AOF https://redis.io/topics/persistence#append-only-file
   appendonly yes
   # Disable RDB persistence, AOF persistence already enabled.
@@ -1184,9 +1187,9 @@ sentinel:
   ## @param sentinel.image.debug Enable image debug mode
   ##
   image:
-    registry: docker.io
+    registry: registry-1.docker.io
     repository: bitnami/redis-sentinel
-    tag: 8.2.1-debian-12-r0
+    tag: latest
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1582,36 +1585,36 @@ sentinel:
     ##
     enabled: false
     service:
-        ## @param sentinel.externalAccess.service.loadBalancerIPAnnotaion Name of annotation to specify fixed IP for service in.
-        ##
+      ## @param sentinel.externalAccess.service.loadBalancerIPAnnotaion Name of annotation to specify fixed IP for service in.
+      ##
       loadBalancerIPAnnotaion: ""
-        ## @param sentinel.externalAccess.service.type Type for the services used to expose every Pod
-        ## At this moment only LoadBalancer is supported
-        ##
+      ## @param sentinel.externalAccess.service.type Type for the services used to expose every Pod
+      ## At this moment only LoadBalancer is supported
+      ##
       type: LoadBalancer
       ## @param sentinel.externalAccess.service.redisPort Port for the services used to expose redis-server
-        ##
+      ##
       redisPort: 6379
 
       ## @param sentinel.externalAccess.service.sentinelPort Port for the services used to expose redis-sentinel
-        ##
+      ##
       sentinelPort: 26379
-        ## @param sentinel.externalAccess.service.loadBalancerIP Array of load balancer IPs for each Redis(R) node. Length must be the same as sentinel.replicaCount
-        ##
+      ## @param sentinel.externalAccess.service.loadBalancerIP Array of load balancer IPs for each Redis(R) node. Length must be the same as sentinel.replicaCount
+      ##
       loadBalancerIP: []
-        ## @param sentinel.externalAccess.service.loadBalancerClass Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
-        ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
-        ##
+      ## @param sentinel.externalAccess.service.loadBalancerClass Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
       loadBalancerClass: ""
-        ## @param sentinel.externalAccess.service.loadBalancerSourceRanges Service Load Balancer sources
-        ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-        ## e.g:
-        ## loadBalancerSourceRanges:
-        ##   - 10.10.10.0/24
-        ##
+      ## @param sentinel.externalAccess.service.loadBalancerSourceRanges Service Load Balancer sources
+      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+      ## e.g:
+      ## loadBalancerSourceRanges:
+      ##   - 10.10.10.0/24
+      ##
       loadBalancerSourceRanges: []
-        ## @param sentinel.externalAccess.service.annotations Annotations to add to the services used to expose every Pod of the Redis(R) Cluster
-        ##
+      ## @param sentinel.externalAccess.service.annotations Annotations to add to the services used to expose every Pod of the Redis(R) Cluster
+      ##
       annotations: {}
 
 ## @section Other Parameters
@@ -1783,9 +1786,9 @@ metrics:
   ## @param metrics.image.pullSecrets Redis(R) Exporter image pull secrets
   ##
   image:
-    registry: docker.io
+    registry: registry-1.docker.io
     repository: bitnami/redis-exporter
-    tag: 1.76.0-debian-12-r0
+    tag: latest
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2161,9 +2164,9 @@ volumePermissions:
   ## @param volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets
   ##
   image:
-    registry: docker.io
+    registry: registry-1.docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r51
+    tag: latest
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2225,9 +2228,9 @@ kubectl:
   ## @param kubectl.image.pullSecrets Kubectl pull secrets
   ##
   image:
-    registry: docker.io
+    registry: registry-1.docker.io
     repository: bitnami/kubectl
-    tag: 1.33.4-debian-12-r0
+    tag: latest
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2294,9 +2297,9 @@ sysctl:
   ## @param sysctl.image.pullSecrets OS Shell + Utility image pull secrets
   ##
   image:
-    registry: docker.io
+    registry: registry-1.docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r51
+    tag: latest
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
