@@ -3,8 +3,11 @@
 architecture: standalone
 auth:
   enabled: false
+image:
+  repository: bitnamilegacy/redis
+  tag: 8.2.1-debian-12-r0
 master:
-  #! TODO(@zebradil): Perform rightsizing.
-  resourcesPreset: "none"
   persistence:
     enabled: false
+  #! TODO(@zebradil): Perform rightsizing.
+  resourcesPreset: 'none'
