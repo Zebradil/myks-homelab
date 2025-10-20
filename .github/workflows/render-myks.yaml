@@ -39,7 +39,7 @@ jobs:
         env:
           MYKS_SMART_MODE_BASE_REVISION: ${{ github.base_ref && format('origin/{0}', github.base_ref) || env.NX_BASE }}
         run: |
-          myks all
+          myks render
           myks cleanup --cache
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@e89d40939c28e39f97cf32126055eeae86ba74ec # v6.3.0
