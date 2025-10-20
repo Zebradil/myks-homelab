@@ -38,6 +38,9 @@ jobs:
       - name: Render
         env:
           MYKS_SMART_MODE_BASE_REVISION: ${{ github.base_ref && format('origin/{0}', github.base_ref) || env.NX_BASE }}
+          KBLD_REGISTRY_HOSTNAME: ${{ secrets.HARBOR_REGISTRY }}
+          KBLD_REGISTRY_USERNAME: ${{ secrets.HARBOR_ROBOT_NAME }}
+          KBLD_REGISTRY_PASSWORD: ${{ secrets.HARBOR_ROBOT_PASSWORD }}
         run: |
           myks render
           myks cleanup --cache
