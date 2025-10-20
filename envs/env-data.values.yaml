@@ -20,6 +20,8 @@ argocd:
     generateSecret: false
 helm:
   kubeVersion: '1.29'
+kbld:
+  enabled: true
 myks:
   gitRepoUrl: https://github.com/Zebradil/myks-homelab
   #! Explicitly set the main branch to avoid extra diff in PRs.
