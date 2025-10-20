@@ -3,6 +3,12 @@ kind: Deployment
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
+    kbld.k14s.io/images: |
+      - origins:
+        - resolved:
+            tag: v2.13.2
+            url: goharbor/harbor-core:v2.13.2
+        url: index.docker.io/goharbor/harbor-core@sha256:89114e3fb5c95aefa3285d5d627f89c46c3eaa2f4da138cedee887e58d297f2a
   labels:
     app: harbor
     app.kubernetes.io/component: core
@@ -60,7 +66,7 @@ spec:
                 name: harbor-core
             - secretRef:
                 name: harbor-core
-          image: goharbor/harbor-core:v2.13.2
+          image: index.docker.io/goharbor/harbor-core@sha256:89114e3fb5c95aefa3285d5d627f89c46c3eaa2f4da138cedee887e58d297f2a
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 2

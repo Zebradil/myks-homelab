@@ -3,6 +3,12 @@ kind: DaemonSet
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
+    kbld.k14s.io/images: |
+      - origins:
+        - resolved:
+            tag: v3.5.3
+            url: docker.io/traefik:v3.5.3
+        url: index.docker.io/library/traefik@sha256:d6be8725d21b45bdd84b93ea01438256e0e3c94aa8fa51834fe87f37cd5d4af8
   labels:
     app.kubernetes.io/instance: traefik-traefik
     app.kubernetes.io/name: traefik
@@ -121,7 +127,7 @@ spec:
               value: traefik
             - name: BASE_DOMAIN
               value: zebradil.dev
-          image: docker.io/traefik:v3.5.3
+          image: index.docker.io/library/traefik@sha256:d6be8725d21b45bdd84b93ea01438256e0e3c94aa8fa51834fe87f37cd5d4af8
           imagePullPolicy: IfNotPresent
           lifecycle: null
           livenessProbe:

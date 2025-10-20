@@ -101,6 +101,10 @@ helm:
   kubeVersion: "1.29"
   namespace: ""
   charts: []
+kbld:
+  enabled: true
+  imagesAnnotation: true
+  cache: true
 yttPkg:
   dirs: []
 render:

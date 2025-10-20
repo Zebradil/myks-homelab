@@ -3,6 +3,12 @@ kind: Deployment
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
+    kbld.k14s.io/images: |
+      - origins:
+        - resolved:
+            tag: v2.14.7
+            url: quay.io/argoproj/argocd:v2.14.7
+        url: quay.io/argoproj/argocd@sha256:1893f23b240cd0a3ee27eccb7d84eb41de1f68bae33772d9a9acdf4e1f72dfba
   labels:
     app.kubernetes.io/component: notifications-controller
     app.kubernetes.io/name: argocd-notifications-controller
@@ -54,7 +60,7 @@ spec:
                   key: notificationscontroller.repo.server.plaintext
                   name: argocd-cmd-params-cm
                   optional: true
-          image: quay.io/argoproj/argocd:v2.14.7
+          image: quay.io/argoproj/argocd@sha256:1893f23b240cd0a3ee27eccb7d84eb41de1f68bae33772d9a9acdf4e1f72dfba
           imagePullPolicy: Always
           livenessProbe:
             tcpSocket:

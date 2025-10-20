@@ -3,6 +3,12 @@ kind: Deployment
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
+    kbld.k14s.io/images: |
+      - origins:
+        - resolved:
+            tag: v3.14.0-ubuntu
+            url: registry.gitlab.com/comentario/comentario:v3.14.0-ubuntu
+        url: registry.gitlab.com/comentario/comentario@sha256:359c8c41f4cda124175a1f7574a3448336b725ea96a96b485e4dbbf7e3b722e8
   name: comentario
 spec:
   selector:
@@ -31,7 +37,7 @@ spec:
               value: /etc/comentario/secrets.yaml
             - name: BASE_URL
               value: https://comentario.zebradil.dev
-          image: registry.gitlab.com/comentario/comentario:v3.14.0-ubuntu
+          image: registry.gitlab.com/comentario/comentario@sha256:359c8c41f4cda124175a1f7574a3448336b725ea96a96b485e4dbbf7e3b722e8
           name: comentario
           ports:
             - containerPort: 8080

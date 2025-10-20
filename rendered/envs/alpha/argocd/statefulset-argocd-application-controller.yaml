@@ -3,6 +3,12 @@ kind: StatefulSet
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
+    kbld.k14s.io/images: |
+      - origins:
+        - resolved:
+            tag: v2.14.7
+            url: quay.io/argoproj/argocd:v2.14.7
+        url: quay.io/argoproj/argocd@sha256:1893f23b240cd0a3ee27eccb7d84eb41de1f68bae33772d9a9acdf4e1f72dfba
   labels:
     app.kubernetes.io/component: application-controller
     app.kubernetes.io/name: argocd-application-controller
@@ -270,7 +276,7 @@ spec:
                   optional: true
             - name: KUBECACHEDIR
               value: /tmp/kubecache
-          image: quay.io/argoproj/argocd:v2.14.7
+          image: quay.io/argoproj/argocd@sha256:1893f23b240cd0a3ee27eccb7d84eb41de1f68bae33772d9a9acdf4e1f72dfba
           imagePullPolicy: Always
           name: argocd-application-controller
           ports:

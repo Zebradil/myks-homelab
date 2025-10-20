@@ -3,6 +3,21 @@ kind: Deployment
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
+    kbld.k14s.io/images: |
+      - origins:
+        - resolved:
+            tag: 2.18.4
+            url: ghcr.io/paperless-ngx/paperless-ngx:2.18.4
+        - preresolved:
+            url: ghcr.io/paperless-ngx/paperless-ngx@sha256:3421ebe06ed27662d014046cf5089e612de853aae0c676a2bc72f73b38080e57
+        url: ghcr.io/paperless-ngx/paperless-ngx@sha256:3421ebe06ed27662d014046cf5089e612de853aae0c676a2bc72f73b38080e57
+      - origins:
+        - resolved:
+            tag: 9.3_p2-r1-ls143
+            url: linuxserver/openssh-server:9.3_p2-r1-ls143
+        - preresolved:
+            url: index.docker.io/linuxserver/openssh-server@sha256:d55ff78303834a03ef4bf21733fccce12365949ed1715bdbe7e42d1b66db620a
+        url: index.docker.io/linuxserver/openssh-server@sha256:d55ff78303834a03ef4bf21733fccce12365949ed1715bdbe7e42d1b66db620a
   name: paperless
 spec:
   selector:
@@ -51,7 +66,7 @@ spec:
               value: <path:static/0.sops.yaml#sessionSecretKey>
             - name: PAPERLESS_TIME_ZONE
               value: Europe/Berlin
-          image: ghcr.io/paperless-ngx/paperless-ngx:2.18.4
+          image: ghcr.io/paperless-ngx/paperless-ngx@sha256:3421ebe06ed27662d014046cf5089e612de853aae0c676a2bc72f73b38080e57
           name: paperless
           ports:
             - containerPort: 8000
@@ -80,7 +95,7 @@ spec:
               value: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCnzIKHO6ux0JUuSZGmnrVtukIvvqiPRt3pdwPbvMDQwTSFtW0xdORkYKGsCYhPuzEcLMFfJgUT4JEtMPFdj1TTizo5fDOlQP+pJMoRc4HKmqzTsK4FvmS/7Bl6IvWbhAcceKynGkZmOrQziMo7RINrFy1/sjf9ZVaMoQvbFjLUEGboxuq0gJVfgxlRQX28rHolFZk9YWWbHMJ0Gbw/YLQWqf3EJuQnyAWSrnZsX+a8CsKoCzlgsFne91PgNFA5OhkIMkKQy1Mk4qSXhQ7ZUHhcN7reDhyyDX/E+Y0y87Y5NZ8OxAU6Bzl0wZKcAIhZkE/hvhb6L4hJ98VS04QD7Gpj
             - name: LOG_STDOUT
               value: "true"
-          image: linuxserver/openssh-server:9.3_p2-r1-ls143
+          image: index.docker.io/linuxserver/openssh-server@sha256:d55ff78303834a03ef4bf21733fccce12365949ed1715bdbe7e42d1b66db620a
           name: sftp
           ports:
             - containerPort: 2222
@@ -97,7 +112,7 @@ spec:
           command:
             - /bin/sh
             - -c
-          image: linuxserver/openssh-server:9.3_p2-r1-ls143
+          image: index.docker.io/linuxserver/openssh-server@sha256:d55ff78303834a03ef4bf21733fccce12365949ed1715bdbe7e42d1b66db620a
           name: copy-scripts
           volumeMounts:
             - mountPath: /mnt/scripts

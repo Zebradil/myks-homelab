@@ -3,6 +3,12 @@ kind: StatefulSet
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
+    kbld.k14s.io/images: |
+      - origins:
+        - resolved:
+            tag: v2.13.2
+            url: goharbor/harbor-db:v2.13.2
+        url: index.docker.io/goharbor/harbor-db@sha256:fcf1f3dbc8f10183abe336712560a94fb2804ba8d3ce3ca634342e5a8df7da2c
   labels:
     app: harbor
     app.kubernetes.io/component: database
@@ -48,7 +54,7 @@ spec:
           envFrom:
             - secretRef:
                 name: harbor-database
-          image: goharbor/harbor-db:v2.13.2
+          image: index.docker.io/goharbor/harbor-db@sha256:fcf1f3dbc8f10183abe336712560a94fb2804ba8d3ce3ca634342e5a8df7da2c
           imagePullPolicy: IfNotPresent
           livenessProbe:
             exec:
@@ -86,7 +92,7 @@ spec:
             - chmod -R 700 /var/lib/postgresql/data/pgdata || true
           command:
             - /bin/sh
-          image: goharbor/harbor-db:v2.13.2
+          image: index.docker.io/goharbor/harbor-db@sha256:fcf1f3dbc8f10183abe336712560a94fb2804ba8d3ce3ca634342e5a8df7da2c
           imagePullPolicy: IfNotPresent
           name: data-permissions-ensurer
           securityContext:

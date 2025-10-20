@@ -3,6 +3,12 @@ kind: StatefulSet
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
+    kbld.k14s.io/images: |
+      - origins:
+        - resolved:
+            tag: v2.13.2
+            url: goharbor/trivy-adapter-photon:v2.13.2
+        url: index.docker.io/goharbor/trivy-adapter-photon@sha256:7a6d2284992ee5739ef0a76a9bed722bd87ec9e9ad286c6d72aa7919a606e106
   labels:
     app: harbor
     app.kubernetes.io/component: trivy
@@ -97,7 +103,7 @@ spec:
                 secretKeyRef:
                   key: redisURL
                   name: harbor-trivy
-          image: goharbor/trivy-adapter-photon:v2.13.2
+          image: index.docker.io/goharbor/trivy-adapter-photon@sha256:7a6d2284992ee5739ef0a76a9bed722bd87ec9e9ad286c6d72aa7919a606e106
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 10

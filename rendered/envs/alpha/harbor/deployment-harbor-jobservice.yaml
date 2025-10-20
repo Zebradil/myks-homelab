@@ -3,6 +3,12 @@ kind: Deployment
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
+    kbld.k14s.io/images: |
+      - origins:
+        - resolved:
+            tag: v2.13.2
+            url: goharbor/harbor-jobservice:v2.13.2
+        url: index.docker.io/goharbor/harbor-jobservice@sha256:12fe1d4271dfa60fdcd90396efcf39afe05f2316e5b3de50413bde06560cc550
   labels:
     app: harbor
     app.kubernetes.io/component: jobservice
@@ -59,7 +65,7 @@ spec:
                 name: harbor-jobservice-env
             - secretRef:
                 name: harbor-jobservice
-          image: goharbor/harbor-jobservice:v2.13.2
+          image: index.docker.io/goharbor/harbor-jobservice@sha256:12fe1d4271dfa60fdcd90396efcf39afe05f2316e5b3de50413bde06560cc550
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:

@@ -3,6 +3,12 @@ kind: Deployment
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
+    kbld.k14s.io/images: |
+      - origins:
+        - resolved:
+            tag: v2.13.2
+            url: goharbor/harbor-exporter:v2.13.2
+        url: index.docker.io/goharbor/harbor-exporter@sha256:17db16a26911348d743476877de703683d8313e87adcbe37cfea86e064337eec
   labels:
     app: harbor
     app.kubernetes.io/component: exporter
@@ -52,7 +58,7 @@ spec:
                 name: harbor-exporter-env
             - secretRef:
                 name: harbor-exporter
-          image: goharbor/harbor-exporter:v2.13.2
+          image: index.docker.io/goharbor/harbor-exporter@sha256:17db16a26911348d743476877de703683d8313e87adcbe37cfea86e064337eec
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:

@@ -3,6 +3,12 @@ kind: Deployment
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
+    kbld.k14s.io/images: |
+      - origins:
+        - resolved:
+            tag: 2023.12.21-5ed3693
+            url: ghcr.io/corentinth/it-tools:2023.12.21-5ed3693
+        url: ghcr.io/corentinth/it-tools@sha256:4aaf67eab769afc9dac5614a15614537446e11150d53eab3be34ac9775a27e3a
   name: it-tools
 spec:
   selector:
@@ -14,7 +20,7 @@ spec:
         app.kubernetes.io/name: it-tools
     spec:
       containers:
-        - image: ghcr.io/corentinth/it-tools:2023.12.21-5ed3693
+        - image: ghcr.io/corentinth/it-tools@sha256:4aaf67eab769afc9dac5614a15614537446e11150d53eab3be34ac9775a27e3a
           name: it-tools
           ports:
             - containerPort: 80
