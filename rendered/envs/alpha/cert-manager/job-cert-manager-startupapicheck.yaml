@@ -9,9 +9,9 @@ metadata:
     kbld.k14s.io/images: |
       - origins:
         - resolved:
-            tag: v1.18.2
-            url: quay.io/jetstack/cert-manager-startupapicheck:v1.18.2
-        url: quay.io/jetstack/cert-manager-startupapicheck@sha256:1075e097415167caa584b203292dfb57e46866df0adb76fe769ef5cb0297ccc4
+            tag: v1.19.1
+            url: quay.io/jetstack/cert-manager-startupapicheck:v1.19.1
+        url: quay.io/jetstack/cert-manager-startupapicheck@sha256:96a82fa28b14fa0307377111f17adeb5888e313c60445074a775b495dbb07d08
   labels:
     app: startupapicheck
     app.kubernetes.io/component: startupapicheck
@@ -40,7 +40,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-          image: quay.io/jetstack/cert-manager-startupapicheck@sha256:1075e097415167caa584b203292dfb57e46866df0adb76fe769ef5cb0297ccc4
+          image: quay.io/jetstack/cert-manager-startupapicheck@sha256:96a82fa28b14fa0307377111f17adeb5888e313c60445074a775b495dbb07d08
           imagePullPolicy: IfNotPresent
           name: cert-manager-startupapicheck
           securityContext:

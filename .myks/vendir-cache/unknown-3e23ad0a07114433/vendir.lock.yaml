@@ -1,8 +1,0 @@
-apiVersion: vendir.k14s.io/v1alpha1
-directories:
-- contents:
-  - configDigest: 551ffb4ef880cfc958a7476ad510a28e5c5cb98ef7e4c39b9dc62ae3c24971e3
-    http: {}
-    path: .
-  path: .myks/vendir-cache/unknown-3e23ad0a07114433/data
-kind: LockConfig
