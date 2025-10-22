@@ -8,6 +8,8 @@ metadata:
         - resolved:
             tag: v1.19.1
             url: quay.io/jetstack/cert-manager-webhook:v1.19.1
+        - preresolved:
+            url: quay.io/jetstack/cert-manager-webhook@sha256:f5bfe77541e38978aec53cc6eb924d190e1fe923c98b2582e6ccf5edf6c02cce
         url: quay.io/jetstack/cert-manager-webhook@sha256:f5bfe77541e38978aec53cc6eb924d190e1fe923c98b2582e6ccf5edf6c02cce
   labels:
     app: webhook
