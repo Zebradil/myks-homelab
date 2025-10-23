@@ -22,7 +22,8 @@ spec:
             capabilities:
               #@overlay/match missing_ok=True
               add:
-                - NET_BIND_SERVICE
                 - CHOWN
+                - NET_BIND_SERVICE
+                - NET_RAW
                 - SETGID
                 - SETUID
