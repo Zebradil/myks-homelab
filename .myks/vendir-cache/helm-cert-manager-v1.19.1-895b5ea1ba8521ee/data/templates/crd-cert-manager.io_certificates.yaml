@@ -1,15 +1,14 @@
+{{- if or .Values.crds.enabled .Values.installCRDs }}
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
+  name: "certificates.cert-manager.io"
+  {{- if .Values.crds.keep }}
   annotations:
-    a8r.io/repository: https://github.com/Zebradil/myks-homelab
     helm.sh/resource-policy: keep
+  {{- end }}
   labels:
-    app: cert-manager
-    app.kubernetes.io/component: crds
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/name: cert-manager
-  name: certificates.cert-manager.io
+    {{- include "cert-manager.crd-labels" . | nindent 4 }}
 spec:
   group: cert-manager.io
   names:
@@ -814,3 +813,4 @@ spec:
       storage: true
       subresources:
         status: {}
+{{- end }}
