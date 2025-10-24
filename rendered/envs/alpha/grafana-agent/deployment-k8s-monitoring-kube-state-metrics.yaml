@@ -8,6 +8,8 @@ metadata:
         - resolved:
             tag: v2.15.0
             url: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.15.0
+        - preresolved:
+            url: registry.k8s.io/kube-state-metrics/kube-state-metrics@sha256:db384bf43222b066c378e77027a675d4cd9911107adba46c2922b3a55e10d6fb
         url: registry.k8s.io/kube-state-metrics/kube-state-metrics@sha256:db384bf43222b066c378e77027a675d4cd9911107adba46c2922b3a55e10d6fb
   labels:
     app.kubernetes.io/component: metrics

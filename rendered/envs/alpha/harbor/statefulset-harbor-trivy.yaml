@@ -8,6 +8,8 @@ metadata:
         - resolved:
             tag: v2.13.2
             url: goharbor/trivy-adapter-photon:v2.13.2
+        - preresolved:
+            url: index.docker.io/goharbor/trivy-adapter-photon@sha256:7a6d2284992ee5739ef0a76a9bed722bd87ec9e9ad286c6d72aa7919a606e106
         url: index.docker.io/goharbor/trivy-adapter-photon@sha256:7a6d2284992ee5739ef0a76a9bed722bd87ec9e9ad286c6d72aa7919a606e106
   labels:
     app: harbor

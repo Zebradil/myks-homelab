@@ -7,5 +7,7 @@ images:
       - resolved:
           tag: 5.4.20240804
           url: linuxserver/librespeed:5.4.20240804
+      - preresolved:
+          url: index.docker.io/linuxserver/librespeed@sha256:1513bbf55b718af1a89e5a532bfd378214ff63ccb9edd36d8321b5c182681888
   image: index.docker.io/linuxserver/librespeed@sha256:1513bbf55b718af1a89e5a532bfd378214ff63ccb9edd36d8321b5c182681888
 kind: ImagesLock

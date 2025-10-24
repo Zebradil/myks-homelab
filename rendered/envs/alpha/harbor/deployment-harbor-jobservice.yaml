@@ -8,6 +8,8 @@ metadata:
         - resolved:
             tag: v2.13.2
             url: goharbor/harbor-jobservice:v2.13.2
+        - preresolved:
+            url: index.docker.io/goharbor/harbor-jobservice@sha256:12fe1d4271dfa60fdcd90396efcf39afe05f2316e5b3de50413bde06560cc550
         url: index.docker.io/goharbor/harbor-jobservice@sha256:12fe1d4271dfa60fdcd90396efcf39afe05f2316e5b3de50413bde06560cc550
   labels:
     app: harbor

@@ -8,6 +8,8 @@ metadata:
         - resolved:
             tag: v2.13.2
             url: goharbor/harbor-exporter:v2.13.2
+        - preresolved:
+            url: index.docker.io/goharbor/harbor-exporter@sha256:17db16a26911348d743476877de703683d8313e87adcbe37cfea86e064337eec
         url: index.docker.io/goharbor/harbor-exporter@sha256:17db16a26911348d743476877de703683d8313e87adcbe37cfea86e064337eec
   labels:
     app: harbor

@@ -8,6 +8,8 @@ metadata:
         - resolved:
             tag: v2.13.2
             url: goharbor/harbor-core:v2.13.2
+        - preresolved:
+            url: index.docker.io/goharbor/harbor-core@sha256:89114e3fb5c95aefa3285d5d627f89c46c3eaa2f4da138cedee887e58d297f2a
         url: index.docker.io/goharbor/harbor-core@sha256:89114e3fb5c95aefa3285d5d627f89c46c3eaa2f4da138cedee887e58d297f2a
   labels:
     app: harbor
