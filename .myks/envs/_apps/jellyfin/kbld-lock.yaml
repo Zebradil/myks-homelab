@@ -16,6 +16,8 @@ images:
       - resolved:
           tag: v2.44.1
           url: filebrowser/filebrowser:v2.44.1
+      - preresolved:
+          url: index.docker.io/filebrowser/filebrowser@sha256:3882b41acee49a73c21cb20715a869f31c8c0b8b55dcd78f2f7c0235b5cfdd80
   image: index.docker.io/filebrowser/filebrowser@sha256:3882b41acee49a73c21cb20715a869f31c8c0b8b55dcd78f2f7c0235b5cfdd80
 - annotations:
     kbld.carvel.dev/id: ghcr.io/hotio/qbittorrent:release-4.6.4
