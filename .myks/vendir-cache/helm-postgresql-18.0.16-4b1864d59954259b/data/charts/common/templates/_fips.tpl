@@ -48,7 +48,7 @@ Map JAVA values for FIPS configuration
 {{ include "common.fips.java" (dict "value" "restricted") }}
 */}}
 {{- define "common.fips.java" -}}
-    {{- $suffix := ternary "original" .value (eq .value "disabled") -}}
+    {{- $suffix := ternary "original" .value (eq .value "off") -}}
     {{- $javaSecurityFile := printf "java.security.%s" $suffix -}}
     {{/* The two equals signs mean the property file will completely override the master properties file */}}
     {{- $javaSecurityOpt := printf "-Djava.security.properties==/opt/bitnami/java/conf/security/%s" $javaSecurityFile -}}
