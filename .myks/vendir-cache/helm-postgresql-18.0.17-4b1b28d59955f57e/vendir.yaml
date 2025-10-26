@@ -5,9 +5,9 @@ directories:
             name: postgresql
             repository:
                 url: oci://registry-1.docker.io/bitnamicharts
-            version: 18.0.16
+            version: 18.0.17
           lazy: true
           path: .
-      path: .myks/vendir-cache/helm-postgresql-18.0.16-4b1864d59954259b/data
+      path: .myks/vendir-cache/helm-postgresql-18.0.17-4b1b28d59955f57e/data
       permissions: null
 kind: Config
