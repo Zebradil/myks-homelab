@@ -27,11 +27,9 @@ metadata:
         url: index.docker.io/filebrowser/filebrowser@sha256:f63369420687482dfdf252f80ef675f44ca1d1cd3a631261fb424136214fe629
       - origins:
         - resolved:
-            tag: 10.10.7
-            url: jellyfin/jellyfin:10.10.7
-        - preresolved:
-            url: index.docker.io/jellyfin/jellyfin@sha256:7ae36aab93ef9b6aaff02b37f8bb23df84bb2d7a3f6054ec8fc466072a648ce2
-        url: index.docker.io/jellyfin/jellyfin@sha256:7ae36aab93ef9b6aaff02b37f8bb23df84bb2d7a3f6054ec8fc466072a648ce2
+            tag: 10.11.0
+            url: jellyfin/jellyfin:10.11.0
+        url: index.docker.io/jellyfin/jellyfin@sha256:59417f441213e236a9f907d4e71a13472042409d85f9e9310dbdd87ee33d7bd4
       - origins:
         - resolved:
             tag: 1.36.1
@@ -52,7 +50,7 @@ spec:
         app: jellyfin
     spec:
       containers:
-        - image: index.docker.io/jellyfin/jellyfin@sha256:7ae36aab93ef9b6aaff02b37f8bb23df84bb2d7a3f6054ec8fc466072a648ce2
+        - image: index.docker.io/jellyfin/jellyfin@sha256:59417f441213e236a9f907d4e71a13472042409d85f9e9310dbdd87ee33d7bd4
           livenessProbe:
             failureThreshold: 3
             httpGet:
