@@ -65,6 +65,8 @@ spec:
               value: master
             - name: ALLOW_EMPTY_PASSWORD
               value: "yes"
+            - name: OPENSSL_FIPS
+              value: "yes"
             - name: REDIS_TLS_ENABLED
               value: "no"
             - name: REDIS_PORT
