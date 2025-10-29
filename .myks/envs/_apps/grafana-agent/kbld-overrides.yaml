@@ -1,0 +1,5 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+overrides:
+    - image: docker.io/grafana/alloy:v1.7.4
+      newImage: oci.zebradil.dev/hub.docker.com-cache/grafana/alloy:v1.7.4

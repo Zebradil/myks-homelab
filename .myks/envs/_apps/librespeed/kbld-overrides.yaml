@@ -1,0 +1,5 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+overrides:
+    - image: linuxserver/librespeed:5.4.20240804
+      newImage: oci.zebradil.dev/hub.docker.com-cache/linuxserver/librespeed:5.4.20240804

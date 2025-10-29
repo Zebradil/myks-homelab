@@ -1,0 +1,21 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+overrides:
+    - image: goharbor/trivy-adapter-photon:v2.13.2
+      newImage: oci.zebradil.dev/hub.docker.com-cache/goharbor/trivy-adapter-photon:v2.13.2
+    - image: goharbor/harbor-exporter:v2.13.2
+      newImage: oci.zebradil.dev/hub.docker.com-cache/goharbor/harbor-exporter:v2.13.2
+    - image: goharbor/harbor-jobservice:v2.13.2
+      newImage: oci.zebradil.dev/hub.docker.com-cache/goharbor/harbor-jobservice:v2.13.2
+    - image: goharbor/harbor-registryctl:v2.13.2
+      newImage: oci.zebradil.dev/hub.docker.com-cache/goharbor/harbor-registryctl:v2.13.2
+    - image: goharbor/registry-photon:v2.13.2
+      newImage: oci.zebradil.dev/hub.docker.com-cache/goharbor/registry-photon:v2.13.2
+    - image: goharbor/harbor-core:v2.13.2
+      newImage: oci.zebradil.dev/hub.docker.com-cache/goharbor/harbor-core:v2.13.2
+    - image: goharbor/harbor-db:v2.13.2
+      newImage: oci.zebradil.dev/hub.docker.com-cache/goharbor/harbor-db:v2.13.2
+    - image: goharbor/harbor-portal:v2.13.2
+      newImage: oci.zebradil.dev/hub.docker.com-cache/goharbor/harbor-portal:v2.13.2
+    - image: goharbor/redis-photon:v2.13.2
+      newImage: oci.zebradil.dev/hub.docker.com-cache/goharbor/redis-photon:v2.13.2

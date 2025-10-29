@@ -6,10 +6,8 @@ images:
     kbld.carvel.dev/origins: |
       - resolved:
           tag: v1.7.4
-          url: docker.io/grafana/alloy:v1.7.4
-      - preresolved:
-          url: index.docker.io/grafana/alloy@sha256:fd2d274beeed926ffe62cf353df12a69d37af61e9a27eb4dc897a127755e4d95
-  image: index.docker.io/grafana/alloy@sha256:fd2d274beeed926ffe62cf353df12a69d37af61e9a27eb4dc897a127755e4d95
+          url: oci.zebradil.dev/hub.docker.com-cache/grafana/alloy:v1.7.4
+  image: oci.zebradil.dev/hub.docker.com-cache/grafana/alloy@sha256:fd2d274beeed926ffe62cf353df12a69d37af61e9a27eb4dc897a127755e4d95
 - annotations:
     kbld.carvel.dev/id: ghcr.io/jimmidyson/configmap-reload:v0.14.0
     kbld.carvel.dev/origins: |

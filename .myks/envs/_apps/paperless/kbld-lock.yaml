@@ -15,10 +15,8 @@ images:
     kbld.carvel.dev/origins: |
       - resolved:
           tag: 9.3_p2-r1-ls143
-          url: linuxserver/openssh-server:9.3_p2-r1-ls143
-      - preresolved:
-          url: index.docker.io/linuxserver/openssh-server@sha256:d55ff78303834a03ef4bf21733fccce12365949ed1715bdbe7e42d1b66db620a
-  image: index.docker.io/linuxserver/openssh-server@sha256:d55ff78303834a03ef4bf21733fccce12365949ed1715bdbe7e42d1b66db620a
+          url: oci.zebradil.dev/hub.docker.com-cache/linuxserver/openssh-server:9.3_p2-r1-ls143
+  image: oci.zebradil.dev/hub.docker.com-cache/linuxserver/openssh-server@sha256:d55ff78303834a03ef4bf21733fccce12365949ed1715bdbe7e42d1b66db620a
 - annotations:
     kbld.carvel.dev/id: oci.zebradil.dev/hub.docker.com-cache/bitnamilegacy/postgresql:14.18.0-debian-12-r0
     kbld.carvel.dev/origins: |

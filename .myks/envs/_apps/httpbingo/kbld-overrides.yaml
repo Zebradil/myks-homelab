@@ -1,0 +1,5 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+overrides:
+    - image: mccutchen/go-httpbin:2.18.3
+      newImage: oci.zebradil.dev/hub.docker.com-cache/mccutchen/go-httpbin:2.18.3

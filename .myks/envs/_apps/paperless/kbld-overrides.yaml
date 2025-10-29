@@ -1,0 +1,5 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+overrides:
+    - image: linuxserver/openssh-server:9.3_p2-r1-ls143
+      newImage: oci.zebradil.dev/hub.docker.com-cache/linuxserver/openssh-server:9.3_p2-r1-ls143

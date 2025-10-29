@@ -1,0 +1,5 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+overrides:
+    - image: louislam/uptime-kuma:2.0.1
+      newImage: oci.zebradil.dev/hub.docker.com-cache/louislam/uptime-kuma:2.0.1

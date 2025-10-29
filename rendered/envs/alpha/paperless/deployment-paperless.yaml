@@ -80,7 +80,7 @@ spec:
               value: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCnzIKHO6ux0JUuSZGmnrVtukIvvqiPRt3pdwPbvMDQwTSFtW0xdORkYKGsCYhPuzEcLMFfJgUT4JEtMPFdj1TTizo5fDOlQP+pJMoRc4HKmqzTsK4FvmS/7Bl6IvWbhAcceKynGkZmOrQziMo7RINrFy1/sjf9ZVaMoQvbFjLUEGboxuq0gJVfgxlRQX28rHolFZk9YWWbHMJ0Gbw/YLQWqf3EJuQnyAWSrnZsX+a8CsKoCzlgsFne91PgNFA5OhkIMkKQy1Mk4qSXhQ7ZUHhcN7reDhyyDX/E+Y0y87Y5NZ8OxAU6Bzl0wZKcAIhZkE/hvhb6L4hJ98VS04QD7Gpj
             - name: LOG_STDOUT
               value: "true"
-          image: index.docker.io/linuxserver/openssh-server@sha256:d55ff78303834a03ef4bf21733fccce12365949ed1715bdbe7e42d1b66db620a
+          image: oci.zebradil.dev/hub.docker.com-cache/linuxserver/openssh-server@sha256:d55ff78303834a03ef4bf21733fccce12365949ed1715bdbe7e42d1b66db620a
           name: sftp
           ports:
             - containerPort: 2222
@@ -97,7 +97,7 @@ spec:
           command:
             - /bin/sh
             - -c
-          image: index.docker.io/linuxserver/openssh-server@sha256:d55ff78303834a03ef4bf21733fccce12365949ed1715bdbe7e42d1b66db620a
+          image: oci.zebradil.dev/hub.docker.com-cache/linuxserver/openssh-server@sha256:d55ff78303834a03ef4bf21733fccce12365949ed1715bdbe7e42d1b66db620a
           name: copy-scripts
           volumeMounts:
             - mountPath: /mnt/scripts

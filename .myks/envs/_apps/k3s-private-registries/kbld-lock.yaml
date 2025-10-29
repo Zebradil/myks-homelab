@@ -6,10 +6,8 @@ images:
     kbld.carvel.dev/origins: |
       - resolved:
           tag: 4.48.1
-          url: mikefarah/yq:4.48.1
-      - preresolved:
-          url: index.docker.io/mikefarah/yq@sha256:75b3a60dce1fa4641b0f02bdb4465eddc5da95e62028118a292239ca8e3921e5
-  image: index.docker.io/mikefarah/yq@sha256:75b3a60dce1fa4641b0f02bdb4465eddc5da95e62028118a292239ca8e3921e5
+          url: oci.zebradil.dev/hub.docker.com-cache/mikefarah/yq:4.48.1
+  image: oci.zebradil.dev/hub.docker.com-cache/mikefarah/yq@sha256:75b3a60dce1fa4641b0f02bdb4465eddc5da95e62028118a292239ca8e3921e5
 - annotations:
     kbld.carvel.dev/id: registry.k8s.io/pause:3.10.1
     kbld.carvel.dev/origins: |

@@ -23,6 +23,13 @@ helm:
 kbld:
   enabled: true
   imagesAnnotation: false
+  overrides:
+    - match:
+        registry: index\.docker\.io
+        repository: (.+)
+      replace:
+        registry: oci.zebradil.dev
+        repository: hub.docker.com-cache/$1
 myks:
   gitRepoUrl: https://github.com/Zebradil/myks-homelab
   #! Explicitly set the main branch to avoid extra diff in PRs.

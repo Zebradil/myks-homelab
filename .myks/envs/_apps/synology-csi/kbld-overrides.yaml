@@ -1,0 +1,5 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+overrides:
+    - image: synology/synology-csi:v1.2.0
+      newImage: oci.zebradil.dev/hub.docker.com-cache/synology/synology-csi:v1.2.0

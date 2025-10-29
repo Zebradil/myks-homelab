@@ -105,7 +105,15 @@ kbld:
   enabled: true
   imagesAnnotation: false
   cache: true
-  overrides: []
+  overrides:
+  - match:
+      registry: index\.docker\.io
+      repository: (.+)
+      tag: ""
+    replace:
+      registry: oci.zebradil.dev
+      repository: hub.docker.com-cache/$1
+      tag: ""
 yttPkg:
   dirs: []
 render:
