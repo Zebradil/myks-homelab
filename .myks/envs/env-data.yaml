@@ -103,8 +103,9 @@ helm:
   charts: []
 kbld:
   enabled: true
-  imagesAnnotation: true
+  imagesAnnotation: false
   cache: true
+  overrides: []
 yttPkg:
   dirs: []
 render:

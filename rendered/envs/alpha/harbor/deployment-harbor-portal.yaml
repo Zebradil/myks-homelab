@@ -3,14 +3,6 @@ kind: Deployment
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
-    kbld.k14s.io/images: |
-      - origins:
-        - resolved:
-            tag: v2.13.2
-            url: goharbor/harbor-portal:v2.13.2
-        - preresolved:
-            url: index.docker.io/goharbor/harbor-portal@sha256:ac9c2444e1045ac6fc23ae3adbfb43443cdb31dc937be354410b6328a9768bb8
-        url: index.docker.io/goharbor/harbor-portal@sha256:ac9c2444e1045ac6fc23ae3adbfb43443cdb31dc937be354410b6328a9768bb8
   labels:
     app: harbor
     app.kubernetes.io/component: portal

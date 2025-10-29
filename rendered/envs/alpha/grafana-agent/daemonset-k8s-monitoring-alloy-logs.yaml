@@ -3,21 +3,6 @@ kind: DaemonSet
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
-    kbld.k14s.io/images: |
-      - origins:
-        - resolved:
-            tag: v0.14.0
-            url: ghcr.io/jimmidyson/configmap-reload:v0.14.0
-        - preresolved:
-            url: ghcr.io/jimmidyson/configmap-reload@sha256:a35b35f5bd5c5dc59d6885a60ac325235d873defbc819cd1e16f52f897752c85
-        url: ghcr.io/jimmidyson/configmap-reload@sha256:a35b35f5bd5c5dc59d6885a60ac325235d873defbc819cd1e16f52f897752c85
-      - origins:
-        - resolved:
-            tag: v1.7.4
-            url: docker.io/grafana/alloy:v1.7.4
-        - preresolved:
-            url: index.docker.io/grafana/alloy@sha256:fd2d274beeed926ffe62cf353df12a69d37af61e9a27eb4dc897a127755e4d95
-        url: index.docker.io/grafana/alloy@sha256:fd2d274beeed926ffe62cf353df12a69d37af61e9a27eb4dc897a127755e4d95
   labels:
     app.kubernetes.io/instance: k8s-monitoring
     app.kubernetes.io/name: alloy-logs

@@ -3,14 +3,6 @@ kind: StatefulSet
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
-    kbld.k14s.io/images: |
-      - origins:
-        - resolved:
-            tag: 8.2.1-debian-12-r0
-            url: oci.zebradil.dev/hub.docker.com-cache/bitnamilegacy/redis:8.2.1-debian-12-r0
-        - preresolved:
-            url: oci.zebradil.dev/hub.docker.com-cache/bitnamilegacy/redis@sha256:25bf63f3caf75af4628c0dfcf39859ad1ac8abe135be85e99699f9637b16dc28
-        url: oci.zebradil.dev/hub.docker.com-cache/bitnamilegacy/redis@sha256:25bf63f3caf75af4628c0dfcf39859ad1ac8abe135be85e99699f9637b16dc28
   labels:
     app.kubernetes.io/component: master
     app.kubernetes.io/instance: redis

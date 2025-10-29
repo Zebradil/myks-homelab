@@ -3,14 +3,6 @@ kind: Deployment
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
-    kbld.k14s.io/images: |
-      - origins:
-        - resolved:
-            tag: v1.19.1
-            url: quay.io/jetstack/cert-manager-cainjector:v1.19.1
-        - preresolved:
-            url: quay.io/jetstack/cert-manager-cainjector@sha256:c7898aece8fb08102fca0b37683e37cb94e0a77c0d15b8e3c9128f6c04c868e0
-        url: quay.io/jetstack/cert-manager-cainjector@sha256:c7898aece8fb08102fca0b37683e37cb94e0a77c0d15b8e3c9128f6c04c868e0
   labels:
     app: cainjector
     app.kubernetes.io/component: cainjector

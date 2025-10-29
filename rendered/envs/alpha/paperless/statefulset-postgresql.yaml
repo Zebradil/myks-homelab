@@ -3,14 +3,6 @@ kind: StatefulSet
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
-    kbld.k14s.io/images: |
-      - origins:
-        - resolved:
-            tag: 14.18.0-debian-12-r0
-            url: oci.zebradil.dev/hub.docker.com-cache/bitnamilegacy/postgresql:14.18.0-debian-12-r0
-        - preresolved:
-            url: oci.zebradil.dev/hub.docker.com-cache/bitnamilegacy/postgresql@sha256:1487d8c274877c8b241c46edfc7d17abaa32a16ec7a4305b45dbf9104a6bb45f
-        url: oci.zebradil.dev/hub.docker.com-cache/bitnamilegacy/postgresql@sha256:1487d8c274877c8b241c46edfc7d17abaa32a16ec7a4305b45dbf9104a6bb45f
   labels:
     app.kubernetes.io/component: primary
     app.kubernetes.io/instance: postgresql

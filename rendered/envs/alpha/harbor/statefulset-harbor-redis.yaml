@@ -3,14 +3,6 @@ kind: StatefulSet
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
-    kbld.k14s.io/images: |
-      - origins:
-        - resolved:
-            tag: v2.13.2
-            url: goharbor/redis-photon:v2.13.2
-        - preresolved:
-            url: index.docker.io/goharbor/redis-photon@sha256:7b3e7ea34477cb1df592594fb0d0ea9168945fa9f72aab9586ec357cbe935ae0
-        url: index.docker.io/goharbor/redis-photon@sha256:7b3e7ea34477cb1df592594fb0d0ea9168945fa9f72aab9586ec357cbe935ae0
   labels:
     app: harbor
     app.kubernetes.io/component: redis

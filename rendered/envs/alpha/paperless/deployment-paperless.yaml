@@ -3,21 +3,6 @@ kind: Deployment
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
-    kbld.k14s.io/images: |
-      - origins:
-        - resolved:
-            tag: 2.19.2
-            url: ghcr.io/paperless-ngx/paperless-ngx:2.19.2
-        - preresolved:
-            url: ghcr.io/paperless-ngx/paperless-ngx@sha256:e1e0026cdacda4bb157c024a8a1a343bd16b34d8900e7f3958598b9afebd0d38
-        url: ghcr.io/paperless-ngx/paperless-ngx@sha256:e1e0026cdacda4bb157c024a8a1a343bd16b34d8900e7f3958598b9afebd0d38
-      - origins:
-        - resolved:
-            tag: 9.3_p2-r1-ls143
-            url: linuxserver/openssh-server:9.3_p2-r1-ls143
-        - preresolved:
-            url: index.docker.io/linuxserver/openssh-server@sha256:d55ff78303834a03ef4bf21733fccce12365949ed1715bdbe7e42d1b66db620a
-        url: index.docker.io/linuxserver/openssh-server@sha256:d55ff78303834a03ef4bf21733fccce12365949ed1715bdbe7e42d1b66db620a
   name: paperless
 spec:
   selector:

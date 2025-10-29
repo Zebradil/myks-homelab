@@ -3,14 +3,6 @@ kind: Deployment
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
-    kbld.k14s.io/images: |
-      - origins:
-        - resolved:
-            tag: 2.18.3
-            url: mccutchen/go-httpbin:2.18.3
-        - preresolved:
-            url: index.docker.io/mccutchen/go-httpbin@sha256:3992f3763e9ce5a4307eae0a869a78b4df3931dc8feba74ab823dd2444af6a6b
-        url: index.docker.io/mccutchen/go-httpbin@sha256:3992f3763e9ce5a4307eae0a869a78b4df3931dc8feba74ab823dd2444af6a6b
   name: httpbingo
 spec:
   selector:

@@ -3,14 +3,6 @@ kind: Deployment
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
-    kbld.k14s.io/images: |
-      - origins:
-        - resolved:
-            tag: 1.34.3
-            url: ghcr.io/dani-garcia/vaultwarden:1.34.3
-        - preresolved:
-            url: ghcr.io/dani-garcia/vaultwarden@sha256:84fd8a47f58d79a1ad824c27be0a9492750c0fa5216b35c749863093bfa3c3d7
-        url: ghcr.io/dani-garcia/vaultwarden@sha256:84fd8a47f58d79a1ad824c27be0a9492750c0fa5216b35c749863093bfa3c3d7
   name: vaultwarden
 spec:
   selector:

@@ -3,21 +3,6 @@ kind: Deployment
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
-    kbld.k14s.io/images: |
-      - origins:
-        - resolved:
-            tag: v2.14.7
-            url: quay.io/argoproj/argocd:v2.14.7
-        - preresolved:
-            url: quay.io/argoproj/argocd@sha256:1893f23b240cd0a3ee27eccb7d84eb41de1f68bae33772d9a9acdf4e1f72dfba
-        url: quay.io/argoproj/argocd@sha256:1893f23b240cd0a3ee27eccb7d84eb41de1f68bae33772d9a9acdf4e1f72dfba
-      - origins:
-        - resolved:
-            tag: latest
-            url: registry.access.redhat.com/ubi8
-        - preresolved:
-            url: registry.access.redhat.com/ubi8@sha256:96ede92bab65df0386c9dabe6ec946aaa13a8717d2d5ad52d5d9a1d2e1f90e0f
-        url: registry.access.redhat.com/ubi8@sha256:96ede92bab65df0386c9dabe6ec946aaa13a8717d2d5ad52d5d9a1d2e1f90e0f
   labels:
     app.kubernetes.io/component: repo-server
     app.kubernetes.io/name: argocd-repo-server
