@@ -16,7 +16,7 @@ spec:
         app: k3s-private-registries-writer
     spec:
       containers:
-        - image: registry.k8s.io/pause@sha256:278fb9dbcca9518083ad1e11276933a2e96f23de604a3a08cc3c80002767d24c
+        - image: oci.zebradil.dev/registry.k8s.io-cache/pause@sha256:278fb9dbcca9518083ad1e11276933a2e96f23de604a3a08cc3c80002767d24c
           name: pause
       initContainers:
         - args:
@@ -94,7 +94,7 @@ spec:
               value: /etc/rancher/k3s/registries.yaml
             - name: REGISTRIES_FILENAME
               value: registries.yaml
-          image: oci.zebradil.dev/hub.docker.com-cache/mikefarah/yq@sha256:75b3a60dce1fa4641b0f02bdb4465eddc5da95e62028118a292239ca8e3921e5
+          image: oci.zebradil.dev/index.docker.io-cache/mikefarah/yq@sha256:75b3a60dce1fa4641b0f02bdb4465eddc5da95e62028118a292239ca8e3921e5
           name: registry-config-writer
           securityContext:
             runAsGroup: 0

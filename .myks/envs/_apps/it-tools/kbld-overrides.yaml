@@ -1,0 +1,5 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+overrides:
+    - image: ghcr.io/corentinth/it-tools:2023.12.21-5ed3693
+      newImage: oci.zebradil.dev/ghcr.io-cache/corentinth/it-tools:2023.12.21-5ed3693

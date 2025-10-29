@@ -73,7 +73,7 @@ spec:
               value: "true"
             - name: PROM_CLUSTER_ID_LABEL
               value: cluster
-          image: ghcr.io/opencost/opencost@sha256:b313d6d320058bbd3841a948fb636182f49b46df2368d91e2ae046ed03c0f83c
+          image: oci.zebradil.dev/ghcr.io-cache/opencost/opencost@sha256:b313d6d320058bbd3841a948fb636182f49b46df2368d91e2ae046ed03c0f83c
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3

@@ -24,12 +24,20 @@ kbld:
   enabled: true
   imagesAnnotation: false
   overrides:
+    #@ registries = [
+    #@   "ghcr.io",
+    #@   "index.docker.io",
+    #@   "quay.io",
+    #@   "registry.access.redhat.com",
+    #@   "registry.k8s.io",
+    #@ ]
+    #@ for/end reg in registries:
     - match:
-        registry: index\.docker\.io
+        registry: #@ reg.replace(".", "\.")
         repository: (.+)
       replace:
         registry: oci.zebradil.dev
-        repository: hub.docker.com-cache/$1
+        repository: #@ reg + "-cache/$1"
 myks:
   gitRepoUrl: https://github.com/Zebradil/myks-homelab
   #! Explicitly set the main branch to avoid extra diff in PRs.

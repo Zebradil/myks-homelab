@@ -6,38 +6,34 @@ images:
     kbld.carvel.dev/origins: |
       - resolved:
           tag: 1.36.1
-          url: oci.zebradil.dev/hub.docker.com-cache/library/busybox:1.36.1
-  image: oci.zebradil.dev/hub.docker.com-cache/library/busybox@sha256:e636055b9bbdbba1f2fb48e84d357e734ecf0b81853d2a0117dace0c7e6ace02
+          url: oci.zebradil.dev/index.docker.io-cache/library/busybox:1.36.1
+  image: oci.zebradil.dev/index.docker.io-cache/library/busybox@sha256:355b3a1bf5609da364166913878a8508d4ba30572d02020a97028c75477e24ff
 - annotations:
     kbld.carvel.dev/id: filebrowser/filebrowser:v2.44.0
     kbld.carvel.dev/origins: |
       - resolved:
           tag: v2.44.0
-          url: oci.zebradil.dev/hub.docker.com-cache/filebrowser/filebrowser:v2.44.0
-  image: oci.zebradil.dev/hub.docker.com-cache/filebrowser/filebrowser@sha256:f63369420687482dfdf252f80ef675f44ca1d1cd3a631261fb424136214fe629
+          url: oci.zebradil.dev/index.docker.io-cache/filebrowser/filebrowser:v2.44.0
+  image: oci.zebradil.dev/index.docker.io-cache/filebrowser/filebrowser@sha256:f63369420687482dfdf252f80ef675f44ca1d1cd3a631261fb424136214fe629
 - annotations:
     kbld.carvel.dev/id: ghcr.io/hotio/qbittorrent:release-4.6.4
     kbld.carvel.dev/origins: |
       - resolved:
           tag: release-4.6.4
-          url: ghcr.io/hotio/qbittorrent:release-4.6.4
-      - preresolved:
-          url: ghcr.io/hotio/qbittorrent@sha256:39829b3e092a91fb15f6696d5a8b762a2da6436ff59e529e13305e6bfb52f829
-  image: ghcr.io/hotio/qbittorrent@sha256:39829b3e092a91fb15f6696d5a8b762a2da6436ff59e529e13305e6bfb52f829
+          url: oci.zebradil.dev/ghcr.io-cache/hotio/qbittorrent:release-4.6.4
+  image: oci.zebradil.dev/ghcr.io-cache/hotio/qbittorrent@sha256:39829b3e092a91fb15f6696d5a8b762a2da6436ff59e529e13305e6bfb52f829
 - annotations:
     kbld.carvel.dev/id: ghcr.io/linuxserver/wireguard:v1.0.20210914-ls31
     kbld.carvel.dev/origins: |
       - resolved:
           tag: v1.0.20210914-ls31
-          url: ghcr.io/linuxserver/wireguard:v1.0.20210914-ls31
-      - preresolved:
-          url: ghcr.io/linuxserver/wireguard@sha256:c417568c79a051a8a73ffc2ad28ef58f58ba76bdb4c420389819c001aa55a03e
-  image: ghcr.io/linuxserver/wireguard@sha256:c417568c79a051a8a73ffc2ad28ef58f58ba76bdb4c420389819c001aa55a03e
+          url: oci.zebradil.dev/ghcr.io-cache/linuxserver/wireguard:v1.0.20210914-ls31
+  image: oci.zebradil.dev/ghcr.io-cache/linuxserver/wireguard@sha256:c417568c79a051a8a73ffc2ad28ef58f58ba76bdb4c420389819c001aa55a03e
 - annotations:
     kbld.carvel.dev/id: jellyfin/jellyfin:10.10.7
     kbld.carvel.dev/origins: |
       - resolved:
           tag: 10.10.7
-          url: oci.zebradil.dev/hub.docker.com-cache/jellyfin/jellyfin:10.10.7
-  image: oci.zebradil.dev/hub.docker.com-cache/jellyfin/jellyfin@sha256:7ae36aab93ef9b6aaff02b37f8bb23df84bb2d7a3f6054ec8fc466072a648ce2
+          url: oci.zebradil.dev/index.docker.io-cache/jellyfin/jellyfin:10.10.7
+  image: oci.zebradil.dev/index.docker.io-cache/jellyfin/jellyfin@sha256:7ae36aab93ef9b6aaff02b37f8bb23df84bb2d7a3f6054ec8fc466072a648ce2
 kind: ImagesLock

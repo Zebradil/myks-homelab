@@ -1,5 +1,11 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 overrides:
+    - image: ghcr.io/dexidp/dex:v2.41.1
+      newImage: oci.zebradil.dev/ghcr.io-cache/dexidp/dex:v2.41.1
+    - image: quay.io/argoproj/argocd:v2.14.7
+      newImage: oci.zebradil.dev/quay.io-cache/argoproj/argocd:v2.14.7
     - image: redis:7.0.15-alpine
-      newImage: oci.zebradil.dev/hub.docker.com-cache/library/redis:7.0.15-alpine
+      newImage: oci.zebradil.dev/index.docker.io-cache/library/redis:7.0.15-alpine
+    - image: registry.access.redhat.com/ubi8
+      newImage: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8:latest

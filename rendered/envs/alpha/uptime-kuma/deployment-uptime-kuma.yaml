@@ -16,7 +16,7 @@ spec:
         app.kubernetes.io/name: uptime-kuma
     spec:
       containers:
-        - image: oci.zebradil.dev/hub.docker.com-cache/louislam/uptime-kuma@sha256:60e6fe0c481b452633cef1a47c1096633b36e6871c5cd97ec61039de1706e1f3
+        - image: oci.zebradil.dev/index.docker.io-cache/louislam/uptime-kuma@sha256:60e6fe0c481b452633cef1a47c1096633b36e6871c5cd97ec61039de1706e1f3
           name: uptime-kuma
           ports:
             - containerPort: 3001

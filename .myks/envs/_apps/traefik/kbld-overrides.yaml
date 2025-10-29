@@ -2,4 +2,4 @@ apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 overrides:
     - image: docker.io/traefik:v3.5.3
-      newImage: oci.zebradil.dev/hub.docker.com-cache/library/traefik:v3.5.3
+      newImage: oci.zebradil.dev/index.docker.io-cache/library/traefik:v3.5.3

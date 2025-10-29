@@ -16,7 +16,7 @@ spec:
         app.kubernetes.io/name: starbase80
     spec:
       containers:
-        - image: oci.zebradil.dev/hub.docker.com-cache/library/nginx@sha256:029d4461bd98f124e531380505ceea2072418fdf28752aa73b7b273ba3048903
+        - image: oci.zebradil.dev/index.docker.io-cache/library/nginx@sha256:029d4461bd98f124e531380505ceea2072418fdf28752aa73b7b273ba3048903
           name: server
           ports:
             - containerPort: 80
@@ -46,7 +46,7 @@ spec:
           env:
             - name: TITLE
               value: ""
-          image: oci.zebradil.dev/hub.docker.com-cache/jordanroher/starbase-80@sha256:0000ccf33ef464d20096ac36e75a7878017783f5d2f0dc483ed14142413a7f74
+          image: oci.zebradil.dev/index.docker.io-cache/jordanroher/starbase-80@sha256:0000ccf33ef464d20096ac36e75a7878017783f5d2f0dc483ed14142413a7f74
           name: builder
           volumeMounts:
             - mountPath: /static

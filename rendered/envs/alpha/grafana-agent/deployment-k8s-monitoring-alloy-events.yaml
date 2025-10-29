@@ -40,7 +40,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
-          image: oci.zebradil.dev/hub.docker.com-cache/grafana/alloy@sha256:fd2d274beeed926ffe62cf353df12a69d37af61e9a27eb4dc897a127755e4d95
+          image: oci.zebradil.dev/index.docker.io-cache/grafana/alloy@sha256:fd2d274beeed926ffe62cf353df12a69d37af61e9a27eb4dc897a127755e4d95
           imagePullPolicy: IfNotPresent
           name: alloy
           ports:
@@ -59,7 +59,7 @@ spec:
         - args:
             - --volume-dir=/etc/alloy
             - --webhook-url=http://localhost:12345/-/reload
-          image: ghcr.io/jimmidyson/configmap-reload@sha256:a35b35f5bd5c5dc59d6885a60ac325235d873defbc819cd1e16f52f897752c85
+          image: oci.zebradil.dev/ghcr.io-cache/jimmidyson/configmap-reload@sha256:a35b35f5bd5c5dc59d6885a60ac325235d873defbc819cd1e16f52f897752c85
           name: config-reloader
           resources:
             requests:

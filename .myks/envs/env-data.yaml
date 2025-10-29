@@ -107,12 +107,44 @@ kbld:
   cache: true
   overrides:
   - match:
+      registry: ghcr\.io
+      repository: (.+)
+      tag: ""
+    replace:
+      registry: oci.zebradil.dev
+      repository: ghcr.io-cache/$1
+      tag: ""
+  - match:
       registry: index\.docker\.io
       repository: (.+)
       tag: ""
     replace:
       registry: oci.zebradil.dev
-      repository: hub.docker.com-cache/$1
+      repository: index.docker.io-cache/$1
+      tag: ""
+  - match:
+      registry: quay\.io
+      repository: (.+)
+      tag: ""
+    replace:
+      registry: oci.zebradil.dev
+      repository: quay.io-cache/$1
+      tag: ""
+  - match:
+      registry: registry\.access\.redhat\.com
+      repository: (.+)
+      tag: ""
+    replace:
+      registry: oci.zebradil.dev
+      repository: registry.access.redhat.com-cache/$1
+      tag: ""
+  - match:
+      registry: registry\.k8s\.io
+      repository: (.+)
+      tag: ""
+    replace:
+      registry: oci.zebradil.dev
+      repository: registry.k8s.io-cache/$1
       tag: ""
 yttPkg:
   dirs: []

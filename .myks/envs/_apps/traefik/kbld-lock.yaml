@@ -6,6 +6,6 @@ images:
     kbld.carvel.dev/origins: |
       - resolved:
           tag: v3.5.3
-          url: oci.zebradil.dev/hub.docker.com-cache/library/traefik:v3.5.3
-  image: oci.zebradil.dev/hub.docker.com-cache/library/traefik@sha256:d6be8725d21b45bdd84b93ea01438256e0e3c94aa8fa51834fe87f37cd5d4af8
+          url: oci.zebradil.dev/index.docker.io-cache/library/traefik:v3.5.3
+  image: oci.zebradil.dev/index.docker.io-cache/library/traefik@sha256:d6be8725d21b45bdd84b93ea01438256e0e3c94aa8fa51834fe87f37cd5d4af8
 kind: ImagesLock

@@ -16,7 +16,7 @@ spec:
         app: jellyfin
     spec:
       containers:
-        - image: oci.zebradil.dev/hub.docker.com-cache/jellyfin/jellyfin@sha256:7ae36aab93ef9b6aaff02b37f8bb23df84bb2d7a3f6054ec8fc466072a648ce2
+        - image: oci.zebradil.dev/index.docker.io-cache/jellyfin/jellyfin@sha256:7ae36aab93ef9b6aaff02b37f8bb23df84bb2d7a3f6054ec8fc466072a648ce2
           livenessProbe:
             failureThreshold: 3
             httpGet:
@@ -51,7 +51,7 @@ spec:
         - env:
             - name: FB_DATABASE
               value: /database/database.db
-          image: oci.zebradil.dev/hub.docker.com-cache/filebrowser/filebrowser@sha256:f63369420687482dfdf252f80ef675f44ca1d1cd3a631261fb424136214fe629
+          image: oci.zebradil.dev/index.docker.io-cache/filebrowser/filebrowser@sha256:f63369420687482dfdf252f80ef675f44ca1d1cd3a631261fb424136214fe629
           livenessProbe:
             failureThreshold: 3
             httpGet:
@@ -80,7 +80,7 @@ spec:
         - env:
             - name: WEBUI_PORT
               value: "8080"
-          image: ghcr.io/hotio/qbittorrent@sha256:39829b3e092a91fb15f6696d5a8b762a2da6436ff59e529e13305e6bfb52f829
+          image: oci.zebradil.dev/ghcr.io-cache/hotio/qbittorrent@sha256:39829b3e092a91fb15f6696d5a8b762a2da6436ff59e529e13305e6bfb52f829
           name: torrent
           ports:
             - containerPort: 8080
@@ -101,7 +101,7 @@ spec:
                 secretKeyRef:
                   key: wg0.conf
                   name: jellyfin-wireguard-config
-          image: oci.zebradil.dev/hub.docker.com-cache/library/busybox@sha256:e636055b9bbdbba1f2fb48e84d357e734ecf0b81853d2a0117dace0c7e6ace02
+          image: oci.zebradil.dev/index.docker.io-cache/library/busybox@sha256:355b3a1bf5609da364166913878a8508d4ba30572d02020a97028c75477e24ff
           name: wireguard-config
           volumeMounts:
             - mountPath: /config
@@ -113,7 +113,7 @@ spec:
               value: "1000"
             - name: TZ
               value: Etc/UTC
-          image: ghcr.io/linuxserver/wireguard@sha256:c417568c79a051a8a73ffc2ad28ef58f58ba76bdb4c420389819c001aa55a03e
+          image: oci.zebradil.dev/ghcr.io-cache/linuxserver/wireguard@sha256:c417568c79a051a8a73ffc2ad28ef58f58ba76bdb4c420389819c001aa55a03e
           name: wireguard
           restartPolicy: Always
           securityContext:

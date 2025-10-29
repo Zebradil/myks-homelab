@@ -6,8 +6,6 @@ images:
     kbld.carvel.dev/origins: |
       - resolved:
           tag: "1.7"
-          url: ghcr.io/anatol/pacoloco:1.7
-      - preresolved:
-          url: ghcr.io/anatol/pacoloco@sha256:d4c3f8fe457714791af911ae210cc4c9cac3175f95a52f0834703b49ab88cf73
-  image: ghcr.io/anatol/pacoloco@sha256:d4c3f8fe457714791af911ae210cc4c9cac3175f95a52f0834703b49ab88cf73
+          url: oci.zebradil.dev/ghcr.io-cache/anatol/pacoloco:1.7
+  image: oci.zebradil.dev/ghcr.io-cache/anatol/pacoloco@sha256:d4c3f8fe457714791af911ae210cc4c9cac3175f95a52f0834703b49ab88cf73
 kind: ImagesLock
