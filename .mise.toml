@@ -3,7 +3,7 @@
 experimental = true
 
 [tools]
-"github:mykso/myks" = "5.0.0"
+"github:mykso/myks" = "5.1.0"
 helm = "3.19.0"
 kubeconform = "0.7.0"
 sops = "3.11.0"
