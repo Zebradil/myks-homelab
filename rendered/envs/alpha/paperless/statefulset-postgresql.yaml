@@ -73,7 +73,7 @@ spec:
               value: error
             - name: POSTGRESQL_SHARED_PRELOAD_LIBRARIES
               value: pgaudit
-          image: oci.zebradil.dev/hub.docker.com-cache/bitnamilegacy/postgresql@sha256:1487d8c274877c8b241c46edfc7d17abaa32a16ec7a4305b45dbf9104a6bb45f
+          image: oci.zebradil.dev/index.docker.io-cache/bitnamilegacy/postgresql@sha256:1487d8c274877c8b241c46edfc7d17abaa32a16ec7a4305b45dbf9104a6bb45f
           imagePullPolicy: IfNotPresent
           livenessProbe:
             exec:

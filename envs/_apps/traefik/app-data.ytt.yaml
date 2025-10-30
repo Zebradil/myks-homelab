@@ -13,3 +13,6 @@ application:
       - junior.ts.zebradil.dev
       - junior.lan.zebradil.dev
     issuer: cloudflare-zerossl
+kbld:
+  #@overlay/replace
+  overrides: []
