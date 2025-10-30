@@ -18,13 +18,13 @@ spec:
         - args: ""
           command: ""
           image: oci.zebradil.dev/index.docker.io-cache/library/traefik@sha256:d6be8725d21b45bdd84b93ea01438256e0e3c94aa8fa51834fe87f37cd5d4af8
-          name: oci-zebradil-dev-index-docker-io-cache-library-traefik-sha256-d
+          name: 86e1980942089caef4054ec74e0574d4
         - args: ""
           command: ""
           image: oci.zebradil.dev/registry.k8s.io-cache/sig-storage/csi-node-driver-registrar@sha256:f9bcee63734b7b01555ee8fc8fb01ac2922478b2c8934bf8d468dd2916edc405
-          name: oci-zebradil-dev-registry-k8s-io-cache-sig-storage-csi-node-dri
+          name: ae419729a1ad694268e7a1affda3b0e7
         - args: ""
           command: ""
           image: oci.zebradil.dev/index.docker.io-cache/synology/synology-csi@sha256:f2fca28076a61b836e0b0527bc121ee8143968db08e15a515769e95ccbcee05a
-          name: oci-zebradil-dev-index-docker-io-cache-synology-synology-csi-sh
+          name: cdbdc4dfe6756e8b07c0ed46e5236bfb
       restartPolicy: Never
