@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: image-puller
+  namespace: image-puller
+spec:
+  selector:
+    matchLabels:
+      app: image-puller
+  template:
+    metadata:
+      labels:
+        app: image-puller
+    spec:
+      containers:
+        - args: ""
+          command: ""
+          image: oci.zebradil.dev/index.docker.io-cache/library/traefik@sha256:d6be8725d21b45bdd84b93ea01438256e0e3c94aa8fa51834fe87f37cd5d4af8
+          name: oci-zebradil-dev-index-docker-io-cache-library-traefik-sha256-d
+        - args: ""
+          command: ""
+          image: oci.zebradil.dev/registry.k8s.io-cache/sig-storage/csi-node-driver-registrar@sha256:f9bcee63734b7b01555ee8fc8fb01ac2922478b2c8934bf8d468dd2916edc405
+          name: oci-zebradil-dev-registry-k8s-io-cache-sig-storage-csi-node-dri
+        - args: ""
+          command: ""
+          image: oci.zebradil.dev/index.docker.io-cache/synology/synology-csi@sha256:f2fca28076a61b836e0b0527bc121ee8143968db08e15a515769e95ccbcee05a
+          name: oci-zebradil-dev-index-docker-io-cache-synology-synology-csi-sh
+      restartPolicy: Never

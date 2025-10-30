@@ -40,10 +40,18 @@ environment:
     name: ""
   - proto: comentario
     name: ""
+  - proto: blank
+    name: fluidd
   - proto: grafana-agent
     name: ""
   - proto: harbor
     name: ""
+  - proto: webapp
+    name: httpbingo
+  - proto: image-puller
+    name: ""
+  - proto: webapp
+    name: it-tools
   - proto: jellyfin
     name: ""
   - proto: k3s-private-registries
@@ -60,16 +68,10 @@ environment:
     name: ""
   - proto: traefik
     name: ""
-  - proto: vaultwarden
-    name: ""
-  - proto: blank
-    name: fluidd
-  - proto: webapp
-    name: httpbingo
-  - proto: webapp
-    name: it-tools
   - proto: webapp
     name: uptime-kuma
+  - proto: vaultwarden
+    name: ""
   hosts:
   - zebradil.dev
   - gray.zebradil.dev
