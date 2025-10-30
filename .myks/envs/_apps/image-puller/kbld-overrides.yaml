@@ -1,0 +1,5 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+overrides:
+    - image: registry.k8s.io/pause:3.10.1
+      newImage: oci.zebradil.dev/registry.k8s.io-cache/pause:3.10.1

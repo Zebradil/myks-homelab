@@ -22,11 +22,13 @@ spec:
     metadata:
       labels: #@ matchLabels
     spec:
-      restartPolicy: Never
       containers:
+        - name: pause
+          image: registry.k8s.io/pause:3.10.1
+      initContainers:
         #@ for img in app.images:
         - name: #@ md5.sum(img)
           image: #@ img
-          command: ''
-          args: ''
+          command: []
+          args: []
         #@ end
