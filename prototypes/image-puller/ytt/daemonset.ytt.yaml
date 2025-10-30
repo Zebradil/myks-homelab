@@ -1,0 +1,32 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:md5", "md5")
+#@ load("@ytt:regexp", "regexp")
+
+#@ app = data.values.application
+#@ name = data.values.myks.context.app
+#@ ns = name
+
+#@ matchLabels = {"app": name}
+
+#@ if/end app.enabled and app.images:
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: #@ name
+  namespace: #@ ns
+spec:
+  selector:
+    matchLabels: #@ matchLabels
+  template:
+    metadata:
+      labels: #@ matchLabels
+    spec:
+      restartPolicy: Never
+      containers:
+        #@ for img in app.images:
+        - name: #@ md5.sum(img)
+          image: #@ img
+          command: ''
+          args: ''
+        #@ end

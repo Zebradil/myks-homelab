@@ -1,0 +1,7 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.46.1-0.20251025024049-b1dc25772cd5
+overrides:
+- image: ghcr.io/corentinth/it-tools:2023.12.21-5ed3693
+  newImage: oci.zebradil.dev/ghcr.io-cache/corentinth/it-tools@sha256:4aaf67eab769afc9dac5614a15614537446e11150d53eab3be34ac9775a27e3a
+  preresolved: true
