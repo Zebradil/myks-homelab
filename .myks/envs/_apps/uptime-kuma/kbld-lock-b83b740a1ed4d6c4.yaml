@@ -1,0 +1,7 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.46.1-0.20251025024049-b1dc25772cd5
+overrides:
+- image: louislam/uptime-kuma:2.0.2
+  newImage: oci.zebradil.dev/index.docker.io-cache/louislam/uptime-kuma@sha256:4c364ef96aaddac7ec4c85f5e5f31c3394d35f631381ccbbf93f18fd26ac7cba
+  preresolved: true
