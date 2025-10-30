@@ -63,7 +63,7 @@ spec:
               value: "no"
             - name: REDIS_PORT
               value: "6379"
-          image: oci.zebradil.dev/hub.docker.com-cache/bitnamilegacy/redis@sha256:25bf63f3caf75af4628c0dfcf39859ad1ac8abe135be85e99699f9637b16dc28
+          image: oci.zebradil.dev/index.docker.io-cache/bitnamilegacy/redis@sha256:25bf63f3caf75af4628c0dfcf39859ad1ac8abe135be85e99699f9637b16dc28
           imagePullPolicy: IfNotPresent
           livenessProbe:
             exec:
