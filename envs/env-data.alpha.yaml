@@ -28,8 +28,15 @@ environment:
     - proto: authelia
     - proto: cert-manager
     - proto: comentario
+    - proto: blank
+      name: fluidd
     - proto: grafana-agent
     - proto: harbor
+    - proto: webapp
+      name: httpbingo
+    - proto: image-puller
+    - proto: webapp
+      name: it-tools
     - proto: jellyfin
     - proto: k3s-private-registries
     - proto: librespeed
@@ -38,12 +45,6 @@ environment:
     - proto: starbase80
     - proto: synology-csi
     - proto: traefik
-    - proto: vaultwarden
-    - proto: blank
-      name: fluidd
-    - proto: webapp
-      name: httpbingo
-    - proto: webapp
-      name: it-tools
     - proto: webapp
       name: uptime-kuma
+    - proto: vaultwarden
