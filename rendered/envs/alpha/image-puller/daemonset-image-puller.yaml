@@ -11,22 +11,75 @@ spec:
       app: image-puller
   template:
     metadata:
+      annotations:
+        checksum/images: 39f249e7001c52c7bc1563fad0b698e4
       labels:
         app: image-puller
     spec:
       containers:
-        - image: oci.zebradil.dev/registry.k8s.io-cache/pause@sha256:278fb9dbcca9518083ad1e11276933a2e96f23de604a3a08cc3c80002767d24c
-          name: pause
-      initContainers:
-        - args: []
-          command: []
-          image: oci.zebradil.dev/index.docker.io-cache/library/traefik@sha256:d6be8725d21b45bdd84b93ea01438256e0e3c94aa8fa51834fe87f37cd5d4af8
-          name: 86e1980942089caef4054ec74e0574d4
-        - args: []
-          command: []
-          image: oci.zebradil.dev/registry.k8s.io-cache/sig-storage/csi-node-driver-registrar@sha256:f9bcee63734b7b01555ee8fc8fb01ac2922478b2c8934bf8d468dd2916edc405
-          name: ae419729a1ad694268e7a1affda3b0e7
-        - args: []
-          command: []
-          image: oci.zebradil.dev/index.docker.io-cache/synology/synology-csi@sha256:f2fca28076a61b836e0b0527bc121ee8143968db08e15a515769e95ccbcee05a
-          name: cdbdc4dfe6756e8b07c0ed46e5236bfb
+        - args:
+            - |
+              #!/bin/bash
+
+              set -euo pipefail
+
+              RUNTIME_ENDPOINT="unix://${1:-/run/k3s/containerd/containerd.sock}"
+              IMAGE_LIST_FILE="${2:-/config/images.txt}"
+
+              # 1. INSTALL CRICTL FROM GITHUB
+              # ----------------------------------------------------
+              CRICTL_VERSION="v1.33.0"
+              ARCH="amd64"
+              DOWNLOAD_URL="https://github.com/kubernetes-sigs/cri-tools/releases/download/${CRICTL_VERSION}/crictl-${CRICTL_VERSION}-linux-${ARCH}.tar.gz"
+
+              echo "Downloading crictl from ${DOWNLOAD_URL}..."
+              curl -fsSL "$DOWNLOAD_URL" \
+                | tar -C /usr/local/bin -xzv
+
+              crictl --version
+
+              # 2. PULL IMAGES USING CRICTL
+              # ----------------------------------------------------
+              echo "Starting image puller for k3s node..."
+              if [ ! -S "$RUNTIME_ENDPOINT" ]; then
+                echo "k3s containerd socket not found at $RUNTIME_ENDPOINT. Is this a k3s node?" >&2
+                exit 1
+              fi
+
+              if [ ! -f "$IMAGE_LIST_FILE" ]; then
+                echo "Image list file not found at $IMAGE_LIST_FILE. Nothing to pull." >&2
+                exit 1
+              fi
+
+              while IFS= read -r image || [ -n "$image" ]; do
+                if [ -z "$(echo "$image" | tr -d '[:space:]')" ]; then
+                  continue
+                fi
+                echo "Pulling image: $image"
+                crictl --timeout 5m --runtime-endpoint "$RUNTIME_ENDPOINT" pull "$image"
+              done <"$IMAGE_LIST_FILE"
+
+              echo "Finished pulling all images. Pod will now sleep to prevent restarts."
+              sleep infinity
+            - /run/k3s/containerd/containerd.sock
+            - /config/images.txt
+          command:
+            - /bin/bash
+            - -c
+          image: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8/ubi@sha256:83068ea81dd02717b8e39b55cdeb2c1b2c9a3db260f01381b991755d44b15073
+          name: puller
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - mountPath: /config
+              name: config-volume
+            - mountPath: /run/k3s/containerd/containerd.sock
+              name: k3s-containerd-socket
+      volumes:
+        - configMap:
+            name: image-puller-list
+          name: config-volume
+        - hostPath:
+            path: /run/k3s/containerd/containerd.sock
+            type: Socket
+          name: k3s-containerd-socket
