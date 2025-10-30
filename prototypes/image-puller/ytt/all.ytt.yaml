@@ -1,0 +1,68 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:md5", "md5")
+#@ load("@ytt:regexp", "regexp")
+
+#@ app = data.values.application
+#@ name = data.values.myks.context.app
+#@ ns = name
+#@ config_map_name = name + "-list"
+
+#@ match_labels = {"app": name}
+
+#! Read the script file content
+#@ script_content = data.read("puller.sh")
+
+#@ image_list = "\n".join(app.images)
+#@ image_list_md5 = md5.sum(image_list)
+
+#@ socket_path = "/run/k3s/containerd/containerd.sock"
+#@ image_list_path = "/config/images.txt"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: #@ config_map_name
+  namespace: #@ ns
+data:
+  images.txt: #@ image_list
+
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: #@ name
+  namespace: #@ ns
+spec:
+  selector:
+    matchLabels: #@ match_labels
+  template:
+    metadata:
+      labels: #@ match_labels
+      annotations:
+        checksum/images: #@ image_list_md5
+    spec:
+      containers:
+        - name: puller
+          image: registry.access.redhat.com/ubi8/ubi:8.9
+          command: ['/bin/bash', '-c']
+          args:
+            -  #@ script_content
+            -  #@ socket_path
+            -  #@ image_list_path
+          securityContext:
+            #! Required to access the host's container runtime socket.
+            privileged: true
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config
+            - name: k3s-containerd-socket
+              mountPath: #@ socket_path
+      volumes:
+        - name: config-volume
+          configMap:
+            name: #@ config_map_name
+        - name: k3s-containerd-socket
+          hostPath:
+            path: #@ socket_path
+            type: Socket
