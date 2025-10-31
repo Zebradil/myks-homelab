@@ -47,4 +47,4 @@ while IFS= read -r image || [ -n "$image" ]; do
 done <"$IMAGE_LIST_FILE"
 
 echo "Finished pulling all images. Pod will now sleep to prevent restarts."
-sleep infinity
+tail -f /dev/null
