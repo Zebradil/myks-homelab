@@ -16,7 +16,6 @@
 #@ image_list_md5 = md5.sum(image_list)
 
 #@ socket_path = "/run/k3s/containerd/containerd.sock"
-#@ image_list_path = "/config/images.txt"
 
 ---
 apiVersion: v1
@@ -48,8 +47,13 @@ spec:
           command: ['/bin/bash', '-c']
           args:
             -  #@ script_content
-            -  #@ socket_path
-            -  #@ image_list_path
+          env:
+            - name: IMAGE_LIST_FILE
+              value: /config/images.txt
+            - name: RUNTIME_ENDPOINT
+              value: #@ socket_path
+            - name: CRICTL_VERSION
+              value: #@ app.crictl_version
           securityContext:
             #! Required to access the host's container runtime socket.
             privileged: true

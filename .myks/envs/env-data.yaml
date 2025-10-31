@@ -100,7 +100,7 @@ helm:
   buildDependencies: false
   capabilities: []
   includeCRDs: true
-  kubeVersion: "1.29"
+  kubeVersion: "1.33"
   namespace: ""
   charts: []
 kbld:

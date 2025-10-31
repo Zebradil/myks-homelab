@@ -19,7 +19,7 @@ argocd:
   env:
     generateSecret: false
 helm:
-  kubeVersion: '1.29'
+  kubeVersion: '1.33'
 kbld:
   enabled: true
   imagesAnnotation: false

@@ -2,5 +2,6 @@
 ---
 #@overlay/match-child-defaults missing_ok=True
 application:
+  crictl_version: v1.33.0
   images:
     - ''

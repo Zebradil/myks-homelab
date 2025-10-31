@@ -2,13 +2,21 @@
 
 set -euo pipefail
 
-RUNTIME_ENDPOINT="unix://${1:-/run/k3s/containerd/containerd.sock}"
-IMAGE_LIST_FILE="${2:-/config/images.txt}"
+: "${RUNTIME_ENDPOINT:?"Environment variable RUNTIME_ENDPOINT must be set"}"
+: "${IMAGE_LIST_FILE:?"Environment variable IMAGE_LIST_FILE must be set"}"
+: "${CRICTL_VERSION:?"Environment variable CRICTL_VERSION must be set"}"
 
 # 1. INSTALL CRICTL FROM GITHUB
 # ----------------------------------------------------
-CRICTL_VERSION="v1.33.0"
-ARCH="amd64"
+ARCH=$(uname -m)
+case "$ARCH" in
+x86_64) ARCH="amd64" ;;
+aarch64 | arm64) ARCH="arm64" ;;
+*)
+  echo "Unsupported architecture: $ARCH" >&2
+  exit 1
+  ;;
+esac
 DOWNLOAD_URL="https://github.com/kubernetes-sigs/cri-tools/releases/download/${CRICTL_VERSION}/crictl-${CRICTL_VERSION}-linux-${ARCH}.tar.gz"
 
 echo "Downloading crictl from ${DOWNLOAD_URL}..."
@@ -35,7 +43,7 @@ while IFS= read -r image || [ -n "$image" ]; do
     continue
   fi
   echo "Pulling image: $image"
-  crictl --timeout 5m --runtime-endpoint "$RUNTIME_ENDPOINT" pull "$image"
+  crictl --timeout 5m --runtime-endpoint "unix://$RUNTIME_ENDPOINT" pull "$image"
 done <"$IMAGE_LIST_FILE"
 
 echo "Finished pulling all images. Pod will now sleep to prevent restarts."
