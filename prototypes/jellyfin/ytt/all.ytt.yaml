@@ -108,7 +108,7 @@ spec:
           image: #@ ap.torrent.image
           env:
             - name: WEBUI_PORT
-              value: "8080"
+              value: '8080'
           ports:
             - name: #@ tr_port
               containerPort: 8080
@@ -141,9 +141,9 @@ spec:
           image: #@ ap.wireguard.image
           env:
             - name: PUID
-              value: "1000"
+              value: '1000'
             - name: PGID
-              value: "1000"
+              value: '1000'
             - name: TZ
               value: Etc/UTC
           securityContext:

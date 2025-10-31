@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    app.kubernetes.io/source: https://github.com/Zebradil/myks-homelab
+    myks.dev/environment: alpha
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: app-alpha-image-puller
+  namespace: argocd
+spec:
+  destination:
+    name: in-cluster
+    namespace: image-puller
+  project: env-alpha
+  source:
+    path: rendered/envs/alpha/image-puller
+    plugin:
+      name: argocd-vault-plugin
+    repoURL: https://github.com/Zebradil/myks-homelab
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

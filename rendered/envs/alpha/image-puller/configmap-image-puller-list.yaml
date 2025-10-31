@@ -1,0 +1,25 @@
+apiVersion: v1
+data:
+  images.txt: |-
+    oci.zebradil.dev/ghcr.io-cache/dexidp/dex@sha256:bc7cfce7c17f52864e2bb2a4dc1d2f86a41e3019f6d42e81d92a301fad0c8a1d
+    oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-core@sha256:89114e3fb5c95aefa3285d5d627f89c46c3eaa2f4da138cedee887e58d297f2a
+    oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-db@sha256:fcf1f3dbc8f10183abe336712560a94fb2804ba8d3ce3ca634342e5a8df7da2c
+    oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-exporter@sha256:17db16a26911348d743476877de703683d8313e87adcbe37cfea86e064337eec
+    oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-jobservice@sha256:12fe1d4271dfa60fdcd90396efcf39afe05f2316e5b3de50413bde06560cc550
+    oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-portal@sha256:ac9c2444e1045ac6fc23ae3adbfb43443cdb31dc937be354410b6328a9768bb8
+    oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-registryctl@sha256:3d82ef5215c55953540aa08b460785f9d0457a10276365ab9f7750027609295b
+    oci.zebradil.dev/index.docker.io-cache/goharbor/redis-photon@sha256:7b3e7ea34477cb1df592594fb0d0ea9168945fa9f72aab9586ec357cbe935ae0
+    oci.zebradil.dev/index.docker.io-cache/goharbor/registry-photon@sha256:1fc840dda17e4bb99cb58edc2a4c2435b9413f770b9146ac716a4593061bc136
+    oci.zebradil.dev/index.docker.io-cache/goharbor/trivy-adapter-photon@sha256:7a6d2284992ee5739ef0a76a9bed722bd87ec9e9ad286c6d72aa7919a606e106
+    oci.zebradil.dev/index.docker.io-cache/library/redis@sha256:c9d92d840fd011c908f040592857c724ae6d877f2aba5c40ad963276507386b2
+    oci.zebradil.dev/index.docker.io-cache/library/traefik@sha256:d6be8725d21b45bdd84b93ea01438256e0e3c94aa8fa51834fe87f37cd5d4af8
+    oci.zebradil.dev/index.docker.io-cache/synology/synology-csi@sha256:f2fca28076a61b836e0b0527bc121ee8143968db08e15a515769e95ccbcee05a
+    oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:1893f23b240cd0a3ee27eccb7d84eb41de1f68bae33772d9a9acdf4e1f72dfba
+    oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:bcfca5f27e2d2a822bdbbe7390601edefee48c3cae03b552a33235dcca4a0e24
+    oci.zebradil.dev/registry.k8s.io-cache/sig-storage/csi-node-driver-registrar@sha256:f9bcee63734b7b01555ee8fc8fb01ac2922478b2c8934bf8d468dd2916edc405
+kind: ConfigMap
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: image-puller-list
+  namespace: image-puller

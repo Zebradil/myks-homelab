@@ -241,7 +241,7 @@ spec:
               value: /helm-working-dir
             - name: HELM_DATA_HOME
               value: /helm-working-dir
-          image: quay.io/argoproj/argocd@sha256:1893f23b240cd0a3ee27eccb7d84eb41de1f68bae33772d9a9acdf4e1f72dfba
+          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:1893f23b240cd0a3ee27eccb7d84eb41de1f68bae33772d9a9acdf4e1f72dfba
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 3
@@ -295,7 +295,7 @@ spec:
                 secretKeyRef:
                   key: key
                   name: sops-age-key
-          image: registry.access.redhat.com/ubi8@sha256:bcfca5f27e2d2a822bdbbe7390601edefee48c3cae03b552a33235dcca4a0e24
+          image: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:bcfca5f27e2d2a822bdbbe7390601edefee48c3cae03b552a33235dcca4a0e24
           name: argocd-vault-plugin
           securityContext:
             runAsNonRoot: true
@@ -319,7 +319,7 @@ spec:
             - -n
             - /usr/local/bin/argocd
             - /var/run/argocd/argocd-cmp-server
-          image: quay.io/argoproj/argocd@sha256:1893f23b240cd0a3ee27eccb7d84eb41de1f68bae33772d9a9acdf4e1f72dfba
+          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:1893f23b240cd0a3ee27eccb7d84eb41de1f68bae33772d9a9acdf4e1f72dfba
           name: copyutil
           securityContext:
             allowPrivilegeEscalation: false
@@ -346,7 +346,7 @@ spec:
           env:
             - name: AVP_VERSION
               value: v1.18.1
-          image: registry.access.redhat.com/ubi8@sha256:bcfca5f27e2d2a822bdbbe7390601edefee48c3cae03b552a33235dcca4a0e24
+          image: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:bcfca5f27e2d2a822bdbbe7390601edefee48c3cae03b552a33235dcca4a0e24
           name: download-tools
           volumeMounts:
             - mountPath: /custom-tools
