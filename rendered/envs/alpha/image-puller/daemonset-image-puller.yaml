@@ -12,7 +12,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/images: 39f249e7001c52c7bc1563fad0b698e4
+        checksum/images: f6ee12b7627aa1f661deaa1cc158de7a
       labels:
         app: image-puller
     spec:
