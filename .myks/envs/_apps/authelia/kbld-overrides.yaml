@@ -1,5 +1,5 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 overrides:
-    - image: ghcr.io/authelia/authelia:4.39.6
-      newImage: oci.zebradil.dev/ghcr.io-cache/authelia/authelia:4.39.6
+    - image: ghcr.io/authelia/authelia:4.39.13
+      newImage: oci.zebradil.dev/ghcr.io-cache/authelia/authelia:4.39.13
