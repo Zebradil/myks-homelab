@@ -1,0 +1,7 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.46.1-0.20251025024049-b1dc25772cd5
+overrides:
+- image: ghcr.io/authelia/authelia:4.39.13
+  newImage: oci.zebradil.dev/ghcr.io-cache/authelia/authelia@sha256:7adc2a95b6a4be9332f6a420fdf59c7031bff203d1046ab80d8fbd66f5b1095f
+  preresolved: true
