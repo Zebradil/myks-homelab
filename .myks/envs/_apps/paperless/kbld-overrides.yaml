@@ -1,7 +1,7 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 overrides:
-    - image: ghcr.io/paperless-ngx/paperless-ngx:2.19.3
-      newImage: oci.zebradil.dev/ghcr.io-cache/paperless-ngx/paperless-ngx:2.19.3
+    - image: ghcr.io/paperless-ngx/paperless-ngx:2.19.4
+      newImage: oci.zebradil.dev/ghcr.io-cache/paperless-ngx/paperless-ngx:2.19.4
     - image: linuxserver/openssh-server:9.3_p2-r1-ls143
       newImage: oci.zebradil.dev/index.docker.io-cache/linuxserver/openssh-server:9.3_p2-r1-ls143
