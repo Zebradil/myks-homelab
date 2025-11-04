@@ -2,8 +2,8 @@ apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 minimumRequiredVersion: 0.46.1-0.20251025024049-b1dc25772cd5
 overrides:
-- image: ghcr.io/paperless-ngx/paperless-ngx:2.19.3
-  newImage: oci.zebradil.dev/ghcr.io-cache/paperless-ngx/paperless-ngx@sha256:321ca858e4b6ce9dc416dbcb7c0691d545e3e9b0f44cf420f75c22098854ca25
+- image: ghcr.io/paperless-ngx/paperless-ngx:2.19.4
+  newImage: oci.zebradil.dev/ghcr.io-cache/paperless-ngx/paperless-ngx@sha256:7ec0797af256194f6e117d1b7ed3ef91ad31b4a14bf3092abdee6bb74f6b3656
   preresolved: true
 - image: linuxserver/openssh-server:9.3_p2-r1-ls143
   newImage: oci.zebradil.dev/index.docker.io-cache/linuxserver/openssh-server@sha256:d55ff78303834a03ef4bf21733fccce12365949ed1715bdbe7e42d1b66db620a

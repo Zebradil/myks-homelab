@@ -51,7 +51,7 @@ spec:
               value: <path:static/0.sops.yaml#sessionSecretKey>
             - name: PAPERLESS_TIME_ZONE
               value: Europe/Berlin
-          image: oci.zebradil.dev/ghcr.io-cache/paperless-ngx/paperless-ngx@sha256:321ca858e4b6ce9dc416dbcb7c0691d545e3e9b0f44cf420f75c22098854ca25
+          image: oci.zebradil.dev/ghcr.io-cache/paperless-ngx/paperless-ngx@sha256:7ec0797af256194f6e117d1b7ed3ef91ad31b4a14bf3092abdee6bb74f6b3656
           name: paperless
           ports:
             - containerPort: 8000
