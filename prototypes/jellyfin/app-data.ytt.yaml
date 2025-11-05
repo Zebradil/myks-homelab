@@ -6,13 +6,13 @@ application:
   image: jellyfin/jellyfin:10.11.1
   #! DOCKER_MODS=linuxserver/mods:jellyfin-opencl-intel
   #! FIXME: This is for tests only, replace with node selector
-  nodeName: ""
+  nodeName: ''
   storage:
     cache:
       size: 1Gi
       path: /cache
     config:
-      size: 1Gi
+      size: 3Gi
       path: /config
     media:
       size: 10Gi
@@ -42,4 +42,4 @@ application:
     enabled: true
     #! renovate: datasource=docker
     image: ghcr.io/linuxserver/wireguard:v1.0.20210914-ls31
-    config: ""
+    config: ''
