@@ -9,5 +9,5 @@ overrides:
       newImage: oci.zebradil.dev/ghcr.io-cache/hotio/qbittorrent:release-4.6.4
     - image: ghcr.io/linuxserver/wireguard:v1.0.20210914-ls31
       newImage: oci.zebradil.dev/ghcr.io-cache/linuxserver/wireguard:v1.0.20210914-ls31
-    - image: jellyfin/jellyfin:10.10.7
-      newImage: oci.zebradil.dev/index.docker.io-cache/jellyfin/jellyfin:10.10.7
+    - image: jellyfin/jellyfin:10.11.1
+      newImage: oci.zebradil.dev/index.docker.io-cache/jellyfin/jellyfin:10.11.1
