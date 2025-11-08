@@ -29,7 +29,6 @@ spec:
                 fieldRef:
                   fieldPath: spec.nodeName
           image: oci.zebradil.dev/registry.k8s.io-cache/sig-storage/csi-node-driver-registrar@sha256:f9bcee63734b7b01555ee8fc8fb01ac2922478b2c8934bf8d468dd2916edc405
-          imagePullPolicy: Always
           name: csi-driver-registrar
           securityContext:
             privileged: true
@@ -52,7 +51,6 @@ spec:
                 fieldRef:
                   fieldPath: spec.nodeName
           image: oci.zebradil.dev/index.docker.io-cache/synology/synology-csi@sha256:f2fca28076a61b836e0b0527bc121ee8143968db08e15a515769e95ccbcee05a
-          imagePullPolicy: IfNotPresent
           name: csi-plugin
           securityContext:
             privileged: true

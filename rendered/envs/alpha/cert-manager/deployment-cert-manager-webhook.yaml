@@ -44,7 +44,6 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
           image: oci.zebradil.dev/quay.io-cache/jetstack/cert-manager-webhook@sha256:f5bfe77541e38978aec53cc6eb924d190e1fe923c98b2582e6ccf5edf6c02cce
-          imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3
             httpGet:

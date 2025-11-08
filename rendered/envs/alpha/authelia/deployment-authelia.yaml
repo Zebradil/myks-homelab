@@ -51,7 +51,6 @@ spec:
             - name: X_AUTHELIA_CONFIG_FILTERS
               value: template
           image: oci.zebradil.dev/ghcr.io-cache/authelia/authelia@sha256:7adc2a95b6a4be9332f6a420fdf59c7031bff203d1046ab80d8fbd66f5b1095f
-          imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 5
             httpGet:

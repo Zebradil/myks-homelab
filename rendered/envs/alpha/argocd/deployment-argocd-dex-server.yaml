@@ -51,7 +51,6 @@ spec:
                   name: argocd-cmd-params-cm
                   optional: true
           image: oci.zebradil.dev/ghcr.io-cache/dexidp/dex@sha256:bc7cfce7c17f52864e2bb2a4dc1d2f86a41e3019f6d42e81d92a301fad0c8a1d
-          imagePullPolicy: Always
           name: dex
           ports:
             - containerPort: 5556
@@ -80,7 +79,6 @@ spec:
             - /usr/local/bin/argocd
             - /shared/argocd-dex
           image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:1893f23b240cd0a3ee27eccb7d84eb41de1f68bae33772d9a9acdf4e1f72dfba
-          imagePullPolicy: Always
           name: copyutil
           securityContext:
             allowPrivilegeEscalation: false

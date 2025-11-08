@@ -49,7 +49,6 @@ spec:
             - secretRef:
                 name: harbor-database
           image: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-db@sha256:fcf1f3dbc8f10183abe336712560a94fb2804ba8d3ce3ca634342e5a8df7da2c
-          imagePullPolicy: IfNotPresent
           livenessProbe:
             exec:
               command:
@@ -87,7 +86,6 @@ spec:
           command:
             - /bin/sh
           image: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-db@sha256:fcf1f3dbc8f10183abe336712560a94fb2804ba8d3ce3ca634342e5a8df7da2c
-          imagePullPolicy: IfNotPresent
           name: data-permissions-ensurer
           securityContext:
             allowPrivilegeEscalation: false

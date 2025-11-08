@@ -50,7 +50,6 @@ spec:
             - name: HOST_IP
               value: 0.0.0.0
           image: oci.zebradil.dev/quay.io-cache/prometheus/node-exporter@sha256:c99d7ee4d12a38661788f60d9eca493f08584e2e544bbd3b3fca64749f86b848
-          imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3
             httpGet:

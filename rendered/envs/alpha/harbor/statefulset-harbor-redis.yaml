@@ -41,7 +41,6 @@ spec:
       automountServiceAccountToken: false
       containers:
         - image: oci.zebradil.dev/index.docker.io-cache/goharbor/redis-photon@sha256:7b3e7ea34477cb1df592594fb0d0ea9168945fa9f72aab9586ec357cbe935ae0
-          imagePullPolicy: IfNotPresent
           livenessProbe:
             initialDelaySeconds: 300
             periodSeconds: 10

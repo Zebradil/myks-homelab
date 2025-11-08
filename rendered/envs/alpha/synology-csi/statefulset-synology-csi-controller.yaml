@@ -26,7 +26,6 @@ spec:
             - name: ADDRESS
               value: /var/lib/csi/sockets/pluginproxy/csi.sock
           image: oci.zebradil.dev/registry.k8s.io-cache/sig-storage/csi-provisioner@sha256:6477988532358148d2e98f7c747db4e9250bbc7ad2664bf666348abf9ee1f5aa
-          imagePullPolicy: Always
           name: csi-provisioner
           securityContext:
             allowPrivilegeEscalation: true
@@ -44,7 +43,6 @@ spec:
             - name: ADDRESS
               value: /var/lib/csi/sockets/pluginproxy/csi.sock
           image: oci.zebradil.dev/registry.k8s.io-cache/sig-storage/csi-attacher@sha256:80dec81b679a733fda448be92a2331150d99095947d04003ecff3dbd7f2a476a
-          imagePullPolicy: Always
           name: csi-attacher
           securityContext:
             allowPrivilegeEscalation: true
@@ -62,7 +60,6 @@ spec:
             - name: ADDRESS
               value: /var/lib/csi/sockets/pluginproxy/csi.sock
           image: oci.zebradil.dev/registry.k8s.io-cache/sig-storage/csi-resizer@sha256:6e0546563b18872b0aa0cad7255a26bb9a87cb879b7fc3e2383c867ef4f706fb
-          imagePullPolicy: Always
           name: csi-resizer
           securityContext:
             allowPrivilegeEscalation: true
@@ -83,7 +80,6 @@ spec:
             - name: CSI_ENDPOINT
               value: unix:///var/lib/csi/sockets/pluginproxy/csi.sock
           image: oci.zebradil.dev/index.docker.io-cache/synology/synology-csi@sha256:f2fca28076a61b836e0b0527bc121ee8143968db08e15a515769e95ccbcee05a
-          imagePullPolicy: IfNotPresent
           name: csi-plugin
           securityContext:
             allowPrivilegeEscalation: true
