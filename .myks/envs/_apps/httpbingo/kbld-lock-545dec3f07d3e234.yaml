@@ -1,7 +1,0 @@
-apiVersion: kbld.k14s.io/v1alpha1
-kind: Config
-minimumRequiredVersion: 0.46.1-0.20251025024049-b1dc25772cd5
-overrides:
-- image: mccutchen/go-httpbin:2.18.3
-  newImage: oci.zebradil.dev/index.docker.io-cache/mccutchen/go-httpbin@sha256:3992f3763e9ce5a4307eae0a869a78b4df3931dc8feba74ab823dd2444af6a6b
-  preresolved: true
