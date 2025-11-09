@@ -47,6 +47,8 @@ spec:
               value: "5432"
             - name: POSTGRESQL_VOLUME_DIR
               value: /bitnami/postgresql
+            - name: OPENSSL_FIPS
+              value: "yes"
             - name: PGDATA
               value: /bitnami/postgresql/data
             - name: POSTGRES_USER
