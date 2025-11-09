@@ -1,6 +1,6 @@
 <!--- app-name: Redis&reg; -->
 
-# Bitnami package for Redis&reg;
+# Bitnami Secure Images Helm chart for Redis&reg;
 
 Redis&reg; is an open source, advanced key-value store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets and sorted sets.
 
@@ -346,6 +346,8 @@ Note that this will not disable transparent huge tables.
 ### FIPS parameters
 
 The FIPS parameters only have effect if you are using images from the [Bitnami Secure Images catalog](https://www.arrow.com/globalecs/uk/products/bitnami-secure-images/).
+
+For more information on this new support, please refer to the [FIPS Compliance section](https://techdocs.broadcom.com/us/en/vmware-tanzu/bitnami-secure-images/bitnami-secure-images/services/bsi-doc/security-frameworks-FIPS-compliance.html).
 
 ### Backup and restore
 
