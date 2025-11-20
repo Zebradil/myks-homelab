@@ -1,11 +1,12 @@
 annotations:
   artifacthub.io/category: security
   artifacthub.io/changes: |
-    - kind: fixed
-      description: Refresh interval of auth backend is now rendered in configMap
-      links: []
-    - kind: changed
-      description: Update chart appVersion to latest release of Authelia app
+    - kind: added
+      description: Support for 'group' attribute for Gateway API HTTPRoute ParentReference.
+    - kind: added
+      description: Support for 'kind' attribute for Gateway API HTTPRoute ParentReference.
+    - kind: added
+      description: Support for 'namespace' attribute for Gateway API HTTPRoute ParentReference.
   artifacthub.io/images: |
     - name: authelia/authelia
       image: ghcr.io/authelia/authelia:4.39.13
@@ -86,4 +87,4 @@ sources:
 - https://github.com/authelia/chartrepo/tree/master/charts/authelia
 - https://www.github.com/authelia/authelia
 type: application
-version: 0.10.47
+version: 0.10.49
