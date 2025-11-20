@@ -16,10 +16,25 @@
       minimumReleaseAge: "7 days",
       automerge: true,
     },
+    {
+      description: "Group Helm updates together",
+      matchPackageNames: ["helm", "helm/helm"],
+      groupName: "helm",
+      groupSlug: "helm",
+    },
   ],
   // Ignore all rendered files
   ignorePaths: ["rendered/**", ".myks/**"],
   customManagers: [
+    {
+      customType: "regex",
+      // any file
+      managerFilePatterns: ["/.*/"],
+      matchStrings: [
+        // #! renovate: datasource=github-releases depName=helm/helm version=3.19.2
+        "#!\\s+renovate:\\s+datasource=(?<datasource>\\S+)\\s+depName=(?<depName>\\S+)\\s+version=(?<currentValue>[^'\"\\s]+)",
+      ],
+    },
     {
       customType: "regex",
       managerFilePatterns: ["/(^|/)app-data\\.ytt\\.yaml$/"],
