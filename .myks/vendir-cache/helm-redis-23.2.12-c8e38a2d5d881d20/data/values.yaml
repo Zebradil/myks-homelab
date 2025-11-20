@@ -643,7 +643,7 @@ master:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
     ##
     sessionAffinity: None
-    ## @param master.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## @param master.service.sessionAffinityConfig Additional settings for the sessionAffinity. Ignored if `master.service.sessionAffinity` is `None`
     ## sessionAffinityConfig:
     ##   clientIP:
     ##     timeoutSeconds: 300
@@ -1120,7 +1120,7 @@ replica:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
     ##
     sessionAffinity: None
-    ## @param replica.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## @param replica.service.sessionAffinityConfig Additional settings for the sessionAffinity. Ignored if `replica.service.sessionAffinity` is `None`
     ## sessionAffinityConfig:
     ##   clientIP:
     ##     timeoutSeconds: 300
@@ -1508,7 +1508,7 @@ sentinel:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
     ##
     sessionAffinity: None
-    ## @param sentinel.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## @param sentinel.service.sessionAffinityConfig Additional settings for the sessionAffinity. Ignored if `sentinel.service.sessionAffinity` is `None`
     ## sessionAffinityConfig:
     ##   clientIP:
     ##     timeoutSeconds: 300
@@ -1584,7 +1584,7 @@ sentinel:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
     ##
     sessionAffinity: None
-    ## @param sentinel.masterService.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## @param sentinel.masterService.sessionAffinityConfig Additional settings for the sessionAffinity. Ignored if `sentinel.masterService.sessionAffinity` is `None`
     ## sessionAffinityConfig:
     ##   clientIP:
     ##     timeoutSeconds: 300
@@ -1945,7 +1945,7 @@ metrics:
   ##
   fips:
     openssl: ""
-    golang: relaxed
+    golang: restricted
   ## @param metrics.podLabels Extra labels for Redis(R) exporter pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
