@@ -36,7 +36,6 @@ global:
     ## @param global.postgresql.auth.secretKeys.replicationPasswordKey Name of key in existing secret to use for PostgreSQL credentials (overrides `auth.secretKeys.replicationPasswordKey`). Only used when `global.postgresql.auth.existingSecret` is set.
     ##
     fullnameOverride: ""
-    
     auth:
       postgresPassword: ""
       username: ""
@@ -61,6 +60,11 @@ global:
       ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
       ##
       adaptSecurityContext: auto
+  ## @param global.defaultFips Default value for the FIPS configuration (allowed values: '', restricted, relaxed, off). Can be overriden by the 'fips' object
+  ##  Configure FIPS mode: '', 'restricted', 'relaxed', 'off'
+  ##
+  defaultFips: restricted
+
 ## @section Common parameters
 ##
 
@@ -491,6 +495,10 @@ primary:
   ##     memory: 1024Mi
   ##
   resources: {}
+  ## @param primary.fips.openssl Configure OpenSSL FIPS mode: '', 'restricted', 'relaxed', 'off'. If empty (""), 'global.defaultFips' would be used
+  ##
+  fips:
+    openssl: ""
   ## Pod Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param primary.podSecurityContext.enabled Enable security context
@@ -768,7 +776,7 @@ primary:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
     ##
     sessionAffinity: None
-    ## @param primary.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## @param primary.service.sessionAffinityConfig Additional settings for the sessionAffinity. Ignored if `primary.service.sessionAffinity` is `None`
     ## sessionAffinityConfig:
     ##   clientIP:
     ##     timeoutSeconds: 300
@@ -948,6 +956,10 @@ readReplicas:
   ##     memory: 1024Mi
   ##
   resources: {}
+  ## @param readReplicas.fips.openssl Configure OpenSSL FIPS mode: '', 'restricted', 'relaxed', 'off'. If empty (""), 'global.defaultFips' would be used
+  ##
+  fips:
+    openssl: ""
   ## Pod Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param readReplicas.podSecurityContext.enabled Enable security context
@@ -1225,7 +1237,7 @@ readReplicas:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
     ##
     sessionAffinity: None
-    ## @param readReplicas.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## @param readReplicas.service.sessionAffinityConfig Additional settings for the sessionAffinity. Ignored if `readReplicas.service.sessionAffinity` is `None`
     ## sessionAffinityConfig:
     ##   clientIP:
     ##     timeoutSeconds: 300
@@ -1384,6 +1396,10 @@ backup:
     ## @param backup.cronjob.resources Set container requests and limits for different resources like CPU or memory
     ## Example:
     resources: {}
+    ## @param backup.cronjob.fips.openssl Configure OpenSSL FIPS mode: '', 'restricted', 'relaxed', 'off'. If empty (""), 'global.defaultFips' would be used
+    ##
+    fips:
+      openssl: ""
     ## resources:
     ##   requests:
     ##     cpu: 1
@@ -1551,6 +1567,10 @@ passwordUpdateJob:
   ##     memory: 1024Mi
   ##
   resources: {}
+  ## @param passwordUpdateJob.fips.openssl Configure OpenSSL FIPS mode: '', 'restricted', 'relaxed', 'off'. If empty (""), 'global.defaultFips' would be used
+  ##
+  fips:
+    openssl: ""
   ## @param passwordUpdateJob.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
@@ -1627,6 +1647,10 @@ volumePermissions:
   ##     memory: 1024Mi
   ##
   resources: {}
+  ## @param volumePermissions.fips.openssl Configure OpenSSL FIPS mode: '', 'restricted', 'relaxed', 'off'. If empty (""), 'global.defaultFips' would be used
+  ##
+  fips:
+    openssl: ""
   ## Init container' Security Context
   ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
   ## and not the below volumePermissions.containerSecurityContext.runAsUser
@@ -1847,6 +1871,12 @@ metrics:
   ##     memory: 1024Mi
   ##
   resources: {}
+  ## @param metrics.fips.openssl Configure OpenSSL FIPS mode: '', 'restricted', 'relaxed', 'off'. If empty (""), 'global.defaultFips' would be used
+  ## @param metrics.fips.golang Configure Golang FIPS mode: '', 'restricted', 'relaxed', 'off'. If empty (""), 'global.defaultFips' would be used
+  ##
+  fips:
+    openssl: ""
+    golang: relaxed
   ## Service configuration
   ##
   service:
@@ -1858,8 +1888,7 @@ metrics:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
     ##
     clusterIP: ""
-    ## @param metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
-    ## Values: ClientIP or None
+    ## @param metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin. Allowed values: `ClientIP` or `None`
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
