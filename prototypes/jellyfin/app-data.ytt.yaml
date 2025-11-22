@@ -31,7 +31,7 @@ application:
   filebrowser:
     enabled: true
     #! renovate: datasource=docker
-    image: filebrowser/filebrowser:v2.46.0
+    image: filebrowser/filebrowser:v2.46.1
 
   torrent:
     enabled: true
