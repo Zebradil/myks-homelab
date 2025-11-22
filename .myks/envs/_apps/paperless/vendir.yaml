@@ -7,7 +7,7 @@ directories:
     lazy: true
     helmChart:
       name: postgresql
-      version: 18.0.17
+      version: 18.1.9
       repository:
         url: oci://registry-1.docker.io/bitnamicharts
 - path: charts/redis
@@ -16,6 +16,6 @@ directories:
     lazy: true
     helmChart:
       name: redis
-      version: 23.2.3
+      version: 23.2.12
       repository:
         url: oci://registry-1.docker.io/bitnamicharts

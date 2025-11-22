@@ -1,0 +1,7 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.46.1-0.20251025024049-b1dc25772cd5
+overrides:
+- image: docker.io/traefik:v3.6.0
+  newImage: oci.zebradil.dev/index.docker.io-cache/library/traefik@sha256:18112aed2bfe3dfb8534f1045622390c3316596cff0cefab64f44e43d23e1640
+  preresolved: true

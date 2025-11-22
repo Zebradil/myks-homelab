@@ -4,7 +4,7 @@
 application:
   #! Container image for the init container that writes the registries configuration
   #! renovate: datasource=docker
-  image: mikefarah/yq:4.48.1
+  image: mikefarah/yq:4.48.2
 
   #! K3s registries configuration that will be written to /etc/rancher/k3s/registries.yaml
   #! This accepts any YAML structure as defined in K3s documentation

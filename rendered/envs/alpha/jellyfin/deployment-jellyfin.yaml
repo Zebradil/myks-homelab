@@ -51,7 +51,7 @@ spec:
         - env:
             - name: FB_DATABASE
               value: /database/database.db
-          image: oci.zebradil.dev/index.docker.io-cache/filebrowser/filebrowser@sha256:c751c3a0ed38a8a18b647ae7897b57c793f52a6501a75be2fe4b72d1c27b60ea
+          image: oci.zebradil.dev/index.docker.io-cache/filebrowser/filebrowser@sha256:a3d21db89b6aa6b32d072184bf884a832725912f8bae1952338a09d10de415e2
           livenessProbe:
             failureThreshold: 3
             httpGet:
