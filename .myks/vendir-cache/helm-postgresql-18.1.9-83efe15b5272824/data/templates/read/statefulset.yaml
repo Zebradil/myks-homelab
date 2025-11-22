@@ -225,10 +225,6 @@ spec:
             - name: OPENSSL_FIPS
               value: {{ include "common.fips.config" (dict "tech" "openssl" "fips" .Values.readReplicas.fips "global" .Values.global) | quote }}
             {{- end }}
-            {{- if include "common.fips.enabled" . }}
-            - name: OPENSSL_FIPS
-              value: {{ include "common.fips.config" (dict "tech" "openssl" "fips" .Values.readReplicas.fips "global" .Values.global) | quote }}
-            {{- end }}
             # Authentication
             {{- if or (eq $customUser "postgres") (empty $customUser) }}
             {{- if .Values.auth.enablePostgresUser }}
