@@ -12,6 +12,12 @@ argocd:
       targetRevision: main
       plugin:
         name: argocd-vault-plugin
+    syncPolicy:
+      prune: true
+      selfHeal: false
+    syncOptions:
+      - FailOnSharedResource=true
+      - RespectIgnoreDifferences=true
   project:
     prefix: env-
     destination:
@@ -33,7 +39,7 @@ kbld:
     #@ ]
     #@ for/end reg in registries:
     - match:
-        registry: #@ reg.replace(".", "\.")
+        registry: #@ reg.replace(".", "\\.")
         repository: (.+)
       replace:
         registry: oci.zebradil.dev

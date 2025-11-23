@@ -32,4 +32,5 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
+      - FailOnSharedResource=true
       - RespectIgnoreDifferences=true
