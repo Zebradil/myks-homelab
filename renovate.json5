@@ -27,6 +27,7 @@
       matchDatasources: ["docker"],
       matchCurrentValue: "/^latest$/",
       pinVersions: true,
+    },
   ],
   // Ignore all rendered files
   ignorePaths: ["rendered/**", ".myks/**"],
