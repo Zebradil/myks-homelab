@@ -1,0 +1,30 @@
+#@ load("secrets.star", "sec")
+
+#@data/values-schema
+---
+#@overlay/match-child-defaults missing_ok=True
+application:
+  #! renovate: datasource=docker
+  image: ghcr.io/zhaofengli/attic:latest
+
+  #@schema/validation min_len=1
+  token_rs256_secret_base64: #@ sec.sops("0", "token_rs256_secret_base64")
+
+  #! See https://github.com/zhaofengli/attic/blob/main/server/src/config-template.toml
+  config:
+    listen: '[::]:8080'
+    allowed-hosts: ['']
+    database:
+      url: 'sqlite:///data/attic.db'
+    storage:
+      type: 'local'
+      path: '/data/storage'
+    chunking:
+      nar-size-threshold: 65536 #! chunk files that are 64 KiB or larger
+      min-size: 16384 #! 16 KiB
+      avg-size: 65536 #! 64 KiB
+      max-size: 262144 #! 256 KiB
+    compression:
+      type: 'zstd'
+    garbage-collection:
+      interval: '12 hours'

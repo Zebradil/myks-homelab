@@ -22,6 +22,11 @@
       groupName: "helm",
       groupSlug: "helm",
     },
+    {
+      description: "Pin latest container image tags",
+      matchDatasources: ["docker"],
+      matchCurrentValue: "/^latest$/",
+      pinVersions: true,
   ],
   // Ignore all rendered files
   ignorePaths: ["rendered/**", ".myks/**"],

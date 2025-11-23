@@ -1,0 +1,84 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:sha256", "sha256")
+#@ load("@ytt:toml", "toml")
+
+#@ d = data.values
+#@ ap = d.application
+#@ name = d.myks.context.app
+#@ config_secret_name = name + "-config"
+#@ data_pvc_name = name + "-data"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: #@ name
+spec:
+  selector:
+    matchLabels:
+      app: #@ name
+  template:
+    metadata:
+      labels:
+        app: #@ name
+      annotations:
+        checksum/config: #@ sha256.sum(toml.encode(ap.config))
+    spec:
+      containers:
+        - name: #@ name
+          image: #@ ap.image
+          command:
+            - atticd
+            - --config
+            - /config/attic.toml
+          env:
+            - name: ATTIC_SERVER_TOKEN_RS256_SECRET_BASE64
+              value: #@ ap.token_rs256_secret_base64
+          ports:
+            - containerPort: 8080
+              name: http
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: config
+          secret:
+            secretName: #@ config_secret_name
+        - name: data
+          persistentVolumeClaim:
+            claimName: #@ data_pvc_name
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: #@ config_secret_name
+stringData:
+  attic.toml: #@ toml.encode(ap.config)
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #@ name
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+  selector:
+    app: #@ name
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: #@ data_pvc_name
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi

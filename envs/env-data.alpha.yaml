@@ -25,6 +25,7 @@ environment:
   id: alpha
   applications:
     - proto: argocd
+    - proto: attic
     - proto: authelia
     - proto: cert-manager
     - proto: comentario

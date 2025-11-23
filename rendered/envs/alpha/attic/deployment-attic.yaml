@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: attic
+spec:
+  selector:
+    matchLabels:
+      app: attic
+  template:
+    metadata:
+      annotations:
+        checksum/config: 75d794ac7a56842d0f471b51d95d413647926acfe89f2511a8ac040934704866
+      labels:
+        app: attic
+    spec:
+      containers:
+        - command:
+            - atticd
+            - --config
+            - /config/attic.toml
+          env:
+            - name: ATTIC_SERVER_TOKEN_RS256_SECRET_BASE64
+              value: <path:static/0.sops.yaml#token_rs256_secret_base64>
+          image: oci.zebradil.dev/ghcr.io-cache/zhaofengli/attic@sha256:18574aba70fc89d2b695273fbe2e7b2f8ad7e8e786b4cc535124fbe14bada1d0
+          name: attic
+          ports:
+            - containerPort: 8080
+              name: http
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /data
+              name: data
+      volumes:
+        - name: config
+          secret:
+            secretName: attic-config
+        - name: data
+          persistentVolumeClaim:
+            claimName: attic-data
