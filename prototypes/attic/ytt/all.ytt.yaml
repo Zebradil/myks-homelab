@@ -31,9 +31,6 @@ spec:
             - atticd
             - --config
             - /config/attic.toml
-          env:
-            - name: ATTIC_SERVER_TOKEN_RS256_SECRET_BASE64
-              value: #@ ap.token_rs256_secret_base64
           ports:
             - containerPort: 8080
               name: http

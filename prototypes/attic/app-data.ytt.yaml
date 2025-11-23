@@ -7,9 +7,6 @@ application:
   #! renovate: datasource=docker
   image: ghcr.io/zhaofengli/attic:latest
 
-  #@schema/validation min_len=1
-  token_rs256_secret_base64: #@ sec.sops("0", "token_rs256_secret_base64")
-
   #! See https://github.com/zhaofengli/attic/blob/main/server/src/config-template.toml
   config:
     listen: '[::]:8080'
@@ -28,3 +25,7 @@ application:
       type: 'zstd'
     garbage-collection:
       interval: '12 hours'
+    jwt:
+      signing:
+        #@schema/validation min_len=1
+        token_rs256_secret_base64: #@ sec.sops("0", "token_rs256_secret_base64")
