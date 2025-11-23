@@ -28,4 +28,4 @@ application:
     jwt:
       signing:
         #@schema/validation min_len=1
-        token_rs256_secret_base64: #@ sec.sops("0", "token_rs256_secret_base64")
+        token-rs256-secret-base64: #@ sec.sops("0", "token-rs256-secret-base64")
