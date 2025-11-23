@@ -1,0 +1,98 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: attic
+spec:
+  rules:
+    - host: attic.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: attic
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: attic.gray.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: attic
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: attic.junior.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: attic
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: attic.ts.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: attic
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: attic.gray.ts.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: attic
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: attic.junior.ts.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: attic
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: attic.lan.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: attic
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: attic.gray.lan.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: attic
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: attic.junior.lan.zebradil.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: attic
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
