@@ -17,6 +17,14 @@ argocd:
         name: argocd-vault-plugin
       repoURL: https://github.com/Zebradil/myks-homelab
       targetRevision: main
+    syncPolicy:
+      prune: true
+      selfHeal: false
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true
+    - FailOnSharedResource=true
+    - RespectIgnoreDifferences=true
   env:
     name: ""
     prefix: ""
