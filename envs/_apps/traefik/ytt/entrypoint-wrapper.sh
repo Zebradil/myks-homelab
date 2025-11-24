@@ -10,7 +10,13 @@ function script_error_trap() {
   echo "--- Script Failed Unexpectedly ---" >&2
   echo "Error on line $line_number" >&2
   echo "Exit code: $last_exit_code" >&2
-  echo "Failing command: $BASH_COMMAND" >&2
+
+  # shellcheck disable=SC2128
+  if [[ -n "$FUNCNAME" && "$FUNCNAME" != "script_error_trap" ]]; then
+    echo "Failing function: $FUNCNAME" >&2
+  else
+    echo "Failing script: $0" >&2
+  fi
   echo "-----------------------------------" >&2
 
   echo "Last known NODE_IPV6: $NODE_IPV6" >&2
