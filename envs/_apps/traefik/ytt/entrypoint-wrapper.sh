@@ -27,7 +27,7 @@ function script_error_trap() {
 trap script_error_trap ERR
 
 function get_ipv6() {
-  nslookup -type=aaaa "${HOSTNAME:?}.${BASE_DOMAIN:?}" 1.1.1.1 \
+  nslookup -type=aaaa "${HOSTNAME:?}.${BASE_DOMAIN:?}" "${DNS:-8.8.8.8}" \
     | grep '^Address:' \
     | tail -1 \
     | cut -d' ' -f2
