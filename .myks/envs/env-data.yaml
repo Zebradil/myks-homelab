@@ -42,8 +42,6 @@ environment:
   applications:
   - proto: argocd
     name: ""
-  - proto: attic
-    name: ""
   - proto: authelia
     name: ""
   - proto: cert-manager
