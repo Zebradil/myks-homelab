@@ -2,6 +2,8 @@
 ---
 environment:
   #@overlay/match missing_ok=True
+  baseDomain: ''
+  #@overlay/match missing_ok=True
   hosts: ['']
   #@overlay/match missing_ok=True
   traefik:

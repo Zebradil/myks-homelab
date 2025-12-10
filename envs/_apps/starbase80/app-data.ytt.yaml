@@ -1,9 +1,10 @@
-#@data/values
+#@ load("@myks:data.lib.yaml", "env_data")
 
 #@ def get_uri(service):
-#@   return "https://"+service+".zebradil.dev"
+#@   return "https://{}.{}".format(service, env_data.environment.baseDomain)
 #@ end
 
+#@data/values
 ---
 application:
   builder:

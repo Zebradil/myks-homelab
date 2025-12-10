@@ -1,7 +1,0 @@
-apiVersion: kbld.k14s.io/v1alpha1
-kind: Config
-minimumRequiredVersion: 0.46.1-0.20251025024049-b1dc25772cd5
-overrides:
-- image: ghcr.io/zhaofengli/attic:latest
-  newImage: oci.zebradil.dev/ghcr.io-cache/zhaofengli/attic@sha256:18574aba70fc89d2b695273fbe2e7b2f8ad7e8e786b4cc535124fbe14bada1d0
-  preresolved: true

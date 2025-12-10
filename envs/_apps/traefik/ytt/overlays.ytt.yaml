@@ -3,7 +3,6 @@
 
 #@ deployments = overlay.subset({"kind":"Deployment"})
 #@ daemonsets = overlay.subset({"kind":"DaemonSet"})
-#@ base_domain = data.values.environment.traefik.hosts.web[0]
 
 #! This overlay adds a custom command to the traefik container and removes the
 #! ports field from the container spec, as it is not needed when using hostNetwork.
@@ -27,6 +26,6 @@ spec:
             - /entrypoint.sh
           env:
             - name: BASE_DOMAIN
-              value: #@ base_domain
+              value: #@ data.values.environment.baseDomain
           #@overlay/remove
           ports:

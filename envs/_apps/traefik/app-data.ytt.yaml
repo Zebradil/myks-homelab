@@ -1,15 +1,8 @@
+#@ load("@myks:data.lib.yaml", "env_data")
+
 #@data/values
 ---
 application:
   tls:
-    baseDomains:
-      - zebradil.dev
-      - ts.zebradil.dev
-      - lan.zebradil.dev
-      - gray.zebradil.dev
-      - gray.ts.zebradil.dev
-      - gray.lan.zebradil.dev
-      - junior.zebradil.dev
-      - junior.ts.zebradil.dev
-      - junior.lan.zebradil.dev
+    baseDomains: #@ env_data.environment.hosts
     issuer: cloudflare-zerossl

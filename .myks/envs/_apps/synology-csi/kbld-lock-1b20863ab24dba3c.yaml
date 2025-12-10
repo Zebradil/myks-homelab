@@ -1,6 +1,6 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
-minimumRequiredVersion: 0.46.1-0.20251025024049-b1dc25772cd5
+minimumRequiredVersion: 0.47.0
 overrides:
 - image: registry.k8s.io/sig-storage/csi-attacher:v3.3.0
   newImage: oci.zebradil.dev/registry.k8s.io-cache/sig-storage/csi-attacher@sha256:80dec81b679a733fda448be92a2331150d99095947d04003ecff3dbd7f2a476a

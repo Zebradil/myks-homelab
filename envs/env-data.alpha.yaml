@@ -16,6 +16,7 @@
 
 ---
 environment:
+  baseDomain: #@ base_domain
   hosts: #@ base_hosts + vpn_hosts + lan_hosts
   traefik:
     hosts:

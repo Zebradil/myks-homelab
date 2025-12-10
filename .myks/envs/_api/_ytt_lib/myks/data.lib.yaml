@@ -1,3 +1,5 @@
+
+#@ def _env_data():
 application: {}
 argocd:
   enabled: true
@@ -17,6 +19,14 @@ argocd:
         name: argocd-vault-plugin
       repoURL: https://github.com/Zebradil/myks-homelab
       targetRevision: main
+    syncPolicy:
+      prune: true
+      selfHeal: false
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true
+    - FailOnSharedResource=true
+    - RespectIgnoreDifferences=true
   env:
     name: ""
     prefix: ""
@@ -40,8 +50,18 @@ environment:
     name: ""
   - proto: comentario
     name: ""
+  - proto: blank
+    name: fluidd
   - proto: grafana-agent
     name: ""
+  - proto: harbor
+    name: ""
+  - proto: webapp
+    name: httpbingo
+  - proto: image-puller
+    name: ""
+  - proto: webapp
+    name: it-tools
   - proto: jellyfin
     name: ""
   - proto: k3s-private-registries
@@ -58,16 +78,11 @@ environment:
     name: ""
   - proto: traefik
     name: ""
-  - proto: vaultwarden
-    name: ""
-  - proto: blank
-    name: fluidd
-  - proto: webapp
-    name: httpbingo
-  - proto: webapp
-    name: it-tools
   - proto: webapp
     name: uptime-kuma
+  - proto: vaultwarden
+    name: ""
+  baseDomain: zebradil.dev
   hosts:
   - zebradil.dev
   - gray.zebradil.dev
@@ -96,9 +111,54 @@ helm:
   buildDependencies: false
   capabilities: []
   includeCRDs: true
-  kubeVersion: "1.29"
+  kubeVersion: "1.33"
   namespace: ""
   charts: []
+kbld:
+  enabled: true
+  imagesAnnotation: false
+  cache: true
+  overrides:
+  - match:
+      registry: ghcr\.io
+      repository: (.+)
+      tag: ""
+    replace:
+      registry: oci.zebradil.dev
+      repository: ghcr.io-cache/$1
+      tag: ""
+  - match:
+      registry: index\.docker\.io
+      repository: (.+)
+      tag: ""
+    replace:
+      registry: oci.zebradil.dev
+      repository: index.docker.io-cache/$1
+      tag: ""
+  - match:
+      registry: quay\.io
+      repository: (.+)
+      tag: ""
+    replace:
+      registry: oci.zebradil.dev
+      repository: quay.io-cache/$1
+      tag: ""
+  - match:
+      registry: registry\.access\.redhat\.com
+      repository: (.+)
+      tag: ""
+    replace:
+      registry: oci.zebradil.dev
+      repository: registry.access.redhat.com-cache/$1
+      tag: ""
+  - match:
+      registry: registry\.k8s\.io
+      repository: (.+)
+      tag: ""
+    replace:
+      registry: oci.zebradil.dev
+      repository: registry.k8s.io-cache/$1
+      tag: ""
 yttPkg:
   dirs: []
 render:
@@ -112,3 +172,9 @@ myks:
     step: ""
     helm:
       chart: ""
+
+#@ end
+
+#@ load("@ytt:struct", "struct")
+#@ load("@ytt:yaml", "yaml")
+#@ env_data = struct.encode(yaml.decode(yaml.encode(_env_data())))
