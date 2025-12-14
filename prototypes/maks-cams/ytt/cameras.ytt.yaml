@@ -60,8 +60,8 @@ metadata:
   name: #@ name + "-cam-rewrite"
 spec:
   replacePathRegex:
-    regex: '^/cam[0-9]+(/.*)?$'
-    replacement: '/cam$1'
+    regex: '^/cam[0-9]+/?(.*)?$'
+    replacement: '/cam/$1'
 
 
 #@ for/end route in cam_routes:

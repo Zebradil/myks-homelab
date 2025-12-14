@@ -6,5 +6,5 @@ metadata:
   name: cams-cam-rewrite
 spec:
   replacePathRegex:
-    regex: ^/cam[0-9]+(/.*)?$
-    replacement: /cam$1
+    regex: ^/cam[0-9]+/?(.*)?$
+    replacement: /cam/$1
