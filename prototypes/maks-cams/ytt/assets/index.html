@@ -16,25 +16,50 @@
         overflow: hidden;
         background: #000;
       }
+
       .container {
         display: flex;
         flex-direction: column;
         height: 100vh;
         width: 100vw;
       }
+
       .cam-frame {
-        flex: 1; /* Each iframe takes equal vertical space */
+        flex: 1;
         width: 100%;
         border: none;
-        background: #222; /* Placeholder color while loading */
+        background: #222;
       }
     </style>
   </head>
+
   <body>
     <div class="container">
-      <iframe class="cam-frame" src="/cam1"></iframe>
-      <iframe class="cam-frame" src="/cam2"></iframe>
-      <iframe class="cam-frame" src="/cam3"></iframe>
+      <iframe class="cam-frame" data-cam="cam1"></iframe>
+      <iframe class="cam-frame" data-cam="cam2"></iframe>
+      <iframe class="cam-frame" data-cam="cam3"></iframe>
     </div>
+    <script>
+      // Dynamically set iframe src based on current domain
+      // Example: cams.ts.example.com → cams-cam1.ts.example.com/cam
+      document.addEventListener('DOMContentLoaded', function () {
+        const currentHost = window.location.hostname;
+        const protocol = window.location.protocol;
+        const parts = currentHost.split('.');
+
+        // Get all iframes with data-cam attribute
+        const iframes = document.querySelectorAll('iframe[data-cam]');
+
+        iframes.forEach(function (iframe) {
+          const camId = iframe.getAttribute('data-cam');
+          // Insert cam identifier into the subdomain
+          // cams.ts.example.com → cams-cam1.ts.example.com
+          const newHost =
+            parts[0] + '-' + camId + '.' + parts.slice(1).join('.');
+          const newUrl = protocol + '//' + newHost + '/cam';
+          iframe.src = newUrl;
+        });
+      });
+    </script>
   </body>
 </html>

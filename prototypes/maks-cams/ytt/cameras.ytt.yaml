@@ -1,7 +1,6 @@
 #@ load("@ytt:data", "data")
-#@ load("traefik.lib.yaml", "gen_host_matches")
+#@ load("traefik.lib.yaml", "route")
 
-#@ e = data.values.environment
 #@ name = data.values.myks.context.app
 
 #@ cams = {
@@ -10,31 +9,16 @@
 #@   "cam3": "192.168.0.203",
 #@ }
 
-#@ cam_routes = {
-#@   "web": {
-#@     "hosts": e.traefik.hosts.web,
-#@     "entrypoints": ["websecure", "web"],
-#@     "protected": True,
-#@   },
-#@   "lan": {
-#@     "hosts": e.traefik.hosts.lan,
-#@     "entrypoints": ["lan-websecure", "lan-web"],
-#@     "protected": False,
-#@   },
-#@   "vpn": {
-#@     "hosts": e.traefik.hosts.vpn,
-#@     "entrypoints": ["vpn-websecure", "vpn-web"],
-#@     "protected": False,
-#@   },
-#@ }
-
 #@ for cam_id in cams:
 #@ cam_ip = cams[cam_id]
+#@ cam_name = name + "-" + cam_id
+#@ for/end route_doc in route.default(cam_name):
+--- #@ route_doc
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: #@ name + "-" + cam_id
+  name: #@ cam_name
 spec:
   ports:
     - name: http
@@ -44,7 +28,7 @@ spec:
 apiVersion: v1
 kind: Endpoints
 metadata:
-  name: #@ name + "-" + cam_id
+  name: #@ cam_name
 subsets:
   - addresses:
       - ip: #@ cam_ip
@@ -52,37 +36,3 @@ subsets:
       - port: 8889
         name: http
 #@ end
-
----
-apiVersion: traefik.io/v1alpha1
-kind: Middleware
-metadata:
-  name: #@ name + "-cam-rewrite"
-spec:
-  replacePathRegex:
-    regex: '^/cam[0-9]+/?(.*)?$'
-    replacement: '/cam/$1'
-
-
-#@ for/end route in cam_routes:
----
-#@ cfg = cam_routes[route]
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
-metadata:
-  name: #@ name + "-cams-" + route
-spec:
-  entryPoints: #@ cfg["entrypoints"]
-  routes:
-    #@ host_match = gen_host_matches(name, cfg["hosts"])
-    #@ for/end cam_id in cams:
-    - kind: Rule
-      match: #@ "({}) && PathPrefix(`/{}`)".format(host_match, cam_id)
-      middlewares:
-        #@ if/end cfg["protected"]:
-        - name: chain-authelia-auth
-          namespace: authelia
-        - name: #@ name + "-cam-rewrite"
-      services:
-        - name: #@ name + "-" + cam_id
-          port: 80

@@ -1,0 +1,19 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: cams-cam1-protected
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`cams-cam1.zebradil.dev`) || Host(`cams-cam1.gray.zebradil.dev`) || Host(`cams-cam1.junior.zebradil.dev`)
+      middlewares:
+        - name: chain-authelia-auth
+          namespace: authelia
+      services:
+        - name: cams-cam1
+          port: http
