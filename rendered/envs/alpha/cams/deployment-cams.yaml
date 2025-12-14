@@ -22,6 +22,8 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
+              add:
+                - net_bind_service
               drop:
                 - all
             privileged: false

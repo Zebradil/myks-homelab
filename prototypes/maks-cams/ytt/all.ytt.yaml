@@ -44,6 +44,8 @@ spec:
             capabilities:
               drop:
                 - all
+              add:
+                - net_bind_service
             privileged: false
             runAsUser: 1001
             runAsGroup: 1001
