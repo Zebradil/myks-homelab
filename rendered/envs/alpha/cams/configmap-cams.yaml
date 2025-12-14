@@ -1,0 +1,67 @@
+apiVersion: v1
+data:
+  Caddyfile: |
+    :8080 {
+        root * /srv
+        file_server
+
+        reverse_proxy /cam1 192.168.0.201:8889/cam
+        reverse_proxy /cam2 192.168.0.202:8889/cam
+        reverse_proxy /cam3 192.168.0.203:8889/cam
+    }
+  index.html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Camera Streams</title>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="theme-color" content="#000000" />
+        <style>
+          body,
+          html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+          }
+          .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+          }
+          .cam-frame {
+            flex: 1; /* Each iframe takes equal vertical space */
+            width: 100%;
+            border: none;
+            background: #222; /* Placeholder color while loading */
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <iframe class="cam-frame" src="/cam1"></iframe>
+          <iframe class="cam-frame" src="/cam2"></iframe>
+          <iframe class="cam-frame" src="/cam3"></iframe>
+        </div>
+      </body>
+    </html>
+  manifest.json: |
+    {
+      "name": "CamViewer",
+      "short_name": "Cams",
+      "start_url": "/",
+      "display": "standalone",
+      "background_color": "#000000",
+      "theme_color": "#000000",
+      "icons": []
+    }
+kind: ConfigMap
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: cams

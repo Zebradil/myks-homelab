@@ -1,0 +1,5 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+overrides:
+    - image: caddy:2.10.2-alpine
+      newImage: oci.zebradil.dev/index.docker.io-cache/library/caddy:2.10.2-alpine

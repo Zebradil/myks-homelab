@@ -46,6 +46,8 @@ environment:
     name: ""
   - proto: authelia
     name: ""
+  - proto: maks-cams
+    name: cams
   - proto: cert-manager
     name: ""
   - proto: comentario

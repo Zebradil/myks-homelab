@@ -1,0 +1,7 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.47.0
+overrides:
+- image: caddy:2.10.2-alpine
+  newImage: oci.zebradil.dev/index.docker.io-cache/library/caddy@sha256:953131cfea8e12bfe1c631a36308e9660e4389f0c3dfb3be957044d3ac92d446
+  preresolved: true

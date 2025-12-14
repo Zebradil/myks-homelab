@@ -27,6 +27,8 @@ environment:
   applications:
     - proto: argocd
     - proto: authelia
+    - proto: maks-cams
+      name: cams
     - proto: cert-manager
     - proto: comentario
     - proto: blank

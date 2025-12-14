@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Camera Streams</title>
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#000000" />
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+        background: #000;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        width: 100vw;
+      }
+      .cam-frame {
+        flex: 1; /* Each iframe takes equal vertical space */
+        width: 100%;
+        border: none;
+        background: #222; /* Placeholder color while loading */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <iframe class="cam-frame" src="/cam1"></iframe>
+      <iframe class="cam-frame" src="/cam2"></iframe>
+      <iframe class="cam-frame" src="/cam3"></iframe>
+    </div>
+  </body>
+</html>
