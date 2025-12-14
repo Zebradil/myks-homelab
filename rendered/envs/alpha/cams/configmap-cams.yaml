@@ -5,9 +5,23 @@ data:
         root * /srv
         file_server
 
-        reverse_proxy /cam1 192.168.0.201:8889/cam
-        reverse_proxy /cam2 192.168.0.202:8889/cam
-        reverse_proxy /cam3 192.168.0.203:8889/cam
+        # Camera 1
+        handle /cam1 {
+            rewrite * /cam
+            reverse_proxy 192.168.0.201:8889
+        }
+
+        # Camera 2
+        handle /cam2 {
+            rewrite * /cam
+            reverse_proxy 192.168.0.202:8889
+        }
+
+        # Camera 3
+        handle /cam3 {
+            rewrite * /cam
+            reverse_proxy 192.168.0.203:8889
+        }
     }
   index.html: |
     <!doctype html>
