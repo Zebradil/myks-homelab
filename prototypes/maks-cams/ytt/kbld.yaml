@@ -11,5 +11,3 @@ sources:
 destinations:
   - image: caddy-image-ref
     newImage: oci.zebradil.dev/zebradil/homelab/cams
-    tags:
-      - latest
