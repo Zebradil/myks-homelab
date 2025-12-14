@@ -1,13 +1,10 @@
 #@ load("@ytt:data", "data")
-#@ load("@ytt:md5", "md5")
 #@ load("traefik.lib.yaml", "route")
 
 #@ e = data.values.environment
 #@ name = data.values.myks.context.app
 
 #@ pod_labels = { "app.kubernetes.io/name": name }
-
-#@ assets_checksum = md5.sum(data.read("assets/Caddyfile") + data.read("assets/index.html") + data.read("assets/manifest.json"))
 
 ---
 apiVersion: apps/v1
@@ -20,22 +17,11 @@ spec:
   template:
     metadata:
       labels: #@ pod_labels
-      annotations:
-        checksum/assets: #@ assets_checksum
     spec:
       containers:
-        - image: caddy:2.10.2-alpine
+        - image: caddy-image-ref
           name: caddy
           volumeMounts:
-            - name: assets
-              mountPath: /etc/caddy/Caddyfile
-              subPath: Caddyfile
-            - name: assets
-              mountPath: /srv/index.html
-              subPath: index.html
-            - name: assets
-              mountPath: /srv/manifest.json
-              subPath: manifest.json
             - name: caddy-data
               mountPath: /config
             - name: caddy-data
@@ -55,21 +41,8 @@ spec:
             runAsGroup: 1001
             readOnlyRootFilesystem: true
       volumes:
-        - name: assets
-          configMap:
-            name: #@ name
         - name: caddy-data
           emptyDir: {}
-
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: #@ name
-data:
-  Caddyfile: #@ data.read("assets/Caddyfile")
-  manifest.json: #@ data.read("assets/manifest.json")
-  index.html: #@ data.read("assets/index.html")
 
 ---
 apiVersion: v1

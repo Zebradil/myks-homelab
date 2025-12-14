@@ -10,13 +10,11 @@ spec:
       app.kubernetes.io/name: cams
   template:
     metadata:
-      annotations:
-        checksum/assets: c31dace2fc4ecff518de63af71fa3ecd
       labels:
         app.kubernetes.io/name: cams
     spec:
       containers:
-        - image: oci.zebradil.dev/index.docker.io-cache/library/caddy@sha256:953131cfea8e12bfe1c631a36308e9660e4389f0c3dfb3be957044d3ac92d446
+        - image: oci.zebradil.dev/zebradil/homelab/cams@sha256:4373359f4274733ed90f99e4edc578002f2bda1a91568582a00ae156a9770db0
           name: caddy
           ports:
             - containerPort: 8080
@@ -33,22 +31,10 @@ spec:
             runAsGroup: 1001
             runAsUser: 1001
           volumeMounts:
-            - mountPath: /etc/caddy/Caddyfile
-              name: assets
-              subPath: Caddyfile
-            - mountPath: /srv/index.html
-              name: assets
-              subPath: index.html
-            - mountPath: /srv/manifest.json
-              name: assets
-              subPath: manifest.json
             - mountPath: /config
               name: caddy-data
             - mountPath: /data
               name: caddy-data
       volumes:
-        - configMap:
-            name: cams
-          name: assets
         - emptyDir: {}
           name: caddy-data

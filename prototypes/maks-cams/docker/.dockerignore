@@ -1,0 +1,8 @@
+# Ignore everything except assets
+*
+!assets/
+!Dockerfile
+
+# Within assets, ignore any temp files
+assets/.DS_Store
+assets/*~

@@ -1,0 +1,15 @@
+---
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+sources:
+  - image: caddy-image-ref
+    path: prototypes/maks-cams/docker
+    docker:
+      build:
+        pull: true
+        buildkit: true
+destinations:
+  - image: caddy-image-ref
+    newImage: oci.zebradil.dev/zebradil/homelab/cams
+    tags:
+      - latest
