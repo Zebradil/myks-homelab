@@ -26,6 +26,12 @@ jobs:
           ref: ${{ github.head_ref || github.ref_name }}
           # use more powerful token to trigger subsequent workflows
           token: ${{ secrets.ZEBRADIL_BOT_GITHUB_TOKEN }}
+      - name: Login to Harbor registry
+        uses: docker/login-action@v3.6.0
+        with:
+          registry: ${{ secrets.HARBOR_REGISTRY }}
+          username: ${{ secrets.HARBOR_ROBOT_NAME }}
+          password: ${{ secrets.HARBOR_ROBOT_PASSWORD }}
       - name: Derive appropriate SHAs for base and head for myks Smart Mode
         uses: nrwl/nx-set-shas@3e9ad7370203c1e93d109be57f3b72eb0eb511b1 # v4.4.0
       - run: |
@@ -38,9 +44,6 @@ jobs:
       - name: Render
         env:
           MYKS_SMART_MODE_BASE_REVISION: ${{ github.base_ref && format('origin/{0}', github.base_ref) || env.NX_BASE }}
-          KBLD_REGISTRY_HOSTNAME: ${{ secrets.HARBOR_REGISTRY }}
-          KBLD_REGISTRY_USERNAME: ${{ secrets.HARBOR_ROBOT_NAME }}
-          KBLD_REGISTRY_PASSWORD: ${{ secrets.HARBOR_ROBOT_PASSWORD }}
         run: |
           myks render
           myks cleanup --cache
