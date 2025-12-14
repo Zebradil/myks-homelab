@@ -1,0 +1,88 @@
+#@ load("@ytt:data", "data")
+#@ load("traefik.lib.yaml", "gen_host_matches")
+
+#@ e = data.values.environment
+#@ name = data.values.myks.context.app
+
+#@ cams = {
+#@   "cam1": "192.168.0.201",
+#@   "cam2": "192.168.0.202",
+#@   "cam3": "192.168.0.203",
+#@ }
+
+#@ cam_routes = {
+#@   "web": {
+#@     "hosts": e.traefik.hosts.web,
+#@     "entrypoints": ["websecure", "web"],
+#@     "protected": True,
+#@   },
+#@   "lan": {
+#@     "hosts": e.traefik.hosts.lan,
+#@     "entrypoints": ["lan-websecure", "lan-web"],
+#@     "protected": False,
+#@   },
+#@   "vpn": {
+#@     "hosts": e.traefik.hosts.vpn,
+#@     "entrypoints": ["vpn-websecure", "vpn-web"],
+#@     "protected": False,
+#@   },
+#@ }
+
+#@ for cam_id in cams:
+#@ cam_ip = cams[cam_id]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #@ name + "-" + cam_id
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8889
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: #@ name + "-" + cam_id
+subsets:
+  - addresses:
+      - ip: #@ cam_ip
+    ports:
+      - port: 8889
+        name: http
+#@ end
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: #@ name + "-cam-rewrite"
+spec:
+  replacePathRegex:
+    regex: '^/cam[0-9]+'
+    replacement: '/cam/'
+
+
+#@ for/end route in cam_routes:
+---
+#@ cfg = cam_routes[route]
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: #@ name + "-cams-" + route
+spec:
+  entryPoints: #@ cfg["entrypoints"]
+  routes:
+    #@ host_match = gen_host_matches(name, cfg["hosts"])
+    #@ for/end cam_id in cams:
+    - kind: Rule
+      match: #@ "({}) && PathPrefix(`/{}`)".format(host_match, cam_id)
+      middlewares:
+        #@ if/end cfg["protected"]:
+        - name: chain-authelia-auth
+          namespace: authelia
+        - name: #@ name + "-cam-rewrite"
+      services:
+        - name: #@ name + "-" + cam_id
+          port: 80

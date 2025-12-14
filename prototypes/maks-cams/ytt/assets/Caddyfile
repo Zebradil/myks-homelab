@@ -1,22 +1,4 @@
 :8080 {
     root * /srv
     file_server
-
-    # Camera 1
-    handle /cam1 {
-        rewrite * /cam
-        reverse_proxy 192.168.0.201:8889
-    }
-
-    # Camera 2
-    handle /cam2 {
-        rewrite * /cam
-        reverse_proxy 192.168.0.202:8889
-    }
-
-    # Camera 3
-    handle /cam3 {
-        rewrite * /cam
-        reverse_proxy 192.168.0.203:8889
-    }
 }

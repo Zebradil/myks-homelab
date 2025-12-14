@@ -11,7 +11,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/assets: 298b16defdbd91dcc3781495093461b4
+        checksum/assets: 6658f23b29dbc7821b7b6b84651c3de9
       labels:
         app.kubernetes.io/name: cams
     spec:

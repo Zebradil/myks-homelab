@@ -1,0 +1,16 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: cams-lan
+spec:
+  entryPoints:
+    - lan-web
+    - lan-websecure
+  routes:
+    - kind: Rule
+      match: Host(`cams.lan.zebradil.dev`) || Host(`cams.gray.lan.zebradil.dev`) || Host(`cams.junior.lan.zebradil.dev`)
+      services:
+        - name: cams
+          port: http
