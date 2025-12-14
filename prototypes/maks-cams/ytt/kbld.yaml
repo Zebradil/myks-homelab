@@ -10,4 +10,4 @@ sources:
         buildkit: true
 destinations:
   - image: caddy-image-ref
-    newImage: oci.zebradil.dev/zebradil/homelab/cams
+    newImage: oci.zebradil.dev/zebradil/homelab/maks-cams/caddy
