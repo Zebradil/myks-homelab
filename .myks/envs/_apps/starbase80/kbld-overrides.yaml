@@ -3,5 +3,5 @@ kind: Config
 overrides:
     - image: jordanroher/starbase-80:1.6.4
       newImage: oci.zebradil.dev/index.docker.io-cache/jordanroher/starbase-80:1.6.4
-    - image: nginx:1.29.3
-      newImage: oci.zebradil.dev/index.docker.io-cache/library/nginx:1.29.3
+    - image: nginx:1.29.4
+      newImage: oci.zebradil.dev/index.docker.io-cache/library/nginx:1.29.4
