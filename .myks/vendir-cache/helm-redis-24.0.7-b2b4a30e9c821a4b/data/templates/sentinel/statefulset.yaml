@@ -680,9 +680,9 @@ spec:
           {{- if include "common.fips.enabled" . }}
           env:
             - name: OPENSSL_FIPS
-              value: {{ include "common.fips.config" (dict "tech" "openssl" "fips" .Values.metrics.fips "global" .Values.global) | quote }}
+              value: {{ include "common.fips.config" (dict "tech" "openssl" "fips" .Values.kubectl.fips "global" .Values.global) | quote }}
             - name: GODEBUG
-              value: {{ include "common.fips.config" (dict "tech" "golang" "fips" .Values.metrics.fips "global" .Values.global) | quote }}
+              value: {{ include "common.fips.config" (dict "tech" "golang" "fips" .Values.kubectl.fips "global" .Values.global) | quote }}
           {{- end }}
         {{- end }}
         {{- if .Values.replica.sidecars }}
