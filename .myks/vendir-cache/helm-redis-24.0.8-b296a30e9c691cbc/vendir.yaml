@@ -5,9 +5,9 @@ directories:
             name: redis
             repository:
                 url: oci://registry-1.docker.io/bitnamicharts
-            version: 24.0.7
+            version: 24.0.8
           lazy: true
           path: .
-      path: .myks/vendir-cache/helm-redis-24.0.7-b2b4a30e9c821a4b/data
+      path: .myks/vendir-cache/helm-redis-24.0.8-b296a30e9c691cbc/data
       permissions: null
 kind: Config
