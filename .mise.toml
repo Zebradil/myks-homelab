@@ -4,7 +4,7 @@ experimental = true
 
 [tools]
 "ubi:mykso/myks" = "5.4.0"
-helm = "3.19.3"
+helm = "3.19.4"
 kubeconform = "0.7.0"
 sops = "3.11.0"
 task = "3.44.0"
