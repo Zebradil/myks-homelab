@@ -5,8 +5,7 @@
 #@ def values():
 namespace: #@ data.values.myks.context.app
 images:
-  - docker.io/traefik:v3.6.2
-  - docker.io/traefik:v3.6.2
+  -  #@ "docker.io/traefik:" + data.values.application.version
 nodes: #@ data.values.environment.nodes
 kbld:
   enabled: #@ data.values.kbld.enabled

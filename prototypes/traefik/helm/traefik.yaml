@@ -1,5 +1,8 @@
 #@ load("@ytt:data", "data")
 ---
+image:
+  tag: #@ data.values.application.version
+
 providers:
   kubernetesCRD:
     allowCrossNamespace: true
