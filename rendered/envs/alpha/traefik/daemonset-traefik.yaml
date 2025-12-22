@@ -144,7 +144,7 @@ spec:
               value: traefik
             - name: BASE_DOMAIN
               value: zebradil.dev
-          image: oci.zebradil.dev/index.docker.io-cache/library/traefik@sha256:aaf0f6185419a50c74651448c1a5bf4606bd2d2ddb7b8749eed505d55bf8b8ea
+          image: oci.zebradil.dev/index.docker.io-cache/library/traefik@sha256:67622638cd88dbfcfba40159bc652ecf0aea0e032f8a3c7e3134ae7c037b9910
           lifecycle: null
           livenessProbe:
             failureThreshold: 3
