@@ -1,0 +1,28 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:library", "library")
+#@ load("@ytt:template", "template")
+
+#@ images = [
+#@   "harbor-core",
+#@   "harbor-db",
+#@   "harbor-exporter",
+#@   "harbor-jobservice",
+#@   "harbor-portal",
+#@   "harbor-registryctl",
+#@   "redis-photon",
+#@   "registry-photon",
+#@   "trivy-adapter-photon",
+#@ ]
+
+#@ def values():
+namespace: #@ data.values.myks.context.app
+images:
+  #@ for/end image in images:
+  -  #@ "goharbor/{}:{}".format(image, data.values.application.version)
+nodes: #@ data.values.environment.nodes
+kbld:
+  enabled: #@ data.values.kbld.enabled
+#@ end
+
+#@ puller = library.get("image-puller").with_data_values(values())
+--- #@ template.replace(puller.eval())

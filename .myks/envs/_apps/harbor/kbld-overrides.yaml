@@ -19,3 +19,5 @@ overrides:
       newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/registry-photon:v2.13.2
     - image: goharbor/trivy-adapter-photon:v2.13.2
       newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/trivy-adapter-photon:v2.13.2
+    - image: registry.access.redhat.com/ubi8/ubi:8.9
+      newImage: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8/ubi:8.9

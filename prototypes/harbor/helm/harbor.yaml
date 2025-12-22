@@ -1,3 +1,4 @@
+#@ load("@ytt:data", "data")
 #@ load("secrets.star", "sec")
 #@ host = "oci.zebradil.dev"
 #@ registry_user = "zebradil"
@@ -82,3 +83,40 @@ database:
   internal:
     #! The initial superuser password for internal database
     password: #@ sec.sops("1", "databasePassword")
+
+
+#! Set versions manually to synchronize them with the image-puller jobs.
+---
+core:
+  image:
+    tag: #@ data.values.application.version
+database:
+  internal:
+    image:
+      tag: #@ data.values.application.version
+exporter:
+  image:
+    tag: #@ data.values.application.version
+jobservice:
+  image:
+    tag: #@ data.values.application.version
+nginx:
+  image:
+    tag: #@ data.values.application.version
+portal:
+  image:
+    tag: #@ data.values.application.version
+redis:
+  internal:
+    image:
+      tag: #@ data.values.application.version
+registry:
+  controller:
+    image:
+      tag: #@ data.values.application.version
+  registry:
+    image:
+      tag: #@ data.values.application.version
+trivy:
+  image:
+    tag: #@ data.values.application.version
