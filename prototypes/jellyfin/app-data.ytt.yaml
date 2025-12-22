@@ -9,7 +9,7 @@ application:
   nodeName: ''
   storage:
     cache:
-      size: 1Gi
+      size: 3Gi
       path: /cache
     config:
       size: 3Gi
