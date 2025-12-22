@@ -37,7 +37,7 @@
       // any file
       managerFilePatterns: ["/.*/"],
       matchStrings: [
-        // #! renovate: datasource=github-releases depName=helm/helm version=3.19.4
+        // #! renovate: datasource=github-releases depName=helm/helm version=4.0.4
         "#!\\s+renovate:\\s+datasource=(?<datasource>\\S+)\\s+depName=(?<depName>\\S+)\\s+version=(?<currentValue>[^'\"\\s]+)",
       ],
     },
