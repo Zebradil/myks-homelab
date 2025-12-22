@@ -1,13 +1,13 @@
 #@data/values-schema
 ---
+#@overlay/match-child-defaults missing_ok=True
 environment:
-  #@overlay/match missing_ok=True
   baseDomain: ''
-  #@overlay/match missing_ok=True
   hosts: ['']
-  #@overlay/match missing_ok=True
   traefik:
     hosts:
       lan: ['']
       vpn: ['']
       web: ['']
+  nodes:
+    - ''

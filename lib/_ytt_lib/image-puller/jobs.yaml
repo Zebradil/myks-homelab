@@ -1,0 +1,78 @@
+#@ load("@ytt:data", "data")
+
+#! Read the script file content.
+#@ script_content = data.read("puller.sh")
+
+#! Prepare the image list content.
+#! The list is formatted as yaml for compatibility with kbld.
+#@ image_list = "\n".join(["- image: " + image for image in data.values.images])
+
+#@ config_map_name = "image-puller-list"
+#@ socket_path = "/run/k3s/containerd/containerd.sock"
+#@ images_cm_key = "images.txt"
+
+#@ if/end data.values.kbld.enabled:
+---
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+searchRules:
+  - keyMatcher:
+      path:
+        - data
+        -  #@ images_cm_key
+    updateStrategy:
+      yaml:
+        searchRules:
+          - keyMatcher:
+              name: image
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: #@ config_map_name
+  namespace: #@ data.values.namespace
+data: #@ {images_cm_key: image_list}
+
+
+#@ for/end node in data.values.nodes:
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: #@ "image-puller-" + node
+  namespace: #@ data.values.namespace
+spec:
+  template:
+    spec:
+      nodeName: #@ node
+      restartPolicy: Never
+      containers:
+        - name: puller
+          image: registry.access.redhat.com/ubi8/ubi:8.9
+          command: ['/bin/bash', '-c']
+          args:
+            -  #@ script_content
+          env:
+            - name: IMAGE_LIST_FILE
+              value: /config/images.txt
+            - name: RUNTIME_ENDPOINT
+              value: #@ socket_path
+            - name: CRICTL_VERSION
+              value: #@ data.values.crictl_version
+          securityContext:
+            #! Required to access the host's container runtime socket.
+            privileged: true
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config
+            - name: k3s-containerd-socket
+              mountPath: #@ socket_path
+      volumes:
+        - name: config-volume
+          configMap:
+            name: #@ config_map_name
+        - name: k3s-containerd-socket
+          hostPath:
+            path: #@ socket_path
+            type: Socket

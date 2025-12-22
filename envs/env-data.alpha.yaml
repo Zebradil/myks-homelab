@@ -23,6 +23,7 @@ environment:
       lan: #@ lan_hosts
       vpn: #@ vpn_hosts
       web: #@ base_hosts
+  nodes: #@ nodes
   id: alpha
   applications:
     - proto: argocd
