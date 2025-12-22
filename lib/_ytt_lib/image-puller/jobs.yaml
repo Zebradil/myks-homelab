@@ -40,8 +40,12 @@ data: #@ {images_cm_key: image_list}
 apiVersion: batch/v1
 kind: Job
 metadata:
+  #! FIXME: Uncomment when https://github.com/mykso/myks/issues/691 is resolved.
+  #! generateName: #@ "image-puller-" + node + "-"
   name: #@ "image-puller-" + node
   namespace: #@ data.values.namespace
+  annotations:
+    argocd.argoproj.io/hook: PreSync
 spec:
   template:
     spec:
