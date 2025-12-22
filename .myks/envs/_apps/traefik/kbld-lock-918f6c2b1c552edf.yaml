@@ -1,0 +1,23 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.47.0
+overrides:
+- image: docker.io/traefik:v3.6.2
+  newImage: oci.zebradil.dev/index.docker.io-cache/library/traefik@sha256:aaf0f6185419a50c74651448c1a5bf4606bd2d2ddb7b8749eed505d55bf8b8ea
+  preresolved: true
+- image: docker.io/traefik:v3.6.5
+  newImage: oci.zebradil.dev/index.docker.io-cache/library/traefik@sha256:67622638cd88dbfcfba40159bc652ecf0aea0e032f8a3c7e3134ae7c037b9910
+  preresolved: true
+- image: registry.access.redhat.com/ubi8/ubi:8.9
+  newImage: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8/ubi@sha256:83068ea81dd02717b8e39b55cdeb2c1b2c9a3db260f01381b991755d44b15073
+  preresolved: true
+searchRules:
+- keyMatcher:
+    path:
+    - data
+    - images.txt
+  updateStrategy:
+    yaml:
+      searchRules:
+      - keyMatcher:
+          name: image

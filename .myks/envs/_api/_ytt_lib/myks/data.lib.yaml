@@ -109,6 +109,9 @@ environment:
       - zebradil.dev
       - gray.zebradil.dev
       - junior.zebradil.dev
+  nodes:
+  - gray
+  - junior
 helm:
   buildDependencies: false
   capabilities: []

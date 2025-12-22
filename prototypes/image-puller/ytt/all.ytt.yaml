@@ -1,6 +1,5 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:md5", "md5")
-#@ load("@ytt:regexp", "regexp")
 
 #@ app = data.values.application
 #@ name = data.values.myks.context.app

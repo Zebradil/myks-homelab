@@ -1,0 +1,16 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:library", "library")
+#@ load("@ytt:template", "template")
+
+#@ def values():
+namespace: #@ data.values.myks.context.app
+images:
+  - docker.io/traefik:v3.6.2
+  - docker.io/traefik:v3.6.2
+nodes: #@ data.values.environment.nodes
+kbld:
+  enabled: #@ data.values.kbld.enabled
+#@ end
+
+#@ puller = library.get("image-puller").with_data_values(values())
+--- #@ template.replace(puller.eval())

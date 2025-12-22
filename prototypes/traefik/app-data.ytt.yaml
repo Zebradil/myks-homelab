@@ -9,7 +9,7 @@ application:
   tls:
     #! Base domains for the cluster. This is used to generate the wildcard certificates.
     #@schema/validation min_len=1
-    baseDomains: [""]
+    baseDomains: ['']
     #! Cert-Manager issuer name for the wildcard certificate.
     #@schema/validation min_len=1
-    issuer: ""
+    issuer: ''
