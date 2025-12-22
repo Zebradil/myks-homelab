@@ -32,6 +32,8 @@ kind: ConfigMap
 metadata:
   name: #@ config_map_name
   namespace: #@ data.values.namespace
+  annotations:
+    argocd.argoproj.io/hook: PreSync
 data: #@ {images_cm_key: image_list}
 
 
