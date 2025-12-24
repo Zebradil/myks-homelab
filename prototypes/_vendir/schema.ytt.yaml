@@ -9,11 +9,11 @@ prototype:
     #! For Helm charts, this is also the name of the values file
     #! (e.g. `cert-manager` -> `helm/cert-manager.yaml`)
     sourceName:
-      #! One of: charts, ytt, static
-      #! - charts: if the source is a Helm chart
+      #! One of: helm, ytt, static
+      #! - helm: if the source is a Helm chart
       #! - ytt: if the source is a ytt template or raw YAML
       #! - static: if the source is a static file
-      kind: charts
+      plugin: helm
       #! The configuration keys below correspond to the vendir spec,
       #! with some keys omitted.
       #! See https://carvel.dev/vendir/docs/latest/vendir-spec/

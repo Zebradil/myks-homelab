@@ -2,9 +2,9 @@
 
 #@ proto_cfg = data.values.prototype
 
-#@ def get_path(source_cfg, source_name):
-#@   kind = source_cfg.kind if "kind" in source_cfg else "charts"
-#@   return "{}/{}".format(kind, source_name)
+#@ def get_path(cfg, source):
+#@   path = cfg.plugin if "plugin" in cfg and cfg.plugin != "helm" else "charts"
+#@   return "{}/{}".format(path, source)
 #@ end
 
 #@ if/end proto_cfg.sources:
