@@ -1,0 +1,8 @@
+#@data/values
+---
+prototype:
+  sources:
+    authelia:
+      helmChart:
+        url: https://charts.authelia.com
+        version: 0.10.49
