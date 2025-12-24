@@ -1,0 +1,12 @@
+#@data/values
+---
+prototype:
+  sources:
+    argocd:
+      plugin: ytt
+      git:
+        ref: origin/v2.14.7
+        url: https://github.com/argoproj/argo-cd
+      includePaths:
+        - manifests/install.yaml
+      newRootPath: manifests
