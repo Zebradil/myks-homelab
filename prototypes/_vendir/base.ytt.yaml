@@ -1,8 +1,11 @@
 #@ load("@ytt:data", "data")
-#@ load("vendir.lib.star", "lib")
 
 #@ proto_cfg = data.values.prototype
-#@ context = {}
+
+#@ def get_path(source_cfg, source_name):
+#@   kind = source_cfg.kind if "kind" in source_cfg else "charts"
+#@   return "{}/{}".format(kind, source_name)
+#@ end
 
 #@ if/end proto_cfg.sources:
 ---
@@ -10,8 +13,8 @@ apiVersion: vendir.k14s.io/v1alpha1
 kind: Config
 directories:
   #@ for source in proto_cfg.sources:
-  #@   cfg = lib.get_source(proto_cfg, source, context)
-  - path: #@ lib.get_path(cfg, source)
+  #@   cfg = proto_cfg.sources[source]
+  - path: #@ get_path(cfg, source)
     contents:
       - path: .
         lazy: true

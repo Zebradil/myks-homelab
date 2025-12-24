@@ -30,13 +30,3 @@ prototype:
         - some/path/**/*
       excludePaths: []
       newRootPath: some/path
-  #@schema/type any=True
-  #@schema/nullable
-  sourceOverrides:
-    sourceName:
-      - if:
-          tier: stage
-          clusterGroup: tools
-          region: europe-dus1
-        then:
-          #! The rest fields are the same as in `prototype.sources.sourceName`
