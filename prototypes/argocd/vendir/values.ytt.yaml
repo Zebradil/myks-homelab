@@ -4,7 +4,7 @@ prototype:
   sources:
     argocd:
       git:
-        ref: v2.14.7
+        ref: v3.2.3
         url: https://github.com/argoproj/argo-cd
       includePaths:
         - manifests/install.yaml
