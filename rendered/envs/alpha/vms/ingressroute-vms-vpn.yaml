@@ -1,0 +1,16 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: vms-vpn
+spec:
+  entryPoints:
+    - vpn-web
+    - vpn-websecure
+  routes:
+    - kind: Rule
+      match: Host(`vms.ts.zebradil.dev`) || Host(`vms.gray.ts.zebradil.dev`) || Host(`vms.junior.ts.zebradil.dev`)
+      services:
+        - name: vms
+          port: http
