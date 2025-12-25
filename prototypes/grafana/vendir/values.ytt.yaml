@@ -1,0 +1,8 @@
+#@data/values
+---
+prototype:
+  sources:
+    grafana:
+      helmChart:
+        url: https://grafana.github.io/helm-charts
+        version: 10.4.0
