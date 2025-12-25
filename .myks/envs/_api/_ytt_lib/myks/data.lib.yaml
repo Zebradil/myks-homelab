@@ -84,6 +84,8 @@ environment:
     name: uptime-kuma
   - proto: vaultwarden
     name: ""
+  - proto: victoria-metrics
+    name: vms
   baseDomain: zebradil.dev
   hosts:
   - zebradil.dev

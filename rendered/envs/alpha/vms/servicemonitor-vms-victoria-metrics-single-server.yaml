@@ -1,0 +1,22 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    app: server
+    app.kubernetes.io/instance: vms
+    app.kubernetes.io/name: victoria-metrics-single
+  name: vms-victoria-metrics-single-server
+spec:
+  endpoints:
+    - port: http
+      targetPort: http
+  namespaceSelector:
+    matchNames:
+      - vms
+  selector:
+    matchLabels:
+      app: server
+      app.kubernetes.io/instance: vms
+      app.kubernetes.io/name: victoria-metrics-single

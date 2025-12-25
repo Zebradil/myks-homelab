@@ -1,0 +1,15 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels: {}
+  name: vms-victoria-metrics-single-server
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: vms-victoria-metrics-single-server
+subjects:
+  - kind: ServiceAccount
+    name: vms-victoria-metrics-single-server
+    namespace: vms

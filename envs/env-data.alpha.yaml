@@ -52,3 +52,5 @@ environment:
     - proto: webapp
       name: uptime-kuma
     - proto: vaultwarden
+    - proto: victoria-metrics
+      name: vms

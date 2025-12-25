@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    app: server
+    app.kubernetes.io/instance: vms
+    app.kubernetes.io/name: victoria-metrics-single
+  name: vms-victoria-metrics-single-server
+  namespace: vms
+spec:
+  podManagementPolicy: OrderedReady
+  replicas: 1
+  selector:
+    matchLabels:
+      app: server
+      app.kubernetes.io/instance: vms
+      app.kubernetes.io/name: victoria-metrics-single
+  serviceName: vms-victoria-metrics-single-server
+  template:
+    metadata:
+      labels:
+        app: server
+        app.kubernetes.io/instance: vms
+        app.kubernetes.io/name: victoria-metrics-single
+    spec:
+      automountServiceAccountToken: true
+      containers:
+        - args:
+            - --envflag.enable
+            - --envflag.prefix=VM_
+            - --httpListenAddr=:8428
+            - --loggerFormat=json
+            - --promscrape.config=/scrapeconfig/scrape.yml
+            - --retentionPeriod=1
+            - --storageDataPath=/storage
+          image: oci.zebradil.dev/index.docker.io-cache/victoriametrics/victoria-metrics@sha256:6bf82afbd51dcdadf5f908d80e38c78be01232aa94f945ce93fae99daa84d0d9
+          livenessProbe:
+            failureThreshold: 10
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            tcpSocket:
+              port: http
+            timeoutSeconds: 5
+          name: vmsingle
+          ports:
+            - containerPort: 8428
+              name: http
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 15
+            timeoutSeconds: 5
+          securityContext: {}
+          volumeMounts:
+            - mountPath: /storage
+              name: server-volume
+            - mountPath: /scrapeconfig
+              name: scrapeconfig
+      securityContext: {}
+      serviceAccountName: vms-victoria-metrics-single-server
+      terminationGracePeriodSeconds: 60
+      volumes:
+        - configMap:
+            name: vms-victoria-metrics-single-server-scrapeconfig
+          name: scrapeconfig
+  updateStrategy: {}
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: server-volume
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 16Gi

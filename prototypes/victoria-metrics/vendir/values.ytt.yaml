@@ -1,0 +1,9 @@
+#@data/values
+---
+prototype:
+  sources:
+    vms:
+      helmChart:
+        name: victoria-metrics-single
+        url: oci://ghcr.io/victoriametrics/helm-charts
+        version: 0.27.0
