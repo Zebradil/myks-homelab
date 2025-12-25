@@ -6,6 +6,8 @@ persistence:
   enabled: true
   size: 1Gi
 adminPassword: #@ sec.sops("0", "adminPassword")
+service:
+  portName: http
 ---
 datasources:
   datasources.yaml:

@@ -13,7 +13,7 @@ spec:
     - honorLabels: true
       interval: 30s
       path: /metrics
-      port: service
+      port: http
       scheme: http
       scrapeTimeout: 30s
   jobLabel: grafana
