@@ -54,17 +54,17 @@
     {
       "customType": "regex",
       "managerFilePatterns": [
-        "/(^|/)app-data\\.ytt\\.yaml$/"
+        "/.*/"
       ],
       "matchStrings": [
         "#! renovate: datasource=(?<datasource>docker)(?: versioning=(?<versioning>[a-z-]+?))?\\s* image: ['\"]?(?<depName>\\S+):(?<currentValue>[^'\"\\s]+)['\"]?",
-        "#! renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\s* version: ['\"]?(?<currentValue>[^'\"\\s]+)['\"]?"
+        "#! renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\s* [^\\s:]+: ['\"]?(?<currentValue>[^'\"\\s]+)['\"]?"
       ]
     },
     {
       "customType": "regex",
       "managerFilePatterns": [
-        "/(^|/)vendir-data\\.ytt\\.yaml$/"
+        "/.*/"
       ],
       "matchStrings": [
         "#! renovate: datasource=(?<datasource>\\w+)\\s* url: ['\"]?(?<depName>[^'\"\\s]+)['\"]?\\s* version: ['\"]?(?<currentValue>[^'\"\\s]+)['\"]?",
@@ -74,7 +74,7 @@
     {
       "customType": "regex",
       "managerFilePatterns": [
-        "/(^|/)vendir-data\\.ytt\\.yaml$/"
+        "/.*/"
       ],
       "matchStrings": [
         "#! renovate: datasource=(?<datasource>docker)\\s* name: ['\"]?(?<product>[^'\"\\s]+)['\"]?\\s* url: ['\"]?oci://(?<namespace>[^'\"\\s]+)['\"]?\\s* version: ['\"]?(?<currentValue>[^'\"\\s]+)['\"]?'"

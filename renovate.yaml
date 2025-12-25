@@ -34,8 +34,7 @@ ignorePaths:
 customManagers:
   - customType: regex
     managerFilePatterns:
-      - # lang:regex
-        /.*/
+      - /.*/
     matchStrings:
       - # #! renovate: datasource=github-releases depName=helm/helm version=4.0.4
         # lang:regex
@@ -45,8 +44,7 @@ customManagers:
         version=(?<currentValue>\S+)
   - customType: regex
     managerFilePatterns:
-      - # lang:regex
-        /(^|/)app-data\.ytt\.yaml$/
+      - /.*/
     matchStrings:
       - # #! renovate: datasource=docker
         # image: some-registry.io/some-image:1.2.3
@@ -66,11 +64,10 @@ customManagers:
         # lang:regex
         >-
         #! renovate: datasource=(?<datasource>\S+) depName=(?<depName>\S+)\s*
-        version: ['"]?(?<currentValue>[^'"\s]+)['"]?
+        [^\s:]+: ['"]?(?<currentValue>[^'"\s]+)['"]?
   - customType: regex
     managerFilePatterns:
-      - # lang:regex
-        /(^|/)vendir-data\.ytt\.yaml$/
+      - /.*/
     matchStrings:
       - # #! renovate: datasource=git-tags
         # url: https://github.com/argoproj/argo-cd
@@ -95,14 +92,13 @@ customManagers:
     # In particular, the registry must be a part of the package name.
     # See https://github.com/renovatebot/renovate/discussions/25056#discussioncomment-7200797
     managerFilePatterns:
-      - # lang:regex
-        /(^|/)vendir-data\.ytt\.yaml$/
+      - /.*/
     matchStrings:
-      # #! renovate: datasource=docker
-      # name: postgresql
-      # url: oci://registry-1.docker.io/bitnamicharts
-      # version: 13.2.24
-      - # lang:regex
+      - # #! renovate: datasource=docker
+        # name: postgresql
+        # url: oci://registry-1.docker.io/bitnamicharts
+        # version: 13.2.24
+        # lang:regex
         >-
         #! renovate: datasource=(?<datasource>docker)\s*
         name: ['"]?(?<product>[^'"\s]+)['"]?\s*
