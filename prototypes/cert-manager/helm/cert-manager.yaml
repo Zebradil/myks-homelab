@@ -5,7 +5,10 @@
 ---
 ingressShim:
   defaultIssuerName: #@ ap._.defaultIssuerName
-  defaultIssuerKind: "ClusterIssuer"
+  defaultIssuerKind: 'ClusterIssuer'
+crds:
+  enabled: true
+  keep: false
 #! prometheus:
 #!   servicemonitor:
 #!     enabled: true

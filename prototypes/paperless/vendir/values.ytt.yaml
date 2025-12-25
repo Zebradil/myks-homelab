@@ -1,0 +1,12 @@
+#@data/values
+---
+prototype:
+  sources:
+    postgresql:
+      helmChart:
+        url: oci://registry-1.docker.io/bitnamicharts
+        version: 18.1.14
+    redis:
+      helmChart:
+        url: oci://registry-1.docker.io/bitnamicharts
+        version: 24.0.8
