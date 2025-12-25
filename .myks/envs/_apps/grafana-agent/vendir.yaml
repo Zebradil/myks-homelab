@@ -4,11 +4,10 @@ directories:
 - path: charts/k8s-monitoring
   contents:
   - path: .
+    lazy: true
     git:
       url: https://github.com/grafana/k8s-monitoring-helm
-      ref: origin/v1.6.29
-      depth: 1
-    newRootPath: charts/k8s-monitoring-v1
+      ref: v1.6.29
     includePaths:
     - charts/k8s-monitoring-v1/**
-    lazy: true
+    newRootPath: charts/k8s-monitoring-v1
