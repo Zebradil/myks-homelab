@@ -1,0 +1,16 @@
+repos:
+  - repo: local
+    hooks:
+      - id: generate-renovate-json
+        name: Generate renovate.json
+        entry: sh -c "yq -P -o json renovate.yaml > renovate.json"
+        language: system
+        files: '^renovate\.(yaml|json)$'
+        pass_filenames: false
+
+      - id: check-renovate-json-clean
+        name: Check if renovate.json is up to date
+        entry: git diff --exit-code renovate.json
+        language: system
+        files: '^renovate\.json$'
+        pass_filenames: false

@@ -1,0 +1,96 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:best-practices",
+    "schedule:nonOfficeHours"
+  ],
+  "gitIgnoredAuthors": [
+    "renovate[bot]@users.noreply.github.com",
+    "github-actions[bot]@users.noreply.github.com"
+  ],
+  "packageRules": [
+    {
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "minimumReleaseAge": "7 days",
+      "automerge": true
+    },
+    {
+      "description": "Group Helm updates together",
+      "matchPackageNames": [
+        "helm",
+        "helm/helm"
+      ],
+      "groupName": "helm",
+      "groupSlug": "helm"
+    },
+    {
+      "description": "Pin latest container image tags",
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchCurrentValue": "/^latest$/",
+      "rangeStrategy": "pin"
+    }
+  ],
+  "ignorePaths": [
+    "rendered/**",
+    ".myks/**"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/.*/"
+      ],
+      "matchStrings": [
+        "#! renovate: datasource=(?<datasource>\\S+)\\s* depName=(?<depName>\\S+)\\s* version=(?<currentValue>\\S+)"
+      ]
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/(^|/)app-data\\.ytt\\.yaml$/"
+      ],
+      "matchStrings": [
+        "#! renovate: datasource=(?<datasource>docker)(?: versioning=(?<versioning>[a-z-]+?))?\\s* image: ['\"]?(?<depName>\\S+):(?<currentValue>[^'\"\\s]+)['\"]?",
+        "#! renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\s* version: ['\"]?(?<currentValue>[^'\"\\s]+)['\"]?"
+      ]
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/(^|/)vendir-data\\.ytt\\.yaml$/"
+      ],
+      "matchStrings": [
+        "#! renovate: datasource=(?<datasource>\\w+)\\s* url: ['\"]?(?<depName>[^'\"\\s]+)['\"]?\\s* version: ['\"]?(?<currentValue>[^'\"\\s]+)['\"]?",
+        "#! renovate: datasource=(?<datasource>helm)\\s* name: ['\"]?(?<depName>[^'\"\\s]+)['\"]?\\s* url: ['\"]?(?<registryUrl>[^'\"\\s]+)['\"]?\\s* version: ['\"]?(?<currentValue>[^'\"\\s]+)['\"]?"
+      ]
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/(^|/)vendir-data\\.ytt\\.yaml$/"
+      ],
+      "matchStrings": [
+        "#! renovate: datasource=(?<datasource>docker)\\s* name: ['\"]?(?<product>[^'\"\\s]+)['\"]?\\s* url: ['\"]?oci://(?<namespace>[^'\"\\s]+)['\"]?\\s* version: ['\"]?(?<currentValue>[^'\"\\s]+)['\"]?'"
+      ],
+      "depNameTemplate": "{{product}}",
+      "packageNameTemplate": "{{namespace}}/{{product}}"
+    },
+    {
+      "customType": "jsonata",
+      "fileFormat": "yaml",
+      "managerFilePatterns": [
+        "/(^|/)vendir/[^/]+\\.yaml$/"
+      ],
+      "matchStrings": [
+        "$each(prototype.sources, function($v, $k) {\n  [\n    /* Helm chart from HTTP(S) registry */\n    $v.helmChart[$contains(url, /^http/)].{\n      \"currentValue\": version,\n      \"datasource\": \"helm\",\n      \"depName\": $k,\n      \"registryUrl\": url\n    },\n    /* Helm chart from OCI registry */\n    $v.helmChart[$contains(url, /^oci/)].{\n      \"currentValue\": version,\n      \"datasource\": \"docker\",\n      \"depName\": $k,\n      \"packageName\": $substring(url, 6) & \"/\" & name\n    },\n    /* Git repository */\n    $v.git{\n      \"currentValue\": ref,\n      \"datasource\": \"git-tags\",\n      \"depName\": $k,\n      \"packageName\": url\n    }\n  ]\n}) ~> $reduce($append, [])"
+      ]
+    }
+  ]
+}
