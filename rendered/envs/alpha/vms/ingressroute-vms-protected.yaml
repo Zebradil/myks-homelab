@@ -15,5 +15,5 @@ spec:
         - name: chain-authelia-auth
           namespace: authelia
       services:
-        - name: vms
+        - name: vms-victoria-metrics-single-server
           port: http

@@ -1,5 +1,15 @@
 #@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
 #@ load("traefik.lib.yaml", "route")
 
 #@ for/end route_doc in route.default(data.values.myks.context.app):
 --- #@ route_doc
+
+#@overlay/match by=overlay.subset({"kind": "IngressRoute"}), expects="1+"
+---
+spec:
+  routes:
+    #@overlay/match by=overlay.all
+    - services:
+        #@overlay/match by=overlay.all
+        - name: vms-victoria-metrics-single-server

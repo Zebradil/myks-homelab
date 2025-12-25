@@ -12,5 +12,5 @@ spec:
     - kind: Rule
       match: Host(`vms.ts.zebradil.dev`) || Host(`vms.gray.ts.zebradil.dev`) || Host(`vms.junior.ts.zebradil.dev`)
       services:
-        - name: vms
+        - name: vms-victoria-metrics-single-server
           port: http
