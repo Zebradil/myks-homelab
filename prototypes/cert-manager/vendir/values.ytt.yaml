@@ -1,0 +1,8 @@
+#@data/values
+---
+prototype:
+  sources:
+    cert-manager:
+      helmChart:
+        url: https://charts.jetstack.io
+        version: v1.19.2

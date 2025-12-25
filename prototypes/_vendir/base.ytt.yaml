@@ -20,7 +20,7 @@ directories:
         lazy: true
         #@ if/end "helmChart" in cfg:
         helmChart:
-          name: #@ cfg.helmChart.name or source
+          name: #@ cfg.helmChart.name if "name" in cfg.helmChart else source
           version: #@ cfg.helmChart.version
           repository:
             url: #@ cfg.helmChart.url
