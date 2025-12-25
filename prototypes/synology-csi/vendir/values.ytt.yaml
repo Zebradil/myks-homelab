@@ -1,0 +1,14 @@
+#@data/values
+---
+prototype:
+  sources:
+    synologi-csi:
+      git:
+        ref: v1.2.0
+        url: https://github.com/SynologyOpenSource/synology-csi
+      includePaths:
+        - deploy/kubernetes/v1.20/*
+        #! To include snapshotter
+        #!- deploy/kubernetes/v1.20/**/*
+      newRootPath: deploy/kubernetes/v1.20
+      plugin: ytt
