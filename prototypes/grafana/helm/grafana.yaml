@@ -1,3 +1,11 @@
+#@ load("secrets.star", "sec")
+---
+serviceMonitor:
+  enabled: true
+persistence:
+  enabled: true
+  size: 1Gi
+adminPassword: #@ sec.sops("0", "adminPassword")
 ---
 datasources:
   datasources.yaml:

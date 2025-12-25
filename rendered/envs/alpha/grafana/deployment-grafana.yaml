@@ -23,7 +23,7 @@ spec:
         checksum/config: 2026aa920c5cd582c6a6d012ce1c6aa1123645c4cf7716c9a76d2d503289cde6
         checksum/dashboards-json-config: 88c71843be71a0b5c8935545215649954e9c3b1482662978b9b729d45bf4ef44
         checksum/sc-dashboard-provider-config: e70bf6a851099d385178a76de9757bb0bef8299da6d8443602590e44f05fdf24
-        checksum/secret: 9fe2b9cc35e253db901fdcedd636770506debe044d0e54a88b31c4ab00ca2ef4
+        checksum/secret: 8e35020624f465009b376e5b49afd984cbb7ecad4402342e54a02f4b8fa274ff
         kubectl.kubernetes.io/default-container: grafana
       labels:
         app.kubernetes.io/instance: grafana
@@ -101,6 +101,27 @@ spec:
               subPath: dashboardproviders.yaml
       enableServiceLinks: true
       initContainers:
+        - command:
+            - chown
+            - -R
+            - 472:472
+            - /var/lib/grafana
+          image: oci.zebradil.dev/index.docker.io-cache/library/busybox@sha256:95cf004f559831017cdf4628aaf1bb30133677be8702a8c5f2994629f637a209
+          name: init-chown-data
+          securityContext:
+            capabilities:
+              add:
+                - CHOWN
+              drop:
+                - ALL
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+            runAsUser: 0
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /var/lib/grafana
+              name: storage
         - args:
             - -c
             - mkdir -p /var/lib/grafana/dashboards/default && /bin/sh -x /etc/grafana/download_dashboards.sh
@@ -136,5 +157,6 @@ spec:
         - configMap:
             name: grafana-dashboards-default
           name: dashboards-default
-        - emptyDir: {}
-          name: storage
+        - name: storage
+          persistentVolumeClaim:
+            claimName: grafana
