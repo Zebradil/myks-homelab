@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: airgradient-exporter
+spec:
+  endpoints:
+    - port: http
+      targetPort: http
+  namespaceSelector:
+    matchNames:
+      - airgradient-exporter
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: airgradient-exporter

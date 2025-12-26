@@ -5,3 +5,4 @@ application:
   image: ghcr.io/zebradil/airgradient-exporter:1.0.4
   ingress: false
   containerPort: 9112
+  serviceMonitor: true
