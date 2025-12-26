@@ -26,6 +26,8 @@ argocd:
     generateSecret: false
 helm:
   kubeVersion: '1.33'
+  capabilities:
+    - monitoring.coreos.com/v1
 kbld:
   enabled: true
   imagesAnnotation: false

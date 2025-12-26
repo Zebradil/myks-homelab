@@ -1,4 +1,12 @@
 ---
+#@ for/end component in ["controller", "redis", "repoServer", "server"]:
+#@yaml/text-templated-strings
+(@= component @):
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+---
 configs:
   cm:
     application.resourceTrackingMethod: annotation

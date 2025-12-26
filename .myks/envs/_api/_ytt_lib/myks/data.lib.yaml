@@ -120,7 +120,8 @@ environment:
   - junior
 helm:
   buildDependencies: false
-  capabilities: []
+  capabilities:
+  - monitoring.coreos.com/v1
   includeCRDs: true
   kubeVersion: "1.33"
   namespace: ""
