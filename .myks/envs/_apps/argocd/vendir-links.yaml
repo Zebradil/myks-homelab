@@ -1,1 +1,1 @@
-ytt/argocd: git-argo-cd-v2.14.7-16161e74b1c797b7
+charts/argocd: helm-argo-cd-9.2.1-4ebb3653dc291ce9

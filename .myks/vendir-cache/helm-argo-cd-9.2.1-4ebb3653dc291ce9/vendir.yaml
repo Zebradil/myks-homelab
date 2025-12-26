@@ -1,0 +1,13 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+    - contents:
+        - helmChart:
+            name: argo-cd
+            repository:
+                url: https://argoproj.github.io/argo-helm
+            version: 9.2.1
+          lazy: true
+          path: .
+      path: .myks/vendir-cache/helm-argo-cd-9.2.1-4ebb3653dc291ce9/data
+      permissions: null
+kind: Config

@@ -3,10 +3,7 @@
 prototype:
   sources:
     argocd:
-      git:
-        ref: v2.14.7
-        url: https://github.com/argoproj/argo-cd
-      includePaths:
-        - manifests/install.yaml
-      newRootPath: manifests
-      plugin: ytt
+      helmChart:
+        name: argo-cd
+        url: https://argoproj.github.io/argo-helm
+        version: 9.2.1

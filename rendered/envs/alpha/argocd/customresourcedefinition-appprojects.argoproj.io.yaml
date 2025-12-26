@@ -3,6 +3,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
+    helm.sh/resource-policy: keep
   labels:
     app.kubernetes.io/name: appprojects.argoproj.io
     app.kubernetes.io/part-of: argocd
@@ -85,6 +86,7 @@ spec:
                   type: array
                 description:
                   description: Description contains optional project description
+                  maxLength: 255
                   type: string
                 destinationServiceAccounts:
                   description: DestinationServiceAccounts holds information about the service accounts to be impersonated for the application sync operation for each destination.
@@ -247,6 +249,9 @@ spec:
                   items:
                     description: SyncWindow contains the kind, time, duration and attributes that are used to assign the syncWindows to apps
                     properties:
+                      andOperator:
+                        description: UseAndOperator use AND operator for matching applications, namespaces and clusters instead of the default OR operator
+                        type: boolean
                       applications:
                         description: Applications contains a list of applications that the window will apply to
                         items:
@@ -257,6 +262,9 @@ spec:
                         items:
                           type: string
                         type: array
+                      description:
+                        description: Description of the sync that will be applied to the schedule, can be used to add any information such as a ticket number for example
+                        type: string
                       duration:
                         description: Duration is the amount of time the sync window will be open
                         type: string

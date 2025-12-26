@@ -5,6 +5,7 @@ metadata:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
     app.kubernetes.io/component: server
+    app.kubernetes.io/instance: argocd
     app.kubernetes.io/name: argocd-server
     app.kubernetes.io/part-of: argocd
   name: argocd-server
@@ -24,6 +25,7 @@ rules:
       - events
     verbs:
       - list
+      - create
   - apiGroups:
       - ""
     resources:
@@ -39,6 +41,7 @@ rules:
     verbs:
       - get
       - list
+      - update
       - watch
   - apiGroups:
       - batch

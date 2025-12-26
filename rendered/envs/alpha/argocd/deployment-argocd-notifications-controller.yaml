@@ -5,35 +5,64 @@ metadata:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
     app.kubernetes.io/component: notifications-controller
+    app.kubernetes.io/instance: argocd
     app.kubernetes.io/name: argocd-notifications-controller
     app.kubernetes.io/part-of: argocd
   name: argocd-notifications-controller
   namespace: argocd
 spec:
+  replicas: 1
+  revisionHistoryLimit: 3
   selector:
     matchLabels:
+      app.kubernetes.io/instance: argocd
       app.kubernetes.io/name: argocd-notifications-controller
   strategy:
     type: Recreate
   template:
     metadata:
+      annotations:
+        checksum/cmd-params: 6349e02f662f8e41ba34769f0563f5af6c6db1645c35e346f1863f5a0b08b74d
       labels:
+        app.kubernetes.io/component: notifications-controller
+        app.kubernetes.io/instance: argocd
         app.kubernetes.io/name: argocd-notifications-controller
+        app.kubernetes.io/part-of: argocd
     spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: argocd-notifications-controller
+                topologyKey: kubernetes.io/hostname
+              weight: 100
+      automountServiceAccountToken: true
       containers:
         - args:
             - /usr/local/bin/argocd-notifications
+            - --metrics-port=9001
+            - --namespace=argocd
+            - --argocd-repo-server=argocd-repo-server:8081
+            - --secret-name=argocd-notifications-secret
           env:
+            - name: ARGOCD_NOTIFICATIONS_CONTROLLER_LOGLEVEL
+              valueFrom:
+                configMapKeyRef:
+                  key: notificationscontroller.log.level
+                  name: argocd-cmd-params-cm
+                  optional: true
             - name: ARGOCD_NOTIFICATIONS_CONTROLLER_LOGFORMAT
               valueFrom:
                 configMapKeyRef:
                   key: notificationscontroller.log.format
                   name: argocd-cmd-params-cm
                   optional: true
-            - name: ARGOCD_NOTIFICATIONS_CONTROLLER_LOGLEVEL
+            - name: ARGOCD_LOG_FORMAT_TIMESTAMP
               valueFrom:
                 configMapKeyRef:
-                  key: notificationscontroller.log.level
+                  key: log.format.timestamp
                   name: argocd-cmd-params-cm
                   optional: true
             - name: ARGOCD_APPLICATION_NAMESPACES
@@ -54,30 +83,33 @@ spec:
                   key: notificationscontroller.repo.server.plaintext
                   name: argocd-cmd-params-cm
                   optional: true
-          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:1893f23b240cd0a3ee27eccb7d84eb41de1f68bae33772d9a9acdf4e1f72dfba
-          livenessProbe:
-            tcpSocket:
-              port: 9001
-          name: argocd-notifications-controller
+          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:9ab6baab65a6b283044a7d7b7dbe50f589564de9c8898d67c77d84b2b5df46bc
+          name: notifications-controller
+          ports:
+            - containerPort: 9001
+              name: metrics
+              protocol: TCP
+          resources: {}
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
               drop:
                 - ALL
             readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
           volumeMounts:
             - mountPath: /app/config/tls
               name: tls-certs
             - mountPath: /app/config/reposerver/tls
               name: argocd-repo-server-tls
           workingDir: /app
+      dnsPolicy: ClusterFirst
       nodeSelector:
         kubernetes.io/os: linux
-      securityContext:
-        runAsNonRoot: true
-        seccompProfile:
-          type: RuntimeDefault
       serviceAccountName: argocd-notifications-controller
+      terminationGracePeriodSeconds: 30
       volumes:
         - configMap:
             name: argocd-tls-certs-cm
