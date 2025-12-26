@@ -7,4 +7,5 @@
 data:
   #! This disables redirect form http to https, which is not needed because
   #! we are using traefik with TLS termination.
-  server.insecure: "true"
+  #@overlay/match missing_ok=True
+  server.insecure: 'true'
