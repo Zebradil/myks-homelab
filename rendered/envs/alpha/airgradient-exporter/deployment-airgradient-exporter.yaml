@@ -14,7 +14,10 @@ spec:
         app.kubernetes.io/name: airgradient-exporter
     spec:
       containers:
-        - image: oci.zebradil.dev/ghcr.io-cache/zebradil/airgradient-exporter@sha256:c2147240618d4edd95602e423c3e4825c861749fb20884b87810ea202c7112af
+        - env:
+            - name: AIRGRADIENT_MONITORS
+              value: 192.168.1.99
+          image: oci.zebradil.dev/ghcr.io-cache/zebradil/airgradient-exporter@sha256:c2147240618d4edd95602e423c3e4825c861749fb20884b87810ea202c7112af
           name: airgradient-exporter
           ports:
             - containerPort: 9112
