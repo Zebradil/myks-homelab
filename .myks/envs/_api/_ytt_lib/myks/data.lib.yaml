@@ -42,6 +42,8 @@ argocd:
 environment:
   id: alpha
   applications:
+  - proto: webapp
+    name: airgradient-exporter
   - proto: argocd
     name: ""
   - proto: authelia

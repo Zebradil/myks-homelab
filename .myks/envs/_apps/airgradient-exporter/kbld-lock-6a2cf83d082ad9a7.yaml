@@ -1,0 +1,7 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.47.0
+overrides:
+- image: ghcr.io/zebradil/airgradient-exporter:1.0.4
+  newImage: oci.zebradil.dev/ghcr.io-cache/zebradil/airgradient-exporter@sha256:c2147240618d4edd95602e423c3e4825c861749fb20884b87810ea202c7112af
+  preresolved: true

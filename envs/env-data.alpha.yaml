@@ -26,6 +26,8 @@ environment:
   nodes: #@ nodes
   id: alpha
   applications:
+    - proto: webapp
+      name: airgradient-exporter
     - proto: argocd
     - proto: authelia
     - proto: maks-cams
