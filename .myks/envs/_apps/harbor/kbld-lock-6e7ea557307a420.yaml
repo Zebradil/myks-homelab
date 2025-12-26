@@ -1,0 +1,44 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.47.0
+overrides:
+- image: goharbor/harbor-core:v2.14.1
+  newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-core@sha256:9c16d47ff207e7c83ba4b411eb02f6d919948118d8824b0d359711edeca55823
+  preresolved: true
+- image: goharbor/harbor-db:v2.14.1
+  newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-db@sha256:7ffdd1b51388fbd445735857514bf4155e4dc717ef86f04f840231e94b3d38da
+  preresolved: true
+- image: goharbor/harbor-exporter:v2.14.1
+  newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-exporter@sha256:526ff42e209231df155d3eaac5fb1c1a09c07c6e9443cae6b344c24e182823c0
+  preresolved: true
+- image: goharbor/harbor-jobservice:v2.14.1
+  newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-jobservice@sha256:7805addd56a150dcd9dcbaf5c27218e1fb029bad50e0ba3e570994acc4b3d803
+  preresolved: true
+- image: goharbor/harbor-portal:v2.14.1
+  newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-portal@sha256:deebd48edd53f349a568da577949997d7c6b01749a493ad61d8beeeb148d6dd2
+  preresolved: true
+- image: goharbor/harbor-registryctl:v2.14.1
+  newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-registryctl@sha256:b9645ccc017dd694a3c8f34c39556e74e7cfe371e3abd9f1a7bc0f32401e354f
+  preresolved: true
+- image: goharbor/redis-photon:v2.14.1
+  newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/redis-photon@sha256:0db9e53df14befe843f64c7cfd564fd5ffd063df25357c3e467dc891d465eb49
+  preresolved: true
+- image: goharbor/registry-photon:v2.14.1
+  newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/registry-photon@sha256:986c9ad18ff754269fac3c388cb5dacc2e886b816439c8e8bf11cd92e76b6cdb
+  preresolved: true
+- image: goharbor/trivy-adapter-photon:v2.14.1
+  newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/trivy-adapter-photon@sha256:13dddb2adef7e28530e04e5659c49f550e5463e5f2536378ffd9207f7b23aac4
+  preresolved: true
+- image: registry.access.redhat.com/ubi8/ubi:8.9
+  newImage: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8/ubi@sha256:83068ea81dd02717b8e39b55cdeb2c1b2c9a3db260f01381b991755d44b15073
+  preresolved: true
+searchRules:
+- keyMatcher:
+    path:
+    - data
+    - images.txt
+  updateStrategy:
+    yaml:
+      searchRules:
+      - keyMatcher:
+          name: image

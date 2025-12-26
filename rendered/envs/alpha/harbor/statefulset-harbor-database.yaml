@@ -48,7 +48,7 @@ spec:
           envFrom:
             - secretRef:
                 name: harbor-database
-          image: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-db@sha256:fcf1f3dbc8f10183abe336712560a94fb2804ba8d3ce3ca634342e5a8df7da2c
+          image: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-db@sha256:7ffdd1b51388fbd445735857514bf4155e4dc717ef86f04f840231e94b3d38da
           livenessProbe:
             exec:
               command:
@@ -85,7 +85,7 @@ spec:
             - chmod -R 700 /var/lib/postgresql/data/pgdata || true
           command:
             - /bin/sh
-          image: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-db@sha256:fcf1f3dbc8f10183abe336712560a94fb2804ba8d3ce3ca634342e5a8df7da2c
+          image: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-db@sha256:7ffdd1b51388fbd445735857514bf4155e4dc717ef86f04f840231e94b3d38da
           name: data-permissions-ensurer
           securityContext:
             allowPrivilegeEscalation: false
