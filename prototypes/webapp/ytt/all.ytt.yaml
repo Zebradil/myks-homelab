@@ -24,6 +24,8 @@ spec:
       containers:
         - image: #@ a.image
           name: #@ name
+          #@ if/end a.env:
+          env: #@ a.env
           ports:
             - containerPort: #@ a.containerPort
               name: http

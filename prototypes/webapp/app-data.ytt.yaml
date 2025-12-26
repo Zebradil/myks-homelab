@@ -8,3 +8,6 @@ application:
   name: ''
   containerPort: 80
   serviceMonitor: false
+  env:
+    - name: TZ
+      value: UTC
