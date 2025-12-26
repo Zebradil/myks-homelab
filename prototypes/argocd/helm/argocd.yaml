@@ -1,0 +1,7 @@
+---
+configs:
+  cm:
+    application.resourceTrackingMethod: annotation
+    kustomize.enabled: 'false'
+    jsonnet.enabled: 'false'
+    helm.enabled: 'false'

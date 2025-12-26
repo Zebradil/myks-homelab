@@ -1,0 +1,26 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
+#@ load("@ytt:yaml", "yaml")
+#@ load("secrets.star", "sec")
+
+#@ def oidc_config():
+name: Authelia
+issuer: https://auth.zebradil.dev
+clientID: #@ sec.sopsy("oidc", "argocd.client_id")
+clientSecret: #@ sec.sopsy("oidc", "argocd.client_secret")
+cliClientID: #@ sec.sopsy("oidc", "argocd-cli.client_id")
+requestedScopes:
+  - openid
+  - email
+  - groups
+enableUserInfoGroups: true
+userInfoPath: /api/oidc/userinfo
+#@ end
+
+---
+configs:
+  cm:
+    url: https://argocd.zebradil.dev
+    oidc.config: #@ yaml.encode(oidc_config())
+  params:
+    server.insecure: 'true'
