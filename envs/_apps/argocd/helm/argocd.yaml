@@ -1,5 +1,8 @@
+#@ load("@ytt:data", "data")
 #@ load("@ytt:yaml", "yaml")
 #@ load("secrets.star", "sec")
+
+#@ d = data.values
 
 #@ def oidc_config():
 name: Authelia
@@ -16,6 +19,8 @@ userInfoPath: /api/oidc/userinfo
 #@ end
 
 ---
+global:
+  domain: #@ d.myks.context.app + "." + d.environment.baseDomain
 configs:
   cm:
     url: https://argocd.zebradil.dev
