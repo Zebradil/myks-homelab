@@ -56,8 +56,6 @@ environment:
     name: ""
   - proto: blank
     name: fluidd
-  - proto: grafana-agent
-    name: ""
   - proto: harbor
     name: ""
   - proto: webapp
