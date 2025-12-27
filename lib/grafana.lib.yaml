@@ -1,6 +1,16 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:json", "json")
 
+#! Example usage:
+#!
+#!   #@ load("@ytt:data", "data")
+#!   #@ load("grafana.lib.yaml", "gen_dashboard")
+#!
+#!   #@ for file in data.list():
+#!   #@ if/end file.startswith("dashboards_out/"):
+#!   --- #@ gen_dashboard(file)
+#!   #@ end
+
 #@ def gen_dashboard(file):
 #@   basename = file.rpartition("/")[-1]
 #@   name = basename.rpartition(".")[0][:63]
