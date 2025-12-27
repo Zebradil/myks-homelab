@@ -1,0 +1,16 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:json", "json")
+
+#@ def gen_dashboard(file):
+#@   basename = file.rpartition("/")[-1]
+#@   name = basename.rpartition(".")[0][:63]
+#@   # Quickly validate and format the JSON content
+#@   content = json.encode(json.decode(data.read(file)), indent=2)
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: #@ name
+  labels:
+    grafana_dashboard: '1'
+data: #@ { basename: content }
+#@ end

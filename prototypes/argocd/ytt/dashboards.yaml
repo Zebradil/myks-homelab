@@ -1,19 +1,7 @@
 #@ load("@ytt:data", "data")
+#@ load("grafana.lib.yaml", "gen_dashboard")
 
-#@ prefix = "dashboards_out/"
-#@ suffix = ".json"
-#@ dashboards = [
-#@   [file, file.removeprefix(prefix).removesuffix(suffix)[:63]]
-#@   for file in data.list()
-#@   if file.startswith(prefix) and file.endswith(suffix)
-#@ ]
-
-#@ for/end file, name in dashboards:
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: #@ name
-  labels:
-    grafana_dashboard: '1'
-data: #@ { file.removeprefix(prefix): data.read(file) }
+#@ for file in data.list():
+#@ if/end file.startswith("dashboards_out/"):
+--- #@ gen_dashboard(file)
+#@ end
