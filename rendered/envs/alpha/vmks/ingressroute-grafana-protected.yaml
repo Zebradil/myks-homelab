@@ -15,5 +15,5 @@ spec:
         - name: chain-authelia-auth
           namespace: authelia
       services:
-        - name: grafana
+        - name: vmks-grafana
           port: http

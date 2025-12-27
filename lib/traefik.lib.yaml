@@ -25,7 +25,7 @@ spec:
         - name: chain-authelia-auth
           namespace: authelia
       services:
-        - name: #@ name
+        - name: #@ service
           port: http
 #@ end
 
@@ -43,7 +43,7 @@ spec:
     - match: #@ gen_host_matches(name, hosts)
       kind: Rule
       services:
-        - name: #@ name
+        - name: #@ service
           port: http
 #@ end
 

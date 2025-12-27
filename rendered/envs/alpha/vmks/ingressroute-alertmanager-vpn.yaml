@@ -12,5 +12,5 @@ spec:
     - kind: Rule
       match: Host(`alertmanager.ts.zebradil.dev`) || Host(`alertmanager.gray.ts.zebradil.dev`) || Host(`alertmanager.junior.ts.zebradil.dev`)
       services:
-        - name: alertmanager
+        - name: vmalertmanager-vmks-victoria-metrics-k8s-stack
           port: http

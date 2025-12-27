@@ -12,5 +12,5 @@ spec:
     - kind: Rule
       match: Host(`grafana.lan.zebradil.dev`) || Host(`grafana.gray.lan.zebradil.dev`) || Host(`grafana.junior.lan.zebradil.dev`)
       services:
-        - name: grafana
+        - name: vmks-grafana
           port: http
