@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# Print environment variables named MYKS_*
+printenv | grep '^MYKS_'
