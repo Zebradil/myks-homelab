@@ -1,0 +1,16 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: victoria-metrics-vpn
+spec:
+  entryPoints:
+    - vpn-web
+    - vpn-websecure
+  routes:
+    - kind: Rule
+      match: Host(`victoria-metrics.ts.zebradil.dev`) || Host(`victoria-metrics.gray.ts.zebradil.dev`) || Host(`victoria-metrics.junior.ts.zebradil.dev`)
+      services:
+        - name: victoria-metrics
+          port: http
