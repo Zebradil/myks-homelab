@@ -7,6 +7,11 @@ grafana:
   adminPassword: #@ sec.sops("0", "adminPassword")
   service:
     portName: http
+  grafana.ini:
+    analytics:
+      check_for_updates: false
+      feedback_links_enabled: false
+      reporting_enabled: false
 
 victoria-metrics-operator:
   admissionWebhooks:

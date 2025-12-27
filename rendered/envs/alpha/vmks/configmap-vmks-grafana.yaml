@@ -2,7 +2,9 @@ apiVersion: v1
 data:
   grafana.ini: |
     [analytics]
-    check_for_updates = true
+    check_for_updates = false
+    feedback_links_enabled = false
+    reporting_enabled = false
     [grafana_net]
     url = https://grafana.net
     [log]
