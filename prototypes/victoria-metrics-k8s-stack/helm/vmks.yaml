@@ -1,0 +1,14 @@
+#@ load("secrets.star", "sec")
+---
+grafana:
+  persistence:
+    enabled: true
+    size: 1Gi
+  adminPassword: #@ sec.sops("0", "adminPassword")
+  service:
+    portName: http
+
+victoria-metrics-operator:
+  admissionWebhooks:
+    certManager:
+      enabled: true

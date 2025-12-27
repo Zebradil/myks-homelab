@@ -1,0 +1,10 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: vmks-victoria-metrics-operator-issuer
+  namespace: vmks
+spec:
+  ca:
+    secretName: vmks-victoria-metrics-operator-root-ca

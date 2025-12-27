@@ -22,7 +22,7 @@ spec:
       annotations:
         checksum/config: 0e9cbd0ea8e24e32f7dfca5bab17a2ba05652642f0a09a4882833ae88e4cc4a3
         checksum/sc-dashboard-provider-config: 89ec8c9c059a6a61286174130a15d183be69b7a486acc8437afbaf5d790a0ddd
-        checksum/secret: c182552574561a454c232b25781fe409b9887e7154814646f42ca3beff8a710b
+        checksum/secret: 8e35020624f465009b376e5b49afd984cbb7ecad4402342e54a02f4b8fa274ff
         kubectl.kubernetes.io/default-container: grafana
       labels:
         app.kubernetes.io/instance: vmks
@@ -138,6 +138,27 @@ spec:
               name: sc-datasources-volume
       enableServiceLinks: true
       initContainers:
+        - command:
+            - chown
+            - -R
+            - 472:472
+            - /var/lib/grafana
+          image: oci.zebradil.dev/index.docker.io-cache/library/busybox@sha256:95cf004f559831017cdf4628aaf1bb30133677be8702a8c5f2994629f637a209
+          name: init-chown-data
+          securityContext:
+            capabilities:
+              add:
+                - CHOWN
+              drop:
+                - ALL
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+            runAsUser: 0
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /var/lib/grafana
+              name: storage
         - env:
             - name: METHOD
               value: LIST
@@ -172,8 +193,9 @@ spec:
         - configMap:
             name: vmks-grafana
           name: config
-        - emptyDir: {}
-          name: storage
+        - name: storage
+          persistentVolumeClaim:
+            claimName: vmks-grafana
         - emptyDir: {}
           name: sc-dashboard-volume
         - configMap:

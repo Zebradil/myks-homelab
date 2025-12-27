@@ -5,6 +5,9 @@ overrides:
 - image: docker.io/grafana/grafana:12.3.0
   newImage: oci.zebradil.dev/index.docker.io-cache/grafana/grafana@sha256:70d9599b186ce287be0d2c5ba9a78acb2e86c1a68c9c41449454d0fc3eeb84e8
   preresolved: true
+- image: docker.io/library/busybox:1.31.1
+  newImage: oci.zebradil.dev/index.docker.io-cache/library/busybox@sha256:95cf004f559831017cdf4628aaf1bb30133677be8702a8c5f2994629f637a209
+  preresolved: true
 - image: quay.io/kiwigrid/k8s-sidecar:1.30.10
   newImage: oci.zebradil.dev/quay.io-cache/kiwigrid/k8s-sidecar@sha256:835d79d8fbae62e42d8a86929d4e3c5eec2e869255dd37756b5a3166c2f22309
   preresolved: true
