@@ -115,28 +115,37 @@ customManagers:
     matchStrings:
       - # lang:jsonata
         >-
-        $each(prototype.sources, function($v, $k) {
-          [
-            /* Helm chart from HTTP(S) registry */
-            $v.helmChart[$contains(url, /^http/)].{
-              "currentValue": version,
-              "datasource": "helm",
-              "depName": $k,
-              "registryUrl": url
-            },
-            /* Helm chart from OCI registry */
-            $v.helmChart[$contains(url, /^oci/)].{
-              "currentValue": version,
-              "datasource": "docker",
-              "depName": $k,
-              "packageName": $substring(url, 6) & "/" & name
-            },
-            /* Git repository */
-            $v.git{
-              "currentValue": ref,
-              "datasource": "git-tags",
-              "depName": $k,
-              "packageName": url
-            }
-          ]
-        }) ~> $reduce($append, [])
+        (
+          $shaMatcher := /^[a-f0-9]{40}$/;
+          $each(prototype.sources, function($v, $k) {[
+              /* Helm chart from HTTP(S) registry */
+              $v.helmChart[$contains(url, /^http/)].{
+                "currentValue": version,
+                "datasource": "helm",
+                "depName": $k,
+                "registryUrl": url
+              },
+              /* Helm chart from OCI registry */
+              $v.helmChart[$contains(url, /^oci/)].{
+                "currentValue": version,
+                "datasource": "docker",
+                "depName": $k,
+                "packageName": $substring(url, 6) & "/" & name
+              },
+              /* Git repository: with sha ref */
+              $v.git[ref ~> $shaMatcher].{
+                "currentValue": ref,
+                "datasource": "git-refs",
+                "depName": $k,
+                "packageName": url,
+                "versioning": "git"
+              },
+              /* Git repository: with tag ref */
+              $v.git[$not(ref ~> $shaMatcher)].{
+                "currentValue": ref,
+                "datasource": "git-tags",
+                "depName": $k,
+                "packageName": url
+              }
+          ]}) ~> $reduce($append, [])
+        )
