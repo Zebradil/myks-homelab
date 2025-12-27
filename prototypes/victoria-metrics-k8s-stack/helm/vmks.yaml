@@ -12,6 +12,9 @@ grafana:
       check_for_updates: false
       feedback_links_enabled: false
       reporting_enabled: false
+  sidecar:
+    dashboards:
+      searchNamespace: ALL
 
 victoria-metrics-operator:
   admissionWebhooks:

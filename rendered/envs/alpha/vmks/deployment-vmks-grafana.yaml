@@ -41,6 +41,8 @@ spec:
               value: /var/lib/grafana/dashboards/default
             - name: RESOURCE
               value: both
+            - name: NAMESPACE
+              value: ALL
             - name: REQ_USERNAME
               valueFrom:
                 secretKeyRef:
