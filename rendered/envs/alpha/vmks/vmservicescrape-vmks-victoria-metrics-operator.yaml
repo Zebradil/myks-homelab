@@ -1,0 +1,20 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMServiceScrape
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    app.kubernetes.io/instance: vmks
+    app.kubernetes.io/name: victoria-metrics-operator
+  name: vmks-victoria-metrics-operator
+  namespace: vmks
+spec:
+  endpoints:
+    - port: http
+  namespaceSelector:
+    matchNames:
+      - vmks
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: vmks
+      app.kubernetes.io/name: victoria-metrics-operator

@@ -36,7 +36,7 @@ environment:
     - proto: comentario
     - proto: blank
       name: fluidd
-    - proto: grafana
+    #! - proto: grafana
     - proto: grafana-agent
     - proto: harbor
     - proto: webapp
@@ -55,5 +55,7 @@ environment:
     - proto: webapp
       name: uptime-kuma
     - proto: vaultwarden
-    - proto: victoria-metrics
-      name: vms
+    #! - proto: victoria-metrics
+    #!   name: vms
+    - proto: victoria-metrics-k8s-stack
+      name: vmks

@@ -1,0 +1,626 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    app.kubernetes.io/instance: vmks
+    app.kubernetes.io/name: victoria-metrics-operator
+  name: vmks-victoria-metrics-operator-admission
+webhooks:
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIRENDQWdTZ0F3SUJBZ0lQRE5jQXBqWTlVZlREekEyQ25NWXZNQTBHQ1NxR1NJYjNEUUVCQ3dVQU1Ca3gKRnpBVkJnTlZCQU1URG5adExXOXdaWEpoZEc5eUxXTmhNQjRYRFRJMU1USXlOekF4TVRBMU5Gb1hEVE0xTVRJeQpOVEF4TVRBMU5Gb3dHVEVYTUJVR0ExVUVBeE1PZG0wdGIzQmxjbUYwYjNJdFkyRXdnZ0VpTUEwR0NTcUdTSWIzCkRRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRREVkZ2ZOWHFlcUJWODdodUVaRDAva1VjcjZFNjVpUTl5ZHNvL1AKOTF3dnZkRGNNeUdGa21XK0R0VDIyMmNKMkJXNFk2Z2ZnOEJLcklpSHhuMjVrM0hGZzNxTzcrcE5JSEJwM1FZTgp3c29vMzl0YWFoLzI2TmRMSUV1UWhCNnppZUlFZ3NPQVBhQnhJSWxTZExmK214WWxnSng4amJ6b3JCKzNwUkw1Ckx5QXM4MU1VSTd5MkJmcmNKVHZxTGJheEpzSXB0bTM2Uk40cFFBaGl5ZEd2ZVJwbkMzZlljMGZGYU5IVXZmUmEKeTNkdHJXcHhBTk54cXFwL2xnM2tJZjlpSnFBZStuVTZ2aFJ3VjNwZjFnWjFIU2lERVRzSDZONU9GZ282NGNjYgo0SktCTHhlajY2R2FaRGduakdwU0ZvUGlXSTJEZUkxeEV0b0VoTGtlcmtoQm5BRXJBZ01CQUFHallUQmZNQTRHCkExVWREd0VCL3dRRUF3SUNwREFkQmdOVkhTVUVGakFVQmdnckJnRUZCUWNEQVFZSUt3WUJCUVVIQXdJd0R3WUQKVlIwVEFRSC9CQVV3QXdFQi96QWRCZ05WSFE0RUZnUVUwVEV6VUZ4bXpaOTJ3SmUwYUdSZGpKNTRldnN3RFFZSgpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFBQXpKRVBGU2c3TXkvdVRXaHR2L3V4d3JLaDlna21UOTNpSks3Ui9LMysvCnlCcS9EaGxkQWIvMlNORDFocG5OMkIyWldtdU5YL1locEtaRjlGRUx3QlJnZFI1MWs0KzZQcmtWbGNURzczak4KZnhWbnhZM202RW1IamZTQW93WUljVThURmU0Zy9oeDF1RVgvNXRDKzMyRzUxOE1iKzVwR0VSY3ZrclAyaXlQRwo0bEpsZm5HUDhuTUROdktsOHhycVlEU1pybkZIUm1pSExYT0dyQ09kVUwrSU1KNzA3Z3VreWVyZndsSnlPSXlxCnpjd0I3OVVZbkFJNWh2bGlTQ2k0Q25LQXNETzR5VTA0QXp2eWMzNUY3L2JUcFFBQ1ZQVU9OcGZ4YmVSbjUxL0oKb1lMVFNwRStFUG1aT0xvUERJd0lWbFdOUGdKeVY5aWNUblgvTkNaVlFPYz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+      service:
+        name: vmks-victoria-metrics-operator
+        namespace: vmks
+        path: /validate-operator-victoriametrics-com-v1-vlagent
+        port: 9443
+    failurePolicy: Fail
+    name: vlagents.operator.victoriametrics.com
+    objectSelector:
+      matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: NotIn
+          values:
+            - victoria-metrics-operator
+    rules:
+      - apiGroups:
+          - operator.victoriametrics.com
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - vlagents
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIRENDQWdTZ0F3SUJBZ0lQRE5jQXBqWTlVZlREekEyQ25NWXZNQTBHQ1NxR1NJYjNEUUVCQ3dVQU1Ca3gKRnpBVkJnTlZCQU1URG5adExXOXdaWEpoZEc5eUxXTmhNQjRYRFRJMU1USXlOekF4TVRBMU5Gb1hEVE0xTVRJeQpOVEF4TVRBMU5Gb3dHVEVYTUJVR0ExVUVBeE1PZG0wdGIzQmxjbUYwYjNJdFkyRXdnZ0VpTUEwR0NTcUdTSWIzCkRRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRREVkZ2ZOWHFlcUJWODdodUVaRDAva1VjcjZFNjVpUTl5ZHNvL1AKOTF3dnZkRGNNeUdGa21XK0R0VDIyMmNKMkJXNFk2Z2ZnOEJLcklpSHhuMjVrM0hGZzNxTzcrcE5JSEJwM1FZTgp3c29vMzl0YWFoLzI2TmRMSUV1UWhCNnppZUlFZ3NPQVBhQnhJSWxTZExmK214WWxnSng4amJ6b3JCKzNwUkw1Ckx5QXM4MU1VSTd5MkJmcmNKVHZxTGJheEpzSXB0bTM2Uk40cFFBaGl5ZEd2ZVJwbkMzZlljMGZGYU5IVXZmUmEKeTNkdHJXcHhBTk54cXFwL2xnM2tJZjlpSnFBZStuVTZ2aFJ3VjNwZjFnWjFIU2lERVRzSDZONU9GZ282NGNjYgo0SktCTHhlajY2R2FaRGduakdwU0ZvUGlXSTJEZUkxeEV0b0VoTGtlcmtoQm5BRXJBZ01CQUFHallUQmZNQTRHCkExVWREd0VCL3dRRUF3SUNwREFkQmdOVkhTVUVGakFVQmdnckJnRUZCUWNEQVFZSUt3WUJCUVVIQXdJd0R3WUQKVlIwVEFRSC9CQVV3QXdFQi96QWRCZ05WSFE0RUZnUVUwVEV6VUZ4bXpaOTJ3SmUwYUdSZGpKNTRldnN3RFFZSgpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFBQXpKRVBGU2c3TXkvdVRXaHR2L3V4d3JLaDlna21UOTNpSks3Ui9LMysvCnlCcS9EaGxkQWIvMlNORDFocG5OMkIyWldtdU5YL1locEtaRjlGRUx3QlJnZFI1MWs0KzZQcmtWbGNURzczak4KZnhWbnhZM202RW1IamZTQW93WUljVThURmU0Zy9oeDF1RVgvNXRDKzMyRzUxOE1iKzVwR0VSY3ZrclAyaXlQRwo0bEpsZm5HUDhuTUROdktsOHhycVlEU1pybkZIUm1pSExYT0dyQ09kVUwrSU1KNzA3Z3VreWVyZndsSnlPSXlxCnpjd0I3OVVZbkFJNWh2bGlTQ2k0Q25LQXNETzR5VTA0QXp2eWMzNUY3L2JUcFFBQ1ZQVU9OcGZ4YmVSbjUxL0oKb1lMVFNwRStFUG1aT0xvUERJd0lWbFdOUGdKeVY5aWNUblgvTkNaVlFPYz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+      service:
+        name: vmks-victoria-metrics-operator
+        namespace: vmks
+        path: /validate-operator-victoriametrics-com-v1-vlcluster
+        port: 9443
+    failurePolicy: Fail
+    name: vlclusters.operator.victoriametrics.com
+    objectSelector:
+      matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: NotIn
+          values:
+            - victoria-metrics-operator
+    rules:
+      - apiGroups:
+          - operator.victoriametrics.com
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - vlclusters
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1beta1
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIRENDQWdTZ0F3SUJBZ0lQRE5jQXBqWTlVZlREekEyQ25NWXZNQTBHQ1NxR1NJYjNEUUVCQ3dVQU1Ca3gKRnpBVkJnTlZCQU1URG5adExXOXdaWEpoZEc5eUxXTmhNQjRYRFRJMU1USXlOekF4TVRBMU5Gb1hEVE0xTVRJeQpOVEF4TVRBMU5Gb3dHVEVYTUJVR0ExVUVBeE1PZG0wdGIzQmxjbUYwYjNJdFkyRXdnZ0VpTUEwR0NTcUdTSWIzCkRRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRREVkZ2ZOWHFlcUJWODdodUVaRDAva1VjcjZFNjVpUTl5ZHNvL1AKOTF3dnZkRGNNeUdGa21XK0R0VDIyMmNKMkJXNFk2Z2ZnOEJLcklpSHhuMjVrM0hGZzNxTzcrcE5JSEJwM1FZTgp3c29vMzl0YWFoLzI2TmRMSUV1UWhCNnppZUlFZ3NPQVBhQnhJSWxTZExmK214WWxnSng4amJ6b3JCKzNwUkw1Ckx5QXM4MU1VSTd5MkJmcmNKVHZxTGJheEpzSXB0bTM2Uk40cFFBaGl5ZEd2ZVJwbkMzZlljMGZGYU5IVXZmUmEKeTNkdHJXcHhBTk54cXFwL2xnM2tJZjlpSnFBZStuVTZ2aFJ3VjNwZjFnWjFIU2lERVRzSDZONU9GZ282NGNjYgo0SktCTHhlajY2R2FaRGduakdwU0ZvUGlXSTJEZUkxeEV0b0VoTGtlcmtoQm5BRXJBZ01CQUFHallUQmZNQTRHCkExVWREd0VCL3dRRUF3SUNwREFkQmdOVkhTVUVGakFVQmdnckJnRUZCUWNEQVFZSUt3WUJCUVVIQXdJd0R3WUQKVlIwVEFRSC9CQVV3QXdFQi96QWRCZ05WSFE0RUZnUVUwVEV6VUZ4bXpaOTJ3SmUwYUdSZGpKNTRldnN3RFFZSgpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFBQXpKRVBGU2c3TXkvdVRXaHR2L3V4d3JLaDlna21UOTNpSks3Ui9LMysvCnlCcS9EaGxkQWIvMlNORDFocG5OMkIyWldtdU5YL1locEtaRjlGRUx3QlJnZFI1MWs0KzZQcmtWbGNURzczak4KZnhWbnhZM202RW1IamZTQW93WUljVThURmU0Zy9oeDF1RVgvNXRDKzMyRzUxOE1iKzVwR0VSY3ZrclAyaXlQRwo0bEpsZm5HUDhuTUROdktsOHhycVlEU1pybkZIUm1pSExYT0dyQ09kVUwrSU1KNzA3Z3VreWVyZndsSnlPSXlxCnpjd0I3OVVZbkFJNWh2bGlTQ2k0Q25LQXNETzR5VTA0QXp2eWMzNUY3L2JUcFFBQ1ZQVU9OcGZ4YmVSbjUxL0oKb1lMVFNwRStFUG1aT0xvUERJd0lWbFdOUGdKeVY5aWNUblgvTkNaVlFPYz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+      service:
+        name: vmks-victoria-metrics-operator
+        namespace: vmks
+        path: /validate-operator-victoriametrics-com-v1beta1-vlogs
+        port: 9443
+    failurePolicy: Fail
+    name: vlogs.operator.victoriametrics.com
+    objectSelector:
+      matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: NotIn
+          values:
+            - victoria-metrics-operator
+    rules:
+      - apiGroups:
+          - operator.victoriametrics.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - vlogs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIRENDQWdTZ0F3SUJBZ0lQRE5jQXBqWTlVZlREekEyQ25NWXZNQTBHQ1NxR1NJYjNEUUVCQ3dVQU1Ca3gKRnpBVkJnTlZCQU1URG5adExXOXdaWEpoZEc5eUxXTmhNQjRYRFRJMU1USXlOekF4TVRBMU5Gb1hEVE0xTVRJeQpOVEF4TVRBMU5Gb3dHVEVYTUJVR0ExVUVBeE1PZG0wdGIzQmxjbUYwYjNJdFkyRXdnZ0VpTUEwR0NTcUdTSWIzCkRRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRREVkZ2ZOWHFlcUJWODdodUVaRDAva1VjcjZFNjVpUTl5ZHNvL1AKOTF3dnZkRGNNeUdGa21XK0R0VDIyMmNKMkJXNFk2Z2ZnOEJLcklpSHhuMjVrM0hGZzNxTzcrcE5JSEJwM1FZTgp3c29vMzl0YWFoLzI2TmRMSUV1UWhCNnppZUlFZ3NPQVBhQnhJSWxTZExmK214WWxnSng4amJ6b3JCKzNwUkw1Ckx5QXM4MU1VSTd5MkJmcmNKVHZxTGJheEpzSXB0bTM2Uk40cFFBaGl5ZEd2ZVJwbkMzZlljMGZGYU5IVXZmUmEKeTNkdHJXcHhBTk54cXFwL2xnM2tJZjlpSnFBZStuVTZ2aFJ3VjNwZjFnWjFIU2lERVRzSDZONU9GZ282NGNjYgo0SktCTHhlajY2R2FaRGduakdwU0ZvUGlXSTJEZUkxeEV0b0VoTGtlcmtoQm5BRXJBZ01CQUFHallUQmZNQTRHCkExVWREd0VCL3dRRUF3SUNwREFkQmdOVkhTVUVGakFVQmdnckJnRUZCUWNEQVFZSUt3WUJCUVVIQXdJd0R3WUQKVlIwVEFRSC9CQVV3QXdFQi96QWRCZ05WSFE0RUZnUVUwVEV6VUZ4bXpaOTJ3SmUwYUdSZGpKNTRldnN3RFFZSgpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFBQXpKRVBGU2c3TXkvdVRXaHR2L3V4d3JLaDlna21UOTNpSks3Ui9LMysvCnlCcS9EaGxkQWIvMlNORDFocG5OMkIyWldtdU5YL1locEtaRjlGRUx3QlJnZFI1MWs0KzZQcmtWbGNURzczak4KZnhWbnhZM202RW1IamZTQW93WUljVThURmU0Zy9oeDF1RVgvNXRDKzMyRzUxOE1iKzVwR0VSY3ZrclAyaXlQRwo0bEpsZm5HUDhuTUROdktsOHhycVlEU1pybkZIUm1pSExYT0dyQ09kVUwrSU1KNzA3Z3VreWVyZndsSnlPSXlxCnpjd0I3OVVZbkFJNWh2bGlTQ2k0Q25LQXNETzR5VTA0QXp2eWMzNUY3L2JUcFFBQ1ZQVU9OcGZ4YmVSbjUxL0oKb1lMVFNwRStFUG1aT0xvUERJd0lWbFdOUGdKeVY5aWNUblgvTkNaVlFPYz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+      service:
+        name: vmks-victoria-metrics-operator
+        namespace: vmks
+        path: /validate-operator-victoriametrics-com-v1-vlsingle
+        port: 9443
+    failurePolicy: Fail
+    name: vlsingles.operator.victoriametrics.com
+    objectSelector:
+      matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: NotIn
+          values:
+            - victoria-metrics-operator
+    rules:
+      - apiGroups:
+          - operator.victoriametrics.com
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - vlsingles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1beta1
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIRENDQWdTZ0F3SUJBZ0lQRE5jQXBqWTlVZlREekEyQ25NWXZNQTBHQ1NxR1NJYjNEUUVCQ3dVQU1Ca3gKRnpBVkJnTlZCQU1URG5adExXOXdaWEpoZEc5eUxXTmhNQjRYRFRJMU1USXlOekF4TVRBMU5Gb1hEVE0xTVRJeQpOVEF4TVRBMU5Gb3dHVEVYTUJVR0ExVUVBeE1PZG0wdGIzQmxjbUYwYjNJdFkyRXdnZ0VpTUEwR0NTcUdTSWIzCkRRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRREVkZ2ZOWHFlcUJWODdodUVaRDAva1VjcjZFNjVpUTl5ZHNvL1AKOTF3dnZkRGNNeUdGa21XK0R0VDIyMmNKMkJXNFk2Z2ZnOEJLcklpSHhuMjVrM0hGZzNxTzcrcE5JSEJwM1FZTgp3c29vMzl0YWFoLzI2TmRMSUV1UWhCNnppZUlFZ3NPQVBhQnhJSWxTZExmK214WWxnSng4amJ6b3JCKzNwUkw1Ckx5QXM4MU1VSTd5MkJmcmNKVHZxTGJheEpzSXB0bTM2Uk40cFFBaGl5ZEd2ZVJwbkMzZlljMGZGYU5IVXZmUmEKeTNkdHJXcHhBTk54cXFwL2xnM2tJZjlpSnFBZStuVTZ2aFJ3VjNwZjFnWjFIU2lERVRzSDZONU9GZ282NGNjYgo0SktCTHhlajY2R2FaRGduakdwU0ZvUGlXSTJEZUkxeEV0b0VoTGtlcmtoQm5BRXJBZ01CQUFHallUQmZNQTRHCkExVWREd0VCL3dRRUF3SUNwREFkQmdOVkhTVUVGakFVQmdnckJnRUZCUWNEQVFZSUt3WUJCUVVIQXdJd0R3WUQKVlIwVEFRSC9CQVV3QXdFQi96QWRCZ05WSFE0RUZnUVUwVEV6VUZ4bXpaOTJ3SmUwYUdSZGpKNTRldnN3RFFZSgpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFBQXpKRVBGU2c3TXkvdVRXaHR2L3V4d3JLaDlna21UOTNpSks3Ui9LMysvCnlCcS9EaGxkQWIvMlNORDFocG5OMkIyWldtdU5YL1locEtaRjlGRUx3QlJnZFI1MWs0KzZQcmtWbGNURzczak4KZnhWbnhZM202RW1IamZTQW93WUljVThURmU0Zy9oeDF1RVgvNXRDKzMyRzUxOE1iKzVwR0VSY3ZrclAyaXlQRwo0bEpsZm5HUDhuTUROdktsOHhycVlEU1pybkZIUm1pSExYT0dyQ09kVUwrSU1KNzA3Z3VreWVyZndsSnlPSXlxCnpjd0I3OVVZbkFJNWh2bGlTQ2k0Q25LQXNETzR5VTA0QXp2eWMzNUY3L2JUcFFBQ1ZQVU9OcGZ4YmVSbjUxL0oKb1lMVFNwRStFUG1aT0xvUERJd0lWbFdOUGdKeVY5aWNUblgvTkNaVlFPYz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+      service:
+        name: vmks-victoria-metrics-operator
+        namespace: vmks
+        path: /validate-operator-victoriametrics-com-v1beta1-vmagent
+        port: 9443
+    failurePolicy: Fail
+    name: vmagents.operator.victoriametrics.com
+    objectSelector:
+      matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: NotIn
+          values:
+            - victoria-metrics-operator
+    rules:
+      - apiGroups:
+          - operator.victoriametrics.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - vmagents
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1beta1
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIRENDQWdTZ0F3SUJBZ0lQRE5jQXBqWTlVZlREekEyQ25NWXZNQTBHQ1NxR1NJYjNEUUVCQ3dVQU1Ca3gKRnpBVkJnTlZCQU1URG5adExXOXdaWEpoZEc5eUxXTmhNQjRYRFRJMU1USXlOekF4TVRBMU5Gb1hEVE0xTVRJeQpOVEF4TVRBMU5Gb3dHVEVYTUJVR0ExVUVBeE1PZG0wdGIzQmxjbUYwYjNJdFkyRXdnZ0VpTUEwR0NTcUdTSWIzCkRRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRREVkZ2ZOWHFlcUJWODdodUVaRDAva1VjcjZFNjVpUTl5ZHNvL1AKOTF3dnZkRGNNeUdGa21XK0R0VDIyMmNKMkJXNFk2Z2ZnOEJLcklpSHhuMjVrM0hGZzNxTzcrcE5JSEJwM1FZTgp3c29vMzl0YWFoLzI2TmRMSUV1UWhCNnppZUlFZ3NPQVBhQnhJSWxTZExmK214WWxnSng4amJ6b3JCKzNwUkw1Ckx5QXM4MU1VSTd5MkJmcmNKVHZxTGJheEpzSXB0bTM2Uk40cFFBaGl5ZEd2ZVJwbkMzZlljMGZGYU5IVXZmUmEKeTNkdHJXcHhBTk54cXFwL2xnM2tJZjlpSnFBZStuVTZ2aFJ3VjNwZjFnWjFIU2lERVRzSDZONU9GZ282NGNjYgo0SktCTHhlajY2R2FaRGduakdwU0ZvUGlXSTJEZUkxeEV0b0VoTGtlcmtoQm5BRXJBZ01CQUFHallUQmZNQTRHCkExVWREd0VCL3dRRUF3SUNwREFkQmdOVkhTVUVGakFVQmdnckJnRUZCUWNEQVFZSUt3WUJCUVVIQXdJd0R3WUQKVlIwVEFRSC9CQVV3QXdFQi96QWRCZ05WSFE0RUZnUVUwVEV6VUZ4bXpaOTJ3SmUwYUdSZGpKNTRldnN3RFFZSgpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFBQXpKRVBGU2c3TXkvdVRXaHR2L3V4d3JLaDlna21UOTNpSks3Ui9LMysvCnlCcS9EaGxkQWIvMlNORDFocG5OMkIyWldtdU5YL1locEtaRjlGRUx3QlJnZFI1MWs0KzZQcmtWbGNURzczak4KZnhWbnhZM202RW1IamZTQW93WUljVThURmU0Zy9oeDF1RVgvNXRDKzMyRzUxOE1iKzVwR0VSY3ZrclAyaXlQRwo0bEpsZm5HUDhuTUROdktsOHhycVlEU1pybkZIUm1pSExYT0dyQ09kVUwrSU1KNzA3Z3VreWVyZndsSnlPSXlxCnpjd0I3OVVZbkFJNWh2bGlTQ2k0Q25LQXNETzR5VTA0QXp2eWMzNUY3L2JUcFFBQ1ZQVU9OcGZ4YmVSbjUxL0oKb1lMVFNwRStFUG1aT0xvUERJd0lWbFdOUGdKeVY5aWNUblgvTkNaVlFPYz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+      service:
+        name: vmks-victoria-metrics-operator
+        namespace: vmks
+        path: /validate-operator-victoriametrics-com-v1beta1-vmalertmanagerconfig
+        port: 9443
+    failurePolicy: Fail
+    name: vmalertmanagerconfigs.operator.victoriametrics.com
+    objectSelector:
+      matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: NotIn
+          values:
+            - victoria-metrics-operator
+    rules:
+      - apiGroups:
+          - operator.victoriametrics.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - vmalertmanagerconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1beta1
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIRENDQWdTZ0F3SUJBZ0lQRE5jQXBqWTlVZlREekEyQ25NWXZNQTBHQ1NxR1NJYjNEUUVCQ3dVQU1Ca3gKRnpBVkJnTlZCQU1URG5adExXOXdaWEpoZEc5eUxXTmhNQjRYRFRJMU1USXlOekF4TVRBMU5Gb1hEVE0xTVRJeQpOVEF4TVRBMU5Gb3dHVEVYTUJVR0ExVUVBeE1PZG0wdGIzQmxjbUYwYjNJdFkyRXdnZ0VpTUEwR0NTcUdTSWIzCkRRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRREVkZ2ZOWHFlcUJWODdodUVaRDAva1VjcjZFNjVpUTl5ZHNvL1AKOTF3dnZkRGNNeUdGa21XK0R0VDIyMmNKMkJXNFk2Z2ZnOEJLcklpSHhuMjVrM0hGZzNxTzcrcE5JSEJwM1FZTgp3c29vMzl0YWFoLzI2TmRMSUV1UWhCNnppZUlFZ3NPQVBhQnhJSWxTZExmK214WWxnSng4amJ6b3JCKzNwUkw1Ckx5QXM4MU1VSTd5MkJmcmNKVHZxTGJheEpzSXB0bTM2Uk40cFFBaGl5ZEd2ZVJwbkMzZlljMGZGYU5IVXZmUmEKeTNkdHJXcHhBTk54cXFwL2xnM2tJZjlpSnFBZStuVTZ2aFJ3VjNwZjFnWjFIU2lERVRzSDZONU9GZ282NGNjYgo0SktCTHhlajY2R2FaRGduakdwU0ZvUGlXSTJEZUkxeEV0b0VoTGtlcmtoQm5BRXJBZ01CQUFHallUQmZNQTRHCkExVWREd0VCL3dRRUF3SUNwREFkQmdOVkhTVUVGakFVQmdnckJnRUZCUWNEQVFZSUt3WUJCUVVIQXdJd0R3WUQKVlIwVEFRSC9CQVV3QXdFQi96QWRCZ05WSFE0RUZnUVUwVEV6VUZ4bXpaOTJ3SmUwYUdSZGpKNTRldnN3RFFZSgpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFBQXpKRVBGU2c3TXkvdVRXaHR2L3V4d3JLaDlna21UOTNpSks3Ui9LMysvCnlCcS9EaGxkQWIvMlNORDFocG5OMkIyWldtdU5YL1locEtaRjlGRUx3QlJnZFI1MWs0KzZQcmtWbGNURzczak4KZnhWbnhZM202RW1IamZTQW93WUljVThURmU0Zy9oeDF1RVgvNXRDKzMyRzUxOE1iKzVwR0VSY3ZrclAyaXlQRwo0bEpsZm5HUDhuTUROdktsOHhycVlEU1pybkZIUm1pSExYT0dyQ09kVUwrSU1KNzA3Z3VreWVyZndsSnlPSXlxCnpjd0I3OVVZbkFJNWh2bGlTQ2k0Q25LQXNETzR5VTA0QXp2eWMzNUY3L2JUcFFBQ1ZQVU9OcGZ4YmVSbjUxL0oKb1lMVFNwRStFUG1aT0xvUERJd0lWbFdOUGdKeVY5aWNUblgvTkNaVlFPYz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+      service:
+        name: vmks-victoria-metrics-operator
+        namespace: vmks
+        path: /validate-operator-victoriametrics-com-v1beta1-vmalertmanager
+        port: 9443
+    failurePolicy: Fail
+    name: vmalertmanagers.operator.victoriametrics.com
+    objectSelector:
+      matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: NotIn
+          values:
+            - victoria-metrics-operator
+    rules:
+      - apiGroups:
+          - operator.victoriametrics.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - vmalertmanagers
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1beta1
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIRENDQWdTZ0F3SUJBZ0lQRE5jQXBqWTlVZlREekEyQ25NWXZNQTBHQ1NxR1NJYjNEUUVCQ3dVQU1Ca3gKRnpBVkJnTlZCQU1URG5adExXOXdaWEpoZEc5eUxXTmhNQjRYRFRJMU1USXlOekF4TVRBMU5Gb1hEVE0xTVRJeQpOVEF4TVRBMU5Gb3dHVEVYTUJVR0ExVUVBeE1PZG0wdGIzQmxjbUYwYjNJdFkyRXdnZ0VpTUEwR0NTcUdTSWIzCkRRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRREVkZ2ZOWHFlcUJWODdodUVaRDAva1VjcjZFNjVpUTl5ZHNvL1AKOTF3dnZkRGNNeUdGa21XK0R0VDIyMmNKMkJXNFk2Z2ZnOEJLcklpSHhuMjVrM0hGZzNxTzcrcE5JSEJwM1FZTgp3c29vMzl0YWFoLzI2TmRMSUV1UWhCNnppZUlFZ3NPQVBhQnhJSWxTZExmK214WWxnSng4amJ6b3JCKzNwUkw1Ckx5QXM4MU1VSTd5MkJmcmNKVHZxTGJheEpzSXB0bTM2Uk40cFFBaGl5ZEd2ZVJwbkMzZlljMGZGYU5IVXZmUmEKeTNkdHJXcHhBTk54cXFwL2xnM2tJZjlpSnFBZStuVTZ2aFJ3VjNwZjFnWjFIU2lERVRzSDZONU9GZ282NGNjYgo0SktCTHhlajY2R2FaRGduakdwU0ZvUGlXSTJEZUkxeEV0b0VoTGtlcmtoQm5BRXJBZ01CQUFHallUQmZNQTRHCkExVWREd0VCL3dRRUF3SUNwREFkQmdOVkhTVUVGakFVQmdnckJnRUZCUWNEQVFZSUt3WUJCUVVIQXdJd0R3WUQKVlIwVEFRSC9CQVV3QXdFQi96QWRCZ05WSFE0RUZnUVUwVEV6VUZ4bXpaOTJ3SmUwYUdSZGpKNTRldnN3RFFZSgpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFBQXpKRVBGU2c3TXkvdVRXaHR2L3V4d3JLaDlna21UOTNpSks3Ui9LMysvCnlCcS9EaGxkQWIvMlNORDFocG5OMkIyWldtdU5YL1locEtaRjlGRUx3QlJnZFI1MWs0KzZQcmtWbGNURzczak4KZnhWbnhZM202RW1IamZTQW93WUljVThURmU0Zy9oeDF1RVgvNXRDKzMyRzUxOE1iKzVwR0VSY3ZrclAyaXlQRwo0bEpsZm5HUDhuTUROdktsOHhycVlEU1pybkZIUm1pSExYT0dyQ09kVUwrSU1KNzA3Z3VreWVyZndsSnlPSXlxCnpjd0I3OVVZbkFJNWh2bGlTQ2k0Q25LQXNETzR5VTA0QXp2eWMzNUY3L2JUcFFBQ1ZQVU9OcGZ4YmVSbjUxL0oKb1lMVFNwRStFUG1aT0xvUERJd0lWbFdOUGdKeVY5aWNUblgvTkNaVlFPYz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+      service:
+        name: vmks-victoria-metrics-operator
+        namespace: vmks
+        path: /validate-operator-victoriametrics-com-v1beta1-vmalert
+        port: 9443
+    failurePolicy: Fail
+    name: vmalerts.operator.victoriametrics.com
+    objectSelector:
+      matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: NotIn
+          values:
+            - victoria-metrics-operator
+    rules:
+      - apiGroups:
+          - operator.victoriametrics.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - vmalerts
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIRENDQWdTZ0F3SUJBZ0lQRE5jQXBqWTlVZlREekEyQ25NWXZNQTBHQ1NxR1NJYjNEUUVCQ3dVQU1Ca3gKRnpBVkJnTlZCQU1URG5adExXOXdaWEpoZEc5eUxXTmhNQjRYRFRJMU1USXlOekF4TVRBMU5Gb1hEVE0xTVRJeQpOVEF4TVRBMU5Gb3dHVEVYTUJVR0ExVUVBeE1PZG0wdGIzQmxjbUYwYjNJdFkyRXdnZ0VpTUEwR0NTcUdTSWIzCkRRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRREVkZ2ZOWHFlcUJWODdodUVaRDAva1VjcjZFNjVpUTl5ZHNvL1AKOTF3dnZkRGNNeUdGa21XK0R0VDIyMmNKMkJXNFk2Z2ZnOEJLcklpSHhuMjVrM0hGZzNxTzcrcE5JSEJwM1FZTgp3c29vMzl0YWFoLzI2TmRMSUV1UWhCNnppZUlFZ3NPQVBhQnhJSWxTZExmK214WWxnSng4amJ6b3JCKzNwUkw1Ckx5QXM4MU1VSTd5MkJmcmNKVHZxTGJheEpzSXB0bTM2Uk40cFFBaGl5ZEd2ZVJwbkMzZlljMGZGYU5IVXZmUmEKeTNkdHJXcHhBTk54cXFwL2xnM2tJZjlpSnFBZStuVTZ2aFJ3VjNwZjFnWjFIU2lERVRzSDZONU9GZ282NGNjYgo0SktCTHhlajY2R2FaRGduakdwU0ZvUGlXSTJEZUkxeEV0b0VoTGtlcmtoQm5BRXJBZ01CQUFHallUQmZNQTRHCkExVWREd0VCL3dRRUF3SUNwREFkQmdOVkhTVUVGakFVQmdnckJnRUZCUWNEQVFZSUt3WUJCUVVIQXdJd0R3WUQKVlIwVEFRSC9CQVV3QXdFQi96QWRCZ05WSFE0RUZnUVUwVEV6VUZ4bXpaOTJ3SmUwYUdSZGpKNTRldnN3RFFZSgpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFBQXpKRVBGU2c3TXkvdVRXaHR2L3V4d3JLaDlna21UOTNpSks3Ui9LMysvCnlCcS9EaGxkQWIvMlNORDFocG5OMkIyWldtdU5YL1locEtaRjlGRUx3QlJnZFI1MWs0KzZQcmtWbGNURzczak4KZnhWbnhZM202RW1IamZTQW93WUljVThURmU0Zy9oeDF1RVgvNXRDKzMyRzUxOE1iKzVwR0VSY3ZrclAyaXlQRwo0bEpsZm5HUDhuTUROdktsOHhycVlEU1pybkZIUm1pSExYT0dyQ09kVUwrSU1KNzA3Z3VreWVyZndsSnlPSXlxCnpjd0I3OVVZbkFJNWh2bGlTQ2k0Q25LQXNETzR5VTA0QXp2eWMzNUY3L2JUcFFBQ1ZQVU9OcGZ4YmVSbjUxL0oKb1lMVFNwRStFUG1aT0xvUERJd0lWbFdOUGdKeVY5aWNUblgvTkNaVlFPYz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+      service:
+        name: vmks-victoria-metrics-operator
+        namespace: vmks
+        path: /validate-operator-victoriametrics-com-v1-vmanomaly
+        port: 9443
+    failurePolicy: Fail
+    name: vmanomalies.operator.victoriametrics.com
+    objectSelector:
+      matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: NotIn
+          values:
+            - victoria-metrics-operator
+    rules:
+      - apiGroups:
+          - operator.victoriametrics.com
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - vmanomalies
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1beta1
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIRENDQWdTZ0F3SUJBZ0lQRE5jQXBqWTlVZlREekEyQ25NWXZNQTBHQ1NxR1NJYjNEUUVCQ3dVQU1Ca3gKRnpBVkJnTlZCQU1URG5adExXOXdaWEpoZEc5eUxXTmhNQjRYRFRJMU1USXlOekF4TVRBMU5Gb1hEVE0xTVRJeQpOVEF4TVRBMU5Gb3dHVEVYTUJVR0ExVUVBeE1PZG0wdGIzQmxjbUYwYjNJdFkyRXdnZ0VpTUEwR0NTcUdTSWIzCkRRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRREVkZ2ZOWHFlcUJWODdodUVaRDAva1VjcjZFNjVpUTl5ZHNvL1AKOTF3dnZkRGNNeUdGa21XK0R0VDIyMmNKMkJXNFk2Z2ZnOEJLcklpSHhuMjVrM0hGZzNxTzcrcE5JSEJwM1FZTgp3c29vMzl0YWFoLzI2TmRMSUV1UWhCNnppZUlFZ3NPQVBhQnhJSWxTZExmK214WWxnSng4amJ6b3JCKzNwUkw1Ckx5QXM4MU1VSTd5MkJmcmNKVHZxTGJheEpzSXB0bTM2Uk40cFFBaGl5ZEd2ZVJwbkMzZlljMGZGYU5IVXZmUmEKeTNkdHJXcHhBTk54cXFwL2xnM2tJZjlpSnFBZStuVTZ2aFJ3VjNwZjFnWjFIU2lERVRzSDZONU9GZ282NGNjYgo0SktCTHhlajY2R2FaRGduakdwU0ZvUGlXSTJEZUkxeEV0b0VoTGtlcmtoQm5BRXJBZ01CQUFHallUQmZNQTRHCkExVWREd0VCL3dRRUF3SUNwREFkQmdOVkhTVUVGakFVQmdnckJnRUZCUWNEQVFZSUt3WUJCUVVIQXdJd0R3WUQKVlIwVEFRSC9CQVV3QXdFQi96QWRCZ05WSFE0RUZnUVUwVEV6VUZ4bXpaOTJ3SmUwYUdSZGpKNTRldnN3RFFZSgpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFBQXpKRVBGU2c3TXkvdVRXaHR2L3V4d3JLaDlna21UOTNpSks3Ui9LMysvCnlCcS9EaGxkQWIvMlNORDFocG5OMkIyWldtdU5YL1locEtaRjlGRUx3QlJnZFI1MWs0KzZQcmtWbGNURzczak4KZnhWbnhZM202RW1IamZTQW93WUljVThURmU0Zy9oeDF1RVgvNXRDKzMyRzUxOE1iKzVwR0VSY3ZrclAyaXlQRwo0bEpsZm5HUDhuTUROdktsOHhycVlEU1pybkZIUm1pSExYT0dyQ09kVUwrSU1KNzA3Z3VreWVyZndsSnlPSXlxCnpjd0I3OVVZbkFJNWh2bGlTQ2k0Q25LQXNETzR5VTA0QXp2eWMzNUY3L2JUcFFBQ1ZQVU9OcGZ4YmVSbjUxL0oKb1lMVFNwRStFUG1aT0xvUERJd0lWbFdOUGdKeVY5aWNUblgvTkNaVlFPYz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+      service:
+        name: vmks-victoria-metrics-operator
+        namespace: vmks
+        path: /validate-operator-victoriametrics-com-v1beta1-vmauth
+        port: 9443
+    failurePolicy: Fail
+    name: vmauths.operator.victoriametrics.com
+    objectSelector:
+      matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: NotIn
+          values:
+            - victoria-metrics-operator
+    rules:
+      - apiGroups:
+          - operator.victoriametrics.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - vmauths
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1beta1
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIRENDQWdTZ0F3SUJBZ0lQRE5jQXBqWTlVZlREekEyQ25NWXZNQTBHQ1NxR1NJYjNEUUVCQ3dVQU1Ca3gKRnpBVkJnTlZCQU1URG5adExXOXdaWEpoZEc5eUxXTmhNQjRYRFRJMU1USXlOekF4TVRBMU5Gb1hEVE0xTVRJeQpOVEF4TVRBMU5Gb3dHVEVYTUJVR0ExVUVBeE1PZG0wdGIzQmxjbUYwYjNJdFkyRXdnZ0VpTUEwR0NTcUdTSWIzCkRRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRREVkZ2ZOWHFlcUJWODdodUVaRDAva1VjcjZFNjVpUTl5ZHNvL1AKOTF3dnZkRGNNeUdGa21XK0R0VDIyMmNKMkJXNFk2Z2ZnOEJLcklpSHhuMjVrM0hGZzNxTzcrcE5JSEJwM1FZTgp3c29vMzl0YWFoLzI2TmRMSUV1UWhCNnppZUlFZ3NPQVBhQnhJSWxTZExmK214WWxnSng4amJ6b3JCKzNwUkw1Ckx5QXM4MU1VSTd5MkJmcmNKVHZxTGJheEpzSXB0bTM2Uk40cFFBaGl5ZEd2ZVJwbkMzZlljMGZGYU5IVXZmUmEKeTNkdHJXcHhBTk54cXFwL2xnM2tJZjlpSnFBZStuVTZ2aFJ3VjNwZjFnWjFIU2lERVRzSDZONU9GZ282NGNjYgo0SktCTHhlajY2R2FaRGduakdwU0ZvUGlXSTJEZUkxeEV0b0VoTGtlcmtoQm5BRXJBZ01CQUFHallUQmZNQTRHCkExVWREd0VCL3dRRUF3SUNwREFkQmdOVkhTVUVGakFVQmdnckJnRUZCUWNEQVFZSUt3WUJCUVVIQXdJd0R3WUQKVlIwVEFRSC9CQVV3QXdFQi96QWRCZ05WSFE0RUZnUVUwVEV6VUZ4bXpaOTJ3SmUwYUdSZGpKNTRldnN3RFFZSgpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFBQXpKRVBGU2c3TXkvdVRXaHR2L3V4d3JLaDlna21UOTNpSks3Ui9LMysvCnlCcS9EaGxkQWIvMlNORDFocG5OMkIyWldtdU5YL1locEtaRjlGRUx3QlJnZFI1MWs0KzZQcmtWbGNURzczak4KZnhWbnhZM202RW1IamZTQW93WUljVThURmU0Zy9oeDF1RVgvNXRDKzMyRzUxOE1iKzVwR0VSY3ZrclAyaXlQRwo0bEpsZm5HUDhuTUROdktsOHhycVlEU1pybkZIUm1pSExYT0dyQ09kVUwrSU1KNzA3Z3VreWVyZndsSnlPSXlxCnpjd0I3OVVZbkFJNWh2bGlTQ2k0Q25LQXNETzR5VTA0QXp2eWMzNUY3L2JUcFFBQ1ZQVU9OcGZ4YmVSbjUxL0oKb1lMVFNwRStFUG1aT0xvUERJd0lWbFdOUGdKeVY5aWNUblgvTkNaVlFPYz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+      service:
+        name: vmks-victoria-metrics-operator
+        namespace: vmks
+        path: /validate-operator-victoriametrics-com-v1beta1-vmcluster
+        port: 9443
+    failurePolicy: Fail
+    name: vmclusters.operator.victoriametrics.com
+    objectSelector:
+      matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: NotIn
+          values:
+            - victoria-metrics-operator
+    rules:
+      - apiGroups:
+          - operator.victoriametrics.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - vmclusters
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1beta1
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIRENDQWdTZ0F3SUJBZ0lQRE5jQXBqWTlVZlREekEyQ25NWXZNQTBHQ1NxR1NJYjNEUUVCQ3dVQU1Ca3gKRnpBVkJnTlZCQU1URG5adExXOXdaWEpoZEc5eUxXTmhNQjRYRFRJMU1USXlOekF4TVRBMU5Gb1hEVE0xTVRJeQpOVEF4TVRBMU5Gb3dHVEVYTUJVR0ExVUVBeE1PZG0wdGIzQmxjbUYwYjNJdFkyRXdnZ0VpTUEwR0NTcUdTSWIzCkRRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRREVkZ2ZOWHFlcUJWODdodUVaRDAva1VjcjZFNjVpUTl5ZHNvL1AKOTF3dnZkRGNNeUdGa21XK0R0VDIyMmNKMkJXNFk2Z2ZnOEJLcklpSHhuMjVrM0hGZzNxTzcrcE5JSEJwM1FZTgp3c29vMzl0YWFoLzI2TmRMSUV1UWhCNnppZUlFZ3NPQVBhQnhJSWxTZExmK214WWxnSng4amJ6b3JCKzNwUkw1Ckx5QXM4MU1VSTd5MkJmcmNKVHZxTGJheEpzSXB0bTM2Uk40cFFBaGl5ZEd2ZVJwbkMzZlljMGZGYU5IVXZmUmEKeTNkdHJXcHhBTk54cXFwL2xnM2tJZjlpSnFBZStuVTZ2aFJ3VjNwZjFnWjFIU2lERVRzSDZONU9GZ282NGNjYgo0SktCTHhlajY2R2FaRGduakdwU0ZvUGlXSTJEZUkxeEV0b0VoTGtlcmtoQm5BRXJBZ01CQUFHallUQmZNQTRHCkExVWREd0VCL3dRRUF3SUNwREFkQmdOVkhTVUVGakFVQmdnckJnRUZCUWNEQVFZSUt3WUJCUVVIQXdJd0R3WUQKVlIwVEFRSC9CQVV3QXdFQi96QWRCZ05WSFE0RUZnUVUwVEV6VUZ4bXpaOTJ3SmUwYUdSZGpKNTRldnN3RFFZSgpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFBQXpKRVBGU2c3TXkvdVRXaHR2L3V4d3JLaDlna21UOTNpSks3Ui9LMysvCnlCcS9EaGxkQWIvMlNORDFocG5OMkIyWldtdU5YL1locEtaRjlGRUx3QlJnZFI1MWs0KzZQcmtWbGNURzczak4KZnhWbnhZM202RW1IamZTQW93WUljVThURmU0Zy9oeDF1RVgvNXRDKzMyRzUxOE1iKzVwR0VSY3ZrclAyaXlQRwo0bEpsZm5HUDhuTUROdktsOHhycVlEU1pybkZIUm1pSExYT0dyQ09kVUwrSU1KNzA3Z3VreWVyZndsSnlPSXlxCnpjd0I3OVVZbkFJNWh2bGlTQ2k0Q25LQXNETzR5VTA0QXp2eWMzNUY3L2JUcFFBQ1ZQVU9OcGZ4YmVSbjUxL0oKb1lMVFNwRStFUG1aT0xvUERJd0lWbFdOUGdKeVY5aWNUblgvTkNaVlFPYz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+      service:
+        name: vmks-victoria-metrics-operator
+        namespace: vmks
+        path: /validate-operator-victoriametrics-com-v1beta1-vmnodescrape
+        port: 9443
+    failurePolicy: Fail
+    name: vmnodescrapes.operator.victoriametrics.com
+    objectSelector:
+      matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: NotIn
+          values:
+            - victoria-metrics-operator
+    rules:
+      - apiGroups:
+          - operator.victoriametrics.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - vmnodescrapes
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1beta1
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIRENDQWdTZ0F3SUJBZ0lQRE5jQXBqWTlVZlREekEyQ25NWXZNQTBHQ1NxR1NJYjNEUUVCQ3dVQU1Ca3gKRnpBVkJnTlZCQU1URG5adExXOXdaWEpoZEc5eUxXTmhNQjRYRFRJMU1USXlOekF4TVRBMU5Gb1hEVE0xTVRJeQpOVEF4TVRBMU5Gb3dHVEVYTUJVR0ExVUVBeE1PZG0wdGIzQmxjbUYwYjNJdFkyRXdnZ0VpTUEwR0NTcUdTSWIzCkRRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRREVkZ2ZOWHFlcUJWODdodUVaRDAva1VjcjZFNjVpUTl5ZHNvL1AKOTF3dnZkRGNNeUdGa21XK0R0VDIyMmNKMkJXNFk2Z2ZnOEJLcklpSHhuMjVrM0hGZzNxTzcrcE5JSEJwM1FZTgp3c29vMzl0YWFoLzI2TmRMSUV1UWhCNnppZUlFZ3NPQVBhQnhJSWxTZExmK214WWxnSng4amJ6b3JCKzNwUkw1Ckx5QXM4MU1VSTd5MkJmcmNKVHZxTGJheEpzSXB0bTM2Uk40cFFBaGl5ZEd2ZVJwbkMzZlljMGZGYU5IVXZmUmEKeTNkdHJXcHhBTk54cXFwL2xnM2tJZjlpSnFBZStuVTZ2aFJ3VjNwZjFnWjFIU2lERVRzSDZONU9GZ282NGNjYgo0SktCTHhlajY2R2FaRGduakdwU0ZvUGlXSTJEZUkxeEV0b0VoTGtlcmtoQm5BRXJBZ01CQUFHallUQmZNQTRHCkExVWREd0VCL3dRRUF3SUNwREFkQmdOVkhTVUVGakFVQmdnckJnRUZCUWNEQVFZSUt3WUJCUVVIQXdJd0R3WUQKVlIwVEFRSC9CQVV3QXdFQi96QWRCZ05WSFE0RUZnUVUwVEV6VUZ4bXpaOTJ3SmUwYUdSZGpKNTRldnN3RFFZSgpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFBQXpKRVBGU2c3TXkvdVRXaHR2L3V4d3JLaDlna21UOTNpSks3Ui9LMysvCnlCcS9EaGxkQWIvMlNORDFocG5OMkIyWldtdU5YL1locEtaRjlGRUx3QlJnZFI1MWs0KzZQcmtWbGNURzczak4KZnhWbnhZM202RW1IamZTQW93WUljVThURmU0Zy9oeDF1RVgvNXRDKzMyRzUxOE1iKzVwR0VSY3ZrclAyaXlQRwo0bEpsZm5HUDhuTUROdktsOHhycVlEU1pybkZIUm1pSExYT0dyQ09kVUwrSU1KNzA3Z3VreWVyZndsSnlPSXlxCnpjd0I3OVVZbkFJNWh2bGlTQ2k0Q25LQXNETzR5VTA0QXp2eWMzNUY3L2JUcFFBQ1ZQVU9OcGZ4YmVSbjUxL0oKb1lMVFNwRStFUG1aT0xvUERJd0lWbFdOUGdKeVY5aWNUblgvTkNaVlFPYz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+      service:
+        name: vmks-victoria-metrics-operator
+        namespace: vmks
+        path: /validate-operator-victoriametrics-com-v1beta1-vmpodscrape
+        port: 9443
+    failurePolicy: Fail
+    name: vmpodscrapes.operator.victoriametrics.com
+    objectSelector:
+      matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: NotIn
+          values:
+            - victoria-metrics-operator
+    rules:
+      - apiGroups:
+          - operator.victoriametrics.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - vmpodscrapes
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1beta1
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIRENDQWdTZ0F3SUJBZ0lQRE5jQXBqWTlVZlREekEyQ25NWXZNQTBHQ1NxR1NJYjNEUUVCQ3dVQU1Ca3gKRnpBVkJnTlZCQU1URG5adExXOXdaWEpoZEc5eUxXTmhNQjRYRFRJMU1USXlOekF4TVRBMU5Gb1hEVE0xTVRJeQpOVEF4TVRBMU5Gb3dHVEVYTUJVR0ExVUVBeE1PZG0wdGIzQmxjbUYwYjNJdFkyRXdnZ0VpTUEwR0NTcUdTSWIzCkRRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRREVkZ2ZOWHFlcUJWODdodUVaRDAva1VjcjZFNjVpUTl5ZHNvL1AKOTF3dnZkRGNNeUdGa21XK0R0VDIyMmNKMkJXNFk2Z2ZnOEJLcklpSHhuMjVrM0hGZzNxTzcrcE5JSEJwM1FZTgp3c29vMzl0YWFoLzI2TmRMSUV1UWhCNnppZUlFZ3NPQVBhQnhJSWxTZExmK214WWxnSng4amJ6b3JCKzNwUkw1Ckx5QXM4MU1VSTd5MkJmcmNKVHZxTGJheEpzSXB0bTM2Uk40cFFBaGl5ZEd2ZVJwbkMzZlljMGZGYU5IVXZmUmEKeTNkdHJXcHhBTk54cXFwL2xnM2tJZjlpSnFBZStuVTZ2aFJ3VjNwZjFnWjFIU2lERVRzSDZONU9GZ282NGNjYgo0SktCTHhlajY2R2FaRGduakdwU0ZvUGlXSTJEZUkxeEV0b0VoTGtlcmtoQm5BRXJBZ01CQUFHallUQmZNQTRHCkExVWREd0VCL3dRRUF3SUNwREFkQmdOVkhTVUVGakFVQmdnckJnRUZCUWNEQVFZSUt3WUJCUVVIQXdJd0R3WUQKVlIwVEFRSC9CQVV3QXdFQi96QWRCZ05WSFE0RUZnUVUwVEV6VUZ4bXpaOTJ3SmUwYUdSZGpKNTRldnN3RFFZSgpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFBQXpKRVBGU2c3TXkvdVRXaHR2L3V4d3JLaDlna21UOTNpSks3Ui9LMysvCnlCcS9EaGxkQWIvMlNORDFocG5OMkIyWldtdU5YL1locEtaRjlGRUx3QlJnZFI1MWs0KzZQcmtWbGNURzczak4KZnhWbnhZM202RW1IamZTQW93WUljVThURmU0Zy9oeDF1RVgvNXRDKzMyRzUxOE1iKzVwR0VSY3ZrclAyaXlQRwo0bEpsZm5HUDhuTUROdktsOHhycVlEU1pybkZIUm1pSExYT0dyQ09kVUwrSU1KNzA3Z3VreWVyZndsSnlPSXlxCnpjd0I3OVVZbkFJNWh2bGlTQ2k0Q25LQXNETzR5VTA0QXp2eWMzNUY3L2JUcFFBQ1ZQVU9OcGZ4YmVSbjUxL0oKb1lMVFNwRStFUG1aT0xvUERJd0lWbFdOUGdKeVY5aWNUblgvTkNaVlFPYz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+      service:
+        name: vmks-victoria-metrics-operator
+        namespace: vmks
+        path: /validate-operator-victoriametrics-com-v1beta1-vmprobe
+        port: 9443
+    failurePolicy: Fail
+    name: vmprobes.operator.victoriametrics.com
+    objectSelector:
+      matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: NotIn
+          values:
+            - victoria-metrics-operator
+    rules:
+      - apiGroups:
+          - operator.victoriametrics.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - vmprobes
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1beta1
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIRENDQWdTZ0F3SUJBZ0lQRE5jQXBqWTlVZlREekEyQ25NWXZNQTBHQ1NxR1NJYjNEUUVCQ3dVQU1Ca3gKRnpBVkJnTlZCQU1URG5adExXOXdaWEpoZEc5eUxXTmhNQjRYRFRJMU1USXlOekF4TVRBMU5Gb1hEVE0xTVRJeQpOVEF4TVRBMU5Gb3dHVEVYTUJVR0ExVUVBeE1PZG0wdGIzQmxjbUYwYjNJdFkyRXdnZ0VpTUEwR0NTcUdTSWIzCkRRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRREVkZ2ZOWHFlcUJWODdodUVaRDAva1VjcjZFNjVpUTl5ZHNvL1AKOTF3dnZkRGNNeUdGa21XK0R0VDIyMmNKMkJXNFk2Z2ZnOEJLcklpSHhuMjVrM0hGZzNxTzcrcE5JSEJwM1FZTgp3c29vMzl0YWFoLzI2TmRMSUV1UWhCNnppZUlFZ3NPQVBhQnhJSWxTZExmK214WWxnSng4amJ6b3JCKzNwUkw1Ckx5QXM4MU1VSTd5MkJmcmNKVHZxTGJheEpzSXB0bTM2Uk40cFFBaGl5ZEd2ZVJwbkMzZlljMGZGYU5IVXZmUmEKeTNkdHJXcHhBTk54cXFwL2xnM2tJZjlpSnFBZStuVTZ2aFJ3VjNwZjFnWjFIU2lERVRzSDZONU9GZ282NGNjYgo0SktCTHhlajY2R2FaRGduakdwU0ZvUGlXSTJEZUkxeEV0b0VoTGtlcmtoQm5BRXJBZ01CQUFHallUQmZNQTRHCkExVWREd0VCL3dRRUF3SUNwREFkQmdOVkhTVUVGakFVQmdnckJnRUZCUWNEQVFZSUt3WUJCUVVIQXdJd0R3WUQKVlIwVEFRSC9CQVV3QXdFQi96QWRCZ05WSFE0RUZnUVUwVEV6VUZ4bXpaOTJ3SmUwYUdSZGpKNTRldnN3RFFZSgpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFBQXpKRVBGU2c3TXkvdVRXaHR2L3V4d3JLaDlna21UOTNpSks3Ui9LMysvCnlCcS9EaGxkQWIvMlNORDFocG5OMkIyWldtdU5YL1locEtaRjlGRUx3QlJnZFI1MWs0KzZQcmtWbGNURzczak4KZnhWbnhZM202RW1IamZTQW93WUljVThURmU0Zy9oeDF1RVgvNXRDKzMyRzUxOE1iKzVwR0VSY3ZrclAyaXlQRwo0bEpsZm5HUDhuTUROdktsOHhycVlEU1pybkZIUm1pSExYT0dyQ09kVUwrSU1KNzA3Z3VreWVyZndsSnlPSXlxCnpjd0I3OVVZbkFJNWh2bGlTQ2k0Q25LQXNETzR5VTA0QXp2eWMzNUY3L2JUcFFBQ1ZQVU9OcGZ4YmVSbjUxL0oKb1lMVFNwRStFUG1aT0xvUERJd0lWbFdOUGdKeVY5aWNUblgvTkNaVlFPYz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+      service:
+        name: vmks-victoria-metrics-operator
+        namespace: vmks
+        path: /validate-operator-victoriametrics-com-v1beta1-vmrule
+        port: 9443
+    failurePolicy: Fail
+    name: vmrules.operator.victoriametrics.com
+    objectSelector:
+      matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: NotIn
+          values:
+            - victoria-metrics-operator
+    rules:
+      - apiGroups:
+          - operator.victoriametrics.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - vmrules
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1beta1
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIRENDQWdTZ0F3SUJBZ0lQRE5jQXBqWTlVZlREekEyQ25NWXZNQTBHQ1NxR1NJYjNEUUVCQ3dVQU1Ca3gKRnpBVkJnTlZCQU1URG5adExXOXdaWEpoZEc5eUxXTmhNQjRYRFRJMU1USXlOekF4TVRBMU5Gb1hEVE0xTVRJeQpOVEF4TVRBMU5Gb3dHVEVYTUJVR0ExVUVBeE1PZG0wdGIzQmxjbUYwYjNJdFkyRXdnZ0VpTUEwR0NTcUdTSWIzCkRRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRREVkZ2ZOWHFlcUJWODdodUVaRDAva1VjcjZFNjVpUTl5ZHNvL1AKOTF3dnZkRGNNeUdGa21XK0R0VDIyMmNKMkJXNFk2Z2ZnOEJLcklpSHhuMjVrM0hGZzNxTzcrcE5JSEJwM1FZTgp3c29vMzl0YWFoLzI2TmRMSUV1UWhCNnppZUlFZ3NPQVBhQnhJSWxTZExmK214WWxnSng4amJ6b3JCKzNwUkw1Ckx5QXM4MU1VSTd5MkJmcmNKVHZxTGJheEpzSXB0bTM2Uk40cFFBaGl5ZEd2ZVJwbkMzZlljMGZGYU5IVXZmUmEKeTNkdHJXcHhBTk54cXFwL2xnM2tJZjlpSnFBZStuVTZ2aFJ3VjNwZjFnWjFIU2lERVRzSDZONU9GZ282NGNjYgo0SktCTHhlajY2R2FaRGduakdwU0ZvUGlXSTJEZUkxeEV0b0VoTGtlcmtoQm5BRXJBZ01CQUFHallUQmZNQTRHCkExVWREd0VCL3dRRUF3SUNwREFkQmdOVkhTVUVGakFVQmdnckJnRUZCUWNEQVFZSUt3WUJCUVVIQXdJd0R3WUQKVlIwVEFRSC9CQVV3QXdFQi96QWRCZ05WSFE0RUZnUVUwVEV6VUZ4bXpaOTJ3SmUwYUdSZGpKNTRldnN3RFFZSgpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFBQXpKRVBGU2c3TXkvdVRXaHR2L3V4d3JLaDlna21UOTNpSks3Ui9LMysvCnlCcS9EaGxkQWIvMlNORDFocG5OMkIyWldtdU5YL1locEtaRjlGRUx3QlJnZFI1MWs0KzZQcmtWbGNURzczak4KZnhWbnhZM202RW1IamZTQW93WUljVThURmU0Zy9oeDF1RVgvNXRDKzMyRzUxOE1iKzVwR0VSY3ZrclAyaXlQRwo0bEpsZm5HUDhuTUROdktsOHhycVlEU1pybkZIUm1pSExYT0dyQ09kVUwrSU1KNzA3Z3VreWVyZndsSnlPSXlxCnpjd0I3OVVZbkFJNWh2bGlTQ2k0Q25LQXNETzR5VTA0QXp2eWMzNUY3L2JUcFFBQ1ZQVU9OcGZ4YmVSbjUxL0oKb1lMVFNwRStFUG1aT0xvUERJd0lWbFdOUGdKeVY5aWNUblgvTkNaVlFPYz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+      service:
+        name: vmks-victoria-metrics-operator
+        namespace: vmks
+        path: /validate-operator-victoriametrics-com-v1beta1-vmscrapeconfig
+        port: 9443
+    failurePolicy: Fail
+    name: vmscrapeconfigs.operator.victoriametrics.com
+    objectSelector:
+      matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: NotIn
+          values:
+            - victoria-metrics-operator
+    rules:
+      - apiGroups:
+          - operator.victoriametrics.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - vmscrapeconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1beta1
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIRENDQWdTZ0F3SUJBZ0lQRE5jQXBqWTlVZlREekEyQ25NWXZNQTBHQ1NxR1NJYjNEUUVCQ3dVQU1Ca3gKRnpBVkJnTlZCQU1URG5adExXOXdaWEpoZEc5eUxXTmhNQjRYRFRJMU1USXlOekF4TVRBMU5Gb1hEVE0xTVRJeQpOVEF4TVRBMU5Gb3dHVEVYTUJVR0ExVUVBeE1PZG0wdGIzQmxjbUYwYjNJdFkyRXdnZ0VpTUEwR0NTcUdTSWIzCkRRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRREVkZ2ZOWHFlcUJWODdodUVaRDAva1VjcjZFNjVpUTl5ZHNvL1AKOTF3dnZkRGNNeUdGa21XK0R0VDIyMmNKMkJXNFk2Z2ZnOEJLcklpSHhuMjVrM0hGZzNxTzcrcE5JSEJwM1FZTgp3c29vMzl0YWFoLzI2TmRMSUV1UWhCNnppZUlFZ3NPQVBhQnhJSWxTZExmK214WWxnSng4amJ6b3JCKzNwUkw1Ckx5QXM4MU1VSTd5MkJmcmNKVHZxTGJheEpzSXB0bTM2Uk40cFFBaGl5ZEd2ZVJwbkMzZlljMGZGYU5IVXZmUmEKeTNkdHJXcHhBTk54cXFwL2xnM2tJZjlpSnFBZStuVTZ2aFJ3VjNwZjFnWjFIU2lERVRzSDZONU9GZ282NGNjYgo0SktCTHhlajY2R2FaRGduakdwU0ZvUGlXSTJEZUkxeEV0b0VoTGtlcmtoQm5BRXJBZ01CQUFHallUQmZNQTRHCkExVWREd0VCL3dRRUF3SUNwREFkQmdOVkhTVUVGakFVQmdnckJnRUZCUWNEQVFZSUt3WUJCUVVIQXdJd0R3WUQKVlIwVEFRSC9CQVV3QXdFQi96QWRCZ05WSFE0RUZnUVUwVEV6VUZ4bXpaOTJ3SmUwYUdSZGpKNTRldnN3RFFZSgpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFBQXpKRVBGU2c3TXkvdVRXaHR2L3V4d3JLaDlna21UOTNpSks3Ui9LMysvCnlCcS9EaGxkQWIvMlNORDFocG5OMkIyWldtdU5YL1locEtaRjlGRUx3QlJnZFI1MWs0KzZQcmtWbGNURzczak4KZnhWbnhZM202RW1IamZTQW93WUljVThURmU0Zy9oeDF1RVgvNXRDKzMyRzUxOE1iKzVwR0VSY3ZrclAyaXlQRwo0bEpsZm5HUDhuTUROdktsOHhycVlEU1pybkZIUm1pSExYT0dyQ09kVUwrSU1KNzA3Z3VreWVyZndsSnlPSXlxCnpjd0I3OVVZbkFJNWh2bGlTQ2k0Q25LQXNETzR5VTA0QXp2eWMzNUY3L2JUcFFBQ1ZQVU9OcGZ4YmVSbjUxL0oKb1lMVFNwRStFUG1aT0xvUERJd0lWbFdOUGdKeVY5aWNUblgvTkNaVlFPYz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+      service:
+        name: vmks-victoria-metrics-operator
+        namespace: vmks
+        path: /validate-operator-victoriametrics-com-v1beta1-vmservicescrape
+        port: 9443
+    failurePolicy: Fail
+    name: vmservicescrapes.operator.victoriametrics.com
+    objectSelector:
+      matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: NotIn
+          values:
+            - victoria-metrics-operator
+    rules:
+      - apiGroups:
+          - operator.victoriametrics.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - vmservicescrapes
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1beta1
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIRENDQWdTZ0F3SUJBZ0lQRE5jQXBqWTlVZlREekEyQ25NWXZNQTBHQ1NxR1NJYjNEUUVCQ3dVQU1Ca3gKRnpBVkJnTlZCQU1URG5adExXOXdaWEpoZEc5eUxXTmhNQjRYRFRJMU1USXlOekF4TVRBMU5Gb1hEVE0xTVRJeQpOVEF4TVRBMU5Gb3dHVEVYTUJVR0ExVUVBeE1PZG0wdGIzQmxjbUYwYjNJdFkyRXdnZ0VpTUEwR0NTcUdTSWIzCkRRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRREVkZ2ZOWHFlcUJWODdodUVaRDAva1VjcjZFNjVpUTl5ZHNvL1AKOTF3dnZkRGNNeUdGa21XK0R0VDIyMmNKMkJXNFk2Z2ZnOEJLcklpSHhuMjVrM0hGZzNxTzcrcE5JSEJwM1FZTgp3c29vMzl0YWFoLzI2TmRMSUV1UWhCNnppZUlFZ3NPQVBhQnhJSWxTZExmK214WWxnSng4amJ6b3JCKzNwUkw1Ckx5QXM4MU1VSTd5MkJmcmNKVHZxTGJheEpzSXB0bTM2Uk40cFFBaGl5ZEd2ZVJwbkMzZlljMGZGYU5IVXZmUmEKeTNkdHJXcHhBTk54cXFwL2xnM2tJZjlpSnFBZStuVTZ2aFJ3VjNwZjFnWjFIU2lERVRzSDZONU9GZ282NGNjYgo0SktCTHhlajY2R2FaRGduakdwU0ZvUGlXSTJEZUkxeEV0b0VoTGtlcmtoQm5BRXJBZ01CQUFHallUQmZNQTRHCkExVWREd0VCL3dRRUF3SUNwREFkQmdOVkhTVUVGakFVQmdnckJnRUZCUWNEQVFZSUt3WUJCUVVIQXdJd0R3WUQKVlIwVEFRSC9CQVV3QXdFQi96QWRCZ05WSFE0RUZnUVUwVEV6VUZ4bXpaOTJ3SmUwYUdSZGpKNTRldnN3RFFZSgpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFBQXpKRVBGU2c3TXkvdVRXaHR2L3V4d3JLaDlna21UOTNpSks3Ui9LMysvCnlCcS9EaGxkQWIvMlNORDFocG5OMkIyWldtdU5YL1locEtaRjlGRUx3QlJnZFI1MWs0KzZQcmtWbGNURzczak4KZnhWbnhZM202RW1IamZTQW93WUljVThURmU0Zy9oeDF1RVgvNXRDKzMyRzUxOE1iKzVwR0VSY3ZrclAyaXlQRwo0bEpsZm5HUDhuTUROdktsOHhycVlEU1pybkZIUm1pSExYT0dyQ09kVUwrSU1KNzA3Z3VreWVyZndsSnlPSXlxCnpjd0I3OVVZbkFJNWh2bGlTQ2k0Q25LQXNETzR5VTA0QXp2eWMzNUY3L2JUcFFBQ1ZQVU9OcGZ4YmVSbjUxL0oKb1lMVFNwRStFUG1aT0xvUERJd0lWbFdOUGdKeVY5aWNUblgvTkNaVlFPYz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+      service:
+        name: vmks-victoria-metrics-operator
+        namespace: vmks
+        path: /validate-operator-victoriametrics-com-v1beta1-vmsingle
+        port: 9443
+    failurePolicy: Fail
+    name: vmsingles.operator.victoriametrics.com
+    objectSelector:
+      matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: NotIn
+          values:
+            - victoria-metrics-operator
+    rules:
+      - apiGroups:
+          - operator.victoriametrics.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - vmsingles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1beta1
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIRENDQWdTZ0F3SUJBZ0lQRE5jQXBqWTlVZlREekEyQ25NWXZNQTBHQ1NxR1NJYjNEUUVCQ3dVQU1Ca3gKRnpBVkJnTlZCQU1URG5adExXOXdaWEpoZEc5eUxXTmhNQjRYRFRJMU1USXlOekF4TVRBMU5Gb1hEVE0xTVRJeQpOVEF4TVRBMU5Gb3dHVEVYTUJVR0ExVUVBeE1PZG0wdGIzQmxjbUYwYjNJdFkyRXdnZ0VpTUEwR0NTcUdTSWIzCkRRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRREVkZ2ZOWHFlcUJWODdodUVaRDAva1VjcjZFNjVpUTl5ZHNvL1AKOTF3dnZkRGNNeUdGa21XK0R0VDIyMmNKMkJXNFk2Z2ZnOEJLcklpSHhuMjVrM0hGZzNxTzcrcE5JSEJwM1FZTgp3c29vMzl0YWFoLzI2TmRMSUV1UWhCNnppZUlFZ3NPQVBhQnhJSWxTZExmK214WWxnSng4amJ6b3JCKzNwUkw1Ckx5QXM4MU1VSTd5MkJmcmNKVHZxTGJheEpzSXB0bTM2Uk40cFFBaGl5ZEd2ZVJwbkMzZlljMGZGYU5IVXZmUmEKeTNkdHJXcHhBTk54cXFwL2xnM2tJZjlpSnFBZStuVTZ2aFJ3VjNwZjFnWjFIU2lERVRzSDZONU9GZ282NGNjYgo0SktCTHhlajY2R2FaRGduakdwU0ZvUGlXSTJEZUkxeEV0b0VoTGtlcmtoQm5BRXJBZ01CQUFHallUQmZNQTRHCkExVWREd0VCL3dRRUF3SUNwREFkQmdOVkhTVUVGakFVQmdnckJnRUZCUWNEQVFZSUt3WUJCUVVIQXdJd0R3WUQKVlIwVEFRSC9CQVV3QXdFQi96QWRCZ05WSFE0RUZnUVUwVEV6VUZ4bXpaOTJ3SmUwYUdSZGpKNTRldnN3RFFZSgpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFBQXpKRVBGU2c3TXkvdVRXaHR2L3V4d3JLaDlna21UOTNpSks3Ui9LMysvCnlCcS9EaGxkQWIvMlNORDFocG5OMkIyWldtdU5YL1locEtaRjlGRUx3QlJnZFI1MWs0KzZQcmtWbGNURzczak4KZnhWbnhZM202RW1IamZTQW93WUljVThURmU0Zy9oeDF1RVgvNXRDKzMyRzUxOE1iKzVwR0VSY3ZrclAyaXlQRwo0bEpsZm5HUDhuTUROdktsOHhycVlEU1pybkZIUm1pSExYT0dyQ09kVUwrSU1KNzA3Z3VreWVyZndsSnlPSXlxCnpjd0I3OVVZbkFJNWh2bGlTQ2k0Q25LQXNETzR5VTA0QXp2eWMzNUY3L2JUcFFBQ1ZQVU9OcGZ4YmVSbjUxL0oKb1lMVFNwRStFUG1aT0xvUERJd0lWbFdOUGdKeVY5aWNUblgvTkNaVlFPYz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+      service:
+        name: vmks-victoria-metrics-operator
+        namespace: vmks
+        path: /validate-operator-victoriametrics-com-v1beta1-vmstaticscrape
+        port: 9443
+    failurePolicy: Fail
+    name: vmstaticscrapes.operator.victoriametrics.com
+    objectSelector:
+      matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: NotIn
+          values:
+            - victoria-metrics-operator
+    rules:
+      - apiGroups:
+          - operator.victoriametrics.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - vmstaticscrapes
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1beta1
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIRENDQWdTZ0F3SUJBZ0lQRE5jQXBqWTlVZlREekEyQ25NWXZNQTBHQ1NxR1NJYjNEUUVCQ3dVQU1Ca3gKRnpBVkJnTlZCQU1URG5adExXOXdaWEpoZEc5eUxXTmhNQjRYRFRJMU1USXlOekF4TVRBMU5Gb1hEVE0xTVRJeQpOVEF4TVRBMU5Gb3dHVEVYTUJVR0ExVUVBeE1PZG0wdGIzQmxjbUYwYjNJdFkyRXdnZ0VpTUEwR0NTcUdTSWIzCkRRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRREVkZ2ZOWHFlcUJWODdodUVaRDAva1VjcjZFNjVpUTl5ZHNvL1AKOTF3dnZkRGNNeUdGa21XK0R0VDIyMmNKMkJXNFk2Z2ZnOEJLcklpSHhuMjVrM0hGZzNxTzcrcE5JSEJwM1FZTgp3c29vMzl0YWFoLzI2TmRMSUV1UWhCNnppZUlFZ3NPQVBhQnhJSWxTZExmK214WWxnSng4amJ6b3JCKzNwUkw1Ckx5QXM4MU1VSTd5MkJmcmNKVHZxTGJheEpzSXB0bTM2Uk40cFFBaGl5ZEd2ZVJwbkMzZlljMGZGYU5IVXZmUmEKeTNkdHJXcHhBTk54cXFwL2xnM2tJZjlpSnFBZStuVTZ2aFJ3VjNwZjFnWjFIU2lERVRzSDZONU9GZ282NGNjYgo0SktCTHhlajY2R2FaRGduakdwU0ZvUGlXSTJEZUkxeEV0b0VoTGtlcmtoQm5BRXJBZ01CQUFHallUQmZNQTRHCkExVWREd0VCL3dRRUF3SUNwREFkQmdOVkhTVUVGakFVQmdnckJnRUZCUWNEQVFZSUt3WUJCUVVIQXdJd0R3WUQKVlIwVEFRSC9CQVV3QXdFQi96QWRCZ05WSFE0RUZnUVUwVEV6VUZ4bXpaOTJ3SmUwYUdSZGpKNTRldnN3RFFZSgpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFBQXpKRVBGU2c3TXkvdVRXaHR2L3V4d3JLaDlna21UOTNpSks3Ui9LMysvCnlCcS9EaGxkQWIvMlNORDFocG5OMkIyWldtdU5YL1locEtaRjlGRUx3QlJnZFI1MWs0KzZQcmtWbGNURzczak4KZnhWbnhZM202RW1IamZTQW93WUljVThURmU0Zy9oeDF1RVgvNXRDKzMyRzUxOE1iKzVwR0VSY3ZrclAyaXlQRwo0bEpsZm5HUDhuTUROdktsOHhycVlEU1pybkZIUm1pSExYT0dyQ09kVUwrSU1KNzA3Z3VreWVyZndsSnlPSXlxCnpjd0I3OVVZbkFJNWh2bGlTQ2k0Q25LQXNETzR5VTA0QXp2eWMzNUY3L2JUcFFBQ1ZQVU9OcGZ4YmVSbjUxL0oKb1lMVFNwRStFUG1aT0xvUERJd0lWbFdOUGdKeVY5aWNUblgvTkNaVlFPYz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+      service:
+        name: vmks-victoria-metrics-operator
+        namespace: vmks
+        path: /validate-operator-victoriametrics-com-v1beta1-vmuser
+        port: 9443
+    failurePolicy: Fail
+    name: vmusers.operator.victoriametrics.com
+    objectSelector:
+      matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: NotIn
+          values:
+            - victoria-metrics-operator
+    rules:
+      - apiGroups:
+          - operator.victoriametrics.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - vmusers
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIRENDQWdTZ0F3SUJBZ0lQRE5jQXBqWTlVZlREekEyQ25NWXZNQTBHQ1NxR1NJYjNEUUVCQ3dVQU1Ca3gKRnpBVkJnTlZCQU1URG5adExXOXdaWEpoZEc5eUxXTmhNQjRYRFRJMU1USXlOekF4TVRBMU5Gb1hEVE0xTVRJeQpOVEF4TVRBMU5Gb3dHVEVYTUJVR0ExVUVBeE1PZG0wdGIzQmxjbUYwYjNJdFkyRXdnZ0VpTUEwR0NTcUdTSWIzCkRRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRREVkZ2ZOWHFlcUJWODdodUVaRDAva1VjcjZFNjVpUTl5ZHNvL1AKOTF3dnZkRGNNeUdGa21XK0R0VDIyMmNKMkJXNFk2Z2ZnOEJLcklpSHhuMjVrM0hGZzNxTzcrcE5JSEJwM1FZTgp3c29vMzl0YWFoLzI2TmRMSUV1UWhCNnppZUlFZ3NPQVBhQnhJSWxTZExmK214WWxnSng4amJ6b3JCKzNwUkw1Ckx5QXM4MU1VSTd5MkJmcmNKVHZxTGJheEpzSXB0bTM2Uk40cFFBaGl5ZEd2ZVJwbkMzZlljMGZGYU5IVXZmUmEKeTNkdHJXcHhBTk54cXFwL2xnM2tJZjlpSnFBZStuVTZ2aFJ3VjNwZjFnWjFIU2lERVRzSDZONU9GZ282NGNjYgo0SktCTHhlajY2R2FaRGduakdwU0ZvUGlXSTJEZUkxeEV0b0VoTGtlcmtoQm5BRXJBZ01CQUFHallUQmZNQTRHCkExVWREd0VCL3dRRUF3SUNwREFkQmdOVkhTVUVGakFVQmdnckJnRUZCUWNEQVFZSUt3WUJCUVVIQXdJd0R3WUQKVlIwVEFRSC9CQVV3QXdFQi96QWRCZ05WSFE0RUZnUVUwVEV6VUZ4bXpaOTJ3SmUwYUdSZGpKNTRldnN3RFFZSgpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFBQXpKRVBGU2c3TXkvdVRXaHR2L3V4d3JLaDlna21UOTNpSks3Ui9LMysvCnlCcS9EaGxkQWIvMlNORDFocG5OMkIyWldtdU5YL1locEtaRjlGRUx3QlJnZFI1MWs0KzZQcmtWbGNURzczak4KZnhWbnhZM202RW1IamZTQW93WUljVThURmU0Zy9oeDF1RVgvNXRDKzMyRzUxOE1iKzVwR0VSY3ZrclAyaXlQRwo0bEpsZm5HUDhuTUROdktsOHhycVlEU1pybkZIUm1pSExYT0dyQ09kVUwrSU1KNzA3Z3VreWVyZndsSnlPSXlxCnpjd0I3OVVZbkFJNWh2bGlTQ2k0Q25LQXNETzR5VTA0QXp2eWMzNUY3L2JUcFFBQ1ZQVU9OcGZ4YmVSbjUxL0oKb1lMVFNwRStFUG1aT0xvUERJd0lWbFdOUGdKeVY5aWNUblgvTkNaVlFPYz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+      service:
+        name: vmks-victoria-metrics-operator
+        namespace: vmks
+        path: /validate-operator-victoriametrics-com-v1-vtcluster
+        port: 9443
+    failurePolicy: Fail
+    name: vtclusters.operator.victoriametrics.com
+    objectSelector:
+      matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: NotIn
+          values:
+            - victoria-metrics-operator
+    rules:
+      - apiGroups:
+          - operator.victoriametrics.com
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - vtclusters
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIRENDQWdTZ0F3SUJBZ0lQRE5jQXBqWTlVZlREekEyQ25NWXZNQTBHQ1NxR1NJYjNEUUVCQ3dVQU1Ca3gKRnpBVkJnTlZCQU1URG5adExXOXdaWEpoZEc5eUxXTmhNQjRYRFRJMU1USXlOekF4TVRBMU5Gb1hEVE0xTVRJeQpOVEF4TVRBMU5Gb3dHVEVYTUJVR0ExVUVBeE1PZG0wdGIzQmxjbUYwYjNJdFkyRXdnZ0VpTUEwR0NTcUdTSWIzCkRRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRREVkZ2ZOWHFlcUJWODdodUVaRDAva1VjcjZFNjVpUTl5ZHNvL1AKOTF3dnZkRGNNeUdGa21XK0R0VDIyMmNKMkJXNFk2Z2ZnOEJLcklpSHhuMjVrM0hGZzNxTzcrcE5JSEJwM1FZTgp3c29vMzl0YWFoLzI2TmRMSUV1UWhCNnppZUlFZ3NPQVBhQnhJSWxTZExmK214WWxnSng4amJ6b3JCKzNwUkw1Ckx5QXM4MU1VSTd5MkJmcmNKVHZxTGJheEpzSXB0bTM2Uk40cFFBaGl5ZEd2ZVJwbkMzZlljMGZGYU5IVXZmUmEKeTNkdHJXcHhBTk54cXFwL2xnM2tJZjlpSnFBZStuVTZ2aFJ3VjNwZjFnWjFIU2lERVRzSDZONU9GZ282NGNjYgo0SktCTHhlajY2R2FaRGduakdwU0ZvUGlXSTJEZUkxeEV0b0VoTGtlcmtoQm5BRXJBZ01CQUFHallUQmZNQTRHCkExVWREd0VCL3dRRUF3SUNwREFkQmdOVkhTVUVGakFVQmdnckJnRUZCUWNEQVFZSUt3WUJCUVVIQXdJd0R3WUQKVlIwVEFRSC9CQVV3QXdFQi96QWRCZ05WSFE0RUZnUVUwVEV6VUZ4bXpaOTJ3SmUwYUdSZGpKNTRldnN3RFFZSgpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFBQXpKRVBGU2c3TXkvdVRXaHR2L3V4d3JLaDlna21UOTNpSks3Ui9LMysvCnlCcS9EaGxkQWIvMlNORDFocG5OMkIyWldtdU5YL1locEtaRjlGRUx3QlJnZFI1MWs0KzZQcmtWbGNURzczak4KZnhWbnhZM202RW1IamZTQW93WUljVThURmU0Zy9oeDF1RVgvNXRDKzMyRzUxOE1iKzVwR0VSY3ZrclAyaXlQRwo0bEpsZm5HUDhuTUROdktsOHhycVlEU1pybkZIUm1pSExYT0dyQ09kVUwrSU1KNzA3Z3VreWVyZndsSnlPSXlxCnpjd0I3OVVZbkFJNWh2bGlTQ2k0Q25LQXNETzR5VTA0QXp2eWMzNUY3L2JUcFFBQ1ZQVU9OcGZ4YmVSbjUxL0oKb1lMVFNwRStFUG1aT0xvUERJd0lWbFdOUGdKeVY5aWNUblgvTkNaVlFPYz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+      service:
+        name: vmks-victoria-metrics-operator
+        namespace: vmks
+        path: /validate-operator-victoriametrics-com-v1-vtsingle
+        port: 9443
+    failurePolicy: Fail
+    name: vtsingles.operator.victoriametrics.com
+    objectSelector:
+      matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: NotIn
+          values:
+            - victoria-metrics-operator
+    rules:
+      - apiGroups:
+          - operator.victoriametrics.com
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - vtsingles
+    sideEffects: None

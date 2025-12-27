@@ -1,0 +1,15 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+overrides:
+    - image: docker.io/grafana/grafana:12.3.0
+      newImage: oci.zebradil.dev/index.docker.io-cache/grafana/grafana:12.3.0
+    - image: quay.io/kiwigrid/k8s-sidecar:1.30.10
+      newImage: oci.zebradil.dev/quay.io-cache/kiwigrid/k8s-sidecar:1.30.10
+    - image: quay.io/prometheus/node-exporter:v1.10.2
+      newImage: oci.zebradil.dev/quay.io-cache/prometheus/node-exporter:v1.10.2
+    - image: rancher/kubectl:v1.33.1
+      newImage: oci.zebradil.dev/index.docker.io-cache/rancher/kubectl:v1.33.1
+    - image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.17.0
+      newImage: oci.zebradil.dev/registry.k8s.io-cache/kube-state-metrics/kube-state-metrics:v2.17.0
+    - image: victoriametrics/operator:v0.66.1
+      newImage: oci.zebradil.dev/index.docker.io-cache/victoriametrics/operator:v0.66.1

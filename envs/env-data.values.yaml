@@ -25,7 +25,7 @@ argocd:
   env:
     generateSecret: false
 helm:
-  kubeVersion: '1.33'
+  kubeVersion: '1.33.1'
   capabilities:
     - monitoring.coreos.com/v1
 kbld:

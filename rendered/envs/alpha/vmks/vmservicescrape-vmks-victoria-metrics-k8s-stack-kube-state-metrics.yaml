@@ -1,0 +1,22 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMServiceScrape
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    app.kubernetes.io/instance: vmks
+    app.kubernetes.io/name: victoria-metrics-k8s-stack
+  name: vmks-victoria-metrics-k8s-stack-kube-state-metrics
+  namespace: vmks
+spec:
+  endpoints:
+    - honorLabels: true
+      metricRelabelConfigs:
+        - action: labeldrop
+          regex: (uid|container_id|image_id)
+      port: http
+  jobLabel: app.kubernetes.io/name
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: vmks
+      app.kubernetes.io/name: kube-state-metrics
