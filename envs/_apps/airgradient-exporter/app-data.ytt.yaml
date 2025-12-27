@@ -2,7 +2,7 @@
 ---
 application:
   #! renovate: datasource=docker
-  image: ghcr.io/zebradil/airgradient-exporter:1.0.4
+  image: ghcr.io/zebradil/airgradient-exporter:1.0.5
   ingress: false
   containerPort: 9112
   serviceMonitor: true
