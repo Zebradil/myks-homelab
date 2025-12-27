@@ -16,4 +16,4 @@ metadata:
   name: #@ name
   labels:
     grafana_dashboard: '1'
-data: #@ { file: data.read(file) }
+data: #@ { file.removeprefix(prefix): data.read(file) }
