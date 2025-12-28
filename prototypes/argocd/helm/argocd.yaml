@@ -1,5 +1,5 @@
 ---
-#@ for/end component in ["controller", "redis", "repoServer", "server"]:
+#@ for/end component in ["controller", "redis", "repoServer", "server", "notifications"]:
 #@yaml/text-templated-strings
 (@= component @):
   metrics:
