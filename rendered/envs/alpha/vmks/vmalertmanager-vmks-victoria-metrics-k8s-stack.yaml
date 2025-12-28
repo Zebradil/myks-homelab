@@ -10,7 +10,8 @@ metadata:
   name: vmks-victoria-metrics-k8s-stack
   namespace: vmks
 spec:
-  configSecret: vmalertmanager-vmks-victoria-metrics-k8s-stack
+  configSecret: ""
+  disableNamespaceMatcher: true
   externalURL: ""
   image:
     tag: v0.28.1

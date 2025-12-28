@@ -1,5 +1,5 @@
-apiVersion: v1
-kind: Secret
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAlertmanagerConfig
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
@@ -7,13 +7,10 @@ metadata:
     app.kubernetes.io/component: victoria-metrics-k8s-stack-alertmanager
     app.kubernetes.io/instance: vmks
     app.kubernetes.io/name: victoria-metrics-k8s-stack
-  name: vmalertmanager-vmks-victoria-metrics-k8s-stack
+  name: vmks-victoria-metrics-k8s-stack
   namespace: vmks
-stringData:
-  alertmanager.yaml: |
-    receivers:
+spec:
+  receivers:
     - name: blackhole
-    route:
-      receiver: blackhole
-    templates:
-      - "/etc/vm/configs/**/*.tmpl"
+  route:
+    receiver: blackhole
