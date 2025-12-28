@@ -70,7 +70,9 @@ spec:
         runAsUser: 999
       terminationGracePeriodSeconds: 120
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         annotations: null
         labels:
           app: harbor
