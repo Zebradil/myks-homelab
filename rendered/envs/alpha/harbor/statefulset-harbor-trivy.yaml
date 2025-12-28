@@ -101,7 +101,7 @@ spec:
                 secretKeyRef:
                   key: redisURL
                   name: harbor-trivy
-          image: oci.zebradil.dev/index.docker.io-cache/goharbor/trivy-adapter-photon@sha256:7a6d2284992ee5739ef0a76a9bed722bd87ec9e9ad286c6d72aa7919a606e106
+          image: oci.zebradil.dev/index.docker.io-cache/goharbor/trivy-adapter-photon@sha256:13dddb2adef7e28530e04e5659c49f550e5463e5f2536378ffd9207f7b23aac4
           livenessProbe:
             failureThreshold: 10
             httpGet:
