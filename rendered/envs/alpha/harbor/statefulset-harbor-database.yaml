@@ -27,7 +27,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/secret: 4f658ff5ab4ddb0a6bce66e65de225ed18a17430bff8aea00a037d9d434730c3
+        checksum/secret: c6743a598754bc81d08f79bb4346b61c5fd861ed04c9e270f5004b833a53ca88
       labels:
         app: harbor
         app.kubernetes.io/component: database
@@ -110,7 +110,9 @@ spec:
             sizeLimit: 512Mi
           name: shm-volume
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         annotations: null
         labels:
           app: harbor

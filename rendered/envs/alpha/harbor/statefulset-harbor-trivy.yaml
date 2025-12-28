@@ -27,7 +27,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/secret: 7f12f4d3f015217c16af831d781e7a9fec0e615704bf9910ad3df65d95bd2ead
+        checksum/secret: 4f71f45ec653e4a7f18b3c63d42323aeffeda3f58cf88dc127d403c92b233edb
       labels:
         app: harbor
         app.kubernetes.io/component: trivy
@@ -74,6 +74,10 @@ spec:
               value: "false"
             - name: SCANNER_TRIVY_SKIP_JAVA_DB_UPDATE
               value: "false"
+            - name: SCANNER_TRIVY_DB_REPOSITORY
+              value: mirror.gcr.io/aquasec/trivy-db,ghcr.io/aquasecurity/trivy-db
+            - name: SCANNER_TRIVY_JAVA_DB_REPOSITORY
+              value: mirror.gcr.io/aquasec/trivy-java-db,ghcr.io/aquasecurity/trivy-java-db
             - name: SCANNER_TRIVY_OFFLINE_SCAN
               value: "false"
             - name: SCANNER_TRIVY_SECURITY_CHECKS
@@ -145,7 +149,9 @@ spec:
         fsGroup: 10000
         runAsUser: 10000
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         annotations: null
         labels:
           app: harbor

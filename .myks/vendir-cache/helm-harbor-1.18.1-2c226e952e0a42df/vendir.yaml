@@ -1,0 +1,13 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+    - contents:
+        - helmChart:
+            name: harbor
+            repository:
+                url: https://helm.goharbor.io
+            version: 1.18.1
+          lazy: true
+          path: .
+      path: .myks/vendir-cache/helm-harbor-1.18.1-2c226e952e0a42df/data
+      permissions: null
+kind: Config
