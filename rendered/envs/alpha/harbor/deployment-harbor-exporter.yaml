@@ -27,8 +27,8 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/configmap: cdf9ef76093b1c6989cd55766072ad88109317e1d913a07a5aadd4714ef7d943
-        checksum/secret: 7164ebccb0934f296fa28333ce8fbc0c7ed603fb1789388491e990a14785d96c
+        checksum/configmap: c978cb72e80b4ab137c949ff71d839929a768e8d904d1062db559e249db7506e
+        checksum/secret: fed5f69e4a729a3f3c07043a5dd452500430f00990a2621a814d96b1ec2c2d2e
       labels:
         app: harbor
         app.kubernetes.io/component: exporter
