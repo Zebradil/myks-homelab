@@ -1,23 +1,23 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 overrides:
-    - image: goharbor/harbor-core:v2.13.2
-      newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-core:v2.13.2
-    - image: goharbor/harbor-db:v2.13.2
-      newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-db:v2.13.2
-    - image: goharbor/harbor-exporter:v2.13.2
-      newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-exporter:v2.13.2
-    - image: goharbor/harbor-jobservice:v2.13.2
-      newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-jobservice:v2.13.2
-    - image: goharbor/harbor-portal:v2.13.2
-      newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-portal:v2.13.2
-    - image: goharbor/harbor-registryctl:v2.13.2
-      newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-registryctl:v2.13.2
-    - image: goharbor/redis-photon:v2.13.2
-      newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/redis-photon:v2.13.2
-    - image: goharbor/registry-photon:v2.13.2
-      newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/registry-photon:v2.13.2
-    - image: goharbor/trivy-adapter-photon:v2.13.2
-      newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/trivy-adapter-photon:v2.13.2
+    - image: goharbor/harbor-core:v2.14.1
+      newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-core:v2.14.1
+    - image: goharbor/harbor-db:v2.14.1
+      newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-db:v2.14.1
+    - image: goharbor/harbor-exporter:v2.14.1
+      newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-exporter:v2.14.1
+    - image: goharbor/harbor-jobservice:v2.14.1
+      newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-jobservice:v2.14.1
+    - image: goharbor/harbor-portal:v2.14.1
+      newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-portal:v2.14.1
+    - image: goharbor/harbor-registryctl:v2.14.1
+      newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-registryctl:v2.14.1
+    - image: goharbor/redis-photon:v2.14.1
+      newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/redis-photon:v2.14.1
+    - image: goharbor/registry-photon:v2.14.1
+      newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/registry-photon:v2.14.1
+    - image: goharbor/trivy-adapter-photon:v2.14.1
+      newImage: oci.zebradil.dev/index.docker.io-cache/goharbor/trivy-adapter-photon:v2.14.1
     - image: registry.access.redhat.com/ubi8/ubi:8.9
       newImage: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8/ubi:8.9

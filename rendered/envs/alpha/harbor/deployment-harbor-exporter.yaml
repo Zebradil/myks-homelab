@@ -52,7 +52,7 @@ spec:
                 name: harbor-exporter-env
             - secretRef:
                 name: harbor-exporter
-          image: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-exporter@sha256:17db16a26911348d743476877de703683d8313e87adcbe37cfea86e064337eec
+          image: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-exporter@sha256:526ff42e209231df155d3eaac5fb1c1a09c07c6e9443cae6b344c24e182823c0
           livenessProbe:
             httpGet:
               path: /
