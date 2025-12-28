@@ -6,3 +6,11 @@ prototype:
       helmChart:
         url: https://traefik.github.io/charts
         version: 38.0.1
+    dashboard:
+      git:
+        ref: v3.6.5
+        url: https://github.com/traefik/traefik
+      includePaths:
+        - contrib/grafana/traefik-kubernetes.json
+      newRootPath: contrib
+      plugin: ytt

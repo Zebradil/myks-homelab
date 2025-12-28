@@ -1,0 +1,12 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - configDigest: e3f1ebaaa80917f9df81c4a1eaed1b38df96380edcdcd61c443adb1d91753ed2
+    git:
+      commitTitle: Prepare release v3.6.5
+      sha: e4f0c3051c91e23f2c7271da6070b33d7beb4496
+      tags:
+      - v3.6.5
+    path: .
+  path: .myks/vendir-cache/git-traefik-v3.6.5-e7c996d3f0bc2f28/data
+kind: LockConfig

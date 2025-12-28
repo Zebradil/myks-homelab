@@ -10,3 +10,13 @@ directories:
       version: 38.0.1
       repository:
         url: https://traefik.github.io/charts
+- path: ytt/dashboard
+  contents:
+  - path: .
+    lazy: true
+    git:
+      url: https://github.com/traefik/traefik
+      ref: v3.6.5
+    includePaths:
+    - contrib/grafana/traefik-kubernetes.json
+    newRootPath: contrib
