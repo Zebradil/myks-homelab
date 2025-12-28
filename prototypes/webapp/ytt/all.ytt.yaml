@@ -7,6 +7,7 @@
 #@ name = a.name or m.context.app
 
 #@ pod_labels = { "app.kubernetes.io/name": name }
+#@ svc_labels = pod_labels
 
 ---
 apiVersion: apps/v1
@@ -23,6 +24,8 @@ spec:
       containers:
         - image: #@ a.image
           name: #@ name
+          #@ if/end a.env:
+          env: #@ a.env
           ports:
             - containerPort: #@ a.containerPort
               name: http
@@ -41,12 +44,14 @@ apiVersion: v1
 kind: Service
 metadata:
   name: #@ name
+  labels: #@ svc_labels
 spec:
   ports:
     - name: http
       port: 80
       targetPort: http
   selector: #@ pod_labels
+
 
 #@ if/end a.ingress:
 ---
@@ -67,3 +72,20 @@ spec:
                   name: http
             path: /
             pathType: Prefix
+
+
+#@ if/end a.serviceMonitor:
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: #@ name
+spec:
+  endpoints:
+    - port: http
+      targetPort: http
+  namespaceSelector:
+    matchNames:
+      -  #@ name
+  selector:
+    matchLabels: #@ svc_labels

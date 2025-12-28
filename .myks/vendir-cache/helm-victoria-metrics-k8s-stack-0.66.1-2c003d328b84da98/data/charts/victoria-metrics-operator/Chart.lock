@@ -1,0 +1,9 @@
+dependencies:
+- name: victoria-metrics-common
+  repository: https://victoriametrics.github.io/helm-charts
+  version: 0.0.45
+- name: crds
+  repository: ""
+  version: 0.0.*
+digest: sha256:3cf91daa89966332177805ab678a298051628819405743a85c29b7cdb932fde3
+generated: "2025-11-10T08:39:06.042013338Z"

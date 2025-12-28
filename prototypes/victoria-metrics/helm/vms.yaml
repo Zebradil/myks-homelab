@@ -1,0 +1,6 @@
+---
+server:
+  serviceMonitor:
+    enabled: true
+  scrape:
+    enabled: true

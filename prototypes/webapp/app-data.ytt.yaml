@@ -2,9 +2,12 @@
 ---
 #@overlay/match-child-defaults missing_ok=True
 application:
-  host: ""
   #@schema/validation min_len=1
-  image: ""
+  image: ''
   ingress: true
-  name: ""
+  name: ''
   containerPort: 80
+  serviceMonitor: false
+  env:
+    - name: TZ
+      value: UTC

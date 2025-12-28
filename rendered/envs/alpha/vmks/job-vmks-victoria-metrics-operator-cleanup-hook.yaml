@@ -1,0 +1,46 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+    helm.sh/hook: pre-delete
+    helm.sh/hook-delete-policy: before-hook-creation
+    helm.sh/hook-weight: "-3"
+  labels:
+    app.kubernetes.io/instance: vmks
+    app.kubernetes.io/name: victoria-metrics-operator
+  name: vmks-victoria-metrics-operator-cleanup-hook
+  namespace: vmks
+spec:
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: vmks
+        app.kubernetes.io/name: victoria-metrics-operator
+      name: vmks-victoria-metrics-operator
+    spec:
+      containers:
+        - args:
+            - delete
+            - vlagent,vlcluster,vlogs,vlsingle,vmagent,vmalert,vmalertmanager,vmalertmanagerconfig,vmanomaly,vmauth,vmcluster,vmnodescrape,vmpodscrape,vmprobe,vmrule,vmscrapeconfig,vmservicescrape,vmsingle,vmstaticscrape,vmuser,vtcluster,vtsingle
+            - --all
+            - --ignore-not-found=true
+          command:
+            - kubectl
+          image: oci.zebradil.dev/index.docker.io-cache/rancher/kubectl@sha256:a67abd077eba3565a84e412cff9fb4fe1469b27784ef24329c1104efe15783f3
+          name: kubectl
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 56Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+      restartPolicy: OnFailure
+      serviceAccountName: vmks-victoria-metrics-operator-cleanup-hook

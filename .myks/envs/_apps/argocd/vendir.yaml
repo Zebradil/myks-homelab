@@ -1,13 +1,21 @@
 apiVersion: vendir.k14s.io/v1alpha1
 kind: Config
 directories:
-- path: ytt/argocd
+- path: charts/argocd
+  contents:
+  - path: .
+    lazy: true
+    helmChart:
+      name: argo-cd
+      version: 9.2.1
+      repository:
+        url: https://argoproj.github.io/argo-helm
+- path: ytt/dashboards
   contents:
   - path: .
     lazy: true
     git:
-      url: https://github.com/argoproj/argo-cd
-      ref: v2.14.7
+      url: https://github.com/adinhodovic/argo-cd-mixin
+      ref: f30dcfa0758fb588215f2ea808cc30917db80365
     includePaths:
-    - manifests/install.yaml
-    newRootPath: manifests
+    - dashboards_out/argo-cd-*.json

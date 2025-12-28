@@ -1,0 +1,10 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - configDigest: 6f2b356ff42fcfc0241a71b3595f5377eec79ee8bf1be23e65e11fcfbb4dec9b
+    git:
+      commitTitle: 'fix: use standard options for links'
+      sha: f30dcfa0758fb588215f2ea808cc30917db80365
+    path: .
+  path: .myks/vendir-cache/git-argo-cd-mixin-f30dcfa0758fb588215f2ea808cc30917db80365-ad178586a02b9c4f/data
+kind: LockConfig

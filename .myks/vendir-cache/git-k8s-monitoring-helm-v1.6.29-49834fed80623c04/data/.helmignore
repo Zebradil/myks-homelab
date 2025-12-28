@@ -1,9 +1,0 @@
-.git
-.gitignore
-.idea
-ci
-docs/examples
-test
-schema-mods
-scripts
-Makefile

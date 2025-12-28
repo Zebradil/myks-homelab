@@ -3,6 +3,8 @@ kind: Service
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    app.kubernetes.io/name: httpbingo
   name: httpbingo
 spec:
   ports:

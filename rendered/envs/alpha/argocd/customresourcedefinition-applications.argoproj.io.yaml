@@ -3,6 +3,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
+    helm.sh/resource-policy: keep
   labels:
     app.kubernetes.io/name: applications.argoproj.io
     app.kubernetes.io/part-of: argocd
@@ -104,6 +105,9 @@ spec:
                       description: Limit is the maximum number of attempts for retrying a failed sync. If set to 0, no retries will be performed.
                       format: int64
                       type: integer
+                    refresh:
+                      description: 'Refresh indicates if the latest revision should be used on retry instead of the initial one (default: false)'
+                      type: boolean
                   type: object
                 sync:
                   description: Sync contains parameters for the operation
@@ -330,6 +334,9 @@ spec:
                             forceCommonLabels:
                               description: ForceCommonLabels specifies whether to force applying common labels to resources for Kustomize apps
                               type: boolean
+                            ignoreMissingComponents:
+                              description: IgnoreMissingComponents prevents kustomize from failing when components do not exist locally by not appending them to kustomization file
+                              type: boolean
                             images:
                               description: Images is a list of Kustomize image override specifications
                               items:
@@ -341,6 +348,9 @@ spec:
                                 KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
                                 uses the Kubernetes version of the target cluster.
                               type: string
+                            labelIncludeTemplates:
+                              description: LabelIncludeTemplates specifies whether to apply common labels to resource templates or not
+                              type: boolean
                             labelWithoutSelector:
                               description: LabelWithoutSelector specifies whether to apply common labels to resource selectors or not
                               type: boolean
@@ -649,6 +659,9 @@ spec:
                               forceCommonLabels:
                                 description: ForceCommonLabels specifies whether to force applying common labels to resources for Kustomize apps
                                 type: boolean
+                              ignoreMissingComponents:
+                                description: IgnoreMissingComponents prevents kustomize from failing when components do not exist locally by not appending them to kustomization file
+                                type: boolean
                               images:
                                 description: Images is a list of Kustomize image override specifications
                                 items:
@@ -660,6 +673,9 @@ spec:
                                   KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
                                   uses the Kubernetes version of the target cluster.
                                 type: string
+                              labelIncludeTemplates:
+                                description: LabelIncludeTemplates specifies whether to apply common labels to resource templates or not
+                                type: boolean
                               labelWithoutSelector:
                                 description: LabelWithoutSelector specifies whether to apply common labels to resource selectors or not
                                 type: boolean
@@ -1073,6 +1089,9 @@ spec:
                         forceCommonLabels:
                           description: ForceCommonLabels specifies whether to force applying common labels to resources for Kustomize apps
                           type: boolean
+                        ignoreMissingComponents:
+                          description: IgnoreMissingComponents prevents kustomize from failing when components do not exist locally by not appending them to kustomization file
+                          type: boolean
                         images:
                           description: Images is a list of Kustomize image override specifications
                           items:
@@ -1084,6 +1103,9 @@ spec:
                             KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
                             uses the Kubernetes version of the target cluster.
                           type: string
+                        labelIncludeTemplates:
+                          description: LabelIncludeTemplates specifies whether to apply common labels to resource templates or not
+                          type: boolean
                         labelWithoutSelector:
                           description: LabelWithoutSelector specifies whether to apply common labels to resource selectors or not
                           type: boolean
@@ -1250,10 +1272,15 @@ spec:
                         path:
                           description: |-
                             Path is a directory path within the git repository where hydrated manifests should be committed to and synced
-                            from. If hydrateTo is set, this is just the path from which hydrated manifests will be synced.
+                            from. The Path should never point to the root of the repo. If hydrateTo is set, this is just the path from which
+                            hydrated manifests will be synced.
+                          minLength: 1
+                          pattern: ^.{2,}|[^./]$
                           type: string
                         targetBranch:
-                          description: TargetBranch is the branch to which hydrated manifests should be committed
+                          description: |-
+                            TargetBranch is the branch from which hydrated manifests will be synced.
+                            If HydrateTo is not set, this is also the branch to which hydrated manifests are committed.
                           type: string
                       required:
                         - path
@@ -1440,6 +1467,9 @@ spec:
                           forceCommonLabels:
                             description: ForceCommonLabels specifies whether to force applying common labels to resources for Kustomize apps
                             type: boolean
+                          ignoreMissingComponents:
+                            description: IgnoreMissingComponents prevents kustomize from failing when components do not exist locally by not appending them to kustomization file
+                            type: boolean
                           images:
                             description: Images is a list of Kustomize image override specifications
                             items:
@@ -1451,6 +1481,9 @@ spec:
                               KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
                               uses the Kubernetes version of the target cluster.
                             type: string
+                          labelIncludeTemplates:
+                            description: LabelIncludeTemplates specifies whether to apply common labels to resource templates or not
+                            type: boolean
                           labelWithoutSelector:
                             description: LabelWithoutSelector specifies whether to apply common labels to resource selectors or not
                             type: boolean
@@ -1590,6 +1623,9 @@ spec:
                         allowEmpty:
                           description: 'AllowEmpty allows apps have zero live resources (default: false)'
                           type: boolean
+                        enabled:
+                          description: Enable allows apps to explicitly control automated sync
+                          type: boolean
                         prune:
                           description: 'Prune specifies whether to delete resources from the cluster that are not found in the sources anymore as part of automated sync (default: false)'
                           type: boolean
@@ -1630,6 +1666,9 @@ spec:
                           description: Limit is the maximum number of attempts for retrying a failed sync. If set to 0, no retries will be performed.
                           format: int64
                           type: integer
+                        refresh:
+                          description: 'Refresh indicates if the latest revision should be used on retry instead of the initial one (default: false)'
+                          type: boolean
                       type: object
                     syncOptions:
                       description: Options allow you to specify whole app sync-options
@@ -1675,10 +1714,13 @@ spec:
                       format: date-time
                       type: string
                     message:
-                      description: Message is a human-readable informational message describing the health status
+                      description: |-
+                        Message is a human-readable informational message describing the health status
+
+                        Deprecated: this field is not used and will be removed in a future release.
                       type: string
                     status:
-                      description: Status holds the status code of the application or resource
+                      description: Status holds the status code of the application
                       type: string
                   type: object
                 history:
@@ -1891,6 +1933,9 @@ spec:
                               forceCommonLabels:
                                 description: ForceCommonLabels specifies whether to force applying common labels to resources for Kustomize apps
                                 type: boolean
+                              ignoreMissingComponents:
+                                description: IgnoreMissingComponents prevents kustomize from failing when components do not exist locally by not appending them to kustomization file
+                                type: boolean
                               images:
                                 description: Images is a list of Kustomize image override specifications
                                 items:
@@ -1902,6 +1947,9 @@ spec:
                                   KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
                                   uses the Kubernetes version of the target cluster.
                                 type: string
+                              labelIncludeTemplates:
+                                description: LabelIncludeTemplates specifies whether to apply common labels to resource templates or not
+                                type: boolean
                               labelWithoutSelector:
                                 description: LabelWithoutSelector specifies whether to apply common labels to resource selectors or not
                                 type: boolean
@@ -2208,6 +2256,9 @@ spec:
                                 forceCommonLabels:
                                   description: ForceCommonLabels specifies whether to force applying common labels to resources for Kustomize apps
                                   type: boolean
+                                ignoreMissingComponents:
+                                  description: IgnoreMissingComponents prevents kustomize from failing when components do not exist locally by not appending them to kustomization file
+                                  type: boolean
                                 images:
                                   description: Images is a list of Kustomize image override specifications
                                   items:
@@ -2219,6 +2270,9 @@ spec:
                                     KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
                                     uses the Kubernetes version of the target cluster.
                                   type: string
+                                labelIncludeTemplates:
+                                  description: LabelIncludeTemplates specifies whether to apply common labels to resource templates or not
+                                  type: boolean
                                 labelWithoutSelector:
                                   description: LabelWithoutSelector specifies whether to apply common labels to resource selectors or not
                                   type: boolean
@@ -2417,6 +2471,9 @@ spec:
                               description: Limit is the maximum number of attempts for retrying a failed sync. If set to 0, no retries will be performed.
                               format: int64
                               type: integer
+                            refresh:
+                              description: 'Refresh indicates if the latest revision should be used on retry instead of the initial one (default: false)'
+                              type: boolean
                           type: object
                         sync:
                           description: Sync contains parameters for the operation
@@ -2643,6 +2700,9 @@ spec:
                                     forceCommonLabels:
                                       description: ForceCommonLabels specifies whether to force applying common labels to resources for Kustomize apps
                                       type: boolean
+                                    ignoreMissingComponents:
+                                      description: IgnoreMissingComponents prevents kustomize from failing when components do not exist locally by not appending them to kustomization file
+                                      type: boolean
                                     images:
                                       description: Images is a list of Kustomize image override specifications
                                       items:
@@ -2654,6 +2714,9 @@ spec:
                                         KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
                                         uses the Kubernetes version of the target cluster.
                                       type: string
+                                    labelIncludeTemplates:
+                                      description: LabelIncludeTemplates specifies whether to apply common labels to resource templates or not
+                                      type: boolean
                                     labelWithoutSelector:
                                       description: LabelWithoutSelector specifies whether to apply common labels to resource selectors or not
                                       type: boolean
@@ -2962,6 +3025,9 @@ spec:
                                       forceCommonLabels:
                                         description: ForceCommonLabels specifies whether to force applying common labels to resources for Kustomize apps
                                         type: boolean
+                                      ignoreMissingComponents:
+                                        description: IgnoreMissingComponents prevents kustomize from failing when components do not exist locally by not appending them to kustomization file
+                                        type: boolean
                                       images:
                                         description: Images is a list of Kustomize image override specifications
                                         items:
@@ -2973,6 +3039,9 @@ spec:
                                           KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
                                           uses the Kubernetes version of the target cluster.
                                         type: string
+                                      labelIncludeTemplates:
+                                        description: LabelIncludeTemplates specifies whether to apply common labels to resource templates or not
+                                        type: boolean
                                       labelWithoutSelector:
                                         description: LabelWithoutSelector specifies whether to apply common labels to resource selectors or not
                                         type: boolean
@@ -3176,6 +3245,11 @@ spec:
                               hookType:
                                 description: HookType specifies the type of the hook. Empty for non-hook resources
                                 type: string
+                              images:
+                                description: Images contains the images related to the ResourceResult
+                                items:
+                                  type: string
+                                type: array
                               kind:
                                 description: Kind specifies the API kind of the resource
                                 type: string
@@ -3388,6 +3462,9 @@ spec:
                                 forceCommonLabels:
                                   description: ForceCommonLabels specifies whether to force applying common labels to resources for Kustomize apps
                                   type: boolean
+                                ignoreMissingComponents:
+                                  description: IgnoreMissingComponents prevents kustomize from failing when components do not exist locally by not appending them to kustomization file
+                                  type: boolean
                                 images:
                                   description: Images is a list of Kustomize image override specifications
                                   items:
@@ -3399,6 +3476,9 @@ spec:
                                     KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
                                     uses the Kubernetes version of the target cluster.
                                   type: string
+                                labelIncludeTemplates:
+                                  description: LabelIncludeTemplates specifies whether to apply common labels to resource templates or not
+                                  type: boolean
                                 labelWithoutSelector:
                                   description: LabelWithoutSelector specifies whether to apply common labels to resource selectors or not
                                   type: boolean
@@ -3705,6 +3785,9 @@ spec:
                                   forceCommonLabels:
                                     description: ForceCommonLabels specifies whether to force applying common labels to resources for Kustomize apps
                                     type: boolean
+                                  ignoreMissingComponents:
+                                    description: IgnoreMissingComponents prevents kustomize from failing when components do not exist locally by not appending them to kustomization file
+                                    type: boolean
                                   images:
                                     description: Images is a list of Kustomize image override specifications
                                     items:
@@ -3716,6 +3799,9 @@ spec:
                                       KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
                                       uses the Kubernetes version of the target cluster.
                                     type: string
+                                  labelIncludeTemplates:
+                                    description: LabelIncludeTemplates specifies whether to apply common labels to resource templates or not
+                                    type: boolean
                                   labelWithoutSelector:
                                     description: LabelWithoutSelector specifies whether to apply common labels to resource selectors or not
                                     type: boolean
@@ -3864,45 +3950,57 @@ spec:
                 resources:
                   description: Resources is a list of Kubernetes resources managed by this application
                   items:
-                    description: |-
-                      ResourceStatus holds the current sync and health status of a resource
-                      TODO: describe members of this type
+                    description: ResourceStatus holds the current synchronization and health status of a Kubernetes resource.
                     properties:
                       group:
+                        description: Group represents the API group of the resource (e.g., "apps" for Deployments).
                         type: string
                       health:
-                        description: HealthStatus contains information about the currently observed health state of an application or resource
+                        description: Health indicates the health status of the resource (e.g., Healthy, Degraded, Progressing).
                         properties:
                           lastTransitionTime:
-                            description: LastTransitionTime is the time the HealthStatus was set or updated
+                            description: |-
+                              LastTransitionTime is the time the HealthStatus was set or updated
+
+                              Deprecated: this field is not used and will be removed in a future release.
                             format: date-time
                             type: string
                           message:
                             description: Message is a human-readable informational message describing the health status
                             type: string
                           status:
-                            description: Status holds the status code of the application or resource
+                            description: Status holds the status code of the resource
                             type: string
                         type: object
                       hook:
+                        description: Hook is true if the resource is used as a lifecycle hook in an Argo CD application.
                         type: boolean
                       kind:
+                        description: Kind specifies the type of the resource (e.g., "Deployment", "Service").
                         type: string
                       name:
+                        description: Name is the unique name of the resource within the namespace.
                         type: string
                       namespace:
+                        description: Namespace defines the Kubernetes namespace where the resource is located.
                         type: string
                       requiresDeletionConfirmation:
+                        description: RequiresDeletionConfirmation is true if the resource requires explicit user confirmation before deletion.
                         type: boolean
                       requiresPruning:
+                        description: RequiresPruning is true if the resource needs to be pruned (deleted) as part of synchronization.
                         type: boolean
                       status:
-                        description: SyncStatusCode is a type which represents possible comparison results
+                        description: Status represents the synchronization state of the resource (e.g., Synced, OutOfSync).
                         type: string
                       syncWave:
+                        description: |-
+                          SyncWave determines the order in which resources are applied during a sync operation.
+                          Lower values are applied first.
                         format: int64
                         type: integer
                       version:
+                        description: Version indicates the API version of the resource (e.g., "v1", "v1beta1").
                         type: string
                     type: object
                   type: array
@@ -3969,10 +4067,15 @@ spec:
                                 path:
                                   description: |-
                                     Path is a directory path within the git repository where hydrated manifests should be committed to and synced
-                                    from. If hydrateTo is set, this is just the path from which hydrated manifests will be synced.
+                                    from. The Path should never point to the root of the repo. If hydrateTo is set, this is just the path from which
+                                    hydrated manifests will be synced.
+                                  minLength: 1
+                                  pattern: ^.{2,}|[^./]$
                                   type: string
                                 targetBranch:
-                                  description: TargetBranch is the branch to which hydrated manifests should be committed
+                                  description: |-
+                                    TargetBranch is the branch from which hydrated manifests will be synced.
+                                    If HydrateTo is not set, this is also the branch to which hydrated manifests are committed.
                                   type: string
                               required:
                                 - path
@@ -4036,10 +4139,15 @@ spec:
                                 path:
                                   description: |-
                                     Path is a directory path within the git repository where hydrated manifests should be committed to and synced
-                                    from. If hydrateTo is set, this is just the path from which hydrated manifests will be synced.
+                                    from. The Path should never point to the root of the repo. If hydrateTo is set, this is just the path from which
+                                    hydrated manifests will be synced.
+                                  minLength: 1
+                                  pattern: ^.{2,}|[^./]$
                                   type: string
                                 targetBranch:
-                                  description: TargetBranch is the branch to which hydrated manifests should be committed
+                                  description: |-
+                                    TargetBranch is the branch from which hydrated manifests will be synced.
+                                    If HydrateTo is not set, this is also the branch to which hydrated manifests are committed.
                                   type: string
                               required:
                                 - path
@@ -4302,6 +4410,9 @@ spec:
                                 forceCommonLabels:
                                   description: ForceCommonLabels specifies whether to force applying common labels to resources for Kustomize apps
                                   type: boolean
+                                ignoreMissingComponents:
+                                  description: IgnoreMissingComponents prevents kustomize from failing when components do not exist locally by not appending them to kustomization file
+                                  type: boolean
                                 images:
                                   description: Images is a list of Kustomize image override specifications
                                   items:
@@ -4313,6 +4424,9 @@ spec:
                                     KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
                                     uses the Kubernetes version of the target cluster.
                                   type: string
+                                labelIncludeTemplates:
+                                  description: LabelIncludeTemplates specifies whether to apply common labels to resource templates or not
+                                  type: boolean
                                 labelWithoutSelector:
                                   description: LabelWithoutSelector specifies whether to apply common labels to resource selectors or not
                                   type: boolean
@@ -4619,6 +4733,9 @@ spec:
                                   forceCommonLabels:
                                     description: ForceCommonLabels specifies whether to force applying common labels to resources for Kustomize apps
                                     type: boolean
+                                  ignoreMissingComponents:
+                                    description: IgnoreMissingComponents prevents kustomize from failing when components do not exist locally by not appending them to kustomization file
+                                    type: boolean
                                   images:
                                     description: Images is a list of Kustomize image override specifications
                                     items:
@@ -4630,6 +4747,9 @@ spec:
                                       KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
                                       uses the Kubernetes version of the target cluster.
                                     type: string
+                                  labelIncludeTemplates:
+                                    description: LabelIncludeTemplates specifies whether to apply common labels to resource templates or not
+                                    type: boolean
                                   labelWithoutSelector:
                                     description: LabelWithoutSelector specifies whether to apply common labels to resource selectors or not
                                     type: boolean

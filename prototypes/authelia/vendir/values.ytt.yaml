@@ -6,3 +6,11 @@ prototype:
       helmChart:
         url: https://charts.authelia.com
         version: 0.10.49
+    dashboard:
+      git:
+        ref: v4.39.15
+        url: https://github.com/authelia/authelia
+      includePaths:
+        - examples/grafana-dashboards/simple.json
+      newRootPath: examples
+      plugin: ytt

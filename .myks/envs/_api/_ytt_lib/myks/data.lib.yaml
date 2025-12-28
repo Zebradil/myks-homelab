@@ -42,6 +42,8 @@ argocd:
 environment:
   id: alpha
   applications:
+  - proto: webapp
+    name: airgradient-exporter
   - proto: argocd
     name: ""
   - proto: authelia
@@ -54,8 +56,6 @@ environment:
     name: ""
   - proto: blank
     name: fluidd
-  - proto: grafana-agent
-    name: ""
   - proto: harbor
     name: ""
   - proto: webapp
@@ -84,6 +84,8 @@ environment:
     name: uptime-kuma
   - proto: vaultwarden
     name: ""
+  - proto: victoria-metrics-k8s-stack
+    name: vmks
   baseDomain: zebradil.dev
   hosts:
   - zebradil.dev
@@ -114,9 +116,10 @@ environment:
   - junior
 helm:
   buildDependencies: false
-  capabilities: []
+  capabilities:
+  - monitoring.coreos.com/v1
   includeCRDs: true
-  kubeVersion: "1.33"
+  kubeVersion: 1.33.1
   namespace: ""
   charts: []
 kbld:

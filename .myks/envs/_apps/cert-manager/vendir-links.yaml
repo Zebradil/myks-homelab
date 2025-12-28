@@ -1,1 +1,2 @@
 charts/cert-manager: helm-cert-manager-v1.19.2-895e9ea1ba87c485
+charts/cert-manager-monitoring: helm-cert-manager-monitoring-0.3.1-845b8e783fcc68c5

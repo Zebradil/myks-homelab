@@ -1,0 +1,21 @@
+apiVersion: vendir.k14s.io/v1alpha1
+kind: Config
+directories:
+- path: charts/vmks
+  contents:
+  - path: .
+    lazy: true
+    helmChart:
+      name: victoria-metrics-k8s-stack
+      version: 0.66.1
+      repository:
+        url: oci://ghcr.io/victoriametrics/helm-charts
+- path: charts/prom-crds
+  contents:
+  - path: .
+    lazy: true
+    helmChart:
+      name: prometheus-operator-crds
+      version: 18.0.1
+      repository:
+        url: https://prometheus-community.github.io/helm-charts

@@ -1,0 +1,22 @@
+#@ load("secrets.star", "sec")
+---
+grafana:
+  persistence:
+    enabled: true
+    size: 1Gi
+  adminPassword: #@ sec.sops("0", "adminPassword")
+  service:
+    portName: http
+  grafana.ini:
+    analytics:
+      check_for_updates: false
+      feedback_links_enabled: false
+      reporting_enabled: false
+  sidecar:
+    dashboards:
+      searchNamespace: ALL
+
+victoria-metrics-operator:
+  admissionWebhooks:
+    certManager:
+      enabled: true

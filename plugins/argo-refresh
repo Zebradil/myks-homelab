@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Refresh Argo CD application
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/lib.sh"
+
+l:argocd app get "app-${MYKS_ENV}-${MYKS_APP}" --refresh >/dev/null

@@ -5,20 +5,29 @@ metadata:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
     app.kubernetes.io/component: application-controller
+    app.kubernetes.io/instance: argocd
     app.kubernetes.io/name: argocd-application-controller
     app.kubernetes.io/part-of: argocd
   name: argocd-application-controller
   namespace: argocd
 spec:
   replicas: 1
+  revisionHistoryLimit: 5
   selector:
     matchLabels:
+      app.kubernetes.io/instance: argocd
       app.kubernetes.io/name: argocd-application-controller
   serviceName: argocd-application-controller
   template:
     metadata:
+      annotations:
+        checksum/cm: fdc71847ace4e3517a6018e2de2324634a39a22d1c344189e7ef78e5ada96d7c
+        checksum/cmd-params: 422a03812456c79703a353bd220bc6cf91e8c22afe44fa0b85669568f8b8a47c
       labels:
+        app.kubernetes.io/component: application-controller
+        app.kubernetes.io/instance: argocd
         app.kubernetes.io/name: argocd-application-controller
+        app.kubernetes.io/part-of: argocd
     spec:
       affinity:
         podAntiAffinity:
@@ -29,23 +38,16 @@ spec:
                     app.kubernetes.io/name: argocd-application-controller
                 topologyKey: kubernetes.io/hostname
               weight: 100
-            - podAffinityTerm:
-                labelSelector:
-                  matchLabels:
-                    app.kubernetes.io/part-of: argocd
-                topologyKey: kubernetes.io/hostname
-              weight: 5
+      automountServiceAccountToken: true
       containers:
         - args:
             - /usr/local/bin/argocd-application-controller
+            - --metrics-port=8082
           env:
-            - name: REDIS_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: auth
-                  name: argocd-redis
             - name: ARGOCD_CONTROLLER_REPLICAS
               value: "1"
+            - name: ARGOCD_APPLICATION_CONTROLLER_NAME
+              value: argocd-application-controller
             - name: ARGOCD_RECONCILIATION_TIMEOUT
               valueFrom:
                 configMapKeyRef:
@@ -106,6 +108,12 @@ spec:
                   key: controller.log.level
                   name: argocd-cmd-params-cm
                   optional: true
+            - name: ARGOCD_LOG_FORMAT_TIMESTAMP
+              valueFrom:
+                configMapKeyRef:
+                  key: log.format.timestamp
+                  name: argocd-cmd-params-cm
+                  optional: true
             - name: ARGOCD_APPLICATION_CONTROLLER_METRICS_CACHE_EXPIRATION
               valueFrom:
                 configMapKeyRef:
@@ -134,6 +142,18 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: controller.self.heal.backoff.cap.seconds
+                  name: argocd-cmd-params-cm
+                  optional: true
+            - name: ARGOCD_APPLICATION_CONTROLLER_SELF_HEAL_BACKOFF_COOLDOWN_SECONDS
+              valueFrom:
+                configMapKeyRef:
+                  key: controller.self.heal.backoff.cooldown.seconds
+                  name: argocd-cmd-params-cm
+                  optional: true
+            - name: ARGOCD_SYNC_WAVE_DELAY
+              valueFrom:
+                configMapKeyRef:
+                  key: controller.sync.wave.delay.seconds
                   name: argocd-cmd-params-cm
                   optional: true
             - name: ARGOCD_APPLICATION_CONTROLLER_SYNC_TIMEOUT
@@ -184,6 +204,30 @@ spec:
                   key: redis.db
                   name: argocd-cmd-params-cm
                   optional: true
+            - name: REDIS_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: redis-username
+                  name: argocd-redis
+                  optional: true
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: auth
+                  name: argocd-redis
+                  optional: false
+            - name: REDIS_SENTINEL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: redis-sentinel-username
+                  name: argocd-redis
+                  optional: true
+            - name: REDIS_SENTINEL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: redis-sentinel-password
+                  name: argocd-redis
+                  optional: true
             - name: ARGOCD_DEFAULT_CACHE_EXPIRATION
               valueFrom:
                 configMapKeyRef:
@@ -206,6 +250,12 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: otlp.headers
+                  name: argocd-cmd-params-cm
+                  optional: true
+            - name: ARGOCD_APPLICATION_CONTROLLER_OTLP_ATTRS
+              valueFrom:
+                configMapKeyRef:
+                  key: otlp.attrs
                   name: argocd-cmd-params-cm
                   optional: true
             - name: ARGOCD_APPLICATION_NAMESPACES
@@ -268,18 +318,30 @@ spec:
                   key: controller.cluster.cache.events.processing.interval
                   name: argocd-cmd-params-cm
                   optional: true
+            - name: ARGOCD_APPLICATION_CONTROLLER_COMMIT_SERVER
+              valueFrom:
+                configMapKeyRef:
+                  key: commit.server
+                  name: argocd-cmd-params-cm
+                  optional: true
             - name: KUBECACHEDIR
               value: /tmp/kubecache
-          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:1893f23b240cd0a3ee27eccb7d84eb41de1f68bae33772d9a9acdf4e1f72dfba
-          name: argocd-application-controller
+          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:9ab6baab65a6b283044a7d7b7dbe50f589564de9c8898d67c77d84b2b5df46bc
+          name: application-controller
           ports:
             - containerPort: 8082
+              name: metrics
+              protocol: TCP
           readinessProbe:
+            failureThreshold: 3
             httpGet:
               path: /healthz
-              port: 8082
-            initialDelaySeconds: 5
+              port: metrics
+            initialDelaySeconds: 10
             periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources: {}
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -299,9 +361,11 @@ spec:
             - mountPath: /tmp
               name: argocd-application-controller-tmp
           workingDir: /home/argocd
+      dnsPolicy: ClusterFirst
       nodeSelector:
         kubernetes.io/os: linux
       serviceAccountName: argocd-application-controller
+      terminationGracePeriodSeconds: 30
       volumes:
         - emptyDir: {}
           name: argocd-home

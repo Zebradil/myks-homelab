@@ -1,0 +1,16 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: alertmanager-lan
+spec:
+  entryPoints:
+    - lan-web
+    - lan-websecure
+  routes:
+    - kind: Rule
+      match: Host(`alertmanager.lan.zebradil.dev`) || Host(`alertmanager.gray.lan.zebradil.dev`) || Host(`alertmanager.junior.lan.zebradil.dev`)
+      services:
+        - name: vmalertmanager-vmks-victoria-metrics-k8s-stack
+          port: http

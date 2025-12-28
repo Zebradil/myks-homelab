@@ -5,18 +5,27 @@ metadata:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
     app.kubernetes.io/component: dex-server
+    app.kubernetes.io/instance: argocd
     app.kubernetes.io/name: argocd-dex-server
     app.kubernetes.io/part-of: argocd
   name: argocd-dex-server
   namespace: argocd
 spec:
+  replicas: 1
+  revisionHistoryLimit: 3
   selector:
     matchLabels:
+      app.kubernetes.io/instance: argocd
       app.kubernetes.io/name: argocd-dex-server
   template:
     metadata:
+      annotations:
+        checksum/cmd-params: 422a03812456c79703a353bd220bc6cf91e8c22afe44fa0b85669568f8b8a47c
       labels:
+        app.kubernetes.io/component: dex-server
+        app.kubernetes.io/instance: argocd
         app.kubernetes.io/name: argocd-dex-server
+        app.kubernetes.io/part-of: argocd
     spec:
       affinity:
         podAntiAffinity:
@@ -24,13 +33,15 @@ spec:
             - podAffinityTerm:
                 labelSelector:
                   matchLabels:
-                    app.kubernetes.io/part-of: argocd
+                    app.kubernetes.io/name: argocd-dex-server
                 topologyKey: kubernetes.io/hostname
-              weight: 5
+              weight: 100
+      automountServiceAccountToken: true
       containers:
-        - command:
-            - /shared/argocd-dex
+        - args:
             - rundex
+          command:
+            - /shared/argocd-dex
           env:
             - name: ARGOCD_DEX_SERVER_LOGFORMAT
               valueFrom:
@@ -44,18 +55,31 @@ spec:
                   key: dexserver.log.level
                   name: argocd-cmd-params-cm
                   optional: true
+            - name: ARGOCD_LOG_FORMAT_TIMESTAMP
+              valueFrom:
+                configMapKeyRef:
+                  key: log.format.timestamp
+                  name: argocd-cmd-params-cm
+                  optional: true
             - name: ARGOCD_DEX_SERVER_DISABLE_TLS
               valueFrom:
                 configMapKeyRef:
                   key: dexserver.disable.tls
                   name: argocd-cmd-params-cm
                   optional: true
-          image: oci.zebradil.dev/ghcr.io-cache/dexidp/dex@sha256:bc7cfce7c17f52864e2bb2a4dc1d2f86a41e3019f6d42e81d92a301fad0c8a1d
-          name: dex
+          image: oci.zebradil.dev/ghcr.io-cache/dexidp/dex@sha256:5d0656fce7d453c0e3b2706abf40c0d0ce5b371fb0b73b3cf714d05f35fa5f86
+          name: dex-server
           ports:
             - containerPort: 5556
+              name: http
+              protocol: TCP
             - containerPort: 5557
+              name: grpc
+              protocol: TCP
             - containerPort: 5558
+              name: metrics
+              protocol: TCP
+          resources: {}
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -72,14 +96,16 @@ spec:
               name: dexconfig
             - mountPath: /tls
               name: argocd-dex-server-tls
+      dnsPolicy: ClusterFirst
       initContainers:
         - command:
             - /bin/cp
             - -n
             - /usr/local/bin/argocd
             - /shared/argocd-dex
-          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:1893f23b240cd0a3ee27eccb7d84eb41de1f68bae33772d9a9acdf4e1f72dfba
+          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:9ab6baab65a6b283044a7d7b7dbe50f589564de9c8898d67c77d84b2b5df46bc
           name: copyutil
+          resources: {}
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -97,6 +123,7 @@ spec:
       nodeSelector:
         kubernetes.io/os: linux
       serviceAccountName: argocd-dex-server
+      terminationGracePeriodSeconds: 30
       volumes:
         - emptyDir: {}
           name: static-files

@@ -1,0 +1,5 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+overrides:
+    - image: ghcr.io/zebradil/airgradient-exporter:1.0.5
+      newImage: oci.zebradil.dev/ghcr.io-cache/zebradil/airgradient-exporter:1.0.5

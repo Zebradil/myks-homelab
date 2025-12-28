@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    app.kubernetes.io/instance: vmks
+    app.kubernetes.io/name: victoria-metrics-operator
+  name: vmks-victoria-metrics-operator
+  namespace: vmks
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: vmks
+      app.kubernetes.io/name: victoria-metrics-operator
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: vmks
+        app.kubernetes.io/name: victoria-metrics-operator
+    spec:
+      automountServiceAccountToken: true
+      containers:
+        - args:
+            - --zap-log-level=info
+            - --leader-elect
+            - --health-probe-bind-address=:8081
+            - --webhook.enable=true
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: victoria-metrics-operator
+            - name: VM_USECUSTOMCONFIGRELOADER
+              value: "true"
+            - name: VM_CUSTOMCONFIGRELOADERIMAGE
+              value: victoriametrics/operator:config-reloader-v0.66.1
+            - name: VM_ENABLEDPROMETHEUSCONVERTEROWNERREFERENCES
+              value: "false"
+          image: oci.zebradil.dev/index.docker.io-cache/victoriametrics/operator@sha256:9576051f79285ece06acdc8fb42dee5198c38e6609c82268a8bb7b4733abcdfe
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 15
+            tcpSocket:
+              port: probe
+            timeoutSeconds: 5
+          name: operator
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+            - containerPort: 8081
+              name: probe
+              protocol: TCP
+            - containerPort: 9443
+              name: webhook
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: probe
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 15
+            timeoutSeconds: 5
+          resources: {}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /tmp/k8s-webhook-server/serving-certs
+              name: cert
+              readOnly: true
+      securityContext:
+        fsGroup: 2000
+        runAsNonRoot: true
+        runAsUser: 1000
+      serviceAccountName: vmks-victoria-metrics-operator
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: cert
+          secret:
+            defaultMode: 420
+            secretName: vmks-victoria-metrics-operator-validation

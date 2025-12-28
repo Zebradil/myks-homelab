@@ -5,24 +5,21 @@ metadata:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
     app.kubernetes.io/component: dex-server
+    app.kubernetes.io/instance: argocd
     app.kubernetes.io/name: argocd-dex-server
     app.kubernetes.io/part-of: argocd
   name: argocd-dex-server
   namespace: argocd
 spec:
   ports:
-    - appProtocol: TCP
-      name: http
+    - name: http
       port: 5556
       protocol: TCP
-      targetPort: 5556
+      targetPort: http
     - name: grpc
       port: 5557
       protocol: TCP
-      targetPort: 5557
-    - name: metrics
-      port: 5558
-      protocol: TCP
-      targetPort: 5558
+      targetPort: grpc
   selector:
+    app.kubernetes.io/instance: argocd
     app.kubernetes.io/name: argocd-dex-server

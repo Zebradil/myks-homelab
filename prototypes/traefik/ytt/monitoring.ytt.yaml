@@ -1,0 +1,15 @@
+#@ load("@ytt:data", "data")
+#@ load("grafana.lib.yaml", "gen_dashboard")
+
+#@ for file in data.list():
+#@ if/end file.startswith("grafana/"):
+--- #@ gen_dashboard(file, name="traefik-dashboard")
+#@ end
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMNodeScrape
+metadata:
+  name: traefik-host-metrics
+spec:
+  path: /metrics
+  port: '19100'

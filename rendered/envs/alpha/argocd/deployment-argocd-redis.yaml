@@ -5,18 +5,24 @@ metadata:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
     app.kubernetes.io/component: redis
+    app.kubernetes.io/instance: argocd
     app.kubernetes.io/name: argocd-redis
     app.kubernetes.io/part-of: argocd
   name: argocd-redis
   namespace: argocd
 spec:
+  replicas: 1
+  revisionHistoryLimit: 3
   selector:
     matchLabels:
       app.kubernetes.io/name: argocd-redis
   template:
     metadata:
       labels:
+        app.kubernetes.io/component: redis
+        app.kubernetes.io/instance: argocd
         app.kubernetes.io/name: argocd-redis
+        app.kubernetes.io/part-of: argocd
     spec:
       affinity:
         podAntiAffinity:
@@ -27,12 +33,7 @@ spec:
                     app.kubernetes.io/name: argocd-redis
                 topologyKey: kubernetes.io/hostname
               weight: 100
-            - podAffinityTerm:
-                labelSelector:
-                  matchLabels:
-                    app.kubernetes.io/part-of: argocd
-                topologyKey: kubernetes.io/hostname
-              weight: 5
+      automountServiceAccountToken: true
       containers:
         - args:
             - --save
@@ -46,32 +47,23 @@ spec:
                 secretKeyRef:
                   key: auth
                   name: argocd-redis
-          image: oci.zebradil.dev/index.docker.io-cache/library/redis@sha256:c9d92d840fd011c908f040592857c724ae6d877f2aba5c40ad963276507386b2
+          image: ecr-public.aws.com/docker/library/redis@sha256:59b6e694653476de2c992937ebe1c64182af4728e54bb49e9b7a6c26614d8933
           name: redis
           ports:
             - containerPort: 6379
+              name: redis
+              protocol: TCP
+          resources: {}
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
               drop:
                 - ALL
             readOnlyRootFilesystem: true
-      initContainers:
-        - command:
-            - argocd
-            - admin
-            - redis-initial-password
-          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:1893f23b240cd0a3ee27eccb7d84eb41de1f68bae33772d9a9acdf4e1f72dfba
-          name: secret-init
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-                - ALL
-            readOnlyRootFilesystem: true
-            runAsNonRoot: true
-            seccompProfile:
-              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /health
+              name: health
+      dnsPolicy: ClusterFirst
       nodeSelector:
         kubernetes.io/os: linux
       securityContext:
@@ -79,4 +71,10 @@ spec:
         runAsUser: 999
         seccompProfile:
           type: RuntimeDefault
-      serviceAccountName: argocd-redis
+      serviceAccountName: default
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - configMap:
+            defaultMode: 493
+            name: argocd-redis-health-configmap
+          name: health

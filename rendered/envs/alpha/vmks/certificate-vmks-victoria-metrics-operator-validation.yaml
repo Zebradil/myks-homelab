@@ -1,0 +1,17 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: vmks-victoria-metrics-operator-validation
+  namespace: vmks
+spec:
+  dnsNames:
+    - vmks-victoria-metrics-operator
+    - vmks-victoria-metrics-operator.vmks
+    - vmks-victoria-metrics-operator.vmks.svc
+    - vmks-victoria-metrics-operator.vmks.svc.cluster.local.
+  duration: 45800h0m0s
+  issuerRef:
+    name: vmks-victoria-metrics-operator-issuer
+  secretName: vmks-victoria-metrics-operator-validation

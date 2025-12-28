@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: airgradient-exporter
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: airgradient-exporter
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: airgradient-exporter
+    spec:
+      containers:
+        - env:
+            - name: AIRGRADIENT_MONITORS
+              value: 192.168.1.99
+          image: oci.zebradil.dev/ghcr.io-cache/zebradil/airgradient-exporter@sha256:61dfc2b9f68172617e085602b14063f678c732e2caf13e8d03baa4dffed3f867
+          name: airgradient-exporter
+          ports:
+            - containerPort: 9112
+              name: http
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+            privileged: false

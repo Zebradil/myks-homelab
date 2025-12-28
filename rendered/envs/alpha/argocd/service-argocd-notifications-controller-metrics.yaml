@@ -5,15 +5,18 @@ metadata:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
     app.kubernetes.io/component: notifications-controller
-    app.kubernetes.io/name: argocd-notifications-controller-metrics
+    app.kubernetes.io/instance: argocd
+    app.kubernetes.io/name: argocd-metrics
     app.kubernetes.io/part-of: argocd
   name: argocd-notifications-controller-metrics
   namespace: argocd
 spec:
   ports:
-    - name: metrics
+    - name: http-metrics
       port: 9001
       protocol: TCP
-      targetPort: 9001
+      targetPort: metrics
   selector:
+    app.kubernetes.io/instance: argocd
     app.kubernetes.io/name: argocd-notifications-controller
+  type: ClusterIP

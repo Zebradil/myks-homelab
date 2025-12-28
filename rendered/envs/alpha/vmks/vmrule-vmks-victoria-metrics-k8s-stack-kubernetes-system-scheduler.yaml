@@ -1,0 +1,25 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    app: victoria-metrics-k8s-stack
+    app.kubernetes.io/instance: vmks
+    app.kubernetes.io/name: victoria-metrics-k8s-stack
+  name: vmks-victoria-metrics-k8s-stack-kubernetes-system-scheduler
+  namespace: vmks
+spec:
+  groups:
+    - name: kubernetes-system-scheduler
+      params: {}
+      rules:
+        - alert: KubeSchedulerDown
+          annotations:
+            description: KubeScheduler has disappeared from Prometheus target discovery.
+            runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeschedulerdown
+            summary: Target disappeared from Prometheus target discovery.
+          expr: absent(up{job="kube-scheduler"})
+          for: 15m
+          labels:
+            severity: critical

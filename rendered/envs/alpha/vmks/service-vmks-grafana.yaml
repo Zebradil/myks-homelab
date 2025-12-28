@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    app.kubernetes.io/instance: vmks
+    app.kubernetes.io/name: grafana
+  name: vmks-grafana
+  namespace: vmks
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: grafana
+  selector:
+    app.kubernetes.io/instance: vmks
+    app.kubernetes.io/name: grafana
+  type: ClusterIP

@@ -1,0 +1,14 @@
+#@data/values
+---
+prototype:
+  sources:
+    vmks:
+      helmChart:
+        name: victoria-metrics-k8s-stack
+        url: oci://ghcr.io/victoriametrics/helm-charts
+        version: 0.66.1
+    prom-crds:
+      helmChart:
+        name: prometheus-operator-crds
+        url: https://prometheus-community.github.io/helm-charts
+        version: 18.0.1

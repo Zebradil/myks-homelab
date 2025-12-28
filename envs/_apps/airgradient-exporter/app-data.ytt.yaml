@@ -1,0 +1,11 @@
+#@data/values
+---
+application:
+  #! renovate: datasource=docker
+  image: ghcr.io/zebradil/airgradient-exporter:1.0.5
+  ingress: false
+  containerPort: 9112
+  serviceMonitor: true
+  env:
+    - name: AIRGRADIENT_MONITORS
+      value: 192.168.1.99

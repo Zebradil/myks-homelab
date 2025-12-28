@@ -1,0 +1,10 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - configDigest: be959a38f8b75927347af91b78468f0311545064344b87d733cf588d658bea0b
+    helmChart:
+      appVersion: ""
+      version: 0.3.1
+    path: .
+  path: .myks/vendir-cache/helm-cert-manager-monitoring-0.3.1-845b8e783fcc68c5/data
+kind: LockConfig

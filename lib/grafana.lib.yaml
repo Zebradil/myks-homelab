@@ -1,0 +1,30 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:json", "json")
+
+#! Example usage:
+#!
+#!   #@ load("@ytt:data", "data")
+#!   #@ load("grafana.lib.yaml", "gen_dashboard")
+#!
+#!   #@ for file in data.list():
+#!   #@ if/end file.startswith("dashboards_out/"):
+#!   --- #@ gen_dashboard(file)
+#!   #@ end
+
+#@ def gen_dashboard(file, name=""):
+#@   if name == "":
+#@     basename = file.rpartition("/")[-1]
+#@     name = basename.rpartition(".")[0][:63]
+#@   else:
+#@     basename = name + ".json"
+#@   end
+#@   # Quickly validate and format the JSON content
+#@   content = json.encode(json.decode(data.read(file)), indent=2)
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: #@ name
+  labels:
+    grafana_dashboard: '1'
+data: #@ { basename: content }
+#@ end

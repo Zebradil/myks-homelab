@@ -1,0 +1,15 @@
+---
+#@ for/end component in ["controller", "redis", "repoServer", "server", "notifications"]:
+#@yaml/text-templated-strings
+(@= component @):
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+---
+configs:
+  cm:
+    application.resourceTrackingMethod: annotation
+    kustomize.enabled: 'false'
+    jsonnet.enabled: 'false'
+    helm.enabled: 'false'

@@ -25,7 +25,6 @@
             packages = with pkgs; [
               mise
               pre-commit
-              yq-go
             ];
             shellHook = ''
               mise install
