@@ -15,9 +15,9 @@ grafana:
   sidecar:
     dashboards:
       searchNamespace: ALL
-  #! plugins:
-  #! - victoriametrics-metrics-datasource
-  #! - victoriametrics-logs-datasource
+  plugins:
+    - victoriametrics-metrics-datasource
+    - victoriametrics-logs-datasource
   ingress:
     hosts:
       - grafana.lan.zebradil.dev
