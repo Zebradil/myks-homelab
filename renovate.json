@@ -77,7 +77,7 @@
         "/.*/"
       ],
       "matchStrings": [
-        "#! renovate: datasource=(?<datasource>docker)\\s* name: ['\"]?(?<product>[^'\"\\s]+)['\"]?\\s* url: ['\"]?oci://(?<namespace>[^'\"\\s]+)['\"]?\\s* version: ['\"]?(?<currentValue>[^'\"\\s]+)['\"]?'"
+        "#! renovate: datasource=(?<datasource>docker)\\s* name: ['\"]?(?<product>[^'\"\\s]+)['\"]?\\s* url: ['\"]?oci://(?<namespace>[^'\"\\s]+)['\"]?\\s* version: ['\"]?(?<currentValue>[^'\"\\s]+)['\"]?"
       ],
       "depNameTemplate": "{{product}}",
       "packageNameTemplate": "{{namespace}}/{{product}}"
