@@ -22,7 +22,7 @@ data:
       "editable": true,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 2,
-      "id": 0,
+      "id": 18,
       "links": [],
       "liveNow": true,
       "panels": [
@@ -65,8 +65,8 @@ data:
             "overrides": []
           },
           "gridPos": {
-            "h": 10,
-            "w": 3,
+            "h": 4,
+            "w": 4,
             "x": 0,
             "y": 1
           },
@@ -78,9 +78,11 @@ data:
             "orientation": "auto",
             "percentChangeColorMode": "standard",
             "reduceOptions": {
-              "calcs": ["lastNotNull"],
+              "calcs": [
+                "lastNotNull"
+              ],
               "fields": "",
-              "values": false
+              "values": true
             },
             "showPercentChange": false,
             "textMode": "auto",
@@ -94,10 +96,12 @@ data:
                 "uid": "P4169E866C3094E38"
               },
               "editorMode": "code",
+              "exemplar": false,
               "expr": "sum by(serialno) (airgradient_atmp{serialno=~\"$serialno\"})",
+              "instant": true,
               "interval": "",
               "legendFormat": "{{sensor}}",
-              "range": true,
+              "range": false,
               "refId": "A"
             }
           ],
@@ -129,9 +133,9 @@ data:
             "overrides": []
           },
           "gridPos": {
-            "h": 10,
-            "w": 3,
-            "x": 3,
+            "h": 4,
+            "w": 4,
+            "x": 4,
             "y": 1
           },
           "id": 72,
@@ -142,9 +146,11 @@ data:
             "orientation": "auto",
             "percentChangeColorMode": "standard",
             "reduceOptions": {
-              "calcs": ["lastNotNull"],
+              "calcs": [
+                "lastNotNull"
+              ],
               "fields": "",
-              "values": false
+              "values": true
             },
             "showPercentChange": false,
             "textMode": "auto",
@@ -158,10 +164,12 @@ data:
                 "uid": "P4169E866C3094E38"
               },
               "editorMode": "code",
+              "exemplar": false,
               "expr": "sum by(serialno) (airgradient_rhum{serialno=~\"$serialno\"})",
+              "instant": true,
               "interval": "",
               "legendFormat": "{{sensor}}",
-              "range": true,
+              "range": false,
               "refId": "A"
             }
           ],
@@ -178,109 +186,63 @@ data:
               "color": {
                 "mode": "thresholds"
               },
+              "fieldMinMax": false,
               "mappings": [],
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
+                    "color": "dark-green",
                     "value": 0
                   },
                   {
-                    "color": "#EAB839",
-                    "value": 700
+                    "color": "green",
+                    "value": 801
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 1000
+                  },
+                  {
+                    "color": "orange",
+                    "value": 1500
                   },
                   {
                     "color": "red",
-                    "value": 900
+                    "value": 2000
+                  },
+                  {
+                    "color": "purple",
+                    "value": 3000
+                  },
+                  {
+                    "color": "#000000",
+                    "value": 10000
                   }
                 ]
-              },
-              "unit": "ppm"
+              }
             },
             "overrides": []
           },
           "gridPos": {
-            "h": 10,
-            "w": 3,
-            "x": 6,
+            "h": 4,
+            "w": 4,
+            "x": 8,
             "y": 1
           },
           "id": 51,
           "options": {
-            "colorMode": "value",
+            "colorMode": "background",
             "graphMode": "area",
             "justifyMode": "auto",
             "orientation": "auto",
             "percentChangeColorMode": "standard",
             "reduceOptions": {
-              "calcs": ["lastNotNull"],
+              "calcs": [
+                "lastNotNull"
+              ],
               "fields": "",
-              "values": false
-            },
-            "showPercentChange": false,
-            "textMode": "auto",
-            "wideLayout": true
-          },
-          "pluginVersion": "12.3.0",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "P4169E866C3094E38"
-              },
-              "editorMode": "code",
-              "expr": "sum by(serialno) (airgradient_rco2{serialno=~\"$serialno\"})",
-              "legendFormat": "{{airgradient_serial_number}}",
-              "range": true,
-              "refId": "A"
-            }
-          ],
-          "title": "CO2 Level (Sensor: SenseAir S8)",
-          "type": "stat"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "P4169E866C3094E38"
-          },
-          "description": "Total number of particles with a diameter of 0.3 micrometers or smaller per 100ml air",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": 0
-                  }
-                ]
-              },
-              "unit": "particles/100ml"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 10,
-            "w": 2,
-            "x": 9,
-            "y": 1
-          },
-          "id": 22,
-          "options": {
-            "colorMode": "value",
-            "graphMode": "area",
-            "justifyMode": "auto",
-            "orientation": "auto",
-            "percentChangeColorMode": "standard",
-            "reduceOptions": {
-              "calcs": ["lastNotNull"],
-              "fields": "",
-              "values": false
+              "values": true
             },
             "showPercentChange": false,
             "textMode": "auto",
@@ -295,15 +257,14 @@ data:
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum by(serialno) (airgradient_pm003_count{serialno=~\"$serialno\"})",
-              "hide": false,
-              "instant": false,
-              "legendFormat": "PM 0.3 particles / 100ml",
-              "range": true,
-              "refId": "D"
+              "expr": "sum by(serialno) (airgradient_rco2{serialno=~\"$serialno\"})",
+              "instant": true,
+              "legendFormat": "{{airgradient_serial_number}}",
+              "range": false,
+              "refId": "A"
             }
           ],
-          "title": "PM03 Particles / 100ml",
+          "title": "CO2 Level (Sensor: SenseAir S8)",
           "type": "stat"
         },
         {
@@ -326,15 +287,14 @@ data:
                     "value": 0
                   }
                 ]
-              },
-              "unit": "conμgm3"
+              }
             },
             "overrides": []
           },
           "gridPos": {
-            "h": 10,
-            "w": 3,
-            "x": 11,
+            "h": 4,
+            "w": 4,
+            "x": 12,
             "y": 1
           },
           "id": 5,
@@ -345,9 +305,11 @@ data:
             "orientation": "auto",
             "percentChangeColorMode": "standard",
             "reduceOptions": {
-              "calcs": ["lastNotNull"],
+              "calcs": [
+                "lastNotNull"
+              ],
               "fields": "",
-              "values": false
+              "values": true
             },
             "showPercentChange": false,
             "textMode": "auto",
@@ -361,13 +323,15 @@ data:
                 "uid": "P4169E866C3094E38"
               },
               "editorMode": "code",
+              "exemplar": false,
               "expr": "sum by(serialno) (airgradient_pm01{serialno=~\"$serialno\"})",
+              "instant": true,
               "legendFormat": "PM 1.0 μg / m3",
-              "range": true,
+              "range": false,
               "refId": "A"
             }
           ],
-          "title": "PM1 Particle Concentration in μg / m3",
+          "title": "PM1 μg/m3",
           "type": "stat"
         },
         {
@@ -390,15 +354,14 @@ data:
                     "value": 0
                   }
                 ]
-              },
-              "unit": "conμgm3"
+              }
             },
             "overrides": []
           },
           "gridPos": {
-            "h": 10,
-            "w": 3,
-            "x": 14,
+            "h": 4,
+            "w": 4,
+            "x": 16,
             "y": 1
           },
           "id": 33,
@@ -409,9 +372,11 @@ data:
             "orientation": "auto",
             "percentChangeColorMode": "standard",
             "reduceOptions": {
-              "calcs": ["lastNotNull"],
+              "calcs": [
+                "lastNotNull"
+              ],
               "fields": "",
-              "values": false
+              "values": true
             },
             "showPercentChange": false,
             "textMode": "auto",
@@ -425,14 +390,16 @@ data:
                 "uid": "P4169E866C3094E38"
               },
               "editorMode": "code",
+              "exemplar": false,
               "expr": "sum by(serialno) (airgradient_pm02{serialno=~\"$serialno\"})",
               "hide": false,
+              "instant": true,
               "legendFormat": "PM 2.5 μg / m3",
-              "range": true,
+              "range": false,
               "refId": "B"
             }
           ],
-          "title": "PM2.5 Particle Concentration in μg / m3",
+          "title": "PM2.5 μg/m3",
           "type": "stat"
         },
         {
@@ -455,15 +422,14 @@ data:
                     "value": 0
                   }
                 ]
-              },
-              "unit": "conμgm3"
+              }
             },
             "overrides": []
           },
           "gridPos": {
-            "h": 10,
-            "w": 3,
-            "x": 17,
+            "h": 4,
+            "w": 4,
+            "x": 20,
             "y": 1
           },
           "id": 7,
@@ -474,9 +440,11 @@ data:
             "orientation": "auto",
             "percentChangeColorMode": "standard",
             "reduceOptions": {
-              "calcs": ["lastNotNull"],
+              "calcs": [
+                "lastNotNull"
+              ],
               "fields": "",
-              "values": false
+              "values": true
             },
             "showPercentChange": false,
             "textMode": "auto",
@@ -490,14 +458,84 @@ data:
                 "uid": "P4169E866C3094E38"
               },
               "editorMode": "code",
+              "exemplar": false,
               "expr": "sum by(serialno) (airgradient_pm10{serialno=~\"$serialno\"})",
               "hide": false,
+              "instant": true,
               "legendFormat": "PM 10.0 μg / m3",
-              "range": true,
+              "range": false,
               "refId": "C"
             }
           ],
-          "title": "PM10 Particle Concentration in μg / m3",
+          "title": "PM10 μg/m3",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
+          "description": "Total number of particles with a diameter of 0.3 micrometers or smaller per 100ml air",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 4,
+            "x": 0,
+            "y": 5
+          },
+          "id": 22,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "percentChangeColorMode": "standard",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": true
+            },
+            "showPercentChange": false,
+            "textMode": "auto",
+            "wideLayout": true
+          },
+          "pluginVersion": "12.3.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "P4169E866C3094E38"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum by(serialno) (airgradient_pm003_count{serialno=~\"$serialno\"})",
+              "hide": false,
+              "instant": true,
+              "legendFormat": "PM 0.3 particles / 100ml",
+              "range": false,
+              "refId": "D"
+            }
+          ],
+          "title": "PM03 particles/dL",
           "type": "stat"
         },
         {
@@ -523,16 +561,15 @@ data:
                     "value": 1.1
                   }
                 ]
-              },
-              "unit": "NOx"
+              }
             },
             "overrides": []
           },
           "gridPos": {
-            "h": 10,
-            "w": 2,
-            "x": 20,
-            "y": 1
+            "h": 4,
+            "w": 4,
+            "x": 4,
+            "y": 5
           },
           "id": 18,
           "options": {
@@ -542,9 +579,11 @@ data:
             "orientation": "auto",
             "percentChangeColorMode": "standard",
             "reduceOptions": {
-              "calcs": ["lastNotNull"],
+              "calcs": [
+                "lastNotNull"
+              ],
               "fields": "",
-              "values": false
+              "values": true
             },
             "showPercentChange": false,
             "textMode": "auto",
@@ -558,9 +597,11 @@ data:
                 "uid": "P4169E866C3094E38"
               },
               "editorMode": "code",
+              "exemplar": false,
               "expr": "sum by(serialno) (airgradient_nox_index{serialno=~\"$serialno\"})",
+              "instant": true,
               "legendFormat": "{{airgradient_serial_number}} TVOC index",
-              "range": true,
+              "range": false,
               "refId": "A"
             }
           ],
@@ -594,16 +635,15 @@ data:
                     "value": 101
                   }
                 ]
-              },
-              "unit": "TVOC"
+              }
             },
             "overrides": []
           },
           "gridPos": {
-            "h": 10,
-            "w": 2,
-            "x": 22,
-            "y": 1
+            "h": 4,
+            "w": 4,
+            "x": 8,
+            "y": 5
           },
           "id": 11,
           "options": {
@@ -613,9 +653,11 @@ data:
             "orientation": "auto",
             "percentChangeColorMode": "standard",
             "reduceOptions": {
-              "calcs": ["lastNotNull"],
+              "calcs": [
+                "lastNotNull"
+              ],
               "fields": "",
-              "values": false
+              "values": true
             },
             "showPercentChange": false,
             "textMode": "auto",
@@ -629,9 +671,11 @@ data:
                 "uid": "P4169E866C3094E38"
               },
               "editorMode": "code",
+              "exemplar": false,
               "expr": "sum by(serialno) (airgradient_tvoc_index{serialno=~\"$serialno\"})",
+              "instant": true,
               "legendFormat": "{{airgradient_serial_number}} TVOC index",
-              "range": true,
+              "range": false,
               "refId": "A"
             }
           ],
@@ -644,7 +688,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 11
+            "y": 9
           },
           "id": 60,
           "panels": [],
@@ -713,12 +757,19 @@ data:
             "h": 13,
             "w": 12,
             "x": 0,
-            "y": 12
+            "y": 10
           },
           "id": 69,
           "options": {
             "legend": {
-              "calcs": ["lastNotNull", "min", "max", "mean", "variance", "stdDev"],
+              "calcs": [
+                "lastNotNull",
+                "min",
+                "max",
+                "mean",
+                "variance",
+                "stdDev"
+              ],
               "displayMode": "table",
               "placement": "bottom",
               "showLegend": true
@@ -813,12 +864,19 @@ data:
             "h": 13,
             "w": 12,
             "x": 12,
-            "y": 12
+            "y": 10
           },
           "id": 70,
           "options": {
             "legend": {
-              "calcs": ["lastNotNull", "min", "max", "mean", "variance", "stdDev"],
+              "calcs": [
+                "lastNotNull",
+                "min",
+                "max",
+                "mean",
+                "variance",
+                "stdDev"
+              ],
               "displayMode": "table",
               "placement": "bottom",
               "showLegend": true
@@ -853,7 +911,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 25
+            "y": 23
           },
           "id": 42,
           "panels": [],
@@ -910,19 +968,35 @@ data:
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
+                    "color": "dark-green",
                     "value": 0
                   },
                   {
-                    "color": "#EAB839",
-                    "value": 700
+                    "color": "green",
+                    "value": 801
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 1000
+                  },
+                  {
+                    "color": "orange",
+                    "value": 1500
                   },
                   {
                     "color": "red",
-                    "value": 900
+                    "value": 2000
+                  },
+                  {
+                    "color": "purple",
+                    "value": 3000
+                  },
+                  {
+                    "color": "#000000",
+                    "value": 10000
                   }
                 ]
-              },
+              }
               "unit": "ppm"
             },
             "overrides": []
@@ -931,12 +1005,19 @@ data:
             "h": 13,
             "w": 24,
             "x": 0,
-            "y": 26
+            "y": 24
           },
           "id": 50,
           "options": {
             "legend": {
-              "calcs": ["lastNotNull", "min", "max", "mean", "variance", "stdDev"],
+              "calcs": [
+                "lastNotNull",
+                "min",
+                "max",
+                "mean",
+                "variance",
+                "stdDev"
+              ],
               "displayMode": "table",
               "placement": "bottom",
               "showLegend": true
@@ -970,7 +1051,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 39
+            "y": 37
           },
           "id": 9,
           "panels": [],
@@ -1040,12 +1121,19 @@ data:
             "h": 14,
             "w": 12,
             "x": 0,
-            "y": 40
+            "y": 38
           },
           "id": 3,
           "options": {
             "legend": {
-              "calcs": ["lastNotNull", "min", "max", "mean", "variance", "stdDev"],
+              "calcs": [
+                "lastNotNull",
+                "min",
+                "max",
+                "mean",
+                "variance",
+                "stdDev"
+              ],
               "displayMode": "table",
               "placement": "bottom",
               "showLegend": true
@@ -1137,12 +1225,19 @@ data:
             "h": 14,
             "w": 12,
             "x": 12,
-            "y": 40
+            "y": 38
           },
           "id": 27,
           "options": {
             "legend": {
-              "calcs": ["lastNotNull", "min", "max", "mean", "variance", "stdDev"],
+              "calcs": [
+                "lastNotNull",
+                "min",
+                "max",
+                "mean",
+                "variance",
+                "stdDev"
+              ],
               "displayMode": "table",
               "placement": "bottom",
               "showLegend": true
@@ -1233,12 +1328,19 @@ data:
             "h": 14,
             "w": 12,
             "x": 0,
-            "y": 54
+            "y": 52
           },
           "id": 6,
           "options": {
             "legend": {
-              "calcs": ["lastNotNull", "min", "max", "mean", "variance", "stdDev"],
+              "calcs": [
+                "lastNotNull",
+                "min",
+                "max",
+                "mean",
+                "variance",
+                "stdDev"
+              ],
               "displayMode": "table",
               "placement": "bottom",
               "showLegend": true
@@ -1330,12 +1432,19 @@ data:
             "h": 14,
             "w": 12,
             "x": 12,
-            "y": 54
+            "y": 52
           },
           "id": 34,
           "options": {
             "legend": {
-              "calcs": ["lastNotNull", "min", "max", "mean", "variance", "stdDev"],
+              "calcs": [
+                "lastNotNull",
+                "min",
+                "max",
+                "mean",
+                "variance",
+                "stdDev"
+              ],
               "displayMode": "table",
               "placement": "bottom",
               "showLegend": true
@@ -1370,7 +1479,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 68
+            "y": 66
           },
           "id": 10,
           "panels": [],
@@ -1443,12 +1552,19 @@ data:
             "h": 14,
             "w": 12,
             "x": 0,
-            "y": 69
+            "y": 67
           },
           "id": 13,
           "options": {
             "legend": {
-              "calcs": ["lastNotNull", "min", "max", "mean", "variance", "stdDev"],
+              "calcs": [
+                "lastNotNull",
+                "min",
+                "max",
+                "mean",
+                "variance",
+                "stdDev"
+              ],
               "displayMode": "table",
               "placement": "bottom",
               "showLegend": true
@@ -1542,12 +1658,19 @@ data:
             "h": 14,
             "w": 12,
             "x": 12,
-            "y": 69
+            "y": 67
           },
           "id": 17,
           "options": {
             "legend": {
-              "calcs": ["lastNotNull", "min", "max", "mean", "variance", "stdDev"],
+              "calcs": [
+                "lastNotNull",
+                "min",
+                "max",
+                "mean",
+                "variance",
+                "stdDev"
+              ],
               "displayMode": "table",
               "placement": "bottom",
               "showLegend": true
@@ -1588,7 +1711,9 @@ data:
             "allowCustomValue": false,
             "current": {
               "text": "All",
-              "value": ["$__all"]
+              "value": [
+                "$__all"
+              ]
             },
             "datasource": {
               "type": "prometheus",
@@ -1616,12 +1741,21 @@ data:
         "to": "now"
       },
       "timepicker": {
-        "refresh_intervals": ["30s", "1m", "5m", "15m", "30m", "1h", "2h", "1d"]
+        "refresh_intervals": [
+          "30s",
+          "1m",
+          "5m",
+          "15m",
+          "30m",
+          "1h",
+          "2h",
+          "1d"
+        ]
       },
       "timezone": "",
       "title": "Airgradient Native",
       "uid": "d11cb5b1-cb9b-47a9-98a6-94cc40fbc0a6",
-      "version": 6
+      "version": 7
     }
 kind: ConfigMap
 metadata:
