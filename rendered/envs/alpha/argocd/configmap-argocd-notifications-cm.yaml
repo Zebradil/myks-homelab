@@ -6,7 +6,8 @@ data:
     token: $telegram-token
   subscriptions: |
     - recipients:
-      - telegram:-100<path:static/1.sops.yaml#telegram | jsonPath {.chatId}>
+      - telegram:-100<path:static/1.sops.yaml#telegram | jsonPath {.chatId}>|<path:static/1.sops.yaml#telegram
+        | jsonPath {.topicId}>
       triggers:
       - on-created
       - on-deleted
