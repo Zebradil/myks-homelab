@@ -117,4 +117,4 @@ kind: ConfigMap
 metadata:
   name: #@ config_map_name
 data:
-  avp.yaml: #@ yaml.encode(avp_plugin_config())
+  plugin.yaml: #@ yaml.encode(avp_plugin_config())
