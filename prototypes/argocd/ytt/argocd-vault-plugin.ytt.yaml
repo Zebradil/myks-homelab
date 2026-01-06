@@ -15,13 +15,14 @@ type: Opaque
 stringData:
   key: NOTHING HERE, SET IT MANUALLY
 
-#! The following overlay is used to add the argocd-vault-plugin to ArgoCD.
+
+#! The following overlay is used to add the vals CMP plugin to ArgoCD.
 #! It is done by patching the argocd-repo-server deployment in the following way:
-#!   1. Mount cmp-plugin configmap, which contains the argocd-vault-plugin configuration.
-#!   2. Add the argocd-vault-plugin container, which will run the argocd-vault-plugin binary.
+#!   1. Mount cmp-plugin configmap, which contains the plugin configuration.
+#!   2. Add the vals container, which will run the vals binary.
 #!      Additional volumes are mounted to make it work with ArgoCD.
-#!   3. Add the download-tools initContainer to download the argocd-vault-plugin binary,
-#!      which is shared with the argocd-vault-plugin container via the download-tools emptyDir volume.
+#!   3. Add the download-tools initContainer to download the vals binary,
+#!      which is shared with the vals container via the download-tools emptyDir volume.
 #@overlay/match by=overlay.subset({"kind": "Deployment", "metadata": {"name": "argocd-repo-server"}})
 ---
 #@overlay/match-child-defaults missing_ok=True
@@ -41,21 +42,21 @@ spec:
         - name: download-tools
           image: registry.access.redhat.com/ubi8
           env:
-            - name: AVP_VERSION
-              value: #@ data.values.application.argocdVaultPlugin.version
+            - name: VALS_VERSION
+              value: #@ data.values.application.vals.version
           command: [bash, -c]
           args:
+            #! lang:bash
             - |
-              BIN=/custom-tools/argocd-vault-plugin
-              ARTEFACT="argocd-vault-plugin_${AVP_VERSION#v}_linux_amd64"
-              URL="https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/$AVP_VERSION/$ARTEFACT"
-              curl --show-error --location --output "$BIN" "$URL" \
-                && chmod 0755 "$BIN"
+              ARTEFACT="vals_${VALS_VERSION#v}_linux_amd64.tar.gz"
+              URL="https://github.com/helmfile/vals/releases/download/$VALS_VERSION/$ARTEFACT"
+              curl --show-error --location "$URL" \
+                | tar -xzvC /custom-tools vals
           volumeMounts:
             - name: custom-tools
               mountPath: /custom-tools
       containers:
-        - name: argocd-vault-plugin
+        - name: vals
           command: [/var/run/argocd/argocd-cmp-server]
           image: registry.access.redhat.com/ubi8
           env:
@@ -65,6 +66,8 @@ spec:
                   name: #@ sops_age_key_secret
                   key: key
           securityContext:
+            allowPrivilegeEscalation: false
+            runAsGroup: 999
             runAsNonRoot: true
             runAsUser: 999
           volumeMounts:
@@ -78,24 +81,25 @@ spec:
             #! Register plugins into sidecar
             - name: cmp-plugin
               mountPath: /home/argocd/cmp-server/config/plugin.yaml
-              subPath: avp.yaml
+              subPath: plugin.yaml
 
             #! Important: Mount tools into $PATH
             - name: custom-tools
-              mountPath: /usr/local/bin/argocd-vault-plugin
-              subPath: argocd-vault-plugin
+              mountPath: /usr/local/bin/vals
+              subPath: vals
 
+---
 #@ def avp_plugin_config():
 apiVersion: argoproj.io/v1alpha1
 kind: ConfigManagementPlugin
 metadata:
-  name: argocd-vault-plugin
+  name: vals
 spec:
   generate:
     command: ['bash', '-c']
     args:
+      #! lang:bash
       - |-
-        export AVP_TYPE=sops
         find \
           -maxdepth 1 \
           -regextype egrep \
@@ -103,9 +107,10 @@ spec:
           -type f \
           -printf '---\n' \
           -exec cat {} \; \
-        | argocd-vault-plugin generate -
-#@ end
+        | vals eval
 
+
+#@ end
 ---
 apiVersion: v1
 kind: ConfigMap

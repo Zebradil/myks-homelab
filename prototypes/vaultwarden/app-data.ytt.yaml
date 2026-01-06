@@ -1,4 +1,4 @@
-#@ load("secrets.star", "sec")
+#@ load("secrets.star", "sops")
 
 #@ port = 8080
 
@@ -26,7 +26,7 @@ application:
   #! signify that the secrets have changed.
   secretsVersion: 1
   #! See https://github.com/dani-garcia/vaultwarden/wiki/Configuration-overview#using-an-env_file
-  envFile: #@ sec.sops("0", "envFile")
+  envFile: #@ sops("0", "envFile")
   #@schema/default default_env()
   env:
     - name: ""

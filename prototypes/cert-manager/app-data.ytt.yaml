@@ -1,16 +1,16 @@
-#@ load("secrets.star", "sec")
+#@ load("secrets.star", "sops")
 
 #@data/values-schema
 ---
 #@overlay/match-child-defaults missing_ok=True
 application:
   zerossl:
-    email: #@ sec.sops("0", "zerossl_email")
-    eabKeyID: #@ sec.sops("0", "zerossl_eab_key_id")
-    eabKeySecret: #@ sec.sops("0", "zerossl_eab_secret")
+    email: #@ sops("0", "zerossl_email")
+    eabKeyID: #@ sops("0", "zerossl_eab_key_id")
+    eabKeySecret: #@ sops("0", "zerossl_eab_secret")
   cloudflare:
-    email: #@ sec.sops("0", "cloudflare_email")
-    token: #@ sec.sops("0", "cloudflare_api_token")
+    email: #@ sops("0", "cloudflare_email")
+    token: #@ sops("0", "cloudflare_api_token")
   #! Private values are used for sharing values between rendering steps.
   #! They are not intended to be changed directly.
   _:

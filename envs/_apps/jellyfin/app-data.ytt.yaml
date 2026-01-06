@@ -1,4 +1,4 @@
-#@ load("secrets.star", "sec")
+#@ load("secrets.star", "sops")
 
 #@data/values
 ---
@@ -9,4 +9,4 @@ application:
     media:
       size: 1000Gi
   wireguard:
-    config: #@ sec.sops("0", "wireguard_config")
+    config: #@ sops("0", "wireguard_config")

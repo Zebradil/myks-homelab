@@ -6,7 +6,7 @@ This prototype configures K3s nodes to use private Docker registries by creating
 
 - Accepts K3s registries configuration as-is (no processing or transformation)
 - Supports all K3s registry features: mirrors, authentication, TLS, rewrites
-- Uses SOPS encrypted secrets for credentials via `sec.sops()` functions
+- Uses SOPS encrypted secrets for credentials via `sops()` functions
 - Shows configuration diffs with masked secrets for security
 - Automatically restarts when configuration changes
 - Runs on all nodes with appropriate tolerations
@@ -35,10 +35,10 @@ application:
 
 ### Registry with Authentication
 
-You can reference encrypted secrets directly in your configuration using `sec.sops()` functions:
+You can reference encrypted secrets directly in your configuration using `sops()` functions:
 
 ```yaml
-#@ load("secrets.star", "sec")
+#@ load("secrets.star", "sops")
 
 application:
   registries:
@@ -49,12 +49,12 @@ application:
     configs:
       "registry.example.com:5000":
         auth:
-          username: #@ sec.sops("0", "my_registry_username")
-          password: #@ sec.sops("0", "my_registry_password")
+          username: #@ sops("0", "my_registry_username")
+          password: #@ sops("0", "my_registry_password")
       docker.io:
         auth:
           username: my_dockerhub_user
-          password: #@ sec.sops("0", "dockerhub_token")
+          password: #@ sops("0", "dockerhub_token")
 ```
 
 ### TLS Configuration
@@ -74,7 +74,7 @@ application:
 ### Complete Example
 
 ```yaml
-#@ load("secrets.star", "sec")
+#@ load("secrets.star", "sops")
 
 application:
   registries:
@@ -90,13 +90,13 @@ application:
     configs:
       "registry.example.com:5000":
         auth:
-          username: #@ sec.sops("0", "private_registry_user")
-          password: #@ sec.sops("0", "private_registry_pass")
+          username: #@ sops("0", "private_registry_user")
+          password: #@ sops("0", "private_registry_pass")
         tls:
           insecure_skip_verify: true
       "gcr-mirror.example.com":
         auth:
-          token: #@ sec.sops("0", "gcr_access_token")
+          token: #@ sops("0", "gcr_access_token")
         tls:
           ca_file: "/etc/ssl/certs/gcr-ca.pem"
 ```

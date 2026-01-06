@@ -1,6 +1,6 @@
-#@ load("secrets.star", "sec")
+#@ load("secrets.star", "sops")
 
 #@data/values
 ---
 application:
-  password: #@ sec.sops("0", "password")
+  password: #@ sops("0", "password")

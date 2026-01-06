@@ -6,7 +6,7 @@ metadata:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   name: synology-iscsi-btrfs-retain-media-v1
 parameters:
-  dsm: <path:static/dsm-1.sops.yaml#host>
+  dsm: ref+sops://static/dsm-1.sops.yaml#/host
   formatOptions: --nodiscard
   fsType: btrfs
   location: /volume1

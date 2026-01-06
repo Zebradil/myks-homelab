@@ -1,4 +1,4 @@
-#@ load("secrets.star", "sec")
+#@ load("secrets.star", "sops")
 ---
 alloy:
   alloy:
@@ -44,7 +44,7 @@ opencost:
     prometheus:
       existingSecretName: grafana-cloud-prometheus-endpoint
       external:
-        url: #@ sec.sopsy("0", "prometheus.host") + "/api/prom"
+        url: #@ sops("0", "prometheus.host") + "/api/prom"
     ui:
       enabled: false
 prometheus-node-exporter:

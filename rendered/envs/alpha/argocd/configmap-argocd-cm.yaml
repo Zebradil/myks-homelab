@@ -11,9 +11,9 @@ data:
   oidc.config: |
     name: Authelia
     issuer: https://auth.zebradil.dev
-    clientID: <path:static/oidc.sops.yaml#argocd | jsonPath {.client_id}>
-    clientSecret: <path:static/oidc.sops.yaml#argocd | jsonPath {.client_secret}>
-    cliClientID: <path:static/oidc.sops.yaml#argocd-cli | jsonPath {.client_id}>
+    clientID: ref+sops://static/oidc.sops.yaml#/argocd/client_id
+    clientSecret: ref+sops://static/oidc.sops.yaml#/argocd/client_secret
+    cliClientID: ref+sops://static/oidc.sops.yaml#/argocd-cli/client_id
     requestedScopes:
     - openid
     - email

@@ -1,5 +1,5 @@
 #@ load("@ytt:data", "data")
-#@ load("secrets.star", "sec")
+#@ load("secrets.star", "sops")
 
 #@ d = data.values
 #@ repo_url = "git@github.com:Zebradil/myks-private.git"
@@ -35,4 +35,4 @@ metadata:
 stringData:
   type: git
   url: #@ repo_url
-  sshPrivateKey: #@ sec.sops("1", "sshPrivateKey")
+  sshPrivateKey: #@ sops("1", "sshPrivateKey")

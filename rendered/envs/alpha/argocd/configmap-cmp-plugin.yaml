@@ -4,7 +4,7 @@ data:
     apiVersion: argoproj.io/v1alpha1
     kind: ConfigManagementPlugin
     metadata:
-      name: argocd-vault-plugin
+      name: vals
     spec:
       generate:
         command:
@@ -12,7 +12,6 @@ data:
         - -c
         args:
         - |-
-          export AVP_TYPE=sops
           find \
             -maxdepth 1 \
             -regextype egrep \
@@ -20,7 +19,7 @@ data:
             -type f \
             -printf '---\n' \
             -exec cat {} \; \
-          | argocd-vault-plugin generate -
+          | vals eval
 kind: ConfigMap
 metadata:
   annotations:

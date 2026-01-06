@@ -1,11 +1,11 @@
-#@ load("secrets.star", "sec")
+#@ load("secrets.star", "sops")
 
 #@data/values
 ---
 application:
   paperless:
     env:
-      PAPERLESS_SECRET_KEY: #@ sec.sops("0", "sessionSecretKey")
+      PAPERLESS_SECRET_KEY: #@ sops("0", "sessionSecretKey")
     sftp:
       #! The corresponding private key was generated on the scanner host
       public_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCnzIKHO6ux0JUuSZGmnrVtukIvvqiPRt3pdwPbvMDQwTSFtW0xdORkYKGsCYhPuzEcLMFfJgUT4JEtMPFdj1TTizo5fDOlQP+pJMoRc4HKmqzTsK4FvmS/7Bl6IvWbhAcceKynGkZmOrQziMo7RINrFy1/sjf9ZVaMoQvbFjLUEGboxuq0gJVfgxlRQX28rHolFZk9YWWbHMJ0Gbw/YLQWqf3EJuQnyAWSrnZsX+a8CsKoCzlgsFne91PgNFA5OhkIMkKQy1Mk4qSXhQ7ZUHhcN7reDhyyDX/E+Y0y87Y5NZ8OxAU6Bzl0wZKcAIhZkE/hvhb6L4hJ98VS04QD7Gpj
@@ -21,10 +21,10 @@ application:
         init-rsa-keys.sh: |
           #!/bin/sh
           cat <<EOF > /etc/ssh/ssh_host_rsa_key
-          (@= sec.sops("0", "ssh_host_rsa_key") @)
+          (@= sops("0", "ssh_host_rsa_key") @)
           EOF
           cat <<EOF > /etc/ssh/ssh_host_rsa_key.pub
-          (@= sec.sops("0", "ssh_host_rsa_key.pub") @)
+          (@= sops("0", "ssh_host_rsa_key.pub") @)
           EOF
   postgresql:
-    password: #@ sec.sops("0", "databasePassword")
+    password: #@ sops("0", "databasePassword")

@@ -11,7 +11,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 34be6114f20cc5593b81de1b42926050
+        checksum/config: c746b114f0424d0fc27a1078a93cd43d
       labels:
         app: k3s-private-registries-writer
     spec:

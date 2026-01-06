@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/cm: fdc71847ace4e3517a6018e2de2324634a39a22d1c344189e7ef78e5ada96d7c
+        checksum/cm: 0877a09382e9b3299722715de59ed5149c57c98ccce54a3144457f557987a36e
         checksum/cmd-params: 422a03812456c79703a353bd220bc6cf91e8c22afe44fa0b85669568f8b8a47c
       labels:
         app.kubernetes.io/component: repo-server
@@ -367,8 +367,10 @@ spec:
                   key: key
                   name: sops-age-key
           image: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:ceea2c6434cc16cd796b7fcab26f351c308675bd3256894f7377262f3ed2f277
-          name: argocd-vault-plugin
+          name: vals
           securityContext:
+            allowPrivilegeEscalation: false
+            runAsGroup: 999
             runAsNonRoot: true
             runAsUser: 999
           volumeMounts:
@@ -380,10 +382,10 @@ spec:
               name: cmp-tmp
             - mountPath: /home/argocd/cmp-server/config/plugin.yaml
               name: cmp-plugin
-              subPath: avp.yaml
-            - mountPath: /usr/local/bin/argocd-vault-plugin
+              subPath: plugin.yaml
+            - mountPath: /usr/local/bin/vals
               name: custom-tools
-              subPath: argocd-vault-plugin
+              subPath: vals
       dnsPolicy: ClusterFirst
       initContainers:
         - command:
@@ -408,17 +410,16 @@ spec:
               name: var-files
         - args:
             - |
-              BIN=/custom-tools/argocd-vault-plugin
-              ARTEFACT="argocd-vault-plugin_${AVP_VERSION#v}_linux_amd64"
-              URL="https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/$AVP_VERSION/$ARTEFACT"
-              curl --show-error --location --output "$BIN" "$URL" \
-                && chmod 0755 "$BIN"
+              ARTEFACT="vals_${VALS_VERSION#v}_linux_amd64.tar.gz"
+              URL="https://github.com/helmfile/vals/releases/download/$VALS_VERSION/$ARTEFACT"
+              curl --show-error --location "$URL" \
+                | tar -xzvC /custom-tools vals
           command:
             - bash
             - -c
           env:
-            - name: AVP_VERSION
-              value: v1.18.1
+            - name: VALS_VERSION
+              value: v0.43.0
           image: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:ceea2c6434cc16cd796b7fcab26f351c308675bd3256894f7377262f3ed2f277
           name: download-tools
           volumeMounts:

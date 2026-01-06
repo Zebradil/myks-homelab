@@ -1,4 +1,4 @@
-#@ load("secrets.star", "sec")
+#@ load("secrets.star", "sops")
 ---
 #! General purpose storage class
 apiVersion: storage.k8s.io/v1
@@ -11,7 +11,7 @@ allowVolumeExpansion: true
 provisioner: csi.san.synology.com
 reclaimPolicy: Retain
 parameters:
-  dsm: #@ sec.sops("dsm-1", "host")
+  dsm: #@ sops("dsm-1", "host")
   formatOptions: --nodiscard
   fsType: btrfs
   location: /volume3
@@ -26,7 +26,7 @@ allowVolumeExpansion: true
 provisioner: csi.san.synology.com
 reclaimPolicy: Retain
 parameters:
-  dsm: #@ sec.sops("dsm-1", "host")
+  dsm: #@ sops("dsm-1", "host")
   formatOptions: --nodiscard
   fsType: btrfs
   location: /volume1

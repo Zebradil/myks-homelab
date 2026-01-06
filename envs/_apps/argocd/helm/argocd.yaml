@@ -1,15 +1,15 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:yaml", "yaml")
-#@ load("secrets.star", "sec")
+#@ load("secrets.star", "sops")
 
 #@ d = data.values
 
 #@ def oidc_config():
 name: Authelia
 issuer: https://auth.zebradil.dev
-clientID: #@ sec.sopsy("oidc", "argocd.client_id")
-clientSecret: #@ sec.sopsy("oidc", "argocd.client_secret")
-cliClientID: #@ sec.sopsy("oidc", "argocd-cli.client_id")
+clientID: #@ sops("oidc", "argocd.client_id")
+clientSecret: #@ sops("oidc", "argocd.client_secret")
+cliClientID: #@ sops("oidc", "argocd-cli.client_id")
 requestedScopes:
   - openid
   - email
@@ -31,13 +31,13 @@ configs:
 notifications:
   secret:
     items:
-      telegram-token: #@ sec.sopsy("1", "telegram.token")
+      telegram-token: #@ sops("1", "telegram.token")
   notifiers:
     service.telegram: |
       token: $telegram-token
   subscriptions:
     - recipients:
-        -  #@ "telegram:-100{}|{}".format(sec.sopsy("1", "telegram.chatId"), sec.sopsy("1", "telegram.topicId"))
+        -  #@ "telegram:-100{}|{}".format(sops("1", "telegram.chatId"), sops("1", "telegram.topicId"))
       triggers:
         - on-created
         - on-deleted

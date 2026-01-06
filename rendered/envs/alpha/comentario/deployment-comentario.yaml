@@ -13,7 +13,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/secrets: 1ff1822cd08bbb77aec7b6ae9229344f-1
+        checksum/secrets: 055d81d268da4cc92820b6fa1d3f1743-1
       labels:
         app.kubernetes.io/name: comentario
     spec:
