@@ -16,7 +16,7 @@ spec:
   source:
     path: rendered/envs/alpha/pacoloco
     plugin:
-      name: argocd-vault-plugin
+      name: vals
     repoURL: https://github.com/Zebradil/myks-homelab
     targetRevision: main
   syncPolicy:

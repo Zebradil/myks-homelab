@@ -16,7 +16,7 @@ argocd:
     source:
       path: ""
       plugin:
-        name: argocd-vault-plugin
+        name: vals
       repoURL: https://github.com/Zebradil/myks-homelab
       targetRevision: main
     syncPolicy:

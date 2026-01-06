@@ -11,7 +11,7 @@ argocd:
       #! Explicitly set the target revision to avoid overwriting in CI
       targetRevision: main
       plugin:
-        name: argocd-vault-plugin
+        name: vals
     syncPolicy:
       prune: true
       selfHeal: false
