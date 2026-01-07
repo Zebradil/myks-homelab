@@ -43,7 +43,7 @@ sops:
             V2xoWGc5RVFkOFhDOWkxWi9PbjJGWmsKcHv+9ZYsVD+lzairEkmcdum8jrBAKZBn
             oXsKtSSIZPzihWJUhzzJ4BBtasSN7b8UyKHlawCive2kYDimJP6yCQ==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-08-25T13:32:42Z"
-    mac: ENC[AES256_GCM,data:wfNRrr0sW3DJMU0DfmCGmbNs3l/h5ErJwgYKvMhER1VHsrnJOy83IPTJWp7/r84ns8MOsK5giIwFD3GPdlX4dl0wOD3hCHUQAI3CelJZmJXxMR6hfMGvOJWgEippa4CznKki5ELYeT08eNt7lQmlsmcBWq+4ICzRuQISKas0daM=,iv:syeK/I3NCJc/HB+cqI9m0XWr5koIDbbBI/m6PJqZ0b4=,tag:vxGTwq7T/19D6tDsRZPHYA==,type:str]
+    lastmodified: "2026-01-07T10:10:21Z"
+    mac: ENC[AES256_GCM,data:bIuaAwXKEG3qXc+skMilgv1ofd7oijEBe1je5uGpUo9SaUrLEMt3oHQIjolCS9qBV2KlYYcem1bkuvOuJ5Gz9TlreNujmO/bG6w067NgrHuH/tXuGVG6lE9LL020gW04tpmBPqaI8AnseVYFOxrcofETsk2n8YOrgIo8xhMscTQ=,iv:71ntuVGivlUYXwFFOBW1kzqaXMaa9Agi8O9iOagiL6Y=,tag:oroasoS1Mm349a7SvxXPMA==,type:str]
     encrypted_regex: .
-    version: 3.10.2
+    version: 3.11.0

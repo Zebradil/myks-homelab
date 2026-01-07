@@ -54,7 +54,8 @@ configMap:
         - key_id: default
           algorithm: RS256
           key:
-            value: #@ sops("oidc", "jwks.default.key")
+            #! See ytt/secret.ytt.yaml for how this secret is injected.
+            path: /secrets/internal/oidc.jwks.default.key
       clients:
         - client_id: #@ sops("oidc", "harbor.client_id")
           client_name: Harbor
