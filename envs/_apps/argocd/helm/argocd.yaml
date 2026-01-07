@@ -37,7 +37,7 @@ notifications:
       token: $telegram-token
   subscriptions:
     - recipients:
-        -  #@ "telegram:-100{}|{}".format(sops("1", "telegram.chatId"), sops("1", "telegram.topicId"))
+        -  #@ "telegram:" + sops("1", "telegram.fullTopicId")
       triggers:
         - on-created
         - on-deleted

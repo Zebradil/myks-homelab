@@ -6,7 +6,7 @@ data:
     token: $telegram-token
   subscriptions: |
     - recipients:
-      - telegram:-100ref+sops://static/1.sops.yaml#/telegram/chatId|ref+sops://static/1.sops.yaml#/telegram/topicId
+      - telegram:ref+sops://static/1.sops.yaml#/telegram/fullTopicId
       triggers:
       - on-created
       - on-deleted

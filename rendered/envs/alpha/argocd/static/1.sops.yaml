@@ -1,8 +1,7 @@
 sshPrivateKey: ENC[AES256_GCM,data:1Klk0F1x76yMHHLOYN9axdp3V/4hlH0q+ikydWkA0PFuQSzGUNViK9BYSShZmWCgyOgZ9IzvyktPZ39MX0O/Xy2/zbu9JinN2glCSCI0ucNYUWoeAlUSKaSzg5hh3t2l4AyCRqwGlT88GpAUguHBNf5TFiQINyx0+ncUQG4frfvcQUHvVo3r+ezB7FQ7l5P4378o5id77GIctuPQR+4L9PdaDF2K07vBD+V2bMrNkWk+zT1OtRUD0h0Z9XGsd1ibdb07ruZObMusESpDgP6CwFEBE6dniXg8T6ZqbGOrZu9B5H/mfI8XAcjeD6avTH6OKBnpiR6fE0azQE+WSIOgNaeC3wcpeIXouDT0yDmrHMoSZzmqDzXHSeS5qBaSVxmmuqdj2MGZcWMumk5iQ2hHJhplf2EnwB8E8LUuW7Hb7AjNQ1ReTfqolD/ODLWT6LKAgDBbfkB+rIXUn4fCyVa9qNmNvaoJiTd4ZrmpfBYRvhH2QfJ7P+gkv7M14G9xgh5/dGvmJefuMYLygVsoofCs48HPG1hT8T8k+gu/,iv:Kog1vf27h7gc1l513vppE5y+RiRTOVJ3JfonSXRzmeI=,tag:8LX0fFzqYIfToKcTNL2PGA==,type:str]
 telegram:
     token: ENC[AES256_GCM,data:0Hkl6Hq59LTL/0svt1uE+ZL0xfykKm3iwJj7CO3SFTG9D/aV4aXr1dlPZW5IBQ==,iv:PgvdhWKa/Z3Zzzz4P5KhlPBE4UrvQEI1dR5XuBsd3aM=,tag:ax3NKL5nUjSgtDOzKKkW4w==,type:str]
-    chatId: ENC[AES256_GCM,data:AJgdhB8HNF2H7w==,iv:c6e4KhRBVneErpvmliw6/+Rs7fjkyLr7UssUbseo2ew=,tag:h9L3Egk1FTi2J3Vyewn7xA==,type:int]
-    topicId: ENC[AES256_GCM,data:lg==,iv:liPryDgLDGQnwfDkrbYQD9176VIYE9IcFMlNC28QBf0=,tag:rBmpTNEjhTxqCrFAwdZc2g==,type:int]
+    fullTopicId: ENC[AES256_GCM,data:n5hhKsyGzym+NLf2gy2UbQ==,iv:HXkJJiySQQqOLUjEx5JcMhc+dXaSQVeHN6t3nHiXBFY=,tag:IUbkIgOgfb50wAGcXExTeQ==,type:str]
 sops:
     age:
         - recipient: age13hxx3dgpjcp0v2z5xx07nwm4zvdy78rc9xra6lujzzrl7c657ekq2vgwnk
@@ -32,7 +31,7 @@ sops:
             TW05UFhTNEZlVnVhMksyVjN2Rk1oT1kKUf2u6KykznFGK/H5QHzDlzdOtRsTp3wa
             sGzPuBzuzMcOqCy/mwKZg6yQpfvNJlP2ydpf3RU/X1XU7djl0QBmDA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-01-05T22:31:40Z"
-    mac: ENC[AES256_GCM,data:h1WtCIpawP2/zaK5brvFFdMmXluhcRyFcxWurJ4dVF5Z16qIkvPeSMsez5/zovVf1tnb/tOtr50JWcyvBUa50Lb38EGXovn9I4fgeuuNRw0Jn1R9+pQoW1t0eEjBgZwbKb+LmmNba6DuNSAsyAJmAqrJ0yxgOwFwwoORN5xitns=,iv:2mtDzoDlLZcXjnOvc4Sa1qWQ/U274TPp2WyZXJjJh2c=,tag:R4Xha3dcMdf9TgLqxzMYyA==,type:str]
+    lastmodified: "2026-01-07T00:00:57Z"
+    mac: ENC[AES256_GCM,data:3ywR4zmk65eVStKAcrY1Eta7pHugXvyslzsSiSN3KUOp7zRElPdrlx9x5YgqVzrjhz37WUMA0J7HjZWEUO3W3wgNIaX7sKMg5CNnALM3rMUE09svVP2hycpkvBSG782i1KeXHaF3FQhbR+m1AvB2LM4Q1/YWXlXngxHI8f8ob6I=,iv:3cM2+R2BHaTwM3Yk4OGVSYiATrMOSoQWRyiEb21sU4k=,tag:mRNYgAuJRBonxq40IrMG1A==,type:str]
     encrypted_regex: .
     version: 3.11.0
