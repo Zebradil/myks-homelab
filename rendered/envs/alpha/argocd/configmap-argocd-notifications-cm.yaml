@@ -4,6 +4,7 @@ data:
     argocdUrl: https://argocd.zebradil.dev
   service.telegram: |
     token: $telegram-token
+    parseMode: HTML
   subscriptions: |
     - recipients:
       - telegram:ref+sops://static/1.sops.yaml#/telegram/fullTopicId+

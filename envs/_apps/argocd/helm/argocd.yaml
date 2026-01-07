@@ -35,6 +35,7 @@ notifications:
   notifiers:
     service.telegram: |
       token: $telegram-token
+      parseMode: HTML
   subscriptions:
     - recipients:
         -  #@ "telegram:" + sops("1", "telegram.fullTopicId")
