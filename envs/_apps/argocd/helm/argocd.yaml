@@ -35,7 +35,6 @@ notifications:
   notifiers:
     service.telegram: |
       token: $telegram-token
-      parseMode: HTML
   subscriptions:
     - recipients:
         -  #@ "telegram:" + sops("1", "telegram.fullTopicId")
@@ -50,29 +49,40 @@ notifications:
         - on-sync-succeeded
   templates: #! lang:yaml
     template.app-created: |
-      message: ✨ Application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}">{{.app.metadata.name}}</a></b> has been created.
+      message: |
+        ✨ Application *[{{.app.metadata.name}}]({{.context.argocdUrl}}/applications/{{.app.metadata.name}})* has been created.
+
     template.app-deleted: |
-      message: ❌Application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}">{{.app.metadata.name}}</a></b> has been deleted.
+      message: |
+        ❌ Application *[{{.app.metadata.name}}]({{.context.argocdUrl}}/applications/{{.app.metadata.name}})* has been deleted.
+
     template.app-deployed: |
-      message: ✅ Application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}">{{.app.metadata.name}}</a></b> is now running new version of deployments manifests.
+      message: |
+        ✅ Application *[{{.app.metadata.name}}]({{.context.argocdUrl}}/applications/{{.app.metadata.name}})* is now running new version of deployments manifests.
+
     template.app-health-degraded: |
       message: |
-        💔 Application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}">{{.app.metadata.name}}</a></b> has degraded.
+        💔 Application *[{{.app.metadata.name}}]({{.context.argocdUrl}}/applications/{{.app.metadata.name}})* has degraded.
+
     template.app-sync-failed: |
       message: |
-        ⚠️ The sync operation of application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true">{{.app.metadata.name}}</a></b> has failed at {{.app.status.operationState.finishedAt}} with the following error: {{.app.status.operationState.message}}
+        ⚠️ The sync operation of application *[{{.app.metadata.name}}]({{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true)* has failed at {{.app.status.operationState.finishedAt}} with the following error: {{.app.status.operationState.message}}
+
     template.app-sync-running: |
       message: |
-        🔄 The sync operation of application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true">{{.app.metadata.name}}</a></b> has started at {{.app.status.operationState.startedAt}}.
+        🔄 The sync operation of application *[{{.app.metadata.name}}]({{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true)* has started at {{.app.status.operationState.startedAt}}.
+
     template.app-sync-status-unknown: |
       message: |
-        ❓ Application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}">{{.app.metadata.name}}</a></b> sync is 'Unknown'.
-        {{range $c := .app.status.conditions}}
-            * {{$c.message}}
-        {{end}}
+        ❓ Application *[{{.app.metadata.name}}]({{.context.argocdUrl}}/applications/{{.app.metadata.name}})* sync is 'Unknown'.
+        {{- range $c := .app.status.conditions }}
+        • {{ $c.message }}
+        {{- end }}
+
     template.app-sync-succeeded: |
       message: |
-        ✅ Application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true">{{.app.metadata.name}}</a></b> has been successfully synced at {{.app.status.operationState.finishedAt}}.
+        ✅ Application *[{{.app.metadata.name}}]({{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true)* has been successfully synced at {{.app.status.operationState.finishedAt}}.
+
   triggers: #! lang:yaml
     trigger.on-created: |
       - description: Application is created.
