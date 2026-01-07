@@ -14,18 +14,18 @@ spec:
     - name: blackhole
     - name: healthchecks
       webhook_configs:
-        - url: ref+sops://static/0.sops.yaml#/healthchecksPing/url
+        - url: ref+sops://static/0.sops.yaml#/healthchecksPing/url+
     - name: tg-high-severity
       telegram_configs:
-        - bot_token: ref+sops://static/0.sops.yaml#/telegram/botToken
-          chat_id: ref+sops://static/0.sops.yaml#/telegram/chatId
-          message_thread_id: ref+sops://static/0.sops.yaml#/telegram/highSeverityTopicId
+        - bot_token: ref+sops://static/0.sops.yaml#/telegram/botToken+
+          chat_id: ref+sops://static/0.sops.yaml#/telegram/chatId+
+          message_thread_id: ref+sops://static/0.sops.yaml#/telegram/highSeverityTopicId+
     - name: tg-common
       telegram_configs:
-        - bot_token: ref+sops://static/0.sops.yaml#/telegram/botToken
-          chat_id: ref+sops://static/0.sops.yaml#/telegram/chatId
+        - bot_token: ref+sops://static/0.sops.yaml#/telegram/botToken+
+          chat_id: ref+sops://static/0.sops.yaml#/telegram/chatId+
           disable_notifications: true
-          message_thread_id: ref+sops://static/0.sops.yaml#/telegram/commonTopicId
+          message_thread_id: ref+sops://static/0.sops.yaml#/telegram/commonTopicId+
   route:
     group_by:
       - alertgroup

@@ -27,7 +27,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/secret: 95f6b070aed3ec115c2d8c173da7e11458bc8dbb1a4c86bab9269068de8010bc
+        checksum/secret: 79594154f415f4f6f9cd52759aca6e969ec43865b4d191bc4be8095de2ccd599
       labels:
         app: harbor
         app.kubernetes.io/component: database

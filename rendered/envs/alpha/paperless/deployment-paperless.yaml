@@ -14,7 +14,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/paperless-sftp-scripts: fb947f663c35830fd489756fb6589824685523a255d3db3250c0556a461f8881
+        checksum/paperless-sftp-scripts: b4f13a6613db1a98235497715340945ce4bf7491f6d963846498414e51e99715
       labels:
         app: paperless
     spec:
@@ -48,7 +48,7 @@ spec:
             - name: PAPERLESS_OCR_USER_ARGS
               value: '{"invalidate_digital_signatures": true}'
             - name: PAPERLESS_SECRET_KEY
-              value: ref+sops://static/0.sops.yaml#/sessionSecretKey
+              value: ref+sops://static/0.sops.yaml#/sessionSecretKey+
             - name: PAPERLESS_TIME_ZONE
               value: Europe/Berlin
           image: oci.zebradil.dev/ghcr.io-cache/paperless-ngx/paperless-ngx@sha256:719a4e4c4314b417646b00e58bfbfbe55e4cb59017a2dec1533e96d8deb66ec1

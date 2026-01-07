@@ -8,7 +8,7 @@ load("@ytt:struct", "struct")
 # Returns:
 #   A string that is recognized by vals as a sops secret reference.
 def sops(name, key):
-    return "ref+sops://static/{}.sops.yaml#/{}".format(name, key.replace(".", "/"))
+    return "ref+sops://static/{}.sops.yaml#/{}+".format(name, key.replace(".", "/"))
 end
 
 sec = struct.make(

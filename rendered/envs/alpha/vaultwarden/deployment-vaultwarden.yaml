@@ -13,7 +13,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/secrets: bfae65e2a5ed667a2407658ea984c924-1
+        checksum/secrets: d3c944a5139155d62e63871c2b0dcd90-1
       labels:
         app.kubernetes.io/name: vaultwarden
     spec:

@@ -6,9 +6,9 @@ metadata:
   name: cloudflare-zerossl
 spec:
   acme:
-    email: ref+sops://static/0.sops.yaml#/zerossl_email
+    email: ref+sops://static/0.sops.yaml#/zerossl_email+
     externalAccountBinding:
-      keyID: ref+sops://static/0.sops.yaml#/zerossl_eab_key_id
+      keyID: ref+sops://static/0.sops.yaml#/zerossl_eab_key_id+
       keySecretRef:
         key: secret
         name: zerossl-eab
@@ -21,4 +21,4 @@ spec:
             apiTokenSecretRef:
               key: token
               name: cloudflare-api-token
-            email: ref+sops://static/0.sops.yaml#/cloudflare_email
+            email: ref+sops://static/0.sops.yaml#/cloudflare_email+
