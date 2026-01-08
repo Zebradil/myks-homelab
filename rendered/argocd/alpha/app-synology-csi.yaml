@@ -30,6 +30,6 @@ spec:
       selfHeal: false
     syncOptions:
       - CreateNamespace=true
-      - ServerSideApply=true
       - FailOnSharedResource=true
       - RespectIgnoreDifferences=true
+      - ServerSideApply=true
