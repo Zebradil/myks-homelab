@@ -1,0 +1,35 @@
+#@ def templates():
+- name: app-created
+  notify: true
+  message: |
+    ✨ Application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}">{{.app.metadata.name}}</a></b> has been created.
+- name: app-deleted
+  notify: true
+  message: |
+    ❌Application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}">{{.app.metadata.name}}</a></b> has been deleted.
+- name: app-deployed
+  notify: true
+  message: |
+    ✅ Application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}">{{.app.metadata.name}}</a></b> is now running new version of deployments manifests.
+- name: app-health-degraded
+  notify: true
+  message: |
+    💔 Application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}">{{.app.metadata.name}}</a></b> has degraded.
+- name: app-sync-failed
+  notify: true
+  message: |
+    ⚠️ The sync operation of application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true">{{.app.metadata.name}}</a></b> has failed at {{.app.status.operationState.finishedAt}} with the following error: {{.app.status.operationState.message}}
+- name: app-sync-running
+  notify: true
+  message: |
+    🔄 The sync operation of application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true">{{.app.metadata.name}}</a></b> has started at {{.app.status.operationState.startedAt}}.
+- name: app-sync-status-unknown
+  notify: true
+  message: |
+    ❓ Application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}">{{.app.metadata.name}}</a></b> sync is 'Unknown'. {{range $c := .app.status.conditions}} * {{$c.message}} {{end}}
+- name: app-sync-succeeded
+  notify: true
+  message: |
+    ✅ Application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true">{{.app.metadata.name}}</a></b> has been successfully synced at {{.app.status.operationState.finishedAt}}.
+
+#@ end

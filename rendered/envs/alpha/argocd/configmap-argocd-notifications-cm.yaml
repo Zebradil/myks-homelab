@@ -4,9 +4,14 @@ data:
     argocdUrl: https://argocd.zebradil.dev
   service.telegram: |
     token: $telegram-token
+  service.webhook.telegram-html: |
+    url: https://api.telegram.org/bot$telegram-token/sendMessage
+    headers:
+      - name: Content-Type
+        value: application/json
   subscriptions: |
     - recipients:
-      - telegram:ref+sops://static/1.sops.yaml#/telegram/fullTopicId+
+      - telegram-html
       triggers:
       - on-created
       - on-deleted
@@ -17,28 +22,45 @@ data:
       - on-sync-status-unknown
       - on-sync-succeeded
   template.app-created: |
-    message: |
-      ✨ Application *[{{.app.metadata.name}}]({{.context.argocdUrl}}/applications/{{.app.metadata.name}})* has been created.
+    webhook:
+      telegram-html:
+        method: POST
+        body: '{"chat_id":"ref+sops://static/1.sops.yaml#/telegram/chatId+","message_thread_id":"ref+sops://static/1.sops.yaml#/telegram/topicId+","parse_mode":"HTML","text":"✨ Application \u003cb\u003e\u003ca href=\"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}\"\u003e{{.app.metadata.name}}\u003c/a\u003e\u003c/b\u003e has been created.\n"}'
   template.app-deleted: |
-    message: |
-      ❌ Application *[{{.app.metadata.name}}]({{.context.argocdUrl}}/applications/{{.app.metadata.name}})* has been deleted.
+    webhook:
+      telegram-html:
+        method: POST
+        body: '{"chat_id":"ref+sops://static/1.sops.yaml#/telegram/chatId+","message_thread_id":"ref+sops://static/1.sops.yaml#/telegram/topicId+","parse_mode":"HTML","text":"❌Application \u003cb\u003e\u003ca href=\"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}\"\u003e{{.app.metadata.name}}\u003c/a\u003e\u003c/b\u003e has been deleted.\n"}'
   template.app-deployed: |
-    message: |
-      ✅ Application *[{{.app.metadata.name}}]({{.context.argocdUrl}}/applications/{{.app.metadata.name}})* is now running new version of deployments manifests.
-  template.app-health-degraded: "message: |\n  \U0001F494 Application *[{{.app.metadata.name}}]({{.context.argocdUrl}}/applications/{{.app.metadata.name}})* has degraded.\n"
+    webhook:
+      telegram-html:
+        method: POST
+        body: '{"chat_id":"ref+sops://static/1.sops.yaml#/telegram/chatId+","message_thread_id":"ref+sops://static/1.sops.yaml#/telegram/topicId+","parse_mode":"HTML","text":"✅ Application \u003cb\u003e\u003ca href=\"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}\"\u003e{{.app.metadata.name}}\u003c/a\u003e\u003c/b\u003e is now running new version of deployments manifests.\n"}'
+  template.app-health-degraded: |
+    webhook:
+      telegram-html:
+        method: POST
+        body: "{\"chat_id\":\"ref+sops://static/1.sops.yaml#/telegram/chatId+\",\"message_thread_id\":\"ref+sops://static/1.sops.yaml#/telegram/topicId+\",\"parse_mode\":\"HTML\",\"text\":\"\U0001F494 Application \\u003cb\\u003e\\u003ca href=\\\"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}\\\"\\u003e{{.app.metadata.name}}\\u003c/a\\u003e\\u003c/b\\u003e has degraded.\\n\"}"
   template.app-sync-failed: |
-    message: |
-      ⚠️ The sync operation of application *[{{.app.metadata.name}}]({{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true)* has failed at {{.app.status.operationState.finishedAt}} with the following error: {{.app.status.operationState.message}}
-  template.app-sync-running: "message: |\n  \U0001F504 The sync operation of application *[{{.app.metadata.name}}]({{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true)* has started at {{.app.status.operationState.startedAt}}.\n"
+    webhook:
+      telegram-html:
+        method: POST
+        body: '{"chat_id":"ref+sops://static/1.sops.yaml#/telegram/chatId+","message_thread_id":"ref+sops://static/1.sops.yaml#/telegram/topicId+","parse_mode":"HTML","text":"⚠️ The sync operation of application \u003cb\u003e\u003ca href=\"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true\"\u003e{{.app.metadata.name}}\u003c/a\u003e\u003c/b\u003e has failed at {{.app.status.operationState.finishedAt}} with the following error: {{.app.status.operationState.message}}\n"}'
+  template.app-sync-running: |
+    webhook:
+      telegram-html:
+        method: POST
+        body: "{\"chat_id\":\"ref+sops://static/1.sops.yaml#/telegram/chatId+\",\"message_thread_id\":\"ref+sops://static/1.sops.yaml#/telegram/topicId+\",\"parse_mode\":\"HTML\",\"text\":\"\U0001F504 The sync operation of application \\u003cb\\u003e\\u003ca href=\\\"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true\\\"\\u003e{{.app.metadata.name}}\\u003c/a\\u003e\\u003c/b\\u003e has started at {{.app.status.operationState.startedAt}}.\\n\"}"
   template.app-sync-status-unknown: |
-    message: |
-      ❓ Application *[{{.app.metadata.name}}]({{.context.argocdUrl}}/applications/{{.app.metadata.name}})* sync is 'Unknown'.
-      {{- range $c := .app.status.conditions }}
-      • {{ $c.message }}
-      {{- end }}
+    webhook:
+      telegram-html:
+        method: POST
+        body: '{"chat_id":"ref+sops://static/1.sops.yaml#/telegram/chatId+","message_thread_id":"ref+sops://static/1.sops.yaml#/telegram/topicId+","parse_mode":"HTML","text":"❓ Application \u003cb\u003e\u003ca href=\"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}\"\u003e{{.app.metadata.name}}\u003c/a\u003e\u003c/b\u003e sync is ''Unknown''. {{range $c := .app.status.conditions}} * {{$c.message}} {{end}}\n"}'
   template.app-sync-succeeded: |
-    message: |
-      ✅ Application *[{{.app.metadata.name}}]({{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true)* has been successfully synced at {{.app.status.operationState.finishedAt}}.
+    webhook:
+      telegram-html:
+        method: POST
+        body: '{"chat_id":"ref+sops://static/1.sops.yaml#/telegram/chatId+","message_thread_id":"ref+sops://static/1.sops.yaml#/telegram/topicId+","parse_mode":"HTML","text":"✅ Application \u003cb\u003e\u003ca href=\"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true\"\u003e{{.app.metadata.name}}\u003c/a\u003e\u003c/b\u003e has been successfully synced at {{.app.status.operationState.finishedAt}}.\n"}'
   trigger.on-created: |
     - description: Application is created.
       oncePer: app.metadata.name

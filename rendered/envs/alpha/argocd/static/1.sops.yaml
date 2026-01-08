@@ -2,6 +2,8 @@ sshPrivateKey: ENC[AES256_GCM,data:1Klk0F1x76yMHHLOYN9axdp3V/4hlH0q+ikydWkA0PFuQ
 telegram:
     token: ENC[AES256_GCM,data:0Hkl6Hq59LTL/0svt1uE+ZL0xfykKm3iwJj7CO3SFTG9D/aV4aXr1dlPZW5IBQ==,iv:PgvdhWKa/Z3Zzzz4P5KhlPBE4UrvQEI1dR5XuBsd3aM=,tag:ax3NKL5nUjSgtDOzKKkW4w==,type:str]
     fullTopicId: ENC[AES256_GCM,data:n5hhKsyGzym+NLf2gy2UbQ==,iv:HXkJJiySQQqOLUjEx5JcMhc+dXaSQVeHN6t3nHiXBFY=,tag:IUbkIgOgfb50wAGcXExTeQ==,type:str]
+    chatId: ENC[AES256_GCM,data:fxvuuWV2+GeOECXX8y8=,iv:9YXI3J4t3bNZKpUb3qAKn45M2TNYLXqFChja9i++VnQ=,tag:9BMTCv5ymnVA0lakoJFYtQ==,type:str]
+    topicId: ENC[AES256_GCM,data:Lw==,iv:KkbUXIzhB5PL53JVVMnXvR4CidBAXa3Tvh9R3VBwKhM=,tag:1yi7gWkIRT8Y1fRIqRaT9A==,type:str]
 sops:
     age:
         - recipient: age13hxx3dgpjcp0v2z5xx07nwm4zvdy78rc9xra6lujzzrl7c657ekq2vgwnk
@@ -31,7 +33,7 @@ sops:
             TW05UFhTNEZlVnVhMksyVjN2Rk1oT1kKUf2u6KykznFGK/H5QHzDlzdOtRsTp3wa
             sGzPuBzuzMcOqCy/mwKZg6yQpfvNJlP2ydpf3RU/X1XU7djl0QBmDA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-01-07T00:00:57Z"
-    mac: ENC[AES256_GCM,data:3ywR4zmk65eVStKAcrY1Eta7pHugXvyslzsSiSN3KUOp7zRElPdrlx9x5YgqVzrjhz37WUMA0J7HjZWEUO3W3wgNIaX7sKMg5CNnALM3rMUE09svVP2hycpkvBSG782i1KeXHaF3FQhbR+m1AvB2LM4Q1/YWXlXngxHI8f8ob6I=,iv:3cM2+R2BHaTwM3Yk4OGVSYiATrMOSoQWRyiEb21sU4k=,tag:mRNYgAuJRBonxq40IrMG1A==,type:str]
+    lastmodified: "2026-01-07T23:38:39Z"
+    mac: ENC[AES256_GCM,data:SWvBoRbsy+j6TIDvYaSfWJeelBlYNhi5mFG8aSgNYg4axIVFRoIxviO1kA1xBjrAiYp6Hr9AdatLkbbs2Kjoi38tPRaTQtI/6EKfKRm0fvR8M0Hps18tfUTJ2L4l+0PPfhUV65p7qBzmlUbOasPvTHtzRqYSsV94WFDq6B1bI8U=,iv:g87r+/M2jT3748+3xqUiCJz94aqBovV3J0s2EKtr+V8=,tag:gKNzdRWNRL5CLR93vslpHw==,type:str]
     encrypted_regex: .
     version: 3.11.0
