@@ -15,9 +15,9 @@ argocd:
     syncPolicy:
       prune: true
       selfHeal: false
-    syncOptions:
-      - FailOnSharedResource=true
-      - RespectIgnoreDifferences=true
+      syncOptions:
+        FailOnSharedResource: 'true'
+        RespectIgnoreDifferences: 'true'
   project:
     prefix: env-
     destination:
