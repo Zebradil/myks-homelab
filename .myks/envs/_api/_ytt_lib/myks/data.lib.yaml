@@ -22,11 +22,21 @@ argocd:
     syncPolicy:
       prune: true
       selfHeal: false
-    syncOptions:
-    - CreateNamespace=true
-    - ServerSideApply=true
-    - FailOnSharedResource=true
-    - RespectIgnoreDifferences=true
+      syncOptions:
+        CreateNamespace: "true"
+        ServerSideApply: "true"
+        ApplyOutOfSyncOnly: null
+        ClientSideApplyMigration: null
+        Delete: null
+        FailOnSharedResource: "true"
+        Force: null
+        Prune: null
+        PruneLast: null
+        PrunePropagationPolicy: null
+        Replace: null
+        RespectIgnoreDifferences: "true"
+        SkipDryRunOnMissingResource: null
+        Validate: null
   env:
     name: ""
     prefix: ""
