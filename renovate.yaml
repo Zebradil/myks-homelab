@@ -141,7 +141,7 @@ customManagers:
                 "versioning": "git"
               },
               /* Git repository: with tag ref */
-              $v.git[$not(ref ~> $shaMatcher)].{
+              $v.git[$not($exists(ref ~> $shaMatcher))].{
                 "currentValue": ref,
                 "datasource": "git-tags",
                 "depName": $k,
