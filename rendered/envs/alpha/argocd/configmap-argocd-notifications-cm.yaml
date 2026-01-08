@@ -17,25 +17,28 @@ data:
       - on-sync-status-unknown
       - on-sync-succeeded
   template.app-created: |
-    message: ✨ Application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}">{{.app.metadata.name}}</a></b> has been created.
+    message: |
+      ✨ Application *[{{.app.metadata.name}}]({{.context.argocdUrl}}/applications/{{.app.metadata.name}})* has been created.
   template.app-deleted: |
-    message: ❌Application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}">{{.app.metadata.name}}</a></b> has been deleted.
+    message: |
+      ❌ Application *[{{.app.metadata.name}}]({{.context.argocdUrl}}/applications/{{.app.metadata.name}})* has been deleted.
   template.app-deployed: |
-    message: ✅ Application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}">{{.app.metadata.name}}</a></b> is now running new version of deployments manifests.
-  template.app-health-degraded: "message: |\n  \U0001F494 Application <b><a href=\"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}\">{{.app.metadata.name}}</a></b> has degraded.\n"
+    message: |
+      ✅ Application *[{{.app.metadata.name}}]({{.context.argocdUrl}}/applications/{{.app.metadata.name}})* is now running new version of deployments manifests.
+  template.app-health-degraded: "message: |\n  \U0001F494 Application *[{{.app.metadata.name}}]({{.context.argocdUrl}}/applications/{{.app.metadata.name}})* has degraded.\n"
   template.app-sync-failed: |
     message: |
-      ⚠️ The sync operation of application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true">{{.app.metadata.name}}</a></b> has failed at {{.app.status.operationState.finishedAt}} with the following error: {{.app.status.operationState.message}}
-  template.app-sync-running: "message: |\n  \U0001F504 The sync operation of application <b><a href=\"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true\">{{.app.metadata.name}}</a></b> has started at {{.app.status.operationState.startedAt}}.\n"
+      ⚠️ The sync operation of application *[{{.app.metadata.name}}]({{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true)* has failed at {{.app.status.operationState.finishedAt}} with the following error: {{.app.status.operationState.message}}
+  template.app-sync-running: "message: |\n  \U0001F504 The sync operation of application *[{{.app.metadata.name}}]({{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true)* has started at {{.app.status.operationState.startedAt}}.\n"
   template.app-sync-status-unknown: |
     message: |
-      ❓ Application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}">{{.app.metadata.name}}</a></b> sync is 'Unknown'.
-      {{range $c := .app.status.conditions}}
-          * {{$c.message}}
-      {{end}}
+      ❓ Application *[{{.app.metadata.name}}]({{.context.argocdUrl}}/applications/{{.app.metadata.name}})* sync is 'Unknown'.
+      {{- range $c := .app.status.conditions }}
+      • {{ $c.message }}
+      {{- end }}
   template.app-sync-succeeded: |
     message: |
-      ✅ Application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true">{{.app.metadata.name}}</a></b> has been successfully synced at {{.app.status.operationState.finishedAt}}.
+      ✅ Application *[{{.app.metadata.name}}]({{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true)* has been successfully synced at {{.app.status.operationState.finishedAt}}.
   trigger.on-created: |
     - description: Application is created.
       oncePer: app.metadata.name
