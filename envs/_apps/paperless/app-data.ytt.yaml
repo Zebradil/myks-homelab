@@ -24,7 +24,7 @@ application:
           (@= sops("0", "ssh_host_rsa_key") @)
           EOF
           cat <<EOF > /etc/ssh/ssh_host_rsa_key.pub
-          (@= sops("0", "ssh_host_rsa_key.pub") @)
+          (@= sops("0", "ssh_host_rsa_key_pub") @)
           EOF
   postgresql:
     password: #@ sops("0", "databasePassword")

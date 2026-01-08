@@ -14,7 +14,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/paperless-sftp-scripts: b4f13a6613db1a98235497715340945ce4bf7491f6d963846498414e51e99715
+        checksum/paperless-sftp-scripts: 01c3d65d08eee0a8eb65b0339aa2c4831032db70e02f4dc1d245da341d87b767
       labels:
         app: paperless
     spec:
