@@ -1,9 +1,12 @@
 annotations:
-  artifacthub.io/changes: "- \"fix(ports): \U0001F41B add missing `http.maxHeaderBytes`
-    option\"\n- \"fix(ports): \U0001F41B `http.encodedCharacters` on custom entrypoints\"\n-
-    \"chore(release): \U0001F680 publish traefik 38.0.1\"\n"
+  artifacthub.io/changes: |
+    - "revert(CRDs): use Traefik Hub v3.18.0 compatible crds"
+    - "fix(security): set the seccomp profile to RuntimeDefault"
+    - "fix(CRDs): enforce the fact that this Chart does not support Traefik Hub v3.19.0"
+    - "feat(deps): update traefik docker tag to v3.6.6"
+    - "chore(release): publish traefik 38.0.2 and crds 1.13.1"
 apiVersion: v2
-appVersion: v3.6.5
+appVersion: v3.6.6
 description: A Traefik based Kubernetes ingress controller
 home: https://traefik.io/
 icon: https://raw.githubusercontent.com/traefik/traefik/master/docs/content/assets/img/traefik.logo.png
@@ -23,4 +26,4 @@ sources:
 - https://github.com/traefik/traefik-helm-chart
 - https://github.com/traefik/traefik
 type: application
-version: 38.0.1
+version: 38.0.2
