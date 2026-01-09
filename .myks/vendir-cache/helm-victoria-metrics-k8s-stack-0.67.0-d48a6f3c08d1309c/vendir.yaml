@@ -5,9 +5,9 @@ directories:
             name: victoria-metrics-k8s-stack
             repository:
                 url: oci://ghcr.io/victoriametrics/helm-charts
-            version: 0.66.1
+            version: 0.67.0
           lazy: true
           path: .
-      path: .myks/vendir-cache/helm-victoria-metrics-k8s-stack-0.66.1-2c003d328b84da98/data
+      path: .myks/vendir-cache/helm-victoria-metrics-k8s-stack-0.67.0-d48a6f3c08d1309c/data
       permissions: null
 kind: Config

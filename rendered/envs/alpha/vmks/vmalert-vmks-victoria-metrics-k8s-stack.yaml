@@ -21,7 +21,7 @@ spec:
     http.pathPrefix: /
     remoteWrite.disablePathAppend: "true"
   image:
-    tag: v1.132.0
+    tag: v1.133.0
   license: {}
   notifiers:
     - url: http://vmalertmanager-vmks-victoria-metrics-k8s-stack-0.vmalertmanager-vmks-victoria-metrics-k8s-stack.vmks.svc.cluster.local.:9093
