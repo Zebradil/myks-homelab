@@ -130,7 +130,7 @@ customManagers:
                 "currentValue": version,
                 "datasource": "docker",
                 "depName": name ?? $k,
-                "packageName": $substring(url, 6) & "/" & name
+                "packageName": $substring(url, 6) & "/" & (name ?? $k)
               },
               /* Git repository: with sha ref */
               $v.git[ref ~> $shaMatcher].{
