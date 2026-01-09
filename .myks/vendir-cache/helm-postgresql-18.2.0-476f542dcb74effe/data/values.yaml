@@ -615,6 +615,10 @@ primary:
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
+  ## @param primary.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param primary.terminationGracePeriodSeconds Seconds PostgreSQL primary pod needs to terminate gracefully
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
@@ -1076,6 +1080,10 @@ readReplicas:
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
+  ## @param readReplicas.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param readReplicas.terminationGracePeriodSeconds Seconds PostgreSQL read only pod needs to terminate gracefully
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
