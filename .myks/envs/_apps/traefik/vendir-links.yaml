@@ -1,2 +1,2 @@
-charts/traefik: helm-traefik-38.0.1-b2f5698d9e0d5127
+charts/traefik: helm-traefik-38.0.2-b2ff698d9e15a5ac
 ytt/dashboard: git-traefik-v3.6.5-e7c996d3f0bc2f28

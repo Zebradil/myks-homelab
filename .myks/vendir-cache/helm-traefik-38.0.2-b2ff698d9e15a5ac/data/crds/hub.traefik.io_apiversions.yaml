@@ -4,23 +4,27 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.17.1
-  name: apis.hub.traefik.io
+  name: apiversions.hub.traefik.io
 spec:
   group: hub.traefik.io
   names:
-    kind: API
-    listKind: APIList
-    plural: apis
-    singular: api
+    kind: APIVersion
+    listKind: APIVersionList
+    plural: apiversions
+    singular: apiversion
   scope: Namespaced
   versions:
-  - name: v1alpha1
+  - additionalPrinterColumns:
+    - jsonPath: .spec.title
+      name: Title
+      type: string
+    - jsonPath: .spec.release
+      name: Release
+      type: string
+    name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: |-
-          API defines an HTTP interface that is exposed to external clients. It specifies the supported versions
-          and provides instructions for accessing its documentation. Once instantiated, an API object is associated
-          with an Ingress, IngressRoute, or HTTPRoute resource, enabling the exposure of the described API to the outside world.
+        description: APIVersion defines a version of an API.
         properties:
           apiVersion:
             description: |-
@@ -40,7 +44,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: APISpec describes the API.
+            description: The desired behavior of this APIVersion.
             properties:
               cors:
                 description: Cors defines the Cross-Origin Resource Sharing configuration.
@@ -90,7 +94,7 @@ spec:
                     type: integer
                 type: object
               description:
-                description: Description explains what the API does.
+                description: Description explains what the APIVersion does.
                 type: string
               openApiSpec:
                 description: OpenAPISpec defines the API contract as an OpenAPI specification.
@@ -212,88 +216,26 @@ spec:
                 x-kubernetes-validations:
                 - message: path or url must be defined
                   rule: has(self.path) || has(self.url)
-              title:
-                description: Title is the human-readable name of the API that will
-                  be used on the portal.
-                maxLength: 253
+              release:
+                description: |-
+                  Release is the version number of the API.
+                  This value must follow the SemVer format: https://semver.org/
+                maxLength: 100
                 type: string
-              versions:
-                description: Versions are the different APIVersions available.
-                items:
-                  description: APIVersionRef references an APIVersion.
-                  properties:
-                    name:
-                      description: Name of the APIVersion.
-                      maxLength: 253
-                      type: string
-                  required:
-                  - name
-                  type: object
-                maxItems: 100
-                minItems: 1
-                type: array
+                x-kubernetes-validations:
+                - message: must be a valid semver version
+                  rule: self.matches(r"""^v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$""")
+              title:
+                description: Title is the public facing name of the APIVersion.
+                type: string
+            required:
+            - release
             type: object
           status:
-            description: The current status of this API.
+            description: The current status of this APIVersion.
             properties:
-              conditions:
-                items:
-                  description: Condition contains details for one aspect of the current
-                    state of this API Resource.
-                  properties:
-                    lastTransitionTime:
-                      description: |-
-                        lastTransitionTime is the last time the condition transitioned from one status to another.
-                        This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
-                      format: date-time
-                      type: string
-                    message:
-                      description: |-
-                        message is a human readable message indicating details about the transition.
-                        This may be an empty string.
-                      maxLength: 32768
-                      type: string
-                    observedGeneration:
-                      description: |-
-                        observedGeneration represents the .metadata.generation that the condition was set based upon.
-                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
-                        with respect to the current state of the instance.
-                      format: int64
-                      minimum: 0
-                      type: integer
-                    reason:
-                      description: |-
-                        reason contains a programmatic identifier indicating the reason for the condition's last transition.
-                        Producers of specific condition types may define expected values and meanings for this field,
-                        and whether the values are considered a guaranteed API.
-                        The value should be a CamelCase string.
-                        This field may not be empty.
-                      maxLength: 1024
-                      minLength: 1
-                      pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
-                      type: string
-                    status:
-                      description: status of the condition, one of True, False, Unknown.
-                      enum:
-                      - "True"
-                      - "False"
-                      - Unknown
-                      type: string
-                    type:
-                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
-                      maxLength: 316
-                      pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
-                      type: string
-                  required:
-                  - lastTransitionTime
-                  - message
-                  - reason
-                  - status
-                  - type
-                  type: object
-                type: array
               hash:
-                description: Hash is a hash representing the API.
+                description: Hash is a hash representing the APIVersion.
                 type: string
               syncedAt:
                 format: date-time
@@ -304,5 +246,4 @@ spec:
         type: object
     served: true
     storage: true
-    subresources:
-      status: {}
+    subresources: {}
