@@ -12,7 +12,7 @@ metadata:
   namespace: vmks
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 1Gi

@@ -4,6 +4,8 @@ grafana:
   persistence:
     enabled: true
     size: 1Gi
+    accessModes:
+      - ReadWriteMany
   adminPassword: #@ sops("0", "adminPassword")
   service:
     portName: http
