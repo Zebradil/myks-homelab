@@ -14,7 +14,7 @@ spec:
         app.kubernetes.io/name: httpbingo
     spec:
       containers:
-        - image: oci.zebradil.dev/index.docker.io-cache/mccutchen/go-httpbin@sha256:be41c6c3772393c097e15f9f8ac381de4ce9e9841c545556af98fbe2e707c619
+        - image: oci.zebradil.dev/index.docker.io-cache/mccutchen/go-httpbin@sha256:b1620821b6ff191d911629f87a720b88df5397c2554045f1cfb1ffde17c9b898
           name: httpbingo
           ports:
             - containerPort: 8080
