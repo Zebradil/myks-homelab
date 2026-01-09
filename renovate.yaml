@@ -122,14 +122,14 @@ customManagers:
               $v.helmChart[$contains(url, /^http/)].{
                 "currentValue": version,
                 "datasource": "helm",
-                "depName": $k,
+                "depName": name ?? $k,
                 "registryUrl": url
               },
               /* Helm chart from OCI registry */
               $v.helmChart[$contains(url, /^oci/)].{
                 "currentValue": version,
                 "datasource": "docker",
-                "depName": $k,
+                "depName": name ?? $k,
                 "packageName": $substring(url, 6) & "/" & name
               },
               /* Git repository: with sha ref */
