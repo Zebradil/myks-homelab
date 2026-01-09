@@ -8,7 +8,7 @@ prototype:
         version: 38.0.1
     dashboard:
       git:
-        ref: v3.6.5
+        ref: v3.6.6
         url: https://github.com/traefik/traefik
       includePaths:
         - contrib/grafana/traefik-kubernetes.json
