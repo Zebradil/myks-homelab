@@ -9,5 +9,5 @@ overrides:
       newImage: oci.zebradil.dev/registry.k8s.io-cache/sig-storage/csi-provisioner:v3.0.0
     - image: registry.k8s.io/sig-storage/csi-resizer:v1.3.0
       newImage: oci.zebradil.dev/registry.k8s.io-cache/sig-storage/csi-resizer:v1.3.0
-    - image: synology/synology-csi:v1.2.0
-      newImage: oci.zebradil.dev/index.docker.io-cache/synology/synology-csi:v1.2.0
+    - image: synology/synology-csi:v1.2.1
+      newImage: oci.zebradil.dev/index.docker.io-cache/synology/synology-csi:v1.2.1
