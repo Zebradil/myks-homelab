@@ -1,2 +1,2 @@
-charts/prom-crds: helm-prometheus-operator-crds-18.0.1-40d1f0850ca5e548
+charts/prom-crds: helm-prometheus-operator-crds-25.0.1-7956f4c63dbca1b0
 charts/vmks: helm-victoria-metrics-k8s-stack-0.66.1-2c003d328b84da98
