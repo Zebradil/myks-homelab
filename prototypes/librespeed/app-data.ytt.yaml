@@ -3,7 +3,7 @@
 #@overlay/match-child-defaults missing_ok=True
 application:
   #! renovate: datasource=docker
-  image: linuxserver/librespeed:5.4.20240804
+  image: linuxserver/librespeed:5.5.0
   #@schema/validation min_len=1
   password: ""
   #! This will be used instead of the default index.html
