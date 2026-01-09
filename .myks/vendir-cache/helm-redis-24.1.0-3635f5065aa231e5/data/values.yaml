@@ -384,6 +384,9 @@ master:
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
+  ## @param master.runtimeClassName Name of the runtime class to be used by master pod(s)
+  ##
+  runtimeClassName: ""
   ## @param master.updateStrategy.type Redis(R) master statefulset strategy type
   ## @skip master.updateStrategy.rollingUpdate
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
@@ -869,6 +872,9 @@ replica:
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
+  ## @param replica.runtimeClassName Name of the runtime class to be used by replica pod(s)
+  ##
+  runtimeClassName: ""
   ## @param replica.updateStrategy.type Redis(R) replicas statefulset strategy type
   ## @skip replica.updateStrategy.rollingUpdate
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
