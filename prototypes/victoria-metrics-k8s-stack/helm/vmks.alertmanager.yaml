@@ -28,27 +28,27 @@ alertmanager:
         - receiver: tg-common
           continue: false
 
-      inhibit_rules:
-        - target_matchers:
-            - severity=~"warning|info"
-          source_matchers:
-            - severity=critical
-          equal:
-            - namespace
-            - alertname
-        - target_matchers:
-            - severity=info
-          source_matchers:
-            - severity=warning
-          equal:
-            - namespace
-            - alertname
-        - target_matchers:
-            - severity=info
-          source_matchers:
-            - alertname=InfoInhibitor
-          equal:
-            - namespace
+    inhibit_rules:
+      - target_matchers:
+          - severity=~"warning|info"
+        source_matchers:
+          - severity=critical
+        equal:
+          - namespace
+          - alertname
+      - target_matchers:
+          - severity=info
+        source_matchers:
+          - severity=warning
+        equal:
+          - namespace
+          - alertname
+      - target_matchers:
+          - severity=info
+        source_matchers:
+          - alertname=InfoInhibitor
+        equal:
+          - namespace
 
     receivers:
       - name: blackhole
