@@ -27,7 +27,7 @@ spec:
               value: "8080"
             - name: DOMAIN
               value: https://vaultwarden.zebradil.dev
-          image: oci.zebradil.dev/ghcr.io-cache/dani-garcia/vaultwarden@sha256:84fd8a47f58d79a1ad824c27be0a9492750c0fa5216b35c749863093bfa3c3d7
+          image: oci.zebradil.dev/ghcr.io-cache/dani-garcia/vaultwarden@sha256:d89a6d21e361254670c24a4272b4b5f245e402c284f2f55de2c379fdbcfa1fa5
           name: vaultwarden
           ports:
             - containerPort: 8080

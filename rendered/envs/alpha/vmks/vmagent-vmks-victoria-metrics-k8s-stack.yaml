@@ -15,7 +15,7 @@ spec:
     promscrape.dropOriginalLabels: "true"
     promscrape.streamParse: "true"
   image:
-    tag: v1.132.0
+    tag: v1.133.0
   license: {}
   port: "8429"
   remoteWrite:

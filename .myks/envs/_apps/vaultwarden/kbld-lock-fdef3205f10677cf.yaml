@@ -1,0 +1,7 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.47.0
+overrides:
+- image: ghcr.io/dani-garcia/vaultwarden:1.35.2
+  newImage: oci.zebradil.dev/ghcr.io-cache/dani-garcia/vaultwarden@sha256:d89a6d21e361254670c24a4272b4b5f245e402c284f2f55de2c379fdbcfa1fa5
+  preresolved: true

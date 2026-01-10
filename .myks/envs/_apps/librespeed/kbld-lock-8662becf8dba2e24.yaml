@@ -1,0 +1,7 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.47.0
+overrides:
+- image: linuxserver/librespeed:5.5.0
+  newImage: oci.zebradil.dev/index.docker.io-cache/linuxserver/librespeed@sha256:602afbfc5a430830919359ab78c12f2667dede9eeae9eb406f909a756d7e2217
+  preresolved: true
