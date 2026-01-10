@@ -4,7 +4,7 @@
 application:
   namespace: argocd
   vals:
-    #! renovate: datasource=github-releases depName=helmfile/vals
-    version: v0.43.0
+    #! renovate: datasource=github-releases depName=zebradil/vals
+    version: v0.43.1
   _:
     sopsAgeKeySecretName: sops-age-key

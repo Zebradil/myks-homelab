@@ -411,7 +411,7 @@ spec:
         - args:
             - |
               ARTEFACT="vals_${VALS_VERSION#v}_linux_amd64.tar.gz"
-              URL="https://github.com/helmfile/vals/releases/download/$VALS_VERSION/$ARTEFACT"
+              URL="https://github.com/zebradil/vals/releases/download/$VALS_VERSION/$ARTEFACT"
               curl --show-error --location "$URL" \
                 | tar -xzvC /custom-tools vals
           command:
@@ -419,7 +419,7 @@ spec:
             - -c
           env:
             - name: VALS_VERSION
-              value: v0.43.0
+              value: v0.43.1
           image: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:ceea2c6434cc16cd796b7fcab26f351c308675bd3256894f7377262f3ed2f277
           name: download-tools
           volumeMounts:
