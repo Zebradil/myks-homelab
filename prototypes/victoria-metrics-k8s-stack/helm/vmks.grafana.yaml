@@ -1,0 +1,25 @@
+#@ load("secrets.star", "sops")
+---
+grafana:
+  persistence:
+    enabled: true
+    size: 1Gi
+    accessModes:
+      - ReadWriteMany
+  adminPassword: #@ sops("0", "adminPassword")
+  service:
+    portName: http
+  grafana.ini:
+    analytics:
+      check_for_updates: false
+      feedback_links_enabled: false
+      reporting_enabled: false
+  sidecar:
+    dashboards:
+      searchNamespace: ALL
+  plugins:
+    - victoriametrics-metrics-datasource
+    - victoriametrics-logs-datasource
+  ingress:
+    hosts:
+      - grafana.lan.zebradil.dev

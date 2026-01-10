@@ -1,0 +1,84 @@
+#@ load("@ytt:data", "data")
+#@ load("secrets.star", "sops")
+
+#@ a = data.values.application
+---
+alertmanager:
+  useManagedConfig: true
+  config:
+    route:
+      receiver: 'blackhole'
+      group_by: ['alertgroup', 'alertname', 'severity']
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 12h
+      routes:
+        #! Watchdog
+        - matchers:
+            - alertname="Watchdog"
+          receiver: healthchecks
+          continue: false
+        #! High severity
+        - matchers:
+            - severity="critical"
+          receiver: tg-high-severity
+          continue: false
+
+        #! All the rest
+        - receiver: tg-common
+          continue: false
+
+      inhibit_rules:
+        - target_matchers:
+            - severity=~"warning|info"
+          source_matchers:
+            - severity=critical
+          equal:
+            - namespace
+            - alertname
+        - target_matchers:
+            - severity=info
+          source_matchers:
+            - severity=warning
+          equal:
+            - namespace
+            - alertname
+        - target_matchers:
+            - severity=info
+          source_matchers:
+            - alertname=InfoInhibitor
+          equal:
+            - namespace
+
+    receivers:
+      - name: blackhole
+      - name: healthchecks
+        webhook_configs:
+          - url_secret:
+              name: #@ a._.secretName
+              key: healthchecksPing.url
+      - name: tg-high-severity
+        telegram_configs:
+          - bot_token:
+              name: #@ a._.secretName
+              key: telegram.botToken
+            chat_id: #@ sops("0", "telegram.chatId")
+            message_thread_id: #@ sops("0", "telegram.highSeverityTopicId")
+            #!message: |
+            #!  [{{ .CommonLabels.alertname }}]({{ .ExternalURL }}/#/alerts?state=alerting&alertname={{ .CommonLabels.alertname }}) in {{ .CommonLabels.namespace }} is {{ .CommonLabels.severity }}!
+            #!  > {{ .CommonAnnotations.summary }}
+      - name: tg-common
+        telegram_configs:
+          - bot_token:
+              name: #@ a._.secretName
+              key: telegram.botToken
+            chat_id: #@ sops("0", "telegram.chatId")
+            message_thread_id: #@ sops("0", "telegram.commonTopicId")
+            disable_notifications: true
+
+  templateFiles: {}
+    #! template_1.tmpl: |-
+    #!   {{ define "hello" -}}
+    #!   hello, Victoria!
+    #!   {{- end }}
+    #! template_2.tmpl: ""
