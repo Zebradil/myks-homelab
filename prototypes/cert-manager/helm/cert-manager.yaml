@@ -9,6 +9,6 @@ ingressShim:
 crds:
   enabled: true
   keep: false
-#! prometheus:
-#!   servicemonitor:
-#!     enabled: true
+prometheus:
+  servicemonitor:
+    enabled: true

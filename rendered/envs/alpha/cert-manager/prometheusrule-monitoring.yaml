@@ -4,9 +4,9 @@ metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
-    app.kubernetes.io/instance: cert-manager-monitoring
+    app.kubernetes.io/instance: monitoring
     app.kubernetes.io/name: cert-manager-monitoring
-  name: cert-manager-monitoring
+  name: monitoring
 spec:
   groups:
     - name: cert-manager

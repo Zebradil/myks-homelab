@@ -1209,7 +1209,7 @@ metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
-    app.kubernetes.io/instance: cert-manager-monitoring
+    app.kubernetes.io/instance: monitoring
     app.kubernetes.io/name: cert-manager-monitoring
     grafana_dashboard: "1"
-  name: cert-manager-monitoring-cert-manager
+  name: monitoring-cert-manager

@@ -19,10 +19,6 @@ spec:
       app.kubernetes.io/name: webhook
   template:
     metadata:
-      annotations:
-        prometheus.io/path: /metrics
-        prometheus.io/port: "9402"
-        prometheus.io/scrape: "true"
       labels:
         app: webhook
         app.kubernetes.io/component: webhook
