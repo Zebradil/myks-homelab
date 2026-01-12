@@ -1,0 +1,12 @@
+#@data/values
+---
+prototype:
+  sources:
+    dashboard:
+      git:
+        ref: 1.1.1
+        url: https://github.com/zebradil/airgradient-exporter
+      includePaths:
+        - dashboard/dashboard.json
+      plugin: ytt
+      newRootPath: dashboard

@@ -1,3 +1,4 @@
+#@ load("@ytt:json", "json")
 #@ load("@ytt:data", "data")
 ---
 apiVersion: v1
@@ -7,4 +8,4 @@ metadata:
   labels:
     grafana_dashboard: '1'
 data:
-  airgradient-exporter-dashboard.json: #@ data.read("dashboard.json")
+  airgradient-exporter-dashboard.json: #@ json.encode(json.decode(data.read("dashboard.json")), indent=2)

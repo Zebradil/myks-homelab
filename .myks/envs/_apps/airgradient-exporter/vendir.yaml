@@ -1,0 +1,13 @@
+apiVersion: vendir.k14s.io/v1alpha1
+kind: Config
+directories:
+- path: ytt/dashboard
+  contents:
+  - path: .
+    lazy: true
+    git:
+      url: https://github.com/zebradil/airgradient-exporter
+      ref: 1.1.1
+    includePaths:
+    - dashboard/dashboard.json
+    newRootPath: dashboard
