@@ -6,5 +6,5 @@ overrides:
   newImage: oci.zebradil.dev/index.docker.io-cache/jordanroher/starbase-80@sha256:0000ccf33ef464d20096ac36e75a7878017783f5d2f0dc483ed14142413a7f74
   preresolved: true
 - image: nginx:1.29.4
-  newImage: oci.zebradil.dev/index.docker.io-cache/library/nginx@sha256:c881927c4077710ac4b1da63b83aa163937fb47457950c267d92f7e4dedf4aec
+  newImage: oci.zebradil.dev/index.docker.io-cache/library/nginx@sha256:fb01117203ff38c2f9af91db1a7409459182a37c87cced5cb442d1d8fcc66d19
   preresolved: true
