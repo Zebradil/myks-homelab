@@ -1,7 +1,0 @@
-apiVersion: kbld.k14s.io/v1alpha1
-kind: Config
-minimumRequiredVersion: 0.47.0
-overrides:
-- image: victoriametrics/victoria-metrics:v1.132.0
-  newImage: oci.zebradil.dev/index.docker.io-cache/victoriametrics/victoria-metrics@sha256:6bf82afbd51dcdadf5f908d80e38c78be01232aa94f945ce93fae99daa84d0d9
-  preresolved: true

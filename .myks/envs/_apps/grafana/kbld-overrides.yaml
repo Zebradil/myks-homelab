@@ -1,9 +1,0 @@
-apiVersion: kbld.k14s.io/v1alpha1
-kind: Config
-overrides:
-    - image: docker.io/curlimages/curl:8.9.1
-      newImage: oci.zebradil.dev/index.docker.io-cache/curlimages/curl:8.9.1
-    - image: docker.io/grafana/grafana:12.3.0
-      newImage: oci.zebradil.dev/index.docker.io-cache/grafana/grafana:12.3.0
-    - image: docker.io/library/busybox:1.31.1
-      newImage: oci.zebradil.dev/index.docker.io-cache/library/busybox:1.31.1

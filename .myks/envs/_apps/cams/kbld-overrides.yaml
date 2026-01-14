@@ -1,5 +1,0 @@
-apiVersion: kbld.k14s.io/v1alpha1
-kind: Config
-overrides:
-    - image: caddy-image-ref
-      newImage: oci.zebradil.dev/index.docker.io-cache/library/caddy-image-ref:latest
