@@ -1,35 +1,47 @@
+#@ url_tmpl = '<b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}">{{.app.metadata.name}}</a></b>'
+#@ url_op_tmpl = '<b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true">{{.app.metadata.name}}</a></b>'
+
 #@ def templates():
 - name: app-created
   notify: true
-  message: |
-    ✨ Application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}">{{.app.metadata.name}}</a></b> has been created.
+  #@yaml/text-templated-strings
+  message: ✨ Application (@= url_tmpl @) has been created.
 - name: app-deleted
   notify: true
-  message: |
-    ❌Application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}">{{.app.metadata.name}}</a></b> has been deleted.
+  #@yaml/text-templated-strings
+  message: ❌Application (@= url_tmpl @) has been deleted.
 - name: app-deployed
-  notify: true
-  message: |
-    ✅ Application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}">{{.app.metadata.name}}</a></b> is now running new version of deployments manifests.
+  notify: false
+  #@yaml/text-templated-strings
+  message: ✅ Application (@= url_tmpl @) is now running new version of deployments manifests.
 - name: app-health-degraded
   notify: true
-  message: |
-    💔 Application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}">{{.app.metadata.name}}</a></b> has degraded.
+  #@yaml/text-templated-strings
+  message: 💔 Application (@= url_tmpl @) has degraded.
 - name: app-sync-failed
   notify: true
+  #@yaml/text-templated-strings
   message: |
-    ⚠️ The sync operation of application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true">{{.app.metadata.name}}</a></b> has failed at {{.app.status.operationState.finishedAt}} with the following error: {{.app.status.operationState.message}}
+    ⚠️ The sync operation of application (@= url_op_tmpl @) has failed at {{.app.status.operationState.finishedAt}} with the following error:
+    <pre>
+    {{.app.status.operationState.message}}
+    </pre>
 - name: app-sync-running
-  notify: true
-  message: |
-    🔄 The sync operation of application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true">{{.app.metadata.name}}</a></b> has started at {{.app.status.operationState.startedAt}}.
+  notify: false
+  #@yaml/text-templated-strings
+  message: 🔄 The sync operation of application (@= url_op_tmpl @) has started at {{.app.status.operationState.startedAt}}.
 - name: app-sync-status-unknown
   notify: true
+  #@yaml/text-templated-strings
   message: |
-    ❓ Application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}">{{.app.metadata.name}}</a></b> sync is 'Unknown'. {{range $c := .app.status.conditions}} * {{$c.message}} {{end}}
+    ❓ Application (@= url_tmpl @) sync is 'Unknown'.
+    <pre>
+    {{range $c := .app.status.conditions-}}
+    - {{$c.message}}
+    {{end-}}
+    </pre>
 - name: app-sync-succeeded
-  notify: true
-  message: |
-    ✅ Application <b><a href="{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true">{{.app.metadata.name}}</a></b> has been successfully synced at {{.app.status.operationState.finishedAt}}.
-
+  notify: false
+  #@yaml/text-templated-strings
+  message: ✅ Application (@= url_op_tmpl @) has been successfully synced at {{.app.status.operationState.finishedAt}}.
 #@ end

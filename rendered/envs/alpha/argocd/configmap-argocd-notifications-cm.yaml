@@ -25,42 +25,42 @@ data:
     webhook:
       telegram-html:
         method: POST
-        body: '{"chat_id":"ref+sops://static/1.sops.yaml#/telegram/chatId+","message_thread_id":"ref+sops://static/1.sops.yaml#/telegram/topicId+","parse_mode":"HTML","text":"✨ Application \u003cb\u003e\u003ca href=\"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}\"\u003e{{.app.metadata.name}}\u003c/a\u003e\u003c/b\u003e has been created.\n"}'
+        body: '{"chat_id":"ref+sops://static/1.sops.yaml#/telegram/chatId+","message_thread_id":"ref+sops://static/1.sops.yaml#/telegram/topicId+","parse_mode":"HTML","text":"✨ Application \u003cb\u003e\u003ca href=\"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}\"\u003e{{.app.metadata.name}}\u003c/a\u003e\u003c/b\u003e has been created."}'
   template.app-deleted: |
     webhook:
       telegram-html:
         method: POST
-        body: '{"chat_id":"ref+sops://static/1.sops.yaml#/telegram/chatId+","message_thread_id":"ref+sops://static/1.sops.yaml#/telegram/topicId+","parse_mode":"HTML","text":"❌Application \u003cb\u003e\u003ca href=\"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}\"\u003e{{.app.metadata.name}}\u003c/a\u003e\u003c/b\u003e has been deleted.\n"}'
+        body: '{"chat_id":"ref+sops://static/1.sops.yaml#/telegram/chatId+","message_thread_id":"ref+sops://static/1.sops.yaml#/telegram/topicId+","parse_mode":"HTML","text":"❌Application \u003cb\u003e\u003ca href=\"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}\"\u003e{{.app.metadata.name}}\u003c/a\u003e\u003c/b\u003e has been deleted."}'
   template.app-deployed: |
     webhook:
       telegram-html:
         method: POST
-        body: '{"chat_id":"ref+sops://static/1.sops.yaml#/telegram/chatId+","message_thread_id":"ref+sops://static/1.sops.yaml#/telegram/topicId+","parse_mode":"HTML","text":"✅ Application \u003cb\u003e\u003ca href=\"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}\"\u003e{{.app.metadata.name}}\u003c/a\u003e\u003c/b\u003e is now running new version of deployments manifests.\n"}'
+        body: '{"chat_id":"ref+sops://static/1.sops.yaml#/telegram/chatId+","disable_notification":true,"message_thread_id":"ref+sops://static/1.sops.yaml#/telegram/topicId+","parse_mode":"HTML","text":"✅ Application \u003cb\u003e\u003ca href=\"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}\"\u003e{{.app.metadata.name}}\u003c/a\u003e\u003c/b\u003e is now running new version of deployments manifests."}'
   template.app-health-degraded: |
     webhook:
       telegram-html:
         method: POST
-        body: "{\"chat_id\":\"ref+sops://static/1.sops.yaml#/telegram/chatId+\",\"message_thread_id\":\"ref+sops://static/1.sops.yaml#/telegram/topicId+\",\"parse_mode\":\"HTML\",\"text\":\"\U0001F494 Application \\u003cb\\u003e\\u003ca href=\\\"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}\\\"\\u003e{{.app.metadata.name}}\\u003c/a\\u003e\\u003c/b\\u003e has degraded.\\n\"}"
+        body: "{\"chat_id\":\"ref+sops://static/1.sops.yaml#/telegram/chatId+\",\"message_thread_id\":\"ref+sops://static/1.sops.yaml#/telegram/topicId+\",\"parse_mode\":\"HTML\",\"text\":\"\U0001F494 Application \\u003cb\\u003e\\u003ca href=\\\"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}\\\"\\u003e{{.app.metadata.name}}\\u003c/a\\u003e\\u003c/b\\u003e has degraded.\"}"
   template.app-sync-failed: |
     webhook:
       telegram-html:
         method: POST
-        body: '{"chat_id":"ref+sops://static/1.sops.yaml#/telegram/chatId+","message_thread_id":"ref+sops://static/1.sops.yaml#/telegram/topicId+","parse_mode":"HTML","text":"⚠️ The sync operation of application \u003cb\u003e\u003ca href=\"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true\"\u003e{{.app.metadata.name}}\u003c/a\u003e\u003c/b\u003e has failed at {{.app.status.operationState.finishedAt}} with the following error: {{.app.status.operationState.message}}\n"}'
+        body: '{"chat_id":"ref+sops://static/1.sops.yaml#/telegram/chatId+","message_thread_id":"ref+sops://static/1.sops.yaml#/telegram/topicId+","parse_mode":"HTML","text":"⚠️ The sync operation of application \u003cb\u003e\u003ca href=\"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true\"\u003e{{.app.metadata.name}}\u003c/a\u003e\u003c/b\u003e has failed at {{.app.status.operationState.finishedAt}} with the following error:\n\u003cpre\u003e\n{{.app.status.operationState.message}}\n\u003c/pre\u003e\n"}'
   template.app-sync-running: |
     webhook:
       telegram-html:
         method: POST
-        body: "{\"chat_id\":\"ref+sops://static/1.sops.yaml#/telegram/chatId+\",\"message_thread_id\":\"ref+sops://static/1.sops.yaml#/telegram/topicId+\",\"parse_mode\":\"HTML\",\"text\":\"\U0001F504 The sync operation of application \\u003cb\\u003e\\u003ca href=\\\"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true\\\"\\u003e{{.app.metadata.name}}\\u003c/a\\u003e\\u003c/b\\u003e has started at {{.app.status.operationState.startedAt}}.\\n\"}"
+        body: "{\"chat_id\":\"ref+sops://static/1.sops.yaml#/telegram/chatId+\",\"disable_notification\":true,\"message_thread_id\":\"ref+sops://static/1.sops.yaml#/telegram/topicId+\",\"parse_mode\":\"HTML\",\"text\":\"\U0001F504 The sync operation of application \\u003cb\\u003e\\u003ca href=\\\"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true\\\"\\u003e{{.app.metadata.name}}\\u003c/a\\u003e\\u003c/b\\u003e has started at {{.app.status.operationState.startedAt}}.\"}"
   template.app-sync-status-unknown: |
     webhook:
       telegram-html:
         method: POST
-        body: '{"chat_id":"ref+sops://static/1.sops.yaml#/telegram/chatId+","message_thread_id":"ref+sops://static/1.sops.yaml#/telegram/topicId+","parse_mode":"HTML","text":"❓ Application \u003cb\u003e\u003ca href=\"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}\"\u003e{{.app.metadata.name}}\u003c/a\u003e\u003c/b\u003e sync is ''Unknown''. {{range $c := .app.status.conditions}} * {{$c.message}} {{end}}\n"}'
+        body: '{"chat_id":"ref+sops://static/1.sops.yaml#/telegram/chatId+","message_thread_id":"ref+sops://static/1.sops.yaml#/telegram/topicId+","parse_mode":"HTML","text":"❓ Application \u003cb\u003e\u003ca href=\"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}\"\u003e{{.app.metadata.name}}\u003c/a\u003e\u003c/b\u003e sync is ''Unknown''.\n\u003cpre\u003e\n{{range $c := .app.status.conditions-}}\n- {{$c.message}}\n{{end-}}\n\u003c/pre\u003e\n"}'
   template.app-sync-succeeded: |
     webhook:
       telegram-html:
         method: POST
-        body: '{"chat_id":"ref+sops://static/1.sops.yaml#/telegram/chatId+","message_thread_id":"ref+sops://static/1.sops.yaml#/telegram/topicId+","parse_mode":"HTML","text":"✅ Application \u003cb\u003e\u003ca href=\"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true\"\u003e{{.app.metadata.name}}\u003c/a\u003e\u003c/b\u003e has been successfully synced at {{.app.status.operationState.finishedAt}}.\n"}'
+        body: '{"chat_id":"ref+sops://static/1.sops.yaml#/telegram/chatId+","disable_notification":true,"message_thread_id":"ref+sops://static/1.sops.yaml#/telegram/topicId+","parse_mode":"HTML","text":"✅ Application \u003cb\u003e\u003ca href=\"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true\"\u003e{{.app.metadata.name}}\u003c/a\u003e\u003c/b\u003e has been successfully synced at {{.app.status.operationState.finishedAt}}."}'
   trigger.on-created: |
     - description: Application is created.
       oncePer: app.metadata.name
