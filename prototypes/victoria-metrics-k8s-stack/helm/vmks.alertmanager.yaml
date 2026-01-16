@@ -100,7 +100,7 @@ alertmanager:
       🏷 Labels:
       {{ range .Labels.SortedPairs }}  <i>{{ .Name | html }}</i>: <pre>{{ .Value | html }}</pre>
       {{ end }}
-      🛠 <a href="{{ .GeneratorUrl }}">Source</a>
+      🛠 <a href="{{ .GeneratorURL }}">Source</a>
       {{- with .Annotations.runbook_url }}
       📚 <a href="{{ . }}">Runbook</a>
       {{ end }}{{ end }}
