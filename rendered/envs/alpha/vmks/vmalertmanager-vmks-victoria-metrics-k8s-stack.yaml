@@ -22,3 +22,5 @@ spec:
   templates:
     - key: monzo.tmpl
       name: vmalertmanager-vmks-victoria-metrics-k8s-stack-monzo-tpl
+    - key: telegram.tmpl
+      name: vmalertmanager-vmks-victoria-metrics-k8s-stack-extra-tpl

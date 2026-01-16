@@ -44,7 +44,9 @@ spec:
             key: telegram.botToken
             name: vmks-secrets
           chat_id: ref+sops://static/0.sops.yaml#/telegram/chatId+
+          message: '{{ template "telegram.message". }}'
           message_thread_id: ref+sops://static/0.sops.yaml#/telegram/highSeverityTopicId+
+          parse_mode: HTML
     - name: tg-common
       telegram_configs:
         - bot_token:
@@ -52,7 +54,9 @@ spec:
             name: vmks-secrets
           chat_id: ref+sops://static/0.sops.yaml#/telegram/chatId+
           disable_notifications: true
+          message: '{{ template "telegram.message". }}'
           message_thread_id: ref+sops://static/0.sops.yaml#/telegram/commonTopicId+
+          parse_mode: HTML
   route:
     group_by:
       - alertgroup

@@ -64,9 +64,8 @@ alertmanager:
               key: telegram.botToken
             chat_id: #@ sops("0", "telegram.chatId")
             message_thread_id: #@ sops("0", "telegram.highSeverityTopicId")
-            #!message: |
-            #!  [{{ .CommonLabels.alertname }}]({{ .ExternalURL }}/#/alerts?state=alerting&alertname={{ .CommonLabels.alertname }}) in {{ .CommonLabels.namespace }} is {{ .CommonLabels.severity }}!
-            #!  > {{ .CommonAnnotations.summary }}
+            parse_mode: 'HTML'
+            message: '{{ template "telegram.message". }}'
       - name: tg-common
         telegram_configs:
           - bot_token:
@@ -75,10 +74,39 @@ alertmanager:
             chat_id: #@ sops("0", "telegram.chatId")
             message_thread_id: #@ sops("0", "telegram.commonTopicId")
             disable_notifications: true
+            parse_mode: 'HTML'
+            message: '{{ template "telegram.message". }}'
 
-  templateFiles: {}
-    #! template_1.tmpl: |-
-    #!   {{ define "hello" -}}
-    #!   hello, Victoria!
-    #!   {{- end }}
-    #! template_2.tmpl: ""
+  templateFiles: #! lang:helm
+    telegram.tmpl: |
+      {{ define "alert_list" }}{{ range . }}
+      ---
+      🪪 <b>{{ .Labels.alertname }}</b>
+      {{- if eq .Labels.severity "critical" }}
+      🚨 CRITICAL 🚨 {{ end }}
+      {{- if eq .Labels.severity "warning" }}
+      ⚠️ WARNING ⚠️{{ end }}
+      {{- with .Annotations.summary }}
+      📝 {{ . }}{{ end }}
+      {{- with .Annotations.description }}
+      📖 {{ . }}{{ end }}
+
+      🏷 Labels:
+      {{ range .Labels.SortedPairs }}  <i>{{ .Name }}</i>: <pre>{{ .Value }}</pre>
+      {{ end }}
+      🛠 <a href="{{ .GeneratorUrl }}">Source</a>
+      {{- with .Annotations.runbook_url }}
+      📚 <a href="{{ . }}">Runbook</a>
+      {{ end }}{{ end }}
+
+      {{ define "telegram.message" }}
+      {{ if gt (len .Alerts.Firing) 0 }}
+      🔥 Alerts Firing 🔥
+      {{ template "alert_list" .Alerts.Firing }}
+      {{ end }}
+      {{ if gt (len .Alerts.Resolved) 0 }}
+      ✅ Alerts Resolved ✅
+      {{ template "alert_list" .Alerts.Resolved }}
+      {{ end }}
+      🔗 <a href="{{ .ExternalURL }}">Alertmanager UI</a>
+      {{ end }}
