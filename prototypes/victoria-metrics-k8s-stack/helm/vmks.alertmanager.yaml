@@ -98,6 +98,7 @@ alertmanager:
       {{- with .Annotations.runbook_url }}
       📚 <a href="{{ . }}">Runbook</a>
       {{ end }}{{ end }}
+      {{ end }}
 
       {{ define "telegram.message" }}
       {{ if gt (len .Alerts.Firing) 0 }}
