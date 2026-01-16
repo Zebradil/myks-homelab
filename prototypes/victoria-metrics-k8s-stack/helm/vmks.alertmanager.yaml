@@ -64,8 +64,8 @@ alertmanager:
               key: telegram.botToken
             chat_id: #@ sops("0", "telegram.chatId")
             message_thread_id: #@ sops("0", "telegram.highSeverityTopicId")
-            parse_mode: 'HTML'
-            message: '{{ template "telegram.message". }}'
+            parse_mode: HTML
+            message: '{{- template "telegram.message" . -}}'
       - name: tg-common
         telegram_configs:
           - bot_token:
@@ -74,12 +74,13 @@ alertmanager:
             chat_id: #@ sops("0", "telegram.chatId")
             message_thread_id: #@ sops("0", "telegram.commonTopicId")
             disable_notifications: true
-            parse_mode: 'HTML'
-            message: '{{ template "telegram.message". }}'
+            parse_mode: HTML
+            message: '{{- template "telegram.message" . -}}'
 
   templateFiles: #! lang:helm
     telegram.tmpl: |
-      {{ define "alert_list" }}{{ range . }}
+      {{- define "alert_list" -}}
+      {{- range . -}}
       ---
       🪪 <b>{{ .Labels.alertname | html }}</b>
       {{- if eq .Labels.severity "critical" }}
@@ -88,26 +89,24 @@ alertmanager:
       ⚠️ WARNING ⚠️{{ end }}
       {{- with .Annotations.summary | html }}
       📝 {{ . }}{{ end }}
-      {{- with .Annotations.description | html }}
+      {{- with .Annotations.description }}
       📖 {{ . }}{{ end }}
 
       🏷 Labels:
-      {{ range .Labels.SortedPairs }}  <i>{{ .Name | html }}</i>: <pre>{{ .Value | html }}</pre>
+      {{ range .Labels.SortedPairs }}  <i>{{ .Name | html }}</i>: <code>{{ .Value | html }}</code>
       {{ end }}
       🛠 <a href="{{ .GeneratorURL }}">Source</a>
       {{- with .Annotations.runbook_url }}
       📚 <a href="{{ . }}">Runbook</a>
       {{ end }}{{ end }}
-      {{ end }}
+      {{- end -}}
 
-      {{ define "telegram.message" }}
-      {{ if gt (len .Alerts.Firing) 0 }}
+      {{- define "telegram.message" }}
+      {{- if gt (len .Alerts.Firing) 0 -}}
       🔥 Alerts Firing 🔥
-      {{ template "alert_list" .Alerts.Firing }}
-      {{ end }}
-      {{ if gt (len .Alerts.Resolved) 0 }}
+      {{ template "alert_list" .Alerts.Firing }}{{ end }}
+      {{- if gt (len .Alerts.Resolved) 0 -}}
       ✅ Alerts Resolved ✅
-      {{ template "alert_list" .Alerts.Resolved }}
-      {{ end }}
+      {{ template "alert_list" .Alerts.Resolved }}{{ end }}
       🔗 <a href="{{ .ExternalURL }}">Alertmanager UI</a>
-      {{ end }}
+      {{- end -}}
