@@ -66,6 +66,7 @@ alertmanager:
             message_thread_id: #@ sops("0", "telegram.highSeverityTopicId")
             parse_mode: 'HTML'
             message: '{{ template "telegram.message". }}'
+            api_url: 'http://echo.echo.svc.cluster.local'
         webhook_configs:
           - url: 'http://echo.echo.svc.cluster.local'
       - name: tg-common
@@ -78,6 +79,7 @@ alertmanager:
             disable_notifications: true
             parse_mode: 'HTML'
             message: '{{ template "telegram.message". }}'
+            api_url: 'http://echo.echo.svc.cluster.local'
         webhook_configs:
           - url: 'http://echo.echo.svc.cluster.local'
 

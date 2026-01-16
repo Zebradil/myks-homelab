@@ -40,7 +40,8 @@ spec:
             name: vmks-secrets
     - name: tg-high-severity
       telegram_configs:
-        - bot_token:
+        - api_url: http://echo.echo.svc.cluster.local
+          bot_token:
             key: telegram.botToken
             name: vmks-secrets
           chat_id: ref+sops://static/0.sops.yaml#/telegram/chatId+
@@ -51,7 +52,8 @@ spec:
         - url: http://echo.echo.svc.cluster.local
     - name: tg-common
       telegram_configs:
-        - bot_token:
+        - api_url: http://echo.echo.svc.cluster.local
+          bot_token:
             key: telegram.botToken
             name: vmks-secrets
           chat_id: ref+sops://static/0.sops.yaml#/telegram/chatId+
