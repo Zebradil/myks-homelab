@@ -1,0 +1,6 @@
+#@data/values
+---
+application:
+  #! renovate: datasource=docker
+  image: ghcr.io/mendhak/http-https-echo:39
+  containerPort: 8080

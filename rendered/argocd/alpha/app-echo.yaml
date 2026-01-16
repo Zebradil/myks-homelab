@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    app.kubernetes.io/source: https://github.com/Zebradil/myks-homelab
+    myks.dev/environment: alpha
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: app-alpha-echo
+  namespace: argocd
+spec:
+  destination:
+    name: in-cluster
+    namespace: echo
+  project: env-alpha
+  source:
+    path: rendered/envs/alpha/echo
+    plugin:
+      name: vals
+    repoURL: https://github.com/Zebradil/myks-homelab
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
+    syncOptions:
+      - CreateNamespace=true
+      - FailOnSharedResource=true
+      - RespectIgnoreDifferences=true
+      - ServerSideApply=true

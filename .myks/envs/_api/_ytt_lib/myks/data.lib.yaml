@@ -64,6 +64,8 @@ environment:
     name: ""
   - proto: comentario
     name: ""
+  - proto: webapp
+    name: echo
   - proto: blank
     name: fluidd
   - proto: harbor

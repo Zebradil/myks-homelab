@@ -1,0 +1,5 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+overrides:
+    - image: ghcr.io/mendhak/http-https-echo:39
+      newImage: oci.zebradil.dev/ghcr.io-cache/mendhak/http-https-echo:39

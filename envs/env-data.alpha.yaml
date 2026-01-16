@@ -34,10 +34,10 @@ environment:
       name: cams
     - proto: cert-manager
     - proto: comentario
+    - proto: webapp
+      name: echo
     - proto: blank
       name: fluidd
-    #! - proto: grafana
-    #! - proto: grafana-agent
     - proto: harbor
     - proto: webapp
       name: httpbingo
@@ -55,7 +55,5 @@ environment:
     - proto: webapp
       name: uptime-kuma
     - proto: vaultwarden
-    #! - proto: victoria-metrics
-    #!   name: vms
     - proto: victoria-metrics-k8s-stack
       name: vmks
