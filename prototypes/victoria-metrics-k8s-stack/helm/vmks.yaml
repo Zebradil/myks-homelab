@@ -4,3 +4,11 @@ victoria-metrics-operator:
   admissionWebhooks:
     certManager:
       enabled: true
+
+kubeControllerManager:
+  service:
+    enabled: false
+
+kubeScheduler:
+  service:
+    enabled: false

@@ -1,0 +1,29 @@
+#@ load("/overlay-matchers.star", m="matchers")
+
+#@ node_scrapes = [
+#@   ("kube-controller-manager", "10257"),
+#@   ("kube-scheduler", "10259"),
+#@ ]
+
+#@ for name, port in node_scrapes:
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMNodeScrape
+metadata:
+  name: #@ name
+spec:
+  scheme: https
+  tlsConfig:
+    insecureSkipVerify: true
+  bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+  port: #@ port
+  path: /metrics
+  selector:
+    matchLabels:
+      node-role.kubernetes.io/master: 'true'
+
+
+#@overlay/match by=m.kind_name("VMServiceScrape", "vmks-" + name)
+#@overlay/remove
+---
+#@ end
