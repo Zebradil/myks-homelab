@@ -47,6 +47,8 @@ spec:
           message: '{{- template "telegram.message" . -}}'
           message_thread_id: ref+sops://static/0.sops.yaml#/telegram/highSeverityTopicId+
           parse_mode: HTML
+      webhook_configs:
+        - url: http://echo.echo.svc.cluster.local
     - name: tg-common
       telegram_configs:
         - bot_token:
@@ -57,6 +59,8 @@ spec:
           message: '{{- template "telegram.message" . -}}'
           message_thread_id: ref+sops://static/0.sops.yaml#/telegram/commonTopicId+
           parse_mode: HTML
+      webhook_configs:
+        - url: http://echo.echo.svc.cluster.local
   route:
     group_by:
       - alertgroup
