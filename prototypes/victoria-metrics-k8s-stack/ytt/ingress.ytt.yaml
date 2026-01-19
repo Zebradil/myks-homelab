@@ -4,8 +4,8 @@
 #@ for/end route_doc in route.default("grafana", "vmks-grafana"):
 --- #@ route_doc
 
-#@ for/end route_doc in route.default("alertmanager", "vmalertmanager-vmks-victoria-metrics-k8s-stack"):
+#@ for/end route_doc in route.default("alertmanager", "vmalertmanager-vmks"):
 --- #@ route_doc
 
-#@ for/end route_doc in route.default("victoria-metrics", "vmsingle-vmks-victoria-metrics-k8s-stack"):
+#@ for/end route_doc in route.default("victoria-metrics", "vmsingle-vmks"):
 --- #@ route_doc

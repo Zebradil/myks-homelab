@@ -15,5 +15,5 @@ spec:
         - name: chain-authelia-auth
           namespace: authelia
       services:
-        - name: vmsingle-vmks-victoria-metrics-k8s-stack
+        - name: vmsingle-vmks
           port: http
