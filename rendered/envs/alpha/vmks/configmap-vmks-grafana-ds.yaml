@@ -1,0 +1,14 @@
+apiVersion: v1
+data:
+  datasource.yaml: "apiVersion: 1\ndatasources: \n  - access: proxy\n    isDefault: true\n    name: VictoriaMetrics\n    type: prometheus\n    url: http://vmsingle-vmks.vmks.svc.cluster.local.:8428\n  - access: proxy\n    isDefault: false\n    name: VictoriaMetrics (DS)\n    type: victoriametrics-metrics-datasource\n    url: http://vmsingle-vmks.vmks.svc.cluster.local.:8428\n  - access: proxy\n    jsonData:\n      implementation: prometheus\n    name: Alertmanager\n    type: alertmanager\n    url: http://vmalertmanager-vmks.vmks.svc.cluster.local.:9093"
+kind: ConfigMap
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    app: victoria-metrics-k8s-stack-grafana
+    app.kubernetes.io/instance: vmks
+    app.kubernetes.io/name: victoria-metrics-k8s-stack
+    grafana_datasource: "1"
+  name: vmks-grafana-ds
+  namespace: vmks

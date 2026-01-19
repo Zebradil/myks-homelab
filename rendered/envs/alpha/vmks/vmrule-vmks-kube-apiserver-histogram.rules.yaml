@@ -1,0 +1,28 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    app: victoria-metrics-k8s-stack
+    app.kubernetes.io/instance: vmks
+    app.kubernetes.io/name: victoria-metrics-k8s-stack
+  name: vmks-kube-apiserver-histogram.rules
+  namespace: vmks
+spec:
+  groups:
+    - name: kube-apiserver-histogram.rules
+      params: {}
+      rules:
+        - annotations: {}
+          expr: histogram_quantile(0.99, sum(rate(apiserver_request_sli_duration_seconds_bucket{job="apiserver",verb=~"LIST|GET",subresource!~"proxy|attach|log|exec|portforward"}[5m])) by(cluster,le,resource)) > 0
+          labels:
+            quantile: "0.99"
+            verb: read
+          record: cluster_quantile:apiserver_request_sli_duration_seconds:histogram_quantile
+        - annotations: {}
+          expr: histogram_quantile(0.99, sum(rate(apiserver_request_sli_duration_seconds_bucket{job="apiserver",verb=~"POST|PUT|PATCH|DELETE",subresource!~"proxy|attach|log|exec|portforward"}[5m])) by(cluster,le,resource)) > 0
+          labels:
+            quantile: "0.99"
+            verb: write
+          record: cluster_quantile:apiserver_request_sli_duration_seconds:histogram_quantile

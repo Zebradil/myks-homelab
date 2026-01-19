@@ -1,4 +1,5 @@
 ---
+fullnameOverride: vmks
 victoria-metrics-operator:
   admissionWebhooks:
     certManager:

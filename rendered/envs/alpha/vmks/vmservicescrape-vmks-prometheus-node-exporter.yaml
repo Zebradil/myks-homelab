@@ -1,0 +1,23 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMServiceScrape
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    app.kubernetes.io/instance: vmks
+    app.kubernetes.io/name: victoria-metrics-k8s-stack
+  name: vmks-prometheus-node-exporter
+  namespace: vmks
+spec:
+  endpoints:
+    - metricRelabelConfigs:
+        - action: drop
+          regex: /var/lib/kubelet/pods.+
+          source_labels:
+            - mountpoint
+      port: metrics
+  jobLabel: jobLabel
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: vmks
+      app.kubernetes.io/name: prometheus-node-exporter
