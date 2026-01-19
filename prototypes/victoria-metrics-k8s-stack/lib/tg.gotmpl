@@ -20,7 +20,7 @@ in namespace <i>{{ .namespace | html }}</i>
 
 {{- define "telegram.alert_list" -}}
 {{- template "telegram.common" -}}
-{{- range . -}}
+{{- range . }}
 ---
 {{- with .Annotations.summary }}
 <b>Sum:</b> {{ . | html }}{{ end }}
