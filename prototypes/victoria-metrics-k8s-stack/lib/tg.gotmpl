@@ -11,42 +11,81 @@
 {{- end -}}
 
 {{- define "telegram.common" -}}
-{{- template "telegram.severity" $.Data.CommonLabels.severity -}}
-{{- with $.Data.CommonLabels -}}
-<b>{{- .alertgroup | html }}/{{ .alertname | html }}</b>
-in namespace <i>{{ .namespace | html }}</i>
+{{- with .CommonLabels }}
+<b>{{ .alertgroup }}/{{ .alertname }}</b>
+{{- with .namespace }}
+<b>Namespace:</b> <i>{{ . }}</i>{{- end }}
+{{- with .pod }}
+<b>Pod:</b> <i>{{ . }}</i>{{- end }}
+{{- with .node }}
+<b>Node:</b> <i>{{ . }}</i>{{- end }}
+{{- with .container }}
+<b>Container:</b> <i>{{ . }}</i>{{- end }}
+{{- end -}}
+{{- with .CommonAnnotations }}
+{{- with .summary }}
+<b>Summary:</b> {{ . | html }}{{- end }}
+{{- with .description }}
+<b>Description:</b> {{ . | html }}{{- end }}
+{{- with .runbook_url }}
+<a href="{{ . }}">Runbook</a>{{- end }}
 {{- end -}}
 {{- end -}}
 
-{{- define "telegram.alert_list" -}}
-{{- template "telegram.common" -}}
-{{- range . }}
----
-{{- with .Annotations.summary }}
+{{- define "telegram.alert_list.firing" -}}
+{{- range .Alerts.Firing }}
+-
+{{- with $.CommonAnnotations.summary }}{{ else with .Annotations.summary }}
 <b>Sum:</b> {{ . | html }}{{ end }}
-{{- with .Labels.pod }}
-<b>Pod:</b> <i>{{ . | html }}</i>{{ end }}
-{{- with .Labels.container }}
-<b>Container:</b> <i>{{ . | html }}</i>{{ end }}
-{{- with .Labels.node }}
-<b>Node:</b> <i>{{ . | html }}</i>{{ end }}
+{{- with $.CommonAnnotations.description }}{{ else with .Annotations.description }}
+<b>Description:</b> {{ . | html }}{{ end }}
+{{- with $.CommonLabels.pod }}{{ else with .Labels.pod }}
+<b>Pod:</b> <i>{{ . }}</i>{{ end }}
+{{- with $.CommonLabels.container }}{{ else with .Labels.container }}
+<b>Container:</b> <i>{{ . }}</i>{{ end }}
+{{- with $.CommonLabels.node }}{{ else with .Labels.node }}
+<b>Node:</b> <i>{{ . }}</i>{{ end }}
 {{- with .StartsAt }}
-<b>Started at:</b> <i>{{ . | html }}</i>{{ end }}
-{{- with .EndsAt }}
-<b>Ended at:</b> <i>{{ . | html }}</i>{{ end }}
+<b>Started at:</b> <i>{{ tz "Europe/Berlin" . }} ({{ since . }})</i>{{ end }}
 
 {{- with .GeneratorURL }}
 <a href="{{ . }}">Source</a>{{ end }}
-{{- with .Annotations.runbook_url }}
+{{- with $.CommonAnnotations.runbook_url }}{{ else with .Annotations.runbook_url }}
+<a href="{{ . }}">Runbook</a>{{ end }}{{ end }}
+{{- end -}}
+
+{{- define "telegram.alert_list.resolved" -}}
+{{- range .Alerts.Resolved }}
+-
+{{- with $.CommonAnnotations.summary }}{{ else with .Annotations.summary }}
+<b>Sum:</b> {{ . | html }}{{ end }}
+{{- with $.CommonAnnotations.description }}{{ else with .Annotations.description }}
+<b>Description:</b> {{ . | html }}{{ end }}
+{{- with $.CommonLabels.pod }}{{ else with .Labels.pod }}
+<b>Pod:</b> <i>{{ . }}</i>{{ end }}
+{{- with $.CommonLabels.container }}{{ else with .Labels.container }}
+<b>Container:</b> <i>{{ . }}</i>{{ end }}
+{{- with $.CommonLabels.node }}{{ else with .Labels.node }}
+<b>Node:</b> <i>{{ . }}</i>{{ end }}
+{{- with .StartsAt }}
+<b>Started at:</b> <i>{{ tz "Europe/Berlin" . }} ({{ . | since | humanizeDuration }})</i>{{ end }}
+
+{{- with .GeneratorURL }}
+<a href="{{ . }}">Source</a>{{ end }}
+{{- with $.CommonAnnotations.runbook_url }}{{ else with .Annotations.runbook_url }}
 <a href="{{ . }}">Runbook</a>{{ end }}{{ end }}
 {{- end -}}
 
 {{- define "telegram.message" }}
-{{- if gt (len .Alerts.Firing) 0 -}}
-🔥 Alerts Firing
-{{ template "telegram.alert_list" .Alerts.Firing }}{{ end }}
-{{- if gt (len .Alerts.Resolved) 0 -}}
-✅ Alerts Resolved
-{{ template "telegram.alert_list" .Alerts.Resolved }}{{ end }}
-<a href="{{ .ExternalURL }}">Alertmanager UI</a>
-{{- end -}}
+{{- template "telegram.severity" .CommonLabels.severity }}
+{{- template "telegram.common" . }}
+
+{{- if gt (len .Alerts.Firing) 0 }}
+
+🔥 Alerts Firing{{ template "telegram.alert_list.firing" . }}{{ end -}}
+
+{{- if gt (len .Alerts.Resolved) 0 }}
+
+✅ Alerts Resolved{{ template "telegram.alert_list.resolved" . }}{{ end }}
+
+<a href="{{ .ExternalURL }}">Alertmanager UI</a>{{- end -}}
