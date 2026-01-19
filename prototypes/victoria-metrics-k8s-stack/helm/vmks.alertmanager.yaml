@@ -101,21 +101,19 @@ alertmanager:
   templateFiles: #! lang:helm
     telegram.tmpl: |
       {{- define "telegram.severity" -}}
-      {{- with .Data.CommonLabels -}}
-      {{- if eq .severity "critical" -}}
+      {{- if eq . "critical" -}}
       🚨 CRITICAL
-      {{- else if eq .severity "warning" -}}
+      {{- else if eq . "warning" -}}
       ⚠️ WARNING
-      {{- else if eq .severity "info" -}}
+      {{- else if eq . "info" -}}
       ℹ️ INFO
       {{- else -}}
       🔔 ALERT
       {{- end -}}
       {{- end -}}
-      {{- end -}}
 
       {{- define "telegram.common" -}}
-      {{- template "telegram.severity" . -}}
+      {{- template "telegram.severity" .Data.CommonLabels.severity -}}
       {{- with .Data.CommonLabels -}}
       <b>{{- .alertgroup | html }}/{{ .alertname | html }}</b>
       in namespace <i>{{ .namespace | html }}</i>
@@ -123,8 +121,8 @@ alertmanager:
       {{- end -}}
 
       {{- define "telegram.alert_list" -}}
-      {{- template "telegram.common" . -}}
-      {{- range .Alerts -}}
+      {{- template "telegram.common" $ -}}
+      {{- range . -}}
       ---
       {{- with .Annotations.summary }}
       <b>Sum:</b> {{ . | html }}{{ end }}
@@ -148,9 +146,9 @@ alertmanager:
       {{- define "telegram.message" }}
       {{- if gt (len .Alerts.Firing) 0 -}}
       🔥 Alerts Firing
-      {{ template "telegram.alert_list" dict "Data" .Data "Alerts" .Alerts.Firing }}{{ end }}
+      {{ template "telegram.alert_list" .Alerts.Firing }}{{ end }}
       {{- if gt (len .Alerts.Resolved) 0 -}}
       ✅ Alerts Resolved
-      {{ template "telegram.alert_list" dict "Data" .Data "Alerts" .Alerts.Resolved }}{{ end }}
+      {{ template "telegram.alert_list" .Alerts.Resolved }}{{ end }}
       <a href="{{ .ExternalURL }}">Alertmanager UI</a>
       {{- end -}}
