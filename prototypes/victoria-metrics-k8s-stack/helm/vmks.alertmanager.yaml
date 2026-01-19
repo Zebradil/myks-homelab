@@ -68,8 +68,15 @@ alertmanager:
             message_thread_id: #@ sops("0", "telegram.highSeverityTopicId")
             parse_mode: HTML
             message: '{{- template "telegram.message" . -}}'
-            #@ if/end debug_receivers:
-            api_url: 'http://echo.echo.svc.cluster.local'
+          #@ if/end debug_receivers:
+          - api_url: 'http://echo.echo.svc.cluster.local'
+            bot_token:
+              name: #@ a._.secretName
+              key: telegram.botToken
+            chat_id: #@ sops("0", "telegram.chatId")
+            message_thread_id: #@ sops("0", "telegram.highSeverityTopicId")
+            parse_mode: HTML
+            message: '{{- template "telegram.message" . -}}'
       - name: tg-common
         telegram_configs:
           - bot_token:
@@ -80,8 +87,16 @@ alertmanager:
             disable_notifications: true
             parse_mode: HTML
             message: '{{- template "telegram.message" . -}}'
-            #@ if/end debug_receivers:
-            api_url: 'http://echo.echo.svc.cluster.local'
+          #@ if/end debug_receivers:
+          - api_url: 'http://echo.echo.svc.cluster.local'
+            bot_token:
+              name: #@ a._.secretName
+              key: telegram.botToken
+            chat_id: #@ sops("0", "telegram.chatId")
+            message_thread_id: #@ sops("0", "telegram.commonTopicId")
+            disable_notifications: true
+            parse_mode: HTML
+            message: '{{- template "telegram.message" . -}}'
 
   templateFiles: #! lang:helm
     telegram.tmpl: |

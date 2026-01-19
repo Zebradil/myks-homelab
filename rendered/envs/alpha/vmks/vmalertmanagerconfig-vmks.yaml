@@ -40,6 +40,13 @@ spec:
             name: vmks-secrets
     - name: tg-high-severity
       telegram_configs:
+        - bot_token:
+            key: telegram.botToken
+            name: vmks-secrets
+          chat_id: ref+sops://static/0.sops.yaml#/telegram/chatId+
+          message: '{{- template "telegram.message" . -}}'
+          message_thread_id: ref+sops://static/0.sops.yaml#/telegram/highSeverityTopicId+
+          parse_mode: HTML
         - api_url: http://echo.echo.svc.cluster.local
           bot_token:
             key: telegram.botToken
@@ -50,6 +57,14 @@ spec:
           parse_mode: HTML
     - name: tg-common
       telegram_configs:
+        - bot_token:
+            key: telegram.botToken
+            name: vmks-secrets
+          chat_id: ref+sops://static/0.sops.yaml#/telegram/chatId+
+          disable_notifications: true
+          message: '{{- template "telegram.message" . -}}'
+          message_thread_id: ref+sops://static/0.sops.yaml#/telegram/commonTopicId+
+          parse_mode: HTML
         - api_url: http://echo.echo.svc.cluster.local
           bot_token:
             key: telegram.botToken
