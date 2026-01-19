@@ -10,7 +10,7 @@ alertmanager:
   config:
     route:
       receiver: 'blackhole'
-      group_by: ['alertgroup', 'alertname', 'severity']
+      group_by: ['alertgroup', 'alertname', 'severity', 'namespace']
       group_wait: 30s
       group_interval: 5m
       repeat_interval: 12h
@@ -85,34 +85,57 @@ alertmanager:
 
   templateFiles: #! lang:helm
     telegram.tmpl: |
-      {{- define "alert_list" -}}
-      {{- range . -}}
-      ---
-      <b>{{ .Labels.alertname | html }}</b>
-      {{- if eq .Labels.severity "critical" }}
-      🚨 CRITICAL{{ end }}
-      {{- if eq .Labels.severity "warning" }}
-      ⚠️ WARNING{{ end }}
-      {{- with .Annotations.summary | html }}
-      {{ . }}{{ end }}
-      {{- with .Annotations.description }}
-      {{ . }}{{ end }}
+      {{- define "telegram.severity" -}}
+      {{- with .Data.CommonLabels -}}
+      {{- if eq .severity "critical" -}}
+      🚨 CRITICAL
+      {{- else if eq .severity "warning" -}}
+      ⚠️ WARNING
+      {{- else if eq .severity "info" -}}
+      ℹ️ INFO
+      {{- else -}}
+      🔔 ALERT
+      {{- end -}}
+      {{- end -}}
+      {{- end -}}
 
-      Labels:
-      {{ range .Labels.SortedPairs }}  <i>{{ .Name | html }}</i>: <code>{{ .Value | html }}</code>
-      {{ end }}
-      - <a href="{{ .GeneratorURL }}">Source</a>
+      {{- define "telegram.common" -}}
+      {{- template "telegram.severity" . -}}
+      {{- with .Data.CommonLabels -}}
+      <b>{{- .alertgroup | html }}/{{ .alertname | html }}</b>
+      in namespace <i>{{ .namespace | html }}</i>
+      {{- end -}}
+      {{- end -}}
+
+      {{- define "telegram.alert_list" -}}
+      {{- template "telegram.common" . -}}
+      {{- range .Alerts -}}
+      ---
+      {{- with .Annotations.summary }}
+      <b>Sum:</b> {{ . | html }}{{ end }}
+      {{- with .Labels.pod }}
+      <b>Pod:</b> <i>{{ . | html }}</i>{{ end }}
+      {{- with .Labels.container }}
+      <b>Container:</b> <i>{{ . | html }}</i>{{ end }}
+      {{- with .Labels.node }}
+      <b>Node:</b> <i>{{ . | html }}</i>{{ end }}
+      {{- with .StartsAt }}
+      <b>Started at:</b> <i>{{ . | html }}</i>{{ end }}
+      {{- with .EndsAt }}
+      <b>Ended at:</b> <i>{{ . | html }}</i>{{ end }}
+
+      {{- with .GeneratorURL }}
+      <a href="{{ .GeneratorURL }}">Source</a>{{ end }}
       {{- with .Annotations.runbook_url }}
-      - <a href="{{ . }}">Runbook</a>
-      {{ end }}{{ end }}
+      <a href="{{ . }}">Runbook</a>{{ end }}{{ end }}
       {{- end -}}
 
       {{- define "telegram.message" }}
       {{- if gt (len .Alerts.Firing) 0 -}}
       🔥 Alerts Firing
-      {{ template "alert_list" .Alerts.Firing }}{{ end }}
+      {{ template "telegram.alert_list" dict "Data" .Data "Alerts" .Alerts.Firing }}{{ end }}
       {{- if gt (len .Alerts.Resolved) 0 -}}
       ✅ Alerts Resolved
-      {{ template "alert_list" .Alerts.Resolved }}{{ end }}
+      {{ template "telegram.alert_list" dict "Data" .Data "Alerts" .Alerts.Resolved }}{{ end }}
       <a href="{{ .ExternalURL }}">Alertmanager UI</a>
       {{- end -}}
