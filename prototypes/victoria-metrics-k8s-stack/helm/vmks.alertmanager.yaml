@@ -70,9 +70,6 @@ alertmanager:
             message: '{{- template "telegram.message" . -}}'
             #@ if/end debug_receivers:
             api_url: 'http://echo.echo.svc.cluster.local'
-        #@ if/end debug_receivers:
-        webhook_configs:
-          - url: 'http://echo.echo.svc.cluster.local'
       - name: tg-common
         telegram_configs:
           - bot_token:
@@ -85,9 +82,6 @@ alertmanager:
             message: '{{- template "telegram.message" . -}}'
             #@ if/end debug_receivers:
             api_url: 'http://echo.echo.svc.cluster.local'
-        #@ if/end debug_receivers:
-        webhook_configs:
-          - url: 'http://echo.echo.svc.cluster.local'
 
   templateFiles: #! lang:helm
     telegram.tmpl: |
