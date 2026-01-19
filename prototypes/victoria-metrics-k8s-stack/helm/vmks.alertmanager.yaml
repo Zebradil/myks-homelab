@@ -68,6 +68,8 @@ alertmanager:
             message_thread_id: #@ sops("0", "telegram.highSeverityTopicId")
             parse_mode: HTML
             message: '{{- template "telegram.message" . -}}'
+            #@ if/end debug_receivers:
+            api_url: 'http://echo.echo.svc.cluster.local'
         #@ if/end debug_receivers:
         webhook_configs:
           - url: 'http://echo.echo.svc.cluster.local'
@@ -81,6 +83,8 @@ alertmanager:
             disable_notifications: true
             parse_mode: HTML
             message: '{{- template "telegram.message" . -}}'
+            #@ if/end debug_receivers:
+            api_url: 'http://echo.echo.svc.cluster.local'
         #@ if/end debug_receivers:
         webhook_configs:
           - url: 'http://echo.echo.svc.cluster.local'
