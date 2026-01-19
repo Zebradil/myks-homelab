@@ -20,7 +20,7 @@ spec:
                 secretKeyRef:
                   key: password
                   name: librespeed
-          image: oci.zebradil.dev/index.docker.io-cache/linuxserver/librespeed@sha256:602afbfc5a430830919359ab78c12f2667dede9eeae9eb406f909a756d7e2217
+          image: oci.zebradil.dev/index.docker.io-cache/linuxserver/librespeed@sha256:8013c4e5faaab73db9882292c8a3118f44834b9ddf5a87c0ad82062a11275109
           name: librespeed
           ports:
             - containerPort: 80
