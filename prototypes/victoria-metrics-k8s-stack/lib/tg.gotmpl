@@ -1,0 +1,52 @@
+{{- define "telegram.severity" -}}
+{{- if eq . "critical" -}}
+🚨 CRITICAL
+{{- else if eq . "warning" -}}
+⚠️ WARNING
+{{- else if eq . "info" -}}
+ℹ️ INFO
+{{- else -}}
+🔔 ALERT
+{{- end -}}
+{{- end -}}
+
+{{- define "telegram.common" -}}
+{{- template "telegram.severity" $.Data.CommonLabels.severity -}}
+{{- with $.Data.CommonLabels -}}
+<b>{{- .alertgroup | html }}/{{ .alertname | html }}</b>
+in namespace <i>{{ .namespace | html }}</i>
+{{- end -}}
+{{- end -}}
+
+{{- define "telegram.alert_list" -}}
+{{- template "telegram.common" -}}
+{{- range . -}}
+---
+{{- with .Annotations.summary }}
+<b>Sum:</b> {{ . | html }}{{ end }}
+{{- with .Labels.pod }}
+<b>Pod:</b> <i>{{ . | html }}</i>{{ end }}
+{{- with .Labels.container }}
+<b>Container:</b> <i>{{ . | html }}</i>{{ end }}
+{{- with .Labels.node }}
+<b>Node:</b> <i>{{ . | html }}</i>{{ end }}
+{{- with .StartsAt }}
+<b>Started at:</b> <i>{{ . | html }}</i>{{ end }}
+{{- with .EndsAt }}
+<b>Ended at:</b> <i>{{ . | html }}</i>{{ end }}
+
+{{- with .GeneratorURL }}
+<a href="{{ . }}">Source</a>{{ end }}
+{{- with .Annotations.runbook_url }}
+<a href="{{ . }}">Runbook</a>{{ end }}{{ end }}
+{{- end -}}
+
+{{- define "telegram.message" }}
+{{- if gt (len .Alerts.Firing) 0 -}}
+🔥 Alerts Firing
+{{ template "telegram.alert_list" .Alerts.Firing }}{{ end }}
+{{- if gt (len .Alerts.Resolved) 0 -}}
+✅ Alerts Resolved
+{{ template "telegram.alert_list" .Alerts.Resolved }}{{ end }}
+<a href="{{ .ExternalURL }}">Alertmanager UI</a>
+{{- end -}}
