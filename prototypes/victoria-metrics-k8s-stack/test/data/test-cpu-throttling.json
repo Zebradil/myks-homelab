@@ -1,0 +1,50 @@
+{
+  "status": "firing",
+  "receiver": "vmks-vmks-tg-common",
+  "externalURL": "https://alertmanager.example.com",
+  "groupLabels": {
+    "alertname": "CPUThrottlingHigh"
+  },
+  "commonLabels": {
+    "alertgroup": "kubernetes-resources",
+    "alertname": "CPUThrottlingHigh",
+    "severity": "info"
+  },
+  "commonAnnotations": {
+    "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/cputhrottlinghigh",
+    "summary": "Processes experience elevated CPU throttling."
+  },
+  "alerts": [
+    {
+      "status": "firing",
+      "labels": {
+        "alertgroup": "kubernetes-resources",
+        "alertname": "CPUThrottlingHigh",
+        "beta_kubernetes_io_arch": "amd64",
+        "beta_kubernetes_io_instance_type": "k3s",
+        "beta_kubernetes_io_os": "linux",
+        "container": "vmagent",
+        "instance": "junior",
+        "kubernetes_io_arch": "amd64",
+        "kubernetes_io_hostname": "junior",
+        "kubernetes_io_os": "linux",
+        "namespace": "vmks",
+        "node_kubernetes_io_instance_type": "k3s",
+        "node_role_kubernetes_io_control_plane": "true",
+        "node_role_kubernetes_io_master": "true",
+        "pod": "vmagent-vmks-7fdbb65d65-zwrjg",
+        "prometheus": "vmks/vmks",
+        "severity": "info"
+      },
+      "annotations": {
+        "description": "54.5% throttling of CPU in namespace vmks for container vmagent in pod vmagent-vmks-7fdbb65d65-zwrjg on cluster .",
+        "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/cputhrottlinghigh",
+        "summary": "Processes experience elevated CPU throttling."
+      },
+      "startsAt": "2026-01-19T16:34:00.000Z",
+      "endsAt": "2026-01-19T22:45:53.229Z",
+      "generatorURL": "http://grafana.example.com/explore",
+      "fingerprint": "7559c9b516d22d87"
+    }
+  ]
+}

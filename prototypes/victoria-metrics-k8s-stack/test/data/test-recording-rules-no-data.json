@@ -1,0 +1,113 @@
+{
+  "status": "firing",
+  "receiver": "vmks-vmks-tg-common",
+  "externalURL": "https://alertmanager.example.com",
+  "groupLabels": {
+    "alertname": "RecordingRulesNoData",
+    "group": "kube-scheduler.rules"
+  },
+  "commonLabels": {
+    "alertgroup": "vmalert",
+    "alertname": "RecordingRulesNoData",
+    "container": "vmalert",
+    "endpoint": "http",
+    "file": "/etc/vmalert/config/vm-vmks-rulefiles-0/vmks-vmks-kube-scheduler.rules.yaml",
+    "group": "kube-scheduler.rules",
+    "instance": "10.42.0.226:8080",
+    "job": "vmalert-vmks",
+    "namespace": "vmks",
+    "pod": "vmalert-vmks-566996b8bb-ncvj7",
+    "prometheus": "vmks/vmks",
+    "service": "vmalert-vmks",
+    "severity": "info"
+  },
+  "commonAnnotations": {
+    "dashboard": "http://grafana.example.com/d/LzldHAVnz?viewPanel=33&var-file=/etc/vmalert/config/vm-vmks-rulefiles-0/vmks-vmks-kube-scheduler.rules.yaml&var-group=kube-scheduler.rules&var-cluster="
+  },
+  "alerts": [
+    {
+      "status": "firing",
+      "labels": {
+        "alertgroup": "vmalert",
+        "alertname": "RecordingRulesNoData",
+        "container": "vmalert",
+        "endpoint": "http",
+        "file": "/etc/vmalert/config/vm-vmks-rulefiles-0/vmks-vmks-kube-scheduler.rules.yaml",
+        "group": "kube-scheduler.rules",
+        "instance": "10.42.0.226:8080",
+        "job": "vmalert-vmks",
+        "namespace": "vmks",
+        "pod": "vmalert-vmks-566996b8bb-ncvj7",
+        "prometheus": "vmks/vmks",
+        "recording": "cluster_quantile:scheduler_scheduling_algorithm_duration_seconds:histogram_quantile",
+        "service": "vmalert-vmks",
+        "severity": "info"
+      },
+      "annotations": {
+        "dashboard": "http://grafana.example.com/d/LzldHAVnz?viewPanel=33&var-file=/etc/vmalert/config/vm-vmks-rulefiles-0/vmks-vmks-kube-scheduler.rules.yaml&var-group=kube-scheduler.rules&var-cluster=",
+        "description": "Recording rule \"cluster_quantile:scheduler_scheduling_algorithm_duration_seconds:histogram_quantile\" from group \"kube-scheduler.rules in file \"/etc/vmalert/config/vm-vmks-rulefiles-0/vmks-vmks-kube-scheduler.rules.yaml\" produces 0 samples over the last 30min. It might be caused by a misconfiguration or incorrect query expression.",
+        "summary": "Recording rule cluster_quantile:scheduler_scheduling_algorithm_duration_seconds:histogram_quantile (kube-scheduler.rules) produces no data"
+      },
+      "startsAt": "2026-01-19T16:48:30.000Z",
+      "endsAt": "2026-01-19T22:46:43.248Z",
+      "generatorURL": "http://grafana.example.com/explore",
+      "fingerprint": "96c4cbaa7f2cfa7f"
+    },
+    {
+      "status": "firing",
+      "labels": {
+        "alertgroup": "vmalert",
+        "alertname": "RecordingRulesNoData",
+        "container": "vmalert",
+        "endpoint": "http",
+        "file": "/etc/vmalert/config/vm-vmks-rulefiles-0/vmks-vmks-kube-scheduler.rules.yaml",
+        "group": "kube-scheduler.rules",
+        "instance": "10.42.0.226:8080",
+        "job": "vmalert-vmks",
+        "namespace": "vmks",
+        "pod": "vmalert-vmks-566996b8bb-ncvj7",
+        "prometheus": "vmks/vmks",
+        "recording": "cluster_quantile:scheduler_pod_scheduling_sli_duration_seconds:histogram_quantile",
+        "service": "vmalert-vmks",
+        "severity": "info"
+      },
+      "annotations": {
+        "dashboard": "http://grafana.example.com/d/LzldHAVnz?viewPanel=33&var-file=/etc/vmalert/config/vm-vmks-rulefiles-0/vmks-vmks-kube-scheduler.rules.yaml&var-group=kube-scheduler.rules&var-cluster=",
+        "description": "Recording rule \"cluster_quantile:scheduler_pod_scheduling_sli_duration_seconds:histogram_quantile\" from group \"kube-scheduler.rules in file \"/etc/vmalert/config/vm-vmks-rulefiles-0/vmks-vmks-kube-scheduler.rules.yaml\" produces 0 samples over the last 30min. It might be caused by a misconfiguration or incorrect query expression.",
+        "summary": "Recording rule cluster_quantile:scheduler_pod_scheduling_sli_duration_seconds:histogram_quantile (kube-scheduler.rules) produces no data"
+      },
+      "startsAt": "2026-01-19T16:48:30.000Z",
+      "endsAt": "2026-01-19T22:46:43.248Z",
+      "generatorURL": "http://grafana.example.com/explore",
+      "fingerprint": "d658d56c63b91154"
+    },
+    {
+      "status": "firing",
+      "labels": {
+        "alertgroup": "vmalert",
+        "alertname": "RecordingRulesNoData",
+        "container": "vmalert",
+        "endpoint": "http",
+        "file": "/etc/vmalert/config/vm-vmks-rulefiles-0/vmks-vmks-kube-scheduler.rules.yaml",
+        "group": "kube-scheduler.rules",
+        "instance": "10.42.0.226:8080",
+        "job": "vmalert-vmks",
+        "namespace": "vmks",
+        "pod": "vmalert-vmks-566996b8bb-ncvj7",
+        "prometheus": "vmks/vmks",
+        "recording": "cluster_quantile:scheduler_scheduling_attempt_duration_seconds:histogram_quantile",
+        "service": "vmalert-vmks",
+        "severity": "info"
+      },
+      "annotations": {
+        "dashboard": "http://grafana.example.com/d/LzldHAVnz?viewPanel=33&var-file=/etc/vmalert/config/vm-vmks-rulefiles-0/vmks-vmks-kube-scheduler.rules.yaml&var-group=kube-scheduler.rules&var-cluster=",
+        "description": "Recording rule \"cluster_quantile:scheduler_scheduling_attempt_duration_seconds:histogram_quantile\" from group \"kube-scheduler.rules in file \"/etc/vmalert/config/vm-vmks-rulefiles-0/vmks-vmks-kube-scheduler.rules.yaml\" produces 0 samples over the last 30min. It might be caused by a misconfiguration or incorrect query expression.",
+        "summary": "Recording rule cluster_quantile:scheduler_scheduling_attempt_duration_seconds:histogram_quantile (kube-scheduler.rules) produces no data"
+      },
+      "startsAt": "2026-01-19T16:48:30.000Z",
+      "endsAt": "2026-01-19T22:46:43.248Z",
+      "generatorURL": "http://grafana.example.com/explore",
+      "fingerprint": "e49bdec6c0014b8f"
+    }
+  ]
+}

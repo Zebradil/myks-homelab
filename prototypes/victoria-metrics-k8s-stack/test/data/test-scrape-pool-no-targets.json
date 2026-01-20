@@ -1,0 +1,116 @@
+{
+  "status": "firing",
+  "receiver": "vmks-vmks-tg-common",
+  "externalURL": "https://alertmanager.example.com",
+  "groupLabels": {
+    "alertname": "ScrapePoolHasNoTargets"
+  },
+  "commonLabels": {
+    "alertgroup": "vmagent",
+    "alertname": "ScrapePoolHasNoTargets",
+    "container": "vmagent",
+    "endpoint": "http",
+    "job": "vmagent-vmks",
+    "namespace": "vmks",
+    "prometheus": "vmks/vmks",
+    "service": "vmagent-vmks",
+    "severity": "warning"
+  },
+  "commonAnnotations": {
+    "summary": "Vmagent has scrape_pool with 0 configured/discovered targets"
+  },
+  "alerts": [
+    {
+      "status": "firing",
+      "labels": {
+        "alertgroup": "vmagent",
+        "alertname": "ScrapePoolHasNoTargets",
+        "container": "vmagent",
+        "endpoint": "http",
+        "job": "vmagent-vmks",
+        "namespace": "vmks",
+        "prometheus": "vmks/vmks",
+        "scrape_job": "serviceScrape/vms/vms-victoria-metrics-single-server/0",
+        "service": "vmagent-vmks",
+        "severity": "warning"
+      },
+      "annotations": {
+        "description": "Vmagent \"vmagent-vmks\" has scrape_pool \"serviceScrape/vms/vms-victoria-metrics-single-server/0\" with 0 discovered targets. It is likely a misconfiguration. Please follow https://docs.victoriametrics.com/victoriametrics/vmagent/#debugging-scrape-targets to troubleshoot the scraping config.",
+        "summary": "Vmagent has scrape_pool with 0 configured/discovered targets"
+      },
+      "startsAt": "2026-01-19T16:48:30.000Z",
+      "endsAt": "2026-01-19T22:46:43.227Z",
+      "generatorURL": "http://grafana.example.com/explore",
+      "fingerprint": "32e88c0aa65a3ec9"
+    },
+    {
+      "status": "firing",
+      "labels": {
+        "alertgroup": "vmagent",
+        "alertname": "ScrapePoolHasNoTargets",
+        "container": "vmagent",
+        "endpoint": "http",
+        "job": "vmagent-vmks",
+        "namespace": "vmks",
+        "prometheus": "vmks/vmks",
+        "scrape_job": "serviceScrape/vmks/vmks-kube-etcd/0",
+        "service": "vmagent-vmks",
+        "severity": "warning"
+      },
+      "annotations": {
+        "description": "Vmagent \"vmagent-vmks\" has scrape_pool \"serviceScrape/vmks/vmks-kube-etcd/0\" with 0 discovered targets. It is likely a misconfiguration. Please follow https://docs.victoriametrics.com/victoriametrics/vmagent/#debugging-scrape-targets to troubleshoot the scraping config.",
+        "summary": "Vmagent has scrape_pool with 0 configured/discovered targets"
+      },
+      "startsAt": "2026-01-19T16:48:30.000Z",
+      "endsAt": "2026-01-19T22:46:43.227Z",
+      "generatorURL": "http://grafana.example.com/explore",
+      "fingerprint": "38b78f22cb9b17a9"
+    },
+    {
+      "status": "firing",
+      "labels": {
+        "alertgroup": "vmagent",
+        "alertname": "ScrapePoolHasNoTargets",
+        "container": "vmagent",
+        "endpoint": "http",
+        "job": "vmagent-vmks",
+        "namespace": "vmks",
+        "prometheus": "vmks/vmks",
+        "scrape_job": "serviceScrape/grafana/grafana/0",
+        "service": "vmagent-vmks",
+        "severity": "warning"
+      },
+      "annotations": {
+        "description": "Vmagent \"vmagent-vmks\" has scrape_pool \"serviceScrape/grafana/grafana/0\" with 0 discovered targets. It is likely a misconfiguration. Please follow https://docs.victoriametrics.com/victoriametrics/vmagent/#debugging-scrape-targets to troubleshoot the scraping config.",
+        "summary": "Vmagent has scrape_pool with 0 configured/discovered targets"
+      },
+      "startsAt": "2026-01-19T16:48:30.000Z",
+      "endsAt": "2026-01-19T22:46:43.227Z",
+      "generatorURL": "http://grafana.example.com/explore",
+      "fingerprint": "6f86b6bad585a590"
+    },
+    {
+      "status": "firing",
+      "labels": {
+        "alertgroup": "vmagent",
+        "alertname": "ScrapePoolHasNoTargets",
+        "container": "vmagent",
+        "endpoint": "http",
+        "job": "vmagent-vmks",
+        "namespace": "vmks",
+        "prometheus": "vmks/vmks",
+        "scrape_job": "serviceScrape/argocd/argocd-redis/0",
+        "service": "vmagent-vmks",
+        "severity": "warning"
+      },
+      "annotations": {
+        "description": "Vmagent \"vmagent-vmks\" has scrape_pool \"serviceScrape/argocd/argocd-redis/0\" with 0 discovered targets. It is likely a misconfiguration. Please follow https://docs.victoriametrics.com/victoriametrics/vmagent/#debugging-scrape-targets to troubleshoot the scraping config.",
+        "summary": "Vmagent has scrape_pool with 0 configured/discovered targets"
+      },
+      "startsAt": "2026-01-19T16:48:30.000Z",
+      "endsAt": "2026-01-19T22:46:43.227Z",
+      "generatorURL": "http://grafana.example.com/explore",
+      "fingerprint": "8ee0080922c9904c"
+    }
+  ]
+}

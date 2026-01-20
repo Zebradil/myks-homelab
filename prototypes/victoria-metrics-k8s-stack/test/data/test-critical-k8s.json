@@ -1,0 +1,52 @@
+{
+  "status": "firing",
+  "receiver": "vmks-vmks-tg-high-severity",
+  "externalURL": "https://alertmanager.example.com",
+  "groupLabels": {
+    "severity": "critical"
+  },
+  "commonLabels": {
+    "severity": "critical"
+  },
+  "commonAnnotations": {
+    "summary": "Target disappeared from Prometheus target discovery."
+  },
+  "alerts": [
+    {
+      "status": "firing",
+      "labels": {
+        "alertgroup": "kubernetes-system-scheduler",
+        "alertname": "KubeSchedulerDown",
+        "job": "kube-scheduler",
+        "severity": "critical"
+      },
+      "annotations": {
+        "description": "KubeScheduler has disappeared from Prometheus target discovery.",
+        "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeschedulerdown",
+        "summary": "Target disappeared from Prometheus target discovery."
+      },
+      "startsAt": "2026-01-19T16:32:20.000Z",
+      "endsAt": "2026-01-19T22:45:53.138Z",
+      "generatorURL": "http://grafana.example.com/explore?left={\"datasource\":\"VictoriaMetrics\",\"queries\":[{\"expr\":\"absent(up{job=\\\"kube-scheduler\\\"})\",\"refId\":\"A\"}],\"range\":{\"from\":\"1768839440000\",\"to\":\"now\"}}",
+      "fingerprint": "18d63fcd9ab123ad"
+    },
+    {
+      "status": "firing",
+      "labels": {
+        "alertgroup": "kubernetes-system-controller-manager",
+        "alertname": "KubeControllerManagerDown",
+        "job": "kube-controller-manager",
+        "severity": "critical"
+      },
+      "annotations": {
+        "description": "KubeControllerManager has disappeared from Prometheus target discovery.",
+        "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubecontrollermanagerdown",
+        "summary": "Target disappeared from Prometheus target discovery."
+      },
+      "startsAt": "2026-01-19T16:32:40.000Z",
+      "endsAt": "2026-01-19T22:45:55.583Z",
+      "generatorURL": "http://grafana.example.com/explore?left={\"datasource\":\"VictoriaMetrics\",\"queries\":[{\"expr\":\"absent(up{job=\\\"kube-controller-manager\\\"})\",\"refId\":\"A\"}],\"range\":{\"from\":\"1768839460000\",\"to\":\"now\"}}",
+      "fingerprint": "31d5de59274bcc91"
+    }
+  ]
+}

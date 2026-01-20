@@ -1,0 +1,118 @@
+{
+  "status": "firing",
+  "receiver": "vmks-vmks-tg-common",
+  "externalURL": "https://alertmanager.example.com",
+  "groupLabels": {},
+  "commonLabels": {},
+  "commonAnnotations": {},
+  "alerts": [
+    {
+      "status": "firing",
+      "labels": {
+        "alertgroup": "alertmanager.rules",
+        "alertname": "AlertmanagerFailedToSendAlerts",
+        "container": "alertmanager",
+        "integration": "telegram",
+        "namespace": "vmks",
+        "pod": "vmalertmanager-vmks-0",
+        "severity": "warning"
+      },
+      "annotations": {
+        "description": "Alertmanager vmks/vmalertmanager-vmks-0 failed to send 81.82% of notifications to telegram.",
+        "summary": "An Alertmanager instance failed to send notifications."
+      },
+      "startsAt": "2026-01-19T22:31:20.000Z",
+      "endsAt": "2026-01-19T22:45:53.213Z",
+      "generatorURL": "http://grafana.example.com/explore",
+      "fingerprint": "0f09bad1ccd3ff2b"
+    },
+    {
+      "status": "firing",
+      "labels": {
+        "alertgroup": "kubernetes-system-scheduler",
+        "alertname": "KubeSchedulerDown",
+        "job": "kube-scheduler",
+        "severity": "critical"
+      },
+      "annotations": {
+        "description": "KubeScheduler has disappeared from Prometheus target discovery.",
+        "summary": "Target disappeared from Prometheus target discovery."
+      },
+      "startsAt": "2026-01-19T16:32:20.000Z",
+      "endsAt": "2026-01-19T22:45:53.138Z",
+      "generatorURL": "http://grafana.example.com/explore",
+      "fingerprint": "18d63fcd9ab123ad"
+    },
+    {
+      "status": "firing",
+      "labels": {
+        "alertgroup": "kubernetes-system-controller-manager",
+        "alertname": "KubeControllerManagerDown",
+        "job": "kube-controller-manager",
+        "severity": "critical"
+      },
+      "annotations": {
+        "description": "KubeControllerManager has disappeared from Prometheus target discovery.",
+        "summary": "Target disappeared from Prometheus target discovery."
+      },
+      "startsAt": "2026-01-19T16:32:40.000Z",
+      "endsAt": "2026-01-19T22:45:55.583Z",
+      "generatorURL": "http://grafana.example.com/explore",
+      "fingerprint": "31d5de59274bcc91"
+    },
+    {
+      "status": "firing",
+      "labels": {
+        "alertgroup": "kubernetes-resources",
+        "alertname": "CPUThrottlingHigh",
+        "container": "vmagent",
+        "namespace": "vmks",
+        "pod": "vmagent-vmks-7fdbb65d65-zwrjg",
+        "severity": "info"
+      },
+      "annotations": {
+        "description": "54.5% throttling of CPU in namespace vmks for container vmagent in pod vmagent-vmks-7fdbb65d65-zwrjg on cluster .",
+        "summary": "Processes experience elevated CPU throttling."
+      },
+      "startsAt": "2026-01-19T16:34:00.000Z",
+      "endsAt": "2026-01-19T22:45:53.229Z",
+      "generatorURL": "http://grafana.example.com/explore",
+      "fingerprint": "7559c9b516d22d87"
+    },
+    {
+      "status": "firing",
+      "labels": {
+        "alertgroup": "vmagent",
+        "alertname": "ScrapePoolHasNoTargets",
+        "job": "vmagent-vmks",
+        "namespace": "vmks",
+        "scrape_job": "serviceScrape/vms/vms-victoria-metrics-single-server/0",
+        "severity": "warning"
+      },
+      "annotations": {
+        "description": "Vmagent \"vmagent-vmks\" has scrape_pool \"serviceScrape/vms/vms-victoria-metrics-single-server/0\" with 0 discovered targets.",
+        "summary": "Vmagent has scrape_pool with 0 configured/discovered targets"
+      },
+      "startsAt": "2026-01-19T16:48:30.000Z",
+      "endsAt": "2026-01-19T22:46:43.227Z",
+      "generatorURL": "http://grafana.example.com/explore",
+      "fingerprint": "32e88c0aa65a3ec9"
+    },
+    {
+      "status": "firing",
+      "labels": {
+        "alertgroup": "general.rules",
+        "alertname": "Watchdog",
+        "severity": "none"
+      },
+      "annotations": {
+        "description": "This is an alert meant to ensure that the entire alerting pipeline is functional.",
+        "summary": "An alert that should always be firing to certify that Alertmanager is working properly."
+      },
+      "startsAt": "2026-01-19T16:17:40.000Z",
+      "endsAt": "2026-01-19T22:45:53.057Z",
+      "generatorURL": "http://grafana.example.com/explore",
+      "fingerprint": "e2306103db8679b0"
+    }
+  ]
+}

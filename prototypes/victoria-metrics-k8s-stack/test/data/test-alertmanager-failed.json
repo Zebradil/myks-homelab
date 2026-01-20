@@ -1,0 +1,46 @@
+{
+  "status": "firing",
+  "receiver": "vmks-vmks-tg-common",
+  "externalURL": "https://alertmanager.example.com",
+  "groupLabels": {
+    "alertname": "AlertmanagerFailedToSendAlerts"
+  },
+  "commonLabels": {
+    "alertgroup": "alertmanager.rules",
+    "alertname": "AlertmanagerFailedToSendAlerts",
+    "severity": "warning"
+  },
+  "commonAnnotations": {
+    "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/alertmanager/alertmanagerfailedtosendalerts",
+    "summary": "An Alertmanager instance failed to send notifications."
+  },
+  "alerts": [
+    {
+      "status": "firing",
+      "labels": {
+        "alertgroup": "alertmanager.rules",
+        "alertname": "AlertmanagerFailedToSendAlerts",
+        "container": "alertmanager",
+        "endpoint": "http",
+        "instance": "10.42.0.238:9093",
+        "integration": "telegram",
+        "job": "vmalertmanager-vmks",
+        "namespace": "vmks",
+        "pod": "vmalertmanager-vmks-0",
+        "prometheus": "vmks/vmks",
+        "reason": "other",
+        "service": "vmalertmanager-vmks",
+        "severity": "warning"
+      },
+      "annotations": {
+        "description": "Alertmanager vmks/vmalertmanager-vmks-0 failed to send 81.82% of notifications to telegram.",
+        "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/alertmanager/alertmanagerfailedtosendalerts",
+        "summary": "An Alertmanager instance failed to send notifications."
+      },
+      "startsAt": "2026-01-19T22:31:20.000Z",
+      "endsAt": "2026-01-19T22:45:53.213Z",
+      "generatorURL": "http://grafana.example.com/explore?left={\"datasource\":\"VictoriaMetrics\",\"queries\":[{\"expr\":\"(rate(alertmanager_notifications_failed_total{job=\\\"vmalertmanager-vmks\\\",container=\\\"alertmanager\\\",namespace=\\\"vmks\\\"}[15m]) / ignoring(reason) group_left() rate(alertmanager_notifications_total{job=\\\"vmalertmanager-vmks\\\",container=\\\"alertmanager\\\",namespace=\\\"vmks\\\"}[15m])) > 0.01\",\"refId\":\"A\"}],\"range\":{\"from\":\"1768861580000\",\"to\":\"now\"}}",
+      "fingerprint": "0f09bad1ccd3ff2b"
+    }
+  ]
+}
