@@ -49,9 +49,9 @@
 <b>Started at:</b> <i>{{ tz "Europe/Berlin" . }} ({{ since . }})</i>{{ end }}
 
 {{- with .GeneratorURL }}
-<a href="{{ . }}">Source</a>{{ end }}
+<a href="{{ . | html }}">Source</a>{{ end }}
 {{- with $.CommonAnnotations.runbook_url }}{{ else with .Annotations.runbook_url }}
-<a href="{{ . }}">Runbook</a>{{ end }}{{ end }}
+<a href="{{ . | html }}">Runbook</a>{{ end }}{{ end }}
 {{- end -}}
 
 {{- define "telegram.alert_list.resolved" -}}
@@ -71,9 +71,9 @@
 <b>Started at:</b> <i>{{ tz "Europe/Berlin" . }} ({{ . | since | humanizeDuration }})</i>{{ end }}
 
 {{- with .GeneratorURL }}
-<a href="{{ . }}">Source</a>{{ end }}
+<a href="{{ . | html }}">Source</a>{{ end }}
 {{- with $.CommonAnnotations.runbook_url }}{{ else with .Annotations.runbook_url }}
-<a href="{{ . }}">Runbook</a>{{ end }}{{ end }}
+<a href="{{ . | html }}">Runbook</a>{{ end }}{{ end }}
 {{- end -}}
 
 {{- define "telegram.message" }}
@@ -88,4 +88,4 @@
 
 ✅ Alerts Resolved{{ template "telegram.alert_list.resolved" . }}{{ end }}
 
-<a href="{{ .ExternalURL }}">Alertmanager UI</a>{{- end -}}
+<a href="{{ .ExternalURL | html }}">Alertmanager UI</a>{{- end -}}
