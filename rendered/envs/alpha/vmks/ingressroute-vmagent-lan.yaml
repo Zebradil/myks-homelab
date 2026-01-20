@@ -3,14 +3,14 @@ kind: IngressRoute
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
-  name: victoria-metrics-lan
+  name: vmagent-lan
 spec:
   entryPoints:
     - lan-web
     - lan-websecure
   routes:
     - kind: Rule
-      match: Host(`victoria-metrics.lan.zebradil.dev`) || Host(`victoria-metrics.gray.lan.zebradil.dev`) || Host(`victoria-metrics.junior.lan.zebradil.dev`)
+      match: Host(`vmagent.lan.zebradil.dev`) || Host(`vmagent.gray.lan.zebradil.dev`) || Host(`vmagent.junior.lan.zebradil.dev`)
       services:
-        - name: vmsingle-vmks
+        - name: vmagent-vmks
           port: http

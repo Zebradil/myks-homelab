@@ -1,0 +1,19 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: vmagent-protected
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`vmagent.zebradil.dev`) || Host(`vmagent.gray.zebradil.dev`) || Host(`vmagent.junior.zebradil.dev`)
+      middlewares:
+        - name: chain-authelia-auth
+          namespace: authelia
+      services:
+        - name: vmagent-vmks
+          port: http

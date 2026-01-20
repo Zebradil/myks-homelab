@@ -3,14 +3,14 @@ kind: IngressRoute
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
-  name: victoria-metrics-vpn
+  name: vmalert-vpn
 spec:
   entryPoints:
     - vpn-web
     - vpn-websecure
   routes:
     - kind: Rule
-      match: Host(`victoria-metrics.ts.zebradil.dev`) || Host(`victoria-metrics.gray.ts.zebradil.dev`) || Host(`victoria-metrics.junior.ts.zebradil.dev`)
+      match: Host(`vmalert.ts.zebradil.dev`) || Host(`vmalert.gray.ts.zebradil.dev`) || Host(`vmalert.junior.ts.zebradil.dev`)
       services:
-        - name: vmsingle-vmks
+        - name: vmalert-vmks
           port: http

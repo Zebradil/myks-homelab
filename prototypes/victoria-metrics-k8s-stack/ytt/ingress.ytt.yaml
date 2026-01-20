@@ -7,5 +7,7 @@
 #@ for/end route_doc in route.default("alertmanager", "vmalertmanager-vmks"):
 --- #@ route_doc
 
-#@ for/end route_doc in route.default("victoria-metrics", "vmsingle-vmks"):
+#@ for component in ["vmalert", "vmagent", "vmsingle"]:
+#@   for/end route_doc in route.default(component, component + "-vmks"):
 --- #@ route_doc
+#@ end

@@ -1,0 +1,19 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: vmalert-protected
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`vmalert.zebradil.dev`) || Host(`vmalert.gray.zebradil.dev`) || Host(`vmalert.junior.zebradil.dev`)
+      middlewares:
+        - name: chain-authelia-auth
+          namespace: authelia
+      services:
+        - name: vmalert-vmks
+          port: http
