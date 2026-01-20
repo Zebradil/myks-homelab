@@ -46,7 +46,7 @@
 {{- with $.CommonLabels.node }}{{ else with .Labels.node }}
 <b>Node:</b> <i>{{ . }}</i>{{ end }}
 {{- with .StartsAt }}
-<b>Started at:</b> <i>{{ tz "Europe/Berlin" . }} ({{ since . }})</i>{{ end }}
+<b>Started at:</b> <i>{{ tz "Europe/Berlin" . }} ({{ . | since | humanizeDuration }})</i>{{ end }}
 
 {{- with .GeneratorURL }}
 <a href="{{ . | html }}">Source</a>{{ end }}
