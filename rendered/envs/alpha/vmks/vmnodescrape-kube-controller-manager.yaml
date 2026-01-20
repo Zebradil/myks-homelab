@@ -8,6 +8,9 @@ spec:
   bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
   path: /metrics
   port: "10257"
+  relabelConfigs:
+    - replacement: kube-controller-manager
+      targetLabel: job
   scheme: https
   selector:
     matchLabels:

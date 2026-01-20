@@ -21,6 +21,9 @@ spec:
   selector:
     matchLabels:
       node-role.kubernetes.io/master: 'true'
+  relabelConfigs:
+    - targetLabel: job
+      replacement: #@ name
 
 
 #@overlay/match by=m.kind_name("VMServiceScrape", "vmks-" + name)
