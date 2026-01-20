@@ -11,7 +11,7 @@
 {{- end -}}
 
 {{- define "telegram.common" -}}
-{{- with .CommonLabels }}
+{{- with .CommonLabels -}}
 <b>{{ .alertgroup }}/{{ .alertname }}</b>
 {{- with .namespace }}
 <b>Namespace:</b> <i>{{ . }}</i>{{- end }}
@@ -77,8 +77,7 @@
 {{- end -}}
 
 {{- define "telegram.message" }}
-{{- template "telegram.severity" .CommonLabels.severity }}
-{{- template "telegram.common" . }}
+{{- template "telegram.severity" .CommonLabels.severity }}: {{ template "telegram.common" . }}
 
 {{- if gt (len .Alerts.Firing) 0 }}
 
