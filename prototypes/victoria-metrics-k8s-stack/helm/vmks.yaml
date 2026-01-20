@@ -5,6 +5,11 @@ victoria-metrics-operator:
     certManager:
       enabled: true
 
+vmagent:
+  spec:
+    extraArgs:
+      promscrape.dropOriginalLabels: 'false'
+
 kubeControllerManager:
   service:
     enabled: false
