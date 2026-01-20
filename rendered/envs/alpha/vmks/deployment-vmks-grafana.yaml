@@ -145,27 +145,6 @@ spec:
               name: sc-datasources-volume
       enableServiceLinks: true
       initContainers:
-        - command:
-            - chown
-            - -R
-            - 472:472
-            - /var/lib/grafana
-          image: oci.zebradil.dev/index.docker.io-cache/library/busybox@sha256:95cf004f559831017cdf4628aaf1bb30133677be8702a8c5f2994629f637a209
-          name: init-chown-data
-          securityContext:
-            capabilities:
-              add:
-                - CHOWN
-              drop:
-                - ALL
-            readOnlyRootFilesystem: false
-            runAsNonRoot: false
-            runAsUser: 0
-            seccompProfile:
-              type: RuntimeDefault
-          volumeMounts:
-            - mountPath: /var/lib/grafana
-              name: storage
         - env:
             - name: METHOD
               value: LIST

@@ -23,3 +23,8 @@ grafana:
   ingress:
     hosts:
       - grafana.lan.zebradil.dev
+  initChownData:
+    #! Some directories in the volume have 700 permissions, which, in the current configuration of the init container,
+    #! disallows the root user to change ownership.
+    #! See https://github.com/grafana/helm-charts/pull/3698
+    enabled: false

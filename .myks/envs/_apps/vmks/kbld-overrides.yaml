@@ -3,8 +3,6 @@ kind: Config
 overrides:
     - image: docker.io/grafana/grafana:12.3.0
       newImage: oci.zebradil.dev/index.docker.io-cache/grafana/grafana:12.3.0
-    - image: docker.io/library/busybox:1.31.1
-      newImage: oci.zebradil.dev/index.docker.io-cache/library/busybox:1.31.1
     - image: quay.io/kiwigrid/k8s-sidecar:1.30.10
       newImage: oci.zebradil.dev/quay.io-cache/kiwigrid/k8s-sidecar:1.30.10
     - image: quay.io/prometheus/node-exporter:v1.10.2
