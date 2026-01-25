@@ -9,4 +9,4 @@ prototype:
     redis:
       helmChart:
         url: oci://registry-1.docker.io/bitnamicharts
-        version: 24.1.0
+        version: 24.1.2
