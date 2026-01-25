@@ -51,7 +51,7 @@ spec:
         - env:
             - name: FB_DATABASE
               value: /database/database.db
-          image: oci.zebradil.dev/index.docker.io-cache/filebrowser/filebrowser@sha256:b4ae9ddf584d1632e0071f67d374e4fa250545d22583b2b12998156ddaf0d09b
+          image: oci.zebradil.dev/index.docker.io-cache/filebrowser/filebrowser@sha256:51042a8c9a77bd2fdb3eb70d96830025defcfa7fc8aa9c587cade91cb7446f4f
           livenessProbe:
             failureThreshold: 3
             httpGet:
@@ -101,7 +101,7 @@ spec:
                 secretKeyRef:
                   key: wg0.conf
                   name: jellyfin-wireguard-config
-          image: oci.zebradil.dev/index.docker.io-cache/library/busybox@sha256:4059babd1b7f9ad15525d28c5cdc7243eb75b4e4131aca2b4232c66eadce2250
+          image: oci.zebradil.dev/index.docker.io-cache/library/busybox@sha256:851281100cc5f93d8a8f8e1a8976a57ec40a9bc9edd66ad3a621e4aa63326915
           name: wireguard-config
           volumeMounts:
             - mountPath: /config
