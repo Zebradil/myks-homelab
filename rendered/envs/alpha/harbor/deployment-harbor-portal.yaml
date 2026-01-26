@@ -42,7 +42,7 @@ spec:
     spec:
       automountServiceAccountToken: false
       containers:
-        - image: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-portal@sha256:deebd48edd53f349a568da577949997d7c6b01749a493ad61d8beeeb148d6dd2
+        - image: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-portal@sha256:a13c6aa7a8ffa2cdc06f8eec638a1059230c5c3cbd7bb333ee93ef69a675a7d1
           livenessProbe:
             httpGet:
               path: /

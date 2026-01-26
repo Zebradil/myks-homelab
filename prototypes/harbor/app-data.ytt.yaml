@@ -5,4 +5,4 @@ application:
   #! Handle application version updates separately to use the same version
   #! in both helm chart and the image puller jobs.
   #! renovate: datasource=github-releases depName=goharbor/harbor
-  version: v2.14.1
+  version: v2.14.2
