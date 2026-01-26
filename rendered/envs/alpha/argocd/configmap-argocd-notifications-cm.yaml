@@ -55,7 +55,7 @@ data:
     webhook:
       telegram-html:
         method: POST
-        body: '{"chat_id":"ref+sops://static/1.sops.yaml#/telegram/chatId+","message_thread_id":"ref+sops://static/1.sops.yaml#/telegram/topicId+","parse_mode":"HTML","text":"❓ Application \u003cb\u003e\u003ca href=\"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}\"\u003e{{.app.metadata.name}}\u003c/a\u003e\u003c/b\u003e sync is ''Unknown''.\n\u003cpre\u003e\n{{range $c := .app.status.conditions-}}\n- {{$c.message}}\n{{end-}}\n\u003c/pre\u003e\n"}'
+        body: '{"chat_id":"ref+sops://static/1.sops.yaml#/telegram/chatId+","message_thread_id":"ref+sops://static/1.sops.yaml#/telegram/topicId+","parse_mode":"HTML","text":"❓ Application \u003cb\u003e\u003ca href=\"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}\"\u003e{{.app.metadata.name}}\u003c/a\u003e\u003c/b\u003e sync is ''Unknown''.\n\u003cpre\u003e{{range $c := .app.status.conditions}}\n- {{$c.message}}\n{{end}}\u003c/pre\u003e\n"}'
   template.app-sync-succeeded: |
     webhook:
       telegram-html:
