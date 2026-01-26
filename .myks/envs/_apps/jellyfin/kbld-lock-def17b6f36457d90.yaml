@@ -14,6 +14,6 @@ overrides:
 - image: ghcr.io/linuxserver/wireguard:v1.0.20210914-ls31
   newImage: oci.zebradil.dev/ghcr.io-cache/linuxserver/wireguard@sha256:c417568c79a051a8a73ffc2ad28ef58f58ba76bdb4c420389819c001aa55a03e
   preresolved: true
-- image: jellyfin/jellyfin:10.11.5
-  newImage: oci.zebradil.dev/index.docker.io-cache/jellyfin/jellyfin@sha256:6d819e9ab067efcf712993b23455cc100ee5585919bb297ea5a109ac00cb626e
+- image: jellyfin/jellyfin:10.11.6
+  newImage: oci.zebradil.dev/index.docker.io-cache/jellyfin/jellyfin@sha256:333b647716631443a43c7fabac4b0c46b4e2f036bad19547e00958f10f721b85
   preresolved: true
