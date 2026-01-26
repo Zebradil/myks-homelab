@@ -60,7 +60,7 @@ spec:
                 name: harbor-core
             - secretRef:
                 name: harbor-core
-          image: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-core@sha256:9c16d47ff207e7c83ba4b411eb02f6d919948118d8824b0d359711edeca55823
+          image: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-core@sha256:3966507a3a63e2eae2c03145f52120f86f7e72645b41e5a5783672d9a32db428
           livenessProbe:
             failureThreshold: 2
             httpGet:
