@@ -5,7 +5,7 @@ prototype:
     postgresql:
       helmChart:
         url: oci://registry-1.docker.io/bitnamicharts
-        version: 18.2.0
+        version: 18.2.3
     redis:
       helmChart:
         url: oci://registry-1.docker.io/bitnamicharts
