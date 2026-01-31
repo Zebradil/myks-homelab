@@ -27,7 +27,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/secret: 4f71f45ec653e4a7f18b3c63d42323aeffeda3f58cf88dc127d403c92b233edb
+        checksum/secret: 43a68aaf73f915e1a439ffd372d1e902937844716ee36410cdf96cbb4ab6f7a3
       labels:
         app: harbor
         app.kubernetes.io/component: trivy
