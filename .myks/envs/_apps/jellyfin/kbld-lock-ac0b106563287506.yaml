@@ -5,8 +5,8 @@ overrides:
 - image: busybox:1.36.1
   newImage: oci.zebradil.dev/index.docker.io-cache/library/busybox@sha256:851281100cc5f93d8a8f8e1a8976a57ec40a9bc9edd66ad3a621e4aa63326915
   preresolved: true
-- image: filebrowser/filebrowser:v2.55.0
-  newImage: oci.zebradil.dev/index.docker.io-cache/filebrowser/filebrowser@sha256:51042a8c9a77bd2fdb3eb70d96830025defcfa7fc8aa9c587cade91cb7446f4f
+- image: filebrowser/filebrowser:v2.56.0
+  newImage: oci.zebradil.dev/index.docker.io-cache/filebrowser/filebrowser@sha256:2c54423548d030a0613e144151d7783eb43321a3a79a1ba291c24b4198c048b1
   preresolved: true
 - image: ghcr.io/hotio/qbittorrent:release-4.6.4
   newImage: oci.zebradil.dev/ghcr.io-cache/hotio/qbittorrent@sha256:39829b3e092a91fb15f6696d5a8b762a2da6436ff59e529e13305e6bfb52f829
