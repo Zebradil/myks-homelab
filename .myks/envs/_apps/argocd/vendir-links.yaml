@@ -1,2 +1,2 @@
-charts/argocd: helm-argo-cd-9.3.4-d235444b9a42a249
+charts/argocd: helm-argo-cd-9.3.6-d22e804b9a3ce98f
 ytt/dashboards: git-argo-cd-mixin-f30dcfa0758fb588215f2ea808cc30917db80365-ad178586a02b9c4f
