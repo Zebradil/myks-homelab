@@ -27,7 +27,7 @@ jobs:
           # use more powerful token to trigger subsequent workflows
           token: ${{ secrets.ZEBRADIL_BOT_GITHUB_TOKEN }}
       - name: Login to Harbor registry
-        uses: docker/login-action@v3.6.0
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
         with:
           registry: ${{ secrets.HARBOR_REGISTRY }}
           username: ${{ secrets.HARBOR_ROBOT_NAME }}
