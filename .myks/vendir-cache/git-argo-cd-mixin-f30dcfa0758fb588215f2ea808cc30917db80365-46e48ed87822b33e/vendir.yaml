@@ -1,0 +1,13 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - git:
+      ref: f30dcfa0758fb588215f2ea808cc30917db80365
+      url: https://github.com/adinhodovic/argo-cd-mixin
+    includePaths:
+    - dashboards_out/argo-cd-*.json
+    lazy: true
+    path: .
+  path: .myks/vendir-cache/git-argo-cd-mixin-f30dcfa0758fb588215f2ea808cc30917db80365-46e48ed87822b33e/data
+kind: Config
+minimumRequiredVersion: ""

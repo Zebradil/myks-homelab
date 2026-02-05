@@ -1,0 +1,13 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - helmChart:
+      name: cert-manager-monitoring
+      repository:
+        url: https://charts.adfinis.com
+      version: 0.3.1
+    lazy: true
+    path: .
+  path: .myks/vendir-cache/helm-cert-manager-monitoring-0.3.1-c80dee624b89f8ca/data
+kind: Config
+minimumRequiredVersion: ""
