@@ -1,0 +1,12 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - configDigest: c392628a1c37a23b68f85e63dba532449976264ff4114d260f85fb22c2e0c744
+    git:
+      commitTitle: Bump version to 1.2.1
+      sha: 13a525c0bb08f8b9c2a811eb91de93349f2c2e98
+      tags:
+      - v1.2.1
+    path: .
+  path: .myks/vendir-cache/git-synology-csi-v1.2.1-f40356a206d2d28/data
+kind: LockConfig

@@ -1,0 +1,13 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - helmChart:
+      name: redis
+      repository:
+        url: oci://registry-1.docker.io/bitnamicharts
+      version: 24.1.2
+    lazy: true
+    path: .
+  path: .myks/vendir-cache/helm-redis-24.1.2-75ad7e431d06677e/data
+kind: Config
+minimumRequiredVersion: ""

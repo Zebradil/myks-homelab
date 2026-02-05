@@ -1,0 +1,13 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - helmChart:
+      name: traefik
+      repository:
+        url: https://traefik.github.io/charts
+      version: 38.0.2
+    lazy: true
+    path: .
+  path: .myks/vendir-cache/helm-traefik-38.0.2-6be339bf2899ae43/data
+kind: Config
+minimumRequiredVersion: ""

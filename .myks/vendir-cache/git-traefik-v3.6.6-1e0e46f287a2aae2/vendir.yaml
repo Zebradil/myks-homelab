@@ -1,0 +1,14 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - git:
+      ref: v3.6.6
+      url: https://github.com/traefik/traefik
+    includePaths:
+    - contrib/grafana/traefik-kubernetes.json
+    lazy: true
+    newRootPath: contrib
+    path: .
+  path: .myks/vendir-cache/git-traefik-v3.6.6-1e0e46f287a2aae2/data
+kind: Config
+minimumRequiredVersion: ""
