@@ -89,6 +89,7 @@ spec:
         matchers:
           - alertname="Watchdog"
         receiver: healthchecks
+        repeat_interval: 5m
       - continue: false
         matchers:
           - severity="critical"
