@@ -1,0 +1,13 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - helmChart:
+      name: prometheus-operator-crds
+      repository:
+        url: https://prometheus-community.github.io/helm-charts
+      version: 26.0.0
+    lazy: true
+    path: .
+  path: .myks/vendir-cache/helm-prometheus-operator-crds-26.0.0-ef7dbf176b350e77/data
+kind: Config
+minimumRequiredVersion: ""
