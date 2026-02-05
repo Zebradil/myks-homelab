@@ -19,6 +19,7 @@ alertmanager:
         - matchers:
             - alertname="Watchdog"
           receiver: healthchecks
+          repeat_interval: 5m
           continue: false
         #! High severity
         - matchers:
