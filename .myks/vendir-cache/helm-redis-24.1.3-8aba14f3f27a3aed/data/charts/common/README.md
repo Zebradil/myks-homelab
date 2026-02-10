@@ -389,7 +389,7 @@ helm install test mychart --set path.to.value00="",path.to.value01=""
 
 #### Useful links
 
-- <https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-resolve-helm2-helm3-post-migration-issues-index.html>
+- <https://techdocs.broadcom.com/us/en/vmware-tanzu/bitnami-secure-images/bitnami-secure-images/services/bsi-doc/apps-tutorials-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
