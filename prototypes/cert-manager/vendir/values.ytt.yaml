@@ -5,7 +5,7 @@ prototype:
     cert-manager:
       helmChart:
         url: https://charts.jetstack.io
-        version: v1.19.2
+        version: v1.19.3
     monitoring:
       helmChart:
         name: cert-manager-monitoring

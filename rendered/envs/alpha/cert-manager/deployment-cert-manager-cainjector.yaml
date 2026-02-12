@@ -34,7 +34,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-          image: oci.zebradil.dev/quay.io-cache/jetstack/cert-manager-cainjector@sha256:1a24f9848e7ae83a787187f4e75fdf5e9adf401f44de2f156c09c6fae1bf046e
+          image: oci.zebradil.dev/quay.io-cache/jetstack/cert-manager-cainjector@sha256:eb1df56668b6e61bd902febe816568e7e47f47276121bc0e1222890871c61e50
           name: cert-manager-cainjector
           ports:
             - containerPort: 9402
