@@ -45,7 +45,7 @@ For Redis Sentinel:
  WARNING
 
     By specifying "master.service.type=LoadBalancer" and "auth.enabled=false" you have
-    most likely exposed the Redis&reg; service externally without any authentication
+    most likely exposed the Redis(R) service externally without any authentication
     mechanism.
 
     For security reasons, we strongly suggest that you switch to "ClusterIP" or
@@ -76,15 +76,15 @@ For Redis Sentinel:
 {{- if eq .Values.architecture "replication" }}
 {{- if .Values.sentinel.enabled }}
 
-Redis&reg; can be accessed via port {{ .Values.sentinel.service.ports.redis }} on the following DNS name from within your cluster:
+Redis(R) can be accessed via port {{ .Values.sentinel.service.ports.redis }} on the following DNS name from within your cluster:
 
     {{ template "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }} for read only operations
 
-For read/write operations, first access the Redis&reg; Sentinel cluster, which is available in port {{ .Values.sentinel.service.ports.sentinel }} using the same domain name above.
+For read/write operations, first access the Redis(R) Sentinel cluster, which is available in port {{ .Values.sentinel.service.ports.sentinel }} using the same domain name above.
 
 {{- else }}
 
-Redis&reg; can be accessed on the following DNS names from within your cluster:
+Redis(R) can be accessed on the following DNS names from within your cluster:
 
     {{ printf "%s-master.%s.svc.%s" (include "common.names.fullname" .) (include "common.names.namespace" . ) .Values.clusterDomain }} for read/write operations (port {{ .Values.master.service.ports.redis }})
     {{ printf "%s-replicas.%s.svc.%s" (include "common.names.fullname" .) (include "common.names.namespace" . ) .Values.clusterDomain }} for read-only operations (port {{ .Values.replica.service.ports.redis }})
@@ -92,13 +92,12 @@ Redis&reg; can be accessed on the following DNS names from within your cluster:
 {{- end }}
 {{- else }}
 
-Redis&reg; can be accessed via port {{ .Values.master.service.ports.redis }} on the following DNS name from within your cluster:
+Redis(R) can be accessed via port {{ .Values.master.service.ports.redis }} on the following DNS name from within your cluster:
 
     {{ template "common.names.fullname" . }}-master.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}
 
 {{- end }}
-
-{{ if .Values.auth.enabled }}
+{{- if .Values.auth.enabled }}
 
 To get your password run:
 
@@ -106,9 +105,9 @@ To get your password run:
 
 {{- end }}
 
-To connect to your Redis&reg; server:
+To connect to your Redis(R) server:
 
-1. Run a Redis&reg; pod that you can use as a client:
+1. Run a Redis(R) pod that you can use as a client:
 
    kubectl run --namespace {{ include "common.names.namespace" . }} redis-client --restart='Never' {{ if .Values.auth.enabled }} --env REDIS_PASSWORD=$REDIS_PASSWORD {{ end }} --image {{ template "redis.image" . }} --command -- sleep infinity
 
@@ -128,7 +127,7 @@ To connect to your Redis&reg; server:
    {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ template "common.names.fullname" . }}-client=true" \{{- end }}
    --namespace {{ include "common.names.namespace" . }} -- bash
 
-2. Connect using the Redis&reg; CLI:
+2. Connect using the Redis(R) CLI:
 
 {{- if eq .Values.architecture "replication" }}
    {{- if .Values.sentinel.enabled }}
@@ -211,7 +210,7 @@ YOU NEED TO PERFORM AN UPGRADE FOR THE SERVICES AND WORKLOAD TO BE CREATED
 {{- end }}
 {{- $resourceSections := list "metrics" "replica" "sentinel" "sysctl" "volumePermissions" }}
 {{- if not (and (eq .Values.architecture "replication") .Values.sentinel.enabled) }}
-  {{- $resourceSections = append $resourceSections "master" -}}
+  {{- $resourceSections = append $resourceSections "master" }}
 {{- end }}
 {{- include "common.warnings.resources" (dict "sections" $resourceSections "context" $) }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.sentinel.image .Values.metrics.image .Values.volumePermissions.image .Values.kubectl.image .Values.sysctl.image) "context" $) }}
