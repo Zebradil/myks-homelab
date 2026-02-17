@@ -5,7 +5,7 @@ annotations:
       version: "5"
       image: registry-1.docker.io/bitnami/os-shell:latest
     - name: postgres-exporter
-      version: 0.18.1
+      version: 0.19.0
       image: registry-1.docker.io/bitnami/postgres-exporter:latest
     - name: postgresql
       version: 18.1.0
@@ -19,7 +19,7 @@ dependencies:
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
   - bitnami-common
-  version: 2.34.0
+  version: 2.36.0
 description: "PostgreSQL (Postgres) is an open source object-relational database known for reliability and data integrity. ACID-compliant, it supports foreign keys, joins, views, triggers and stored procedures."
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/postgresql/img/postgresql-stack-220x234.png
@@ -36,4 +36,4 @@ maintainers:
 name: postgresql
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/postgresql
-version: 18.2.4
+version: 18.2.6
