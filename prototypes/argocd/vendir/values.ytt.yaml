@@ -6,7 +6,7 @@ prototype:
       helmChart:
         name: argo-cd
         url: https://argoproj.github.io/argo-helm
-        version: 9.4.1
+        version: 9.4.3
     dashboards:
       git:
         ref: f30dcfa0758fb588215f2ea808cc30917db80365
