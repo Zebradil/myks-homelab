@@ -2,7 +2,7 @@ apiVersion: v1
 data:
   images.txt: |
     ---
-    - image: oci.zebradil.dev/index.docker.io-cache/library/traefik@sha256:ebe7d3fc715e28f033cea8265e9105b9d64705867f5b916e2d9ed0b62c530192
+    - image: oci.zebradil.dev/index.docker.io-cache/library/traefik@sha256:90099f8948c828ecf0ababd711a4359a2443eba12261c1df2f548a3b1d815938
 kind: ConfigMap
 metadata:
   annotations:
