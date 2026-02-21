@@ -94,7 +94,7 @@ spec:
               value: /etc/rancher/k3s/registries.yaml
             - name: REGISTRIES_FILENAME
               value: registries.yaml
-          image: oci.zebradil.dev/index.docker.io-cache/mikefarah/yq@sha256:601e1d0faee899567ed5c8e50bead050efe51a2b90f07395e5cf5836ce3726a8
+          image: oci.zebradil.dev/index.docker.io-cache/mikefarah/yq@sha256:a4c2cafdf4674b2dc3c6ac457fe1486d55d7d93edb3ed4459637afda3c286af6
           name: registry-config-writer
           securityContext:
             runAsGroup: 0
