@@ -5,7 +5,7 @@ prototype:
     traefik:
       helmChart:
         url: https://traefik.github.io/charts
-        version: 38.0.2
+        version: 39.0.2
     dashboard:
       git:
         ref: v3.6.6
