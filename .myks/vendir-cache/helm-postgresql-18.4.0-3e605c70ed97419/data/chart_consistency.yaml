@@ -1,0 +1,87 @@
+ignore:
+  # Image parameters used by common library helpers
+  - image.registry
+  - image.repository
+  - image.tag
+  - image.digest
+  - image.pullSecrets
+  - volumePermissions.image.registry
+  - volumePermissions.image.repository
+  - volumePermissions.image.tag
+  - volumePermissions.image.digest
+  - volumePermissions.image.pullSecrets
+  - metrics.image.registry
+  - metrics.image.repository
+  - metrics.image.tag
+  - metrics.image.digest
+  - metrics.image.pullSecrets
+  # Values used by common library helpers
+  - nameOverride
+  - fullnameOverride
+  - namespaceOverride
+  - kubeVersion
+  # Update strategy handled by common helpers
+  - primary.updateStrategy.type
+  - readReplicas.updateStrategy.type
+  # Persistence values used in conditional logic
+  - primary.persistence.storageClass
+  - readReplicas.persistence.storageClass
+  - backup.cronjob.storage.storageClass
+  # Runtime class name
+  - readReplicas.runtimeClassName
+  # Backup storage configuration (not used)
+  - backup.cronjob.storage.annotations
+  - backup.cronjob.storage.volumeClaimTemplates
+  - backup.cronjob.storage.volumeClaimTemplates.selector
+  # Update strategy rolling update config (not directly referenced)
+  - primary.updateStrategy.rollingUpdate
+  - readReplicas.updateStrategy.rollingUpdate
+  # Deprecated LDAP parameters (kept for backward compatibility)
+  - ldap.url
+  - ldap.baseDN
+  - ldap.bindDN
+  - ldap.bind_password
+  - ldap.search_attr
+  - ldap.search_filter
+
+ignoreChildren:
+  # Global values used by common library helpers
+  - global
+  # Diagnostic mode
+  - diagnosticMode
+  # FIPS configuration
+  - primary.fips
+  - readReplicas.fips
+  - backup.cronjob.fips
+  - passwordUpdateJob.fips
+  - volumePermissions.fips
+  - metrics.fips
+  # Security contexts handled by common helpers
+  - primary.podSecurityContext
+  - primary.containerSecurityContext
+  - readReplicas.podSecurityContext
+  - readReplicas.containerSecurityContext
+  - backup.cronjob.podSecurityContext
+  - backup.cronjob.containerSecurityContext
+  - passwordUpdateJob.podSecurityContext
+  - passwordUpdateJob.containerSecurityContext
+  - volumePermissions.containerSecurityContext
+  - metrics.containerSecurityContext
+  # Probes handled by common helpers
+  - primary.livenessProbe
+  - primary.readinessProbe
+  - primary.startupProbe
+  - readReplicas.livenessProbe
+  - readReplicas.readinessProbe
+  - readReplicas.startupProbe
+  - metrics.livenessProbe
+  - metrics.readinessProbe
+  - metrics.startupProbe
+  # Metrics service annotations (Prometheus)
+  - metrics.service.annotations
+  # Persistence access modes
+  - primary.persistence.accessModes
+  - readReplicas.persistence.accessModes
+  - backup.cronjob.storage.accessModes
+  # Backup cronjob command
+  - backup.cronjob.command

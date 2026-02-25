@@ -1345,6 +1345,9 @@ backup:
     ttlSecondsAfterFinished: ""
     ## @param backup.cronjob.restartPolicy Set the cronjob parameter restartPolicy
     restartPolicy: OnFailure
+    ## @param backup.cronjob.podLabels Additional pod labels for backup cronjob pods
+    ##
+    podLabels: {}
     ## @param backup.cronjob.podSecurityContext.enabled Enable PodSecurityContext for CronJob/Backup
     ## @param backup.cronjob.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
     ## @param backup.cronjob.podSecurityContext.sysctls Set kernel settings using the sysctl interface
