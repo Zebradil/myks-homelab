@@ -53,4 +53,4 @@ myks:
 #! The helm and myks versions below are managed by renovate and are used solely for triggeing a full re-render when helm
 #! or myks version changes. These versions must be the same as in the mise config (.mise.toml).
 #! renovate: datasource=github-releases depName=helm/helm version=4.1.1
-#! renovate: datasource=github-releases depName=mykso/myks version=5.9.1
+#! renovate: datasource=github-releases depName=mykso/myks version=5.9.2
