@@ -6,6 +6,8 @@ SPDX-License-Identifier: APACHE-2.0
 {{- if .Values.sentinel.externalAccess.enabled }}
 {{- $fullName := include "common.names.fullname" . }}
 {{- $nodesCount := .Values.replica.replicaCount | int }}
+{{- $loadBalancerIPs := coalesce .Values.sentinel.externalAccess.service.loadBalancerIPs .Values.sentinel.externalAccess.service.loadBalancerIP }}
+{{- $loadBalancerIPAnnotation := coalesce .Values.sentinel.externalAccess.service.loadBalancerIPAnnotation .Values.sentinel.externalAccess.service.loadBalancerIPAnnotaion | default "" }}
 {{- $root := . }}
 
 {{- range $i, $e := until $nodesCount }}
@@ -18,33 +20,21 @@ metadata:
   namespace: {{ include "common.names.namespace" $ | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $root.Values.commonLabels "context" $ ) | nindent 4 }}
     pod: {{ $targetPod }}
-  {{- if or
-    (ne $root.Values.sentinel.externalAccess.service.loadBalancerIPAnnotaion "")
+  {{- if or (ne $loadBalancerIPAnnotation "")
     $root.Values.sentinel.externalAccess.service.annotations
-    $root.Values.sentinel.commonAnnotations }}
-  {{- $loadBalancerIPAnnotaion := "" }}
-  {{- if ne $root.Values.sentinel.externalAccess.service.loadBalancerIPAnnotaion ""}}
-    {{- $loadBalancerIPAnnotaion = printf
-      "%s: %s"
-      $root.Values.sentinel.externalAccess.service.loadBalancerIPAnnotaion
-      (index $root.Values.sentinel.externalAccess.service.loadBalancerIP $i) }}
-  {{- end }}
-  {{- $annotations := include "common.tplvalues.merge"
-    ( dict "values"
-      ( list
-        $root.Values.sentinel.externalAccess.service.annotations
-        $root.Values.sentinel.commonAnnotations
-        $loadBalancerIPAnnotaion
-      ) "context" $ ) }}
+    $root.Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list
+    $root.Values.sentinel.externalAccess.service.annotations
+    $root.Values.commonAnnotations
+    $loadBalancerIPAnnotation
+  ) "context" $ ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ $root.Values.sentinel.externalAccess.service.type }}
-  {{- if and
-    ($root.Values.sentinel.externalAccess.service.loadBalancerIP)
-    (eq $root.Values.sentinel.externalAccess.service.loadBalancerIPAnnotaion "")
-    (not $root.Values.sentinel.externalAccess.service.disableLoadBalancerIP) }}
-  loadBalancerIP: {{ index $root.Values.sentinel.externalAccess.service.loadBalancerIP $i }}
+  {{- if and $loadBalancerIPs
+    (eq $root.Values.sentinel.externalAccess.service.loadBalancerIPAnnotation "") }}
+  loadBalancerIP: {{ index $loadBalancerIPs $i }}
   {{- end }}
   {{- if and (eq $root.Values.sentinel.externalAccess.service.type "LoadBalancer") $root.Values.sentinel.externalAccess.service.loadBalancerClass }}
   loadBalancerClass: {{ $root.Values.sentinel.externalAccess.service.loadBalancerClass }}
@@ -61,7 +51,7 @@ spec:
       port: {{ $root.Values.sentinel.externalAccess.service.sentinelPort }}
       protocol: TCP
       targetPort: 26379
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $root.Values.sentinel.commonLabels ) "context" $ ) }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $root.Values.commonLabels ) "context" $ ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     statefulset.kubernetes.io/pod-name: {{ $targetPod }}
 ---

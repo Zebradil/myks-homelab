@@ -5,6 +5,7 @@ SPDX-License-Identifier: APACHE-2.0
 
 {{- if or .Release.IsUpgrade (ne .Values.sentinel.service.type "NodePort")  .Values.sentinel.service.nodePorts.redis -}}
 {{- if and (eq .Values.architecture "replication") .Values.sentinel.enabled }}
+{{- $loadBalancerIPs := coalesce .Values.sentinel.externalAccess.service.loadBalancerIPs .Values.sentinel.externalAccess.service.loadBalancerIP }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
@@ -143,7 +144,7 @@ spec:
             - |
               pod_index=($(echo "$POD_NAME" | tr "-" "\n"))
               pod_index="${pod_index[-1]}"
-              ips=($(echo "{{ .Values.sentinel.externalAccess.service.loadBalancerIP }}" | cut -d [ -f2 | cut -d ] -f 1))
+              ips=($(echo "{{ $loadBalancerIPs }}" | cut -d [ -f2 | cut -d ] -f 1))
               export REDIS_CLUSTER_ANNOUNCE_IP="${ips[$pod_index]}"
               export REDIS_NODES="${ips[@]}"
               /opt/bitnami/scripts/start-scripts/start-node.sh
@@ -374,7 +375,7 @@ spec:
             - |
               pod_index=($(echo "$POD_NAME" | tr "-" "\n"))
               pod_index="${pod_index[-1]}"
-              ips=($(echo "{{ .Values.sentinel.externalAccess.service.loadBalancerIP }}" | cut -d [ -f2 | cut -d ] -f 1))
+              ips=($(echo "{{ $loadBalancerIPs }}" | cut -d [ -f2 | cut -d ] -f 1))
               export REDIS_CLUSTER_ANNOUNCE_IP="${ips[$pod_index]}"
               export REDIS_NODES="${ips[@]}"
               /opt/bitnami/scripts/start-scripts/start-sentinel.sh
@@ -726,11 +727,6 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{- if and .Values.volumePermissions.containerSecurityContext.enabled .Values.volumePermissions.containerSecurityContext.readOnlyRootFilesystem }}
-            - name: empty-dir
-              mountPath: /tmp
-              subPath: tmp-dir
-            {{- end }}
             - name: redis-data
               mountPath: {{ .Values.replica.persistence.path }}
               {{- if .Values.replica.persistence.subPath }}
