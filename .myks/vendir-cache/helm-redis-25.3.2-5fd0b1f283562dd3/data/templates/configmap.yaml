@@ -74,8 +74,9 @@ data:
     dir "/tmp"
     port {{ .Values.sentinel.containerPorts.sentinel }}
     {{- if .Values.sentinel.externalAccess.enabled }}
-    {{- if .Values.sentinel.externalAccess.service.loadBalancerIP }}
-    sentinel monitor {{ .Values.sentinel.masterSet }} {{ index .Values.sentinel.externalAccess.service.loadBalancerIP 0 }} {{ .Values.sentinel.service.ports.redis }} {{ .Values.sentinel.quorum }}
+    {{- $loadBalancerIPs := coalesce .Values.sentinel.externalAccess.service.loadBalancerIPs .Values.sentinel.externalAccess.service.loadBalancerIP }}
+    {{- if $loadBalancerIPs }}
+    sentinel monitor {{ .Values.sentinel.masterSet }} {{ index $loadBalancerIPs 0 }} {{ .Values.sentinel.service.ports.redis }} {{ .Values.sentinel.quorum }}
     {{- end }}
     {{- else }}
     sentinel monitor {{ .Values.sentinel.masterSet }} {{ template "common.names.fullname" . }}-node-0.{{ template "common.names.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }} {{ .Values.sentinel.service.ports.redis }} {{ .Values.sentinel.quorum }}
