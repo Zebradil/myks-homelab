@@ -1,4 +1,4 @@
-FROM caddy:2.10.2-alpine
+FROM caddy:2.11.1-alpine@sha256:3b2a0196e0687279c14c27adff9fc6b44acfa318dbb97eaebe385bdf99e5364c
 
 # Copy assets to the web root
 COPY assets/Caddyfile /etc/caddy/Caddyfile
