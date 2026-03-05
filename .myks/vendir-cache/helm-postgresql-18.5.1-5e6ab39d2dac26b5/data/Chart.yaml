@@ -5,15 +5,15 @@ annotations:
       version: "5"
       image: registry-1.docker.io/bitnami/os-shell:latest
     - name: postgres-exporter
-      version: 0.19.0
+      version: 0.19.1
       image: registry-1.docker.io/bitnami/postgres-exporter:latest
     - name: postgresql
-      version: 18.2.0
+      version: 18.3.0
       image: registry-1.docker.io/bitnami/postgresql:latest
   licenses: Apache-2.0
   tanzuCategory: service
 apiVersion: v2
-appVersion: 18.2.0
+appVersion: 18.3.0
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -36,4 +36,4 @@ maintainers:
 name: postgresql
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/postgresql
-version: 18.4.1
+version: 18.5.1
