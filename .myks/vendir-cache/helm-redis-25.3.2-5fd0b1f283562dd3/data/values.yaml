@@ -1254,6 +1254,9 @@ sentinel:
   ## @param sentinel.parallelSyncs Number of replicas that can be reconfigured in parallel to use the new master after a failover
   ##
   parallelSyncs: 1
+  ## @param sentinel.replicaSyncCheck Wait for data full sync on replicas before marking them as ready (experimental)
+  ##
+  replicaSyncCheck: false
   ## @param sentinel.configuration Configuration for Redis(R) Sentinel nodes
   ## ref: https://redis.io/topics/sentinel
   ##
@@ -1608,9 +1611,6 @@ sentinel:
     ##
     enabled: false
     service:
-      ## @param sentinel.externalAccess.service.loadBalancerIPAnnotaion Name of annotation to specify fixed IP for service in.
-      ##
-      loadBalancerIPAnnotaion: ""
       ## @param sentinel.externalAccess.service.type Type for the services used to expose every Pod
       ## At this moment only LoadBalancer is supported
       ##
@@ -1618,13 +1618,12 @@ sentinel:
       ## @param sentinel.externalAccess.service.redisPort Port for the services used to expose redis-server
       ##
       redisPort: 6379
-
       ## @param sentinel.externalAccess.service.sentinelPort Port for the services used to expose redis-sentinel
       ##
       sentinelPort: 26379
-      ## @param sentinel.externalAccess.service.loadBalancerIP Array of load balancer IPs for each Redis(R) node. Length must be the same as sentinel.replicaCount
+      ## @param sentinel.externalAccess.service.loadBalancerIPs Array of load balancer IPs for each Redis(R) node. Length must be the same as sentinel.replicaCount
       ##
-      loadBalancerIP: []
+      loadBalancerIPs: []
       ## @param sentinel.externalAccess.service.loadBalancerClass Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
       ##
@@ -1639,9 +1638,11 @@ sentinel:
       ## @param sentinel.externalAccess.service.annotations Annotations to add to the services used to expose every Pod of the Redis(R) Cluster
       ##
       annotations: {}
+      ## @param sentinel.externalAccess.service.loadBalancerIPAnnotation Name of annotation to specify fixed IP for the LoadBalancer service
+      ##
+      loadBalancerIPAnnotation: ""
 
 ## @section Other Parameters
-##
 
 ## @param serviceBindings.enabled Create secret for service binding (Experimental)
 ## Ref: https://servicebinding.io/service-provider/
