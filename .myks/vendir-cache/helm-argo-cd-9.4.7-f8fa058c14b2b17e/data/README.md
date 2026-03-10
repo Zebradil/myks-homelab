@@ -902,6 +902,7 @@ NAME: my-release
 | global.runtimeClassName | string | `""` | Runtime class name for all components |
 | global.securityContext | object | `{}` (See [values.yaml]) | Toggle and define pod-level security context. |
 | global.statefulsetAnnotations | object | `{}` | Annotations for the all deployed Statefulsets |
+| global.statefulsetLabels | object | `{}` | Labels for the all deployed Statefulsets |
 | global.tolerations | list | `[]` | Default tolerations for all components |
 | global.topologySpreadConstraints | list | `[]` | Default [TopologySpreadConstraints] rules for all components |
 
@@ -925,7 +926,8 @@ NAME: my-release
 | configs.cm."resource.exclusions" | string | See [values.yaml] | Resource Exclusion/Inclusion |
 | configs.cm."statusbadge.enabled" | bool | `false` | Enable Status Badge |
 | configs.cm."timeout.hard.reconciliation" | string | `"0s"` | Timeout to refresh application data as well as target manifests cache |
-| configs.cm."timeout.reconciliation" | string | `"180s"` | Timeout to discover if a new manifests version got published to the repository |
+| configs.cm."timeout.reconciliation" | string | `"120s"` | Timeout to discover if a new manifests version got published to the repository |
+| configs.cm."timeout.reconciliation.jitter" | string | `"60s"` | Maximum jitter added to the reconciliation timeout to spread out refreshes and reduce repo-server load |
 | configs.cm.annotations | object | `{}` | Annotations to be added to argocd-cm configmap |
 | configs.cm.create | bool | `true` | Create the argocd-cm configmap for [declarative setup] |
 | configs.cmp.annotations | object | `{}` | Annotations to be added to argocd-cmp-cm configmap |
@@ -1048,6 +1050,7 @@ NAME: my-release
 | controller.serviceAccount.labels | object | `{}` | Labels applied to created service account |
 | controller.serviceAccount.name | string | `"argocd-application-controller"` | Service account name |
 | controller.statefulsetAnnotations | object | `{}` | Annotations for the application controller StatefulSet |
+| controller.statefulsetLabels | object | `{}` | Labels for the application controller StatefulSet |
 | controller.terminationGracePeriodSeconds | int | `30` | terminationGracePeriodSeconds for container lifecycle hook |
 | controller.tolerations | list | `[]` (defaults to global.tolerations) | [Tolerations] for use with node taints |
 | controller.topologySpreadConstraints | list | `[]` (defaults to global.topologySpreadConstraints) | Assign custom [TopologySpreadConstraints] rules to the application controller |
