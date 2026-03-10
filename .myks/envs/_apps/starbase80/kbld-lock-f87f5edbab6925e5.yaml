@@ -1,6 +1,6 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
-minimumRequiredVersion: 0.47.0
+minimumRequiredVersion: 0.47.1
 overrides:
 - image: jordanroher/starbase-80:1.6.4
   newImage: oci.zebradil.dev/index.docker.io-cache/jordanroher/starbase-80@sha256:0000ccf33ef464d20096ac36e75a7878017783f5d2f0dc483ed14142413a7f74

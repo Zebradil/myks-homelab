@@ -1,6 +1,6 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
-minimumRequiredVersion: 0.47.0
+minimumRequiredVersion: 0.47.1
 overrides:
 - image: mikefarah/yq:4.52.4
   newImage: oci.zebradil.dev/index.docker.io-cache/mikefarah/yq@sha256:a4c2cafdf4674b2dc3c6ac457fe1486d55d7d93edb3ed4459637afda3c286af6
