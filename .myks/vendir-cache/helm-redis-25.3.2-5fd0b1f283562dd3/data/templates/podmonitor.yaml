@@ -19,9 +19,9 @@ metadata:
 spec:
   podMetricsEndpoints:
     - port: {{ .Values.metrics.podMonitor.port }}
-      {{- if .Values.metrics.serviceMonitor.tlsConfig }}
+      {{- if .Values.metrics.podMonitor.tlsConfig }}
       scheme: https
-      tlsConfig: {{- toYaml .Values.metrics.serviceMonitor.tlsConfig | nindent 8 }}
+      tlsConfig: {{- toYaml .Values.metrics.podMonitor.tlsConfig | nindent 8 }}
       {{- end }}
       {{- if .Values.metrics.podMonitor.interval }}
       interval: {{ .Values.metrics.podMonitor.interval }}
