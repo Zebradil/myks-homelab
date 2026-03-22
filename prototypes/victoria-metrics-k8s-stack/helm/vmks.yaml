@@ -10,6 +10,21 @@ vmagent:
     extraArgs:
       promscrape.dropOriginalLabels: 'false'
 
+vmsingle:
+  enabled: false
+
+vmcluster:
+  enabled: true
+  spec:
+    replicationFactor: 1
+    retentionPeriod: 1m
+    vmstorage:
+      replicaCount: 1
+    vmselect:
+      replicaCount: 1
+    vminsert:
+      replicaCount: 1
+
 kubeControllerManager:
   service:
     enabled: false

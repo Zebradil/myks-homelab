@@ -1,0 +1,44 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMCluster
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    app.kubernetes.io/component: victoria-metrics-k8s-stack-vmcluster
+    app.kubernetes.io/instance: vmks
+    app.kubernetes.io/name: victoria-metrics-k8s-stack
+  name: vmks
+  namespace: vmks
+spec:
+  clusterVersion: v1.133.0-cluster
+  license: {}
+  replicationFactor: 1
+  retentionPeriod: 1m
+  vminsert:
+    extraArgs: {}
+    port: "8480"
+    replicaCount: 1
+    resources: {}
+  vmselect:
+    cacheMountPath: /select-cache
+    extraArgs:
+      vmalert.proxyURL: http://vmalert-vmks.vmks.svc.cluster.local.:8080
+    port: "8481"
+    replicaCount: 1
+    resources: {}
+    storage:
+      volumeClaimTemplate:
+        spec:
+          resources:
+            requests:
+              storage: 2Gi
+  vmstorage:
+    replicaCount: 1
+    resources: {}
+    storage:
+      volumeClaimTemplate:
+        spec:
+          resources:
+            requests:
+              storage: 10Gi
+    storageDataPath: /vm-data
