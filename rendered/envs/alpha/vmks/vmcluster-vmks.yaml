@@ -13,7 +13,7 @@ spec:
   clusterVersion: v1.133.0-cluster
   license: {}
   replicationFactor: 1
-  retentionPeriod: 1m
+  retentionPeriod: 30d
   vminsert:
     extraArgs: {}
     port: "8480"

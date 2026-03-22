@@ -17,7 +17,7 @@ vmcluster:
   enabled: true
   spec:
     replicationFactor: 1
-    retentionPeriod: 1m
+    retentionPeriod: 30d
     vmstorage:
       replicaCount: 1
     vmselect:
