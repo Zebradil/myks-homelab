@@ -25,7 +25,8 @@ data:
         },
         {
           "datasource": {
-            "type": "prometheus"
+            "type": "prometheus",
+            "uid": "${datasource}"
           },
           "description": "Ambient temperature near the sensor.",
           "fieldConfig": {
@@ -100,7 +101,8 @@ data:
         },
         {
           "datasource": {
-            "type": "prometheus"
+            "type": "prometheus",
+            "uid": "${datasource}"
           },
           "description": "Ambient relative humidity near the sensor.",
           "fieldConfig": {
@@ -175,7 +177,8 @@ data:
         },
         {
           "datasource": {
-            "type": "prometheus"
+            "type": "prometheus",
+            "uid": "${datasource}"
           },
           "description": "Carbon dioxide concentration in the air. PPM (parts per million) reflects volumetric gas concentration. Standard unit for tracking CO2 buildup from human activity.",
           "fieldConfig": {
@@ -258,7 +261,8 @@ data:
         },
         {
           "datasource": {
-            "type": "prometheus"
+            "type": "prometheus",
+            "uid": "${datasource}"
           },
           "description": "Total weight of particles with a diameter of 1.0 micrometers or smaller, in μg / m3",
           "fieldConfig": {
@@ -312,7 +316,8 @@ data:
         },
         {
           "datasource": {
-            "type": "prometheus"
+            "type": "prometheus",
+            "uid": "${datasource}"
           },
           "description": "Total weight of particles with a diameter of 2.5 micrometers or smaller, in μg / m3",
           "fieldConfig": {
@@ -366,7 +371,8 @@ data:
         },
         {
           "datasource": {
-            "type": "prometheus"
+            "type": "prometheus",
+            "uid": "${datasource}"
           },
           "description": "Total weight of particles with a diameter of 10.0 micrometers or smaller, in μg / m3",
           "fieldConfig": {
@@ -420,7 +426,8 @@ data:
         },
         {
           "datasource": {
-            "type": "prometheus"
+            "type": "prometheus",
+            "uid": "${datasource}"
           },
           "description": "Total number of particles with a diameter of 0.3 micrometers or smaller per 100ml air",
           "fieldConfig": {
@@ -474,7 +481,8 @@ data:
         },
         {
           "datasource": {
-            "type": "prometheus"
+            "type": "prometheus",
+            "uid": "${datasource}"
           },
           "description": "Unitless index (1 - 500) based on deviation from 24h baseline. 1 = baseline, \u003e1 = more oxidizing gases present.",
           "fieldConfig": {
@@ -537,7 +545,8 @@ data:
         },
         {
           "datasource": {
-            "type": "prometheus"
+            "type": "prometheus",
+            "uid": "${datasource}"
           },
           "description": "Unitless index (1 - 500) based on deviation from 24h baseline. 100 = baseline, \u003e100 = more VOCs present compared to the 24-hour baseline, \u003c100 = fewer VOCs compared to the 24-hour baseline. Index is used because MOx sensors respond broadly to many VOCs, making exact ppb estimates unreliable. Better for detecting relative changes in air quality. The VOC Index adapts its gain based on environment: in clean air it becomes more sensitive to small changes, and in polluted air, it reduces sensitivity to avoid saturation, ensuring relative changes remain meaningful.",
           "fieldConfig": {
@@ -617,7 +626,8 @@ data:
         },
         {
           "datasource": {
-            "type": "prometheus"
+            "type": "prometheus",
+            "uid": "${datasource}"
           },
           "description": "Ambient temperature near the sensor.",
           "fieldConfig": {
@@ -708,7 +718,8 @@ data:
         },
         {
           "datasource": {
-            "type": "prometheus"
+            "type": "prometheus",
+            "uid": "${datasource}"
           },
           "description": "Ambient relative humidity near the sensor.",
           "fieldConfig": {
@@ -812,7 +823,8 @@ data:
         },
         {
           "datasource": {
-            "type": "prometheus"
+            "type": "prometheus",
+            "uid": "${datasource}"
           },
           "description": "Carbon dioxide concentration in the air. PPM (parts per million) reflects volumetric gas concentration. Standard unit for tracking CO2 buildup from human activity.",
           "fieldConfig": {
@@ -925,7 +937,8 @@ data:
         },
         {
           "datasource": {
-            "type": "prometheus"
+            "type": "prometheus",
+            "uid": "${datasource}"
           },
           "description": "Total number of particles with a diameter of 0.3 micrometers or smaller per 100ml air",
           "fieldConfig": {
@@ -988,7 +1001,8 @@ data:
         },
         {
           "datasource": {
-            "type": "prometheus"
+            "type": "prometheus",
+            "uid": "${datasource}"
           },
           "description": "Total weight of particles with a diameter of 1.0 micrometers or smaller, in μg / m3",
           "fieldConfig": {
@@ -1051,7 +1065,8 @@ data:
         },
         {
           "datasource": {
-            "type": "prometheus"
+            "type": "prometheus",
+            "uid": "${datasource}"
           },
           "description": "Total weight of particles with a diameter of 2.5 micrometers or smaller, in μg / m3",
           "fieldConfig": {
@@ -1114,7 +1129,8 @@ data:
         },
         {
           "datasource": {
-            "type": "prometheus"
+            "type": "prometheus",
+            "uid": "${datasource}"
           },
           "description": "Total weight of particles with a diameter of 10.0 micrometers or smaller, in μg / m3",
           "fieldConfig": {
@@ -1190,7 +1206,8 @@ data:
         },
         {
           "datasource": {
-            "type": "prometheus"
+            "type": "prometheus",
+            "uid": "${datasource}"
           },
           "description": "Unitless index (1 - 500) based on deviation from 24h baseline. 100 = baseline, \u003e100 = more VOCs present compared to the 24-hour baseline, \u003c100 = fewer VOCs compared to the 24-hour baseline. Index is used because MOx sensors respond broadly to many VOCs, making exact ppb estimates unreliable. Better for detecting relative changes in air quality. The VOC Index adapts its gain based on environment: in clean air it becomes more sensitive to small changes, and in polluted air, it reduces sensitivity to avoid saturation, ensuring relative changes remain meaningful.",
           "fieldConfig": {
@@ -1273,7 +1290,8 @@ data:
         },
         {
           "datasource": {
-            "type": "prometheus"
+            "type": "prometheus",
+            "uid": "${datasource}"
           },
           "description": "Unitless index (1 - 500) based on deviation from 24h baseline. 1 = baseline, \u003e1 = more oxidizing gases present.",
           "fieldConfig": {
@@ -1355,6 +1373,24 @@ data:
       "schemaVersion": 41,
       "templating": {
         "list": [
+          {
+            "current": {
+              "selected": false,
+              "text": "VictoriaMetrics",
+              "value": "VictoriaMetrics"
+            },
+            "hide": 0,
+            "includeAll": false,
+            "label": "Datasource",
+            "multi": false,
+            "name": "datasource",
+            "options": [],
+            "query": "prometheus",
+            "refresh": 1,
+            "regex": "VictoriaMetrics.*",
+            "skipUrlSync": false,
+            "type": "datasource"
+          },
           {
             "allValue": ".*",
             "allowCustomValue": true,

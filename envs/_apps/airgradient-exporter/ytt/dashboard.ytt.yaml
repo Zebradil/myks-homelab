@@ -1,5 +1,47 @@
 #@ load("@ytt:json", "json")
 #@ load("@ytt:data", "data")
+
+#@ def update_panel_datasource(panel):
+#@   if "datasource" in panel:
+#@     ds = panel["datasource"]
+#@     if type(ds) == "dict":
+#@       ds["uid"] = "${datasource}"
+#@     end
+#@   end
+#@   if "panels" in panel:
+#@     for sub_panel in panel["panels"]:
+#@       update_panel_datasource(sub_panel)
+#@     end
+#@   end
+#@ end
+
+#@ dashboard = json.decode(data.read("dashboard.json"))
+
+#@ ds_variable = {
+#@   "current": {
+#@     "selected": False,
+#@     "text": "VictoriaMetrics",
+#@     "value": "VictoriaMetrics",
+#@   },
+#@   "hide": 0,
+#@   "includeAll": False,
+#@   "label": "Datasource",
+#@   "multi": False,
+#@   "name": "datasource",
+#@   "options": [],
+#@   "query": "prometheus",
+#@   "refresh": 1,
+#@   "regex": "VictoriaMetrics.*",
+#@   "skipUrlSync": False,
+#@   "type": "datasource",
+#@ }
+
+#@ dashboard["templating"]["list"].insert(0, ds_variable)
+
+#@ for panel in dashboard["panels"]:
+#@   update_panel_datasource(panel)
+#@ end
+
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -8,4 +50,4 @@ metadata:
   labels:
     grafana_dashboard: '1'
 data:
-  airgradient-exporter-dashboard.json: #@ json.encode(json.decode(data.read("dashboard.json")), indent=2)
+  airgradient-exporter-dashboard.json: #@ json.encode(dashboard, indent=2)

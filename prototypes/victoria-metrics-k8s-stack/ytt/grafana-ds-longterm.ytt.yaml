@@ -1,0 +1,27 @@
+#@ load("@ytt:yaml", "yaml")
+
+#@ ds_config = {
+#@   "apiVersion": 1,
+#@   "datasources": [
+#@     {
+#@       "access": "proxy",
+#@       "isDefault": False,
+#@       "name": "VictoriaMetrics (Long-Term)",
+#@       "type": "prometheus",
+#@       "url": "http://vmsingle-vmks-longterm.vmks.svc.cluster.local.:8428",
+#@     }
+#@   ],
+#@ }
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vmks-grafana-ds-longterm
+  namespace: vmks
+  labels:
+    app.kubernetes.io/instance: vmks
+    app.kubernetes.io/name: victoria-metrics-k8s-stack
+    grafana_datasource: "1"
+data:
+  datasource.yaml: #@ yaml.encode(ds_config)
