@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -e
+
+# Generate renovate.json from renovate.yaml
+if git diff --cached --name-only | grep -qE '^renovate\.(yaml|json)$'; then
+  yq -P -o json renovate.yaml > renovate.json
+  git diff --exit-code renovate.json || {
+    echo "renovate.json is out of date. Stage it and commit again."
+    exit 1
+  }
+fi

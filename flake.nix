@@ -24,11 +24,11 @@
           default = pkgs.mkShell {
             packages = with pkgs; [
               mise
-              pre-commit
+              yq-go
             ];
             shellHook = ''
+              git config core.hooksPath hooks
               mise install
-              pre-commit install
               source <(mise activate)
             '';
           };
