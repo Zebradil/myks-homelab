@@ -2,15 +2,15 @@ apiVersion: v1
 data:
   images.txt: |
     ---
-    - image: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-core@sha256:3966507a3a63e2eae2c03145f52120f86f7e72645b41e5a5783672d9a32db428
-    - image: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-db@sha256:bf94789dfd58911f6957119a10db0ae78e49d1c58f85c0e09db519d49e194e88
-    - image: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-exporter@sha256:8f21d8c31c1ea9493c5f3f27f3d649751e879c8178a4eb7901cace86694f0732
-    - image: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-jobservice@sha256:62584790a748273a299d436650955a37d90aa060bdf2ed08fa541e2272d1aa23
-    - image: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-portal@sha256:a13c6aa7a8ffa2cdc06f8eec638a1059230c5c3cbd7bb333ee93ef69a675a7d1
-    - image: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-registryctl@sha256:e148259c1f76d4a0d47aea8bc747ec4cf407ccbd6a7c9ce2f180dd64a5c26ddf
-    - image: oci.zebradil.dev/index.docker.io-cache/goharbor/redis-photon@sha256:5335482dd39cc817a168c34229e4d763aa4abde9c734df2cfd8547193ccc2f56
-    - image: oci.zebradil.dev/index.docker.io-cache/goharbor/registry-photon@sha256:d4d062d50456a269b0ba9b907c90b8d8c8176c98fe7aa5d778abd3c5b5166048
-    - image: oci.zebradil.dev/index.docker.io-cache/goharbor/trivy-adapter-photon@sha256:b1231a05e64823283204294a88157b14ef8931f80f88454287b2061eed041fa8
+    - image: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-core@sha256:a30e5a8be3d94b6485e7fdd4ed7fdf9e9724ee0a6d103b3804aacf6784ee358e
+    - image: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-db@sha256:93ea138ab491de8ff79401371db9ce843ba168cc8fa0d55974a464d75b696f6a
+    - image: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-exporter@sha256:dab60feca79fc2e14d9df879651a0a1d3a0671718ca6bf483332193dda6f73e6
+    - image: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-jobservice@sha256:e2b0298e894d725d68954b786c61c5dd607114f6129534756c8f7985124c07a6
+    - image: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-portal@sha256:2556b6c7dd832bf22ed8b177245fa5fbcd70255959e69c5d0fbe2153f4bd2243
+    - image: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-registryctl@sha256:ddf6bb429eb6b5a3db3e98bfe6ab3dd2567ebb35547836d87fc54ddacebfac8d
+    - image: oci.zebradil.dev/index.docker.io-cache/goharbor/redis-photon@sha256:f0e08db4909c21535667bd89676ac28c27003ca967830e259e3bd3aeb8e22f9c
+    - image: oci.zebradil.dev/index.docker.io-cache/goharbor/registry-photon@sha256:6533fc396cbce57131053faec55e1bd1da8b92aed318410c203ff1c7a9b910ab
+    - image: oci.zebradil.dev/index.docker.io-cache/goharbor/trivy-adapter-photon@sha256:5c6f7162804cd94d41672a694579f136ccc9730d024dda9ad24e0f42bdae6f36
 kind: ConfigMap
 metadata:
   annotations:
