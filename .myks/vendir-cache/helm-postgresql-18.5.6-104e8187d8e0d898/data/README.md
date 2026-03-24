@@ -39,7 +39,7 @@ This chart bootstraps a [PostgreSQL](https://github.com/bitnami/containers/tree/
 
 For HA, please see [this repo](https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha)
 
-## Prerequisites
+## Before you begin
 
 - Kubernetes 1.23+
 - Helm 3.8.0+
@@ -60,6 +60,8 @@ The command deploys PostgreSQL on the Kubernetes cluster in the default configur
 > **Tip**: List all releases using `helm list`
 
 ## Configuration and installation details
+
+This section describes credentials, configuration, and other installation options.
 
 ### Resource requests and limits
 
@@ -382,7 +384,7 @@ If you already have data in it, you will fail to sync to standby nodes for all c
 | `global.postgresql.auth.secretKeys.metricsPasswordKey`     | Name of key in existing secret to use for PostgreSQL credentials (overrides `auth.secretKeys.metricsPasswordKey`). Only used when `global.postgresql.auth.existingSecret` is set.                                                                                                                                                                                   | `""`         |
 | `global.postgresql.service.ports.postgresql`               | PostgreSQL service port (overrides `service.ports.postgresql`)                                                                                                                                                                                                                                                                                                      | `""`         |
 | `global.compatibility.openshift.adaptSecurityContext`      | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`       |
-| `global.defaultFips`                                       | Default value for the FIPS configuration (allowed values: '', restricted, relaxed, off). Can be overriden by the 'fips' object                                                                                                                                                                                                                                      | `restricted` |
+| `global.defaultFips`                                       | Default value for the FIPS configuration (allowed values: '', restricted, relaxed, off). Can be overridden by the 'fips' object                                                                                                                                                                                                                                     | `restricted` |
 
 ### Common parameters
 
@@ -947,6 +949,8 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/postg
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+The following subsections describe notable changes when upgrading.
 
 ### To 16.3.0
 
