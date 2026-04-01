@@ -2,14 +2,11 @@ annotations:
   artifacthub.io/category: security
   artifacthub.io/changes: |
     - kind: added
-      description: Support for 'group' attribute for Gateway API HTTPRoute ParentReference.
+      description: Updated to Authelia 4.39.16.
     - kind: added
-      description: Support for 'kind' attribute for Gateway API HTTPRoute ParentReference.
-    - kind: added
-      description: Support for 'namespace' attribute for Gateway API HTTPRoute ParentReference.
   artifacthub.io/images: |
     - name: authelia/authelia
-      image: ghcr.io/authelia/authelia:4.39.13
+      image: ghcr.io/authelia/authelia:4.39.16
       whitelisted: false
       platforms:
         - linux/amd64
@@ -35,7 +32,7 @@ annotations:
     fingerprint: 192085915BD608A458AC58DCE461FA1531286EEA
     url: https://keybase.io/authelia/pgp_keys.asc
 apiVersion: v2
-appVersion: 4.39.13
+appVersion: 4.39.16
 dependencies:
 - condition: configMap.storage.postgres.deploy
   name: postgresql
@@ -77,7 +74,7 @@ keywords:
 - OAuth 2.0
 - OpenID Connect 1.0
 - OpenID Certified™
-kubeVersion: '>= 1.13.0-0'
+kubeVersion: '>= 1.30.0-0'
 maintainers:
 - email: james-d-elliott@users.noreply.github.com
   name: james-d-elliott
@@ -87,4 +84,4 @@ sources:
 - https://github.com/authelia/chartrepo/tree/master/charts/authelia
 - https://www.github.com/authelia/authelia
 type: application
-version: 0.10.49
+version: 0.10.50

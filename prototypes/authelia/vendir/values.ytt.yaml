@@ -5,7 +5,7 @@ prototype:
     authelia:
       helmChart:
         url: https://charts.authelia.com
-        version: 0.10.49
+        version: 0.10.50
     dashboard:
       git:
         ref: v4.39.15
