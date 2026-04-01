@@ -1,2 +1,2 @@
-charts/authelia: helm-authelia-0.10.49-ed4587409dbf2ddb
+charts/authelia: helm-authelia-0.10.50-360ee2d39c92a81
 ytt/dashboard: git-authelia-v4.39.15-bec8c4fdb55843f4
