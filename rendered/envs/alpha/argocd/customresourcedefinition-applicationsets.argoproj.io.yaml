@@ -3,6 +3,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
+    argocd.argoproj.io/sync-options: ServerSideApply=true
     helm.sh/resource-policy: keep
   labels:
     app.kubernetes.io/name: applicationsets.argoproj.io
