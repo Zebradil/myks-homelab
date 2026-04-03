@@ -80,3 +80,25 @@ Map Golang values for FIPS configuration
       {{- print "fips140=off" -}}
     {{- end -}}
 {{- end -}}
+
+{{/*
+OpenSSL FIPS provider path (empty unless mode is restricted). Uses fips.openssl with global.defaultFips fallback.
+{{ include "common.fips.openssl.provider.path" (dict "fips" .Values.fips "global" .Values.global) }}
+*/}}
+{{- define "common.fips.openssl.provider.path" -}}
+    {{- $openssl := get (.fips) "openssl" -}}
+    {{/* Boolean false means off (unquoted in values) */}}
+    {{- if and (eq (kindOf $openssl) "bool") (not $openssl) -}}
+        {{- $openssl = "off" -}}
+    {{- end -}}
+    {{- $defaultFips := (.global).defaultFips -}}
+    {{- if and (eq (kindOf $defaultFips) "bool") (not $defaultFips) -}}
+        {{- $defaultFips = "off" -}}
+    {{- end -}}
+    {{- $value := $openssl | default $defaultFips -}}
+    {{- if empty $value -}}
+        {{- printf "Please configure a value for 'fips.openssl' or 'global.defaultFips'" | fail -}}
+    {{- else -}}
+        {{- ternary "/etc/ssl/provider_fips.cnf" "" (eq $value "restricted") | print -}}
+    {{- end -}}
+{{- end -}}
