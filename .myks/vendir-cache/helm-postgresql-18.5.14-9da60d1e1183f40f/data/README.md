@@ -1123,7 +1123,7 @@ postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
 
 In this version the chart was adapted to follow the [Helm standard labels](https://helm.sh/docs/chart_best_practices/labels/#standard-labels).
 
-- Some inmutable objects were modified to adopt Helm standard labels introducing backward incompatibilities.
+- Some immutable objects were modified to adopt Helm standard labels introducing backward incompatibilities.
 
 #### How to upgrade to version 9.0.0
 
