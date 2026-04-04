@@ -1,0 +1,10 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - configDigest: f677b32d4b7e21911748de2dd3f5efc62e0ae91edb9d1b856c5419ae33bf8e13
+    helmChart:
+      appVersion: 2.14.3
+      version: 1.18.3
+    path: .
+  path: .myks/vendir-cache/helm-harbor-1.18.3-1648738fa5d2b8f2/data
+kind: LockConfig
