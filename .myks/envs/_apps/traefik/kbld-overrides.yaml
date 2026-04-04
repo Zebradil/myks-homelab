@@ -1,7 +1,7 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 overrides:
-    - image: docker.io/traefik:v3.6.11
-      newImage: oci.zebradil.dev/index.docker.io-cache/library/traefik:v3.6.11
+    - image: docker.io/traefik:v3.6.12
+      newImage: oci.zebradil.dev/index.docker.io-cache/library/traefik:v3.6.12
     - image: registry.access.redhat.com/ubi8/ubi:8.9
       newImage: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8/ubi:8.9
