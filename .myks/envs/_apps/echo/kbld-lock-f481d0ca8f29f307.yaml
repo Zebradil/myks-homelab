@@ -1,0 +1,7 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.47.1
+overrides:
+- image: ghcr.io/mendhak/http-https-echo:40
+  newImage: oci.zebradil.dev/ghcr.io-cache/mendhak/http-https-echo@sha256:d072446da821a767d05dc19fa5ab6a27b1150bfb5c6ecfaecf3a2e5f9812794c
+  preresolved: true
