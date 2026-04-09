@@ -17,6 +17,12 @@ packageRules:
       - digest
     minimumReleaseAge: 7 days
     automerge: true
+  - description: Group differently-named myks dependencies
+    matchDepNames:
+      - mykso/myks
+      - github:mykso/myks
+    groupName: myks
+    groupSlug: myks
   - description: Group Helm updates together
     matchPackageNames:
       - helm
