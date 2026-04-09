@@ -50,6 +50,13 @@ rules:
     verbs:
       - update
   - apiGroups:
+      - cert-manager.io
+    resources:
+      - clusterissuers/finalizers
+      - issuers/finalizers
+    verbs:
+      - update
+  - apiGroups:
       - ""
     resources:
       - secrets

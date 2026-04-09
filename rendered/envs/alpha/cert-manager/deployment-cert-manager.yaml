@@ -30,7 +30,7 @@ spec:
             - --v=2
             - --cluster-resource-namespace=$(POD_NAMESPACE)
             - --leader-election-namespace=kube-system
-            - --acme-http01-solver-image=quay.io/jetstack/cert-manager-acmesolver:v1.19.4
+            - --acme-http01-solver-image=quay.io/jetstack/cert-manager-acmesolver:v1.20.1
             - --default-issuer-name=cloudflare-zerossl
             - --default-issuer-kind=ClusterIssuer
             - --max-concurrent-challenges=60
@@ -39,7 +39,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-          image: oci.zebradil.dev/quay.io-cache/jetstack/cert-manager-controller@sha256:9cad8065bbf57815cbcfa813b903dd8822bcd0271f7443192082b54e96a55585
+          image: oci.zebradil.dev/quay.io-cache/jetstack/cert-manager-controller@sha256:9f9556b4b131554694c67c8229d231b1f7d69b882b5f061a56bafa465f3b22fc
           livenessProbe:
             failureThreshold: 8
             httpGet:
