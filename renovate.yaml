@@ -1,4 +1,4 @@
-# Run `pre-commit run generate-renovate-json` to generate renovate.json from this file.
+# Run `yq -P -o json renovate.yaml > renovate.json` to generate renovate.json from this file.
 
 $schema: https://docs.renovatebot.com/renovate-schema.json
 extends:
@@ -8,6 +8,7 @@ extends:
 gitIgnoredAuthors:
   - renovate[bot]@users.noreply.github.com
   - github-actions[bot]@users.noreply.github.com
+rebaseWhen: conflicted
 packageRules:
   - matchUpdateTypes:
       - minor
