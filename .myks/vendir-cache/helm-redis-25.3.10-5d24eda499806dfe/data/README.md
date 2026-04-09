@@ -52,7 +52,7 @@ The main features of each chart are the following:
 | Single write point (single master)                     | Multiple write points (multiple masters)                               |
 | ![Redis&reg; Topology](img/redis-topology.png) | ![Redis&reg; Cluster Topology](img/redis-cluster-topology.png) |
 
-## Prerequisites
+## Before you begin
 
 - Kubernetes 1.23+
 - Helm 3.8.0+
@@ -60,19 +60,32 @@ The main features of each chart are the following:
 
 ## Installing the Chart
 
-To install the chart with the release name `my-release`:
+First, create a secret with your registry credentials:
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redis
+kubectl create secret docker-registry SECRET_NAME -n NAMESPACE \
+  --docker-server REGISTRY_NAME \
+  --docker-username "USER" \
+  --docker-password "TOKEN"
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+> **Note** You need to substitute the placeholders `SECRET_NAME`, `NAMESPACE`, `REGISTRY_NAME`, `USER`, and `TOKEN` with your actual values.
+
+Then install the chart with the release name `my-release`:
+
+```console
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redis --set "global.imagePullSecrets[0]=SECRET_NAME" -n NAMESPACE
+```
+
+> **Note** You need to substitute the placeholders `REGISTRY_NAME`, `REPOSITORY_NAME`, `SECRET_NAME`, and `NAMESPACE` with your actual values.
 
 The command deploys Redis&reg; on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
 ## Configuration and installation details
+
+This section describes credentials, configuration, and other installation options.
 
 ### Resource requests and limits
 
@@ -392,7 +405,7 @@ Follow the following steps:
        save ""
     ```
 
-    > *Note that the `Enable AOF` comment belongs to the original config file and what you're actually doing is disabling it. This change will only be neccessary for the temporal cluster you're creating to upload the dump.*
+    > *Note that the `Enable AOF` comment belongs to the original config file and what you're actually doing is disabling it. This change will only be necessary for the temporal cluster you're creating to upload the dump.*
 
 - Start the new cluster to create the PVCs. Use the command below as an example:
 
@@ -498,7 +511,7 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 | `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`         |
 | `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`         |
 | `global.redis.password`                               | Global Redis(R) password (overrides `auth.password`)                                                                                                                                                                                                                                                                                                                | `""`         |
-| `global.defaultFips`                                  | Default value for the FIPS configuration (allowed values: '', restricted, relaxed, off). Can be overriden by the 'fips' object                                                                                                                                                                                                                                      | `restricted` |
+| `global.defaultFips`                                  | Default value for the FIPS configuration (allowed values: '', restricted, relaxed, off). Can be overridden by the 'fips' object                                                                                                                                                                                                                                     | `restricted` |
 | `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false`      |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`       |
 
@@ -831,6 +844,7 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 | `sentinel.downAfterMilliseconds`                             | Timeout for detecting a Redis(R) node is down                                                                                                                                                                                       | `60000`                          |
 | `sentinel.failoverTimeout`                                   | Timeout for performing a election failover                                                                                                                                                                                          | `180000`                         |
 | `sentinel.parallelSyncs`                                     | Number of replicas that can be reconfigured in parallel to use the new master after a failover                                                                                                                                      | `1`                              |
+| `sentinel.replicaSyncCheck`                                  | Wait for data full sync on replicas before marking them as ready (experimental)                                                                                                                                                     | `false`                          |
 | `sentinel.configuration`                                     | Configuration for Redis(R) Sentinel nodes                                                                                                                                                                                           | `""`                             |
 | `sentinel.command`                                           | Override default container command (useful when using custom images)                                                                                                                                                                | `[]`                             |
 | `sentinel.args`                                              | Override default container args (useful when using custom images)                                                                                                                                                                   | `[]`                             |
@@ -925,14 +939,14 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 | `sentinel.terminationGracePeriodSeconds`                     | Integer setting the termination grace period for the redis-node pods                                                                                                                                                                | `30`                             |
 | `sentinel.extraPodSpec`                                      | Optionally specify extra PodSpec for the Redis(R) Sentinel pod(s)                                                                                                                                                                   | `{}`                             |
 | `sentinel.externalAccess.enabled`                            | Enable external access to the Redis                                                                                                                                                                                                 | `false`                          |
-| `sentinel.externalAccess.service.loadBalancerIPAnnotaion`    | Name of annotation to specify fixed IP for service in.                                                                                                                                                                              | `""`                             |
 | `sentinel.externalAccess.service.type`                       | Type for the services used to expose every Pod                                                                                                                                                                                      | `LoadBalancer`                   |
 | `sentinel.externalAccess.service.redisPort`                  | Port for the services used to expose redis-server                                                                                                                                                                                   | `6379`                           |
 | `sentinel.externalAccess.service.sentinelPort`               | Port for the services used to expose redis-sentinel                                                                                                                                                                                 | `26379`                          |
-| `sentinel.externalAccess.service.loadBalancerIP`             | Array of load balancer IPs for each Redis(R) node. Length must be the same as sentinel.replicaCount                                                                                                                                 | `[]`                             |
+| `sentinel.externalAccess.service.loadBalancerIPs`            | Array of load balancer IPs for each Redis(R) node. Length must be the same as sentinel.replicaCount                                                                                                                                 | `[]`                             |
 | `sentinel.externalAccess.service.loadBalancerClass`          | Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)                                                                                                                                                    | `""`                             |
 | `sentinel.externalAccess.service.loadBalancerSourceRanges`   | Service Load Balancer sources                                                                                                                                                                                                       | `[]`                             |
 | `sentinel.externalAccess.service.annotations`                | Annotations to add to the services used to expose every Pod of the Redis(R) Cluster                                                                                                                                                 | `{}`                             |
+| `sentinel.externalAccess.service.loadBalancerIPAnnotation`   | Name of annotation to specify fixed IP for the LoadBalancer service                                                                                                                                                                 | `""`                             |
 
 ### Other Parameters
 
@@ -1148,6 +1162,8 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/redis
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+The following subsections describe notable changes when upgrading.
 
 ### To 20.5.0
 
