@@ -52,7 +52,7 @@ spec:
           envFrom:
             - secretRef:
                 name: harbor-registry
-          image: oci.zebradil.dev/index.docker.io-cache/goharbor/registry-photon@sha256:6533fc396cbce57131053faec55e1bd1da8b92aed318410c203ff1c7a9b910ab
+          image: oci.zebradil.dev/index.docker.io-cache/goharbor/registry-photon@sha256:beb49fd16cf0906c04a2bf51a22f7210289e7cc2ae43a733e2a0364380aceae6
           livenessProbe:
             httpGet:
               path: /
@@ -108,7 +108,7 @@ spec:
                 name: harbor-registry
             - secretRef:
                 name: harbor-registryctl
-          image: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-registryctl@sha256:ddf6bb429eb6b5a3db3e98bfe6ab3dd2567ebb35547836d87fc54ddacebfac8d
+          image: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-registryctl@sha256:463172f71d3a1e8d4f9e3b4e687a447f41fbc3126316d8c150dba04a903bbc47
           livenessProbe:
             httpGet:
               path: /api/health
