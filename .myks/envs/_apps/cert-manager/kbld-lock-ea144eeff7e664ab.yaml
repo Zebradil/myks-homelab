@@ -1,6 +1,6 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
-minimumRequiredVersion: 0.47.1
+minimumRequiredVersion: 0.47.2
 overrides:
 - image: quay.io/jetstack/cert-manager-cainjector:v1.20.1
   newImage: oci.zebradil.dev/quay.io-cache/jetstack/cert-manager-cainjector@sha256:a3ff773a577d8ff6ad1fe9ab4ea0b74873e0341e0aac5d9411f3fc235f51bdf8
