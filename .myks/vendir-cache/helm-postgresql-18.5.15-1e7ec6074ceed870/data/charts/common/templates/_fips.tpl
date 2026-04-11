@@ -73,7 +73,7 @@ Map Golang values for FIPS configuration
 */}}
 {{- define "common.fips.golang" -}}
     {{- if eq .value "restricted" -}}
-      {{- print "fips140=only" -}}
+      {{- print "fips140=only,tlsmlkem=0" -}}
     {{- else if eq .value "relaxed" -}}
       {{- print "fips140=on" -}}
     {{- else -}}

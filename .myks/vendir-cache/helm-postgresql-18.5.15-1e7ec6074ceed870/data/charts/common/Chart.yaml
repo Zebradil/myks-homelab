@@ -22,4 +22,4 @@ name: common
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/common
 type: library
-version: 2.37.0
+version: 2.38.0
