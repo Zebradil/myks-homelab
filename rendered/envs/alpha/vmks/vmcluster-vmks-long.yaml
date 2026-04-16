@@ -21,7 +21,6 @@ spec:
     replicaCount: 1
     resources: {}
   vmselect:
-    enabled: true
     extraArgs:
       storageNode: vmstorage-vmks-0.vmstorage-vmks.vmks.svc.cluster.local.:8401,vmstorage-vmks-long-0.vmstorage-vmks-long.vmks.svc.cluster.local.:8401
     replicaCount: 1
