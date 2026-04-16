@@ -1,0 +1,108 @@
+#@ load("@ytt:overlay", "overlay")
+#@ load("remove-labels.star", "m")
+#@ load("/overlay-matchers.star", "matchers")
+
+---
+#@ def metadata_labels():
+#@overlay/match by=m.metadata_labels, when=1
+metadata:
+  #@overlay/match-child-defaults missing_ok=True
+  labels:
+    #@overlay/remove
+    chart:
+    #@overlay/remove
+    helm.sh/chart:
+    #@overlay/remove
+    app.kubernetes.io/version:
+    #@overlay/match by=m.managed_by_helm
+    #@overlay/remove
+    _:
+#@ end
+
+---
+#@ def metadata_empty_labels():
+#@overlay/match by=m.metadata_labels, when=1
+metadata:
+  #@overlay/match by=matchers.empty("labels"), when=1
+  #@overlay/remove
+  labels:
+#@ end
+
+---
+#@ def spec_selector_labels():
+#@overlay/match by=m.spec_selector_labels, when=1
+spec:
+  selector:
+    #@overlay/match-child-defaults missing_ok=True
+    matchLabels:
+      #@overlay/remove
+      chart:
+      #@overlay/remove
+      helm.sh/chart:
+      #@overlay/remove
+      app.kubernetes.io/version:
+      #@overlay/match by=m.managed_by_helm
+      #@overlay/remove
+      _:
+#@ end
+
+---
+#@ def spec_simple_selector_labels():
+#@overlay/match by=m.spec_simple_selector_labels, when=1
+spec:
+  #@overlay/match-child-defaults missing_ok=True
+  selector:
+    #@overlay/remove
+    chart:
+    #@overlay/remove
+    helm.sh/chart:
+    #@overlay/remove
+    app.kubernetes.io/version:
+    #@overlay/match by=m.managed_by_helm
+    #@overlay/remove
+    _:
+#@ end
+
+---
+#@ def spec_template_labels():
+#@overlay/match by=m.spec_template_labels, when=1
+spec:
+  template:
+    metadata:
+      #@overlay/match-child-defaults missing_ok=True
+      labels:
+        #@overlay/remove
+        chart:
+        #@overlay/remove
+        helm.sh/chart:
+        #@overlay/remove
+        app.kubernetes.io/version:
+        #@overlay/match by=m.managed_by_helm
+        #@overlay/remove
+        _:
+#@ end
+
+---
+#@ def spec_template_empty_labels():
+#@overlay/match by=m.spec_template_labels, when=1
+spec:
+  template:
+    metadata:
+      #@overlay/match by=matchers.empty("labels"), when=1
+      #@overlay/remove
+      labels:
+#@ end
+
+#@ def apply_overlays(fragment, _):
+#@   for fn in [
+#@     metadata_labels,
+#@     metadata_empty_labels,
+#@     spec_simple_selector_labels,
+#@     spec_selector_labels,
+#@     spec_template_labels,
+#@     spec_template_empty_labels
+#@   ]:
+#@     fragment = overlay.apply(fragment, fn())
+#@   end
+#@   return fragment
+#@ end

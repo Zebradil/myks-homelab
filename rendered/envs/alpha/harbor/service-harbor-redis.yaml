@@ -6,10 +6,8 @@ metadata:
   labels:
     app: harbor
     app.kubernetes.io/instance: harbor
-    app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: harbor
     app.kubernetes.io/part-of: harbor
-    chart: harbor
     heritage: Helm
     release: harbor
   name: harbor-redis

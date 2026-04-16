@@ -134,6 +134,7 @@ helm:
   kubeVersion: 1.33.1
   namespace: ""
   charts: []
+  removeLabels: true
 kbld:
   enabled: true
   imagesAnnotation: false

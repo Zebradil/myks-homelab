@@ -1,0 +1,26 @@
+#! This file contains an overlay that trims helm chart labels from the rendered manifests.
+#! These labels change in every manifest with every helm chart version and pollute the diff.
+#! Since we can track versions of manifest sources via ArgoCD and git, the labels do not provide any value.
+
+#@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
+#@ load("/helm/remove-labels.lib.yaml", "apply_overlays")
+
+#@ if data.values.helm.removeLabels:
+#@overlay/match by=overlay.all, expects="1+"
+--- #@overlay/replace via=apply_overlays
+
+#! PrometheusAgent and Prometheus resources are uncommon and are not included in the library.
+#@overlay/match by=lambda i, l, r: l["kind"] in ["PrometheusAgent", "Prometheus"], expects="0+"
+---
+spec:
+  #@overlay/match when=1
+  podMetadata:
+    labels:
+      #@overlay/remove
+      #@overlay/match missing_ok=True
+      helm.sh/chart:
+      #@overlay/remove
+      #@overlay/match missing_ok=True
+      app.kubernetes.io/version:
+#@ end

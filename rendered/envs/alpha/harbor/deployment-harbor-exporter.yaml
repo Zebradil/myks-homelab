@@ -7,10 +7,8 @@ metadata:
     app: harbor
     app.kubernetes.io/component: exporter
     app.kubernetes.io/instance: harbor
-    app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: harbor
     app.kubernetes.io/part-of: harbor
-    chart: harbor
     component: exporter
     heritage: Helm
     release: harbor
@@ -33,10 +31,8 @@ spec:
         app: harbor
         app.kubernetes.io/component: exporter
         app.kubernetes.io/instance: harbor
-        app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: harbor
         app.kubernetes.io/part-of: harbor
-        chart: harbor
         component: exporter
         heritage: Helm
         release: harbor

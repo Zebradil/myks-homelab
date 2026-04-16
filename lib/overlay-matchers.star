@@ -22,30 +22,27 @@
 #       type: Recreate
 #
 
-
 load("@ytt:overlay", "overlay")
 load("@ytt:struct", "struct")
+load("/util.star", "deep_check")
 
 # kind_name creates a matcher that matches a resource by kind and name.
 #   Example: kind_name("Deployment", "velero")
 def kind_name(kind, name):
-    return overlay.subset({
-        "kind": kind,
-        "metadata": {
-            "name": name,
-        },
-    })
+  return overlay.subset({
+    "kind": kind,
+    "metadata": {
+      "name": name,
+    },
+  })
 end
 
 # kind_name_prefix creates a matcher that matches a resource by kind and a name
 # prefix.
 def kind_name_prefix(kind, prefix):
-    kind = overlay.subset({
-        "kind": kind,
-    })
-    prefix_match = lambda idx, left, right: left["metadata"]["name"].startswith(prefix)
-
-    return overlay.and_op(kind, prefix_match)
+  kind = overlay.subset({"kind": kind})
+  prefix_match = lambda idx, left, right: left["metadata"]["name"].startswith(prefix)
+  return overlay.and_op(kind, prefix_match)
 end
 
 # value creates a matcher that matches a resource by a specific value.
@@ -53,23 +50,27 @@ end
 # If no value is provided, it matches by the value specified in the overlay.
 #   Example: value() matches the node if its value is equal to the value specified in the overlay.
 def value(val=None):
-    if val == None:
-        return lambda i, l, r: l == r
-    end
-    return lambda i, l, r: l == val
+  if val == None:
+    return lambda i, l, r: l == r
+  end
+  return lambda i, l, r: l == val
 end
 
 def empty(id_or_name=None):
-    if id_or_name == None:
-        return lambda i, l, r: dict(**l) == {}
-    end
-    return lambda i, l, r: i == id_or_name and dict(**l) == {}
+  if id_or_name == None:
+    return lambda i, l, r: dict(**l) == {}
+  end
+  return lambda i, l, r: i == id_or_name and dict(**l) == {}
 end
 
+def exists(*keys):
+  return lambda i, l, r: deep_check(l, *keys)
+end
 
 matchers = struct.make(
-    empty=empty,
-    kind_name=kind_name,
-    kind_name_prefix=kind_name_prefix,
-    value=value,
+  empty=empty,
+  exists=exists,
+  kind_name=kind_name,
+  kind_name_prefix=kind_name_prefix,
+  value=value,
 )

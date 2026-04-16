@@ -11,3 +11,9 @@ environment:
       web: ['']
   nodes:
     - ''
+
+#! Extra features for the helm plugin
+#@overlay/match-child-defaults missing_ok=True
+helm:
+  #! Remove most of the helm-specific labels and annotations
+  removeLabels: true
