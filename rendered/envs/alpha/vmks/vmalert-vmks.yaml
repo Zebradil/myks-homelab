@@ -12,7 +12,7 @@ metadata:
 spec:
   configMaps: []
   datasource:
-    url: http://vmselect-vmks.vmks.svc.cluster.local.:8481/select/0/prometheus
+    url: http://vmselect-vmks-long.vmks.svc.cluster.local.:8481/select/0/prometheus
   evaluationInterval: 20s
   externalLabels: {}
   extraArgs:
@@ -27,7 +27,7 @@ spec:
     - url: http://vmalertmanager-vmks-0.vmalertmanager-vmks.vmks.svc.cluster.local.:9093
   port: "8080"
   remoteRead:
-    url: http://vmselect-vmks.vmks.svc.cluster.local.:8481/select/0/prometheus
+    url: http://vmselect-vmks-long.vmks.svc.cluster.local.:8481/select/0/prometheus
   remoteWrite:
     url: http://vminsert-vmks.vmks.svc.cluster.local.:8480/insert/0/prometheus/api/v1/write
   selectAllByDefault: true

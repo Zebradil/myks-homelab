@@ -9,6 +9,12 @@ vmagent:
   spec:
     extraArgs:
       promscrape.dropOriginalLabels: 'false'
+  additionalRemoteWrites:
+    - url: 'http://vminsert-vmks-long.vmks.svc.cluster.local.:8480/insert/0/prometheus/api/v1/write'
+      inlineUrlRelabelConfig:
+        - source_labels: [__name__]
+          regex: 'airgradient_.*'
+          action: keep
 
 vmsingle:
   enabled: false
@@ -21,9 +27,14 @@ vmcluster:
     vmstorage:
       replicaCount: 1
     vmselect:
-      replicaCount: 1
+      enabled: false
     vminsert:
       replicaCount: 1
+
+external:
+  vm:
+    read:
+      url: 'http://vmselect-vmks-long.vmks.svc.cluster.local.:8481/select/0/prometheus'
 
 kubeControllerManager:
   service:

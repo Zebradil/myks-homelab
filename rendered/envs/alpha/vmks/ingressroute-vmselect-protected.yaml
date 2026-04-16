@@ -3,17 +3,17 @@ kind: IngressRoute
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
-  name: vmsingle-protected
+  name: vmselect-protected
 spec:
   entryPoints:
     - web
     - websecure
   routes:
     - kind: Rule
-      match: Host(`vmsingle.zebradil.dev`) || Host(`vmsingle.gray.zebradil.dev`) || Host(`vmsingle.junior.zebradil.dev`)
+      match: Host(`vmselect.zebradil.dev`) || Host(`vmselect.gray.zebradil.dev`) || Host(`vmselect.junior.zebradil.dev`)
       middlewares:
         - name: chain-authelia-auth
           namespace: authelia
       services:
-        - name: vmsingle-vmks
+        - name: vmselect-vmks-long
           port: http

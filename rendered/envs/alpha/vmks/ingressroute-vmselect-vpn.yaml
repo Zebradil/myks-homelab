@@ -3,14 +3,14 @@ kind: IngressRoute
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
-  name: vmsingle-vpn
+  name: vmselect-vpn
 spec:
   entryPoints:
     - vpn-web
     - vpn-websecure
   routes:
     - kind: Rule
-      match: Host(`vmsingle.ts.zebradil.dev`) || Host(`vmsingle.gray.ts.zebradil.dev`) || Host(`vmsingle.junior.ts.zebradil.dev`)
+      match: Host(`vmselect.ts.zebradil.dev`) || Host(`vmselect.gray.ts.zebradil.dev`) || Host(`vmselect.junior.ts.zebradil.dev`)
       services:
-        - name: vmsingle-vmks
+        - name: vmselect-vmks-long
           port: http
