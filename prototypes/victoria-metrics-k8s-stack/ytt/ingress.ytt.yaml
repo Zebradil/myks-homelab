@@ -7,7 +7,10 @@
 #@ for/end route_doc in route.default("alertmanager", "vmalertmanager-vmks"):
 --- #@ route_doc
 
-#@ for component in ["vmalert", "vmagent", "vmsingle"]:
+#@ for component in ["vmalert", "vmagent"]:
 #@   for/end route_doc in route.default(component, component + "-vmks"):
 --- #@ route_doc
 #@ end
+
+#@ for/end route_doc in route.default("vmselect", "vmselect-vmks-long"):
+--- #@ route_doc

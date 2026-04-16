@@ -19,6 +19,12 @@ spec:
   license: {}
   port: "8429"
   remoteWrite:
+    - inlineUrlRelabelConfig:
+        - action: keep
+          regex: airgradient_.*
+          source_labels:
+            - __name__
+      url: http://vminsert-vmks-long.vmks.svc.cluster.local.:8480/insert/0/prometheus/api/v1/write
     - url: http://vminsert-vmks.vmks.svc.cluster.local.:8480/insert/0/prometheus/api/v1/write
   scrapeInterval: 20s
   selectAllByDefault: true
