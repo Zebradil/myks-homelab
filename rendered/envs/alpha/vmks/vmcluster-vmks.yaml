@@ -1,6 +1,8 @@
 apiVersion: operator.victoriametrics.com/v1beta1
 kind: VMCluster
 metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
     app.kubernetes.io/component: victoria-metrics-k8s-stack-vmcluster
     app.kubernetes.io/instance: vmks

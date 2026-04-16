@@ -3,15 +3,31 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:overlay", "overlay")
 
+#@ has_metadata = lambda i, l, r: "metadata" in l
+
+#@ def metadata_patch():
+#! See https://ambassadorlabs.github.io/k8s-for-humans/
+#@overlay/match missing_ok=True
+annotations:
+  a8r.io/repository: #@ data.values.myks.gitRepoUrl
+  #! More examples:
+  #! a8r.io/owner: https://github.com/mykso
+  #! a8r.io/chat: #@ data.values.application.chat
+#@ end
+
 #! Add common labels and annotations to all resources.
 #! ------------------------------------------------------------
-#@overlay/match by=lambda i, l, r: "metadata" in l, when="1+"
+#@overlay/match by=has_metadata, when="1+"
 ---
 #@overlay/match-child-defaults missing_ok=True
-metadata:
-  #! See https://ambassadorlabs.github.io/k8s-for-humans/
-  annotations:
-    a8r.io/repository: #@ data.values.myks.gitRepoUrl
-    #! More examples:
-    #! a8r.io/owner: https://github.com/mykso
-    #! a8r.io/chat: #@ data.values.application.chat
+metadata: #@ metadata_patch()
+
+
+#! Add common labels and annotations to resources enclosed in Lists
+#! ------------------------------------------------------------
+#@overlay/match by=overlay.subset({"kind":"List"}), when="1+"
+---
+items:
+  #@overlay/match by=has_metadata, when="1+"
+  - #@overlay/match-child-defaults missing_ok=True
+    metadata: #@ metadata_patch()
