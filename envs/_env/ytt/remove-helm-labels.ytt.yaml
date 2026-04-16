@@ -10,6 +10,14 @@
 #@overlay/match by=overlay.all, expects="1+"
 --- #@overlay/replace via=apply_overlays
 
+#! Handle List-enclosed resources
+#@overlay/match by=overlay.subset({"kind":"List"}), when="1+"
+---
+items:
+  #@overlay/match by=overlay.all, when="1+"
+  -  #@overlay/replace via=apply_overlays
+
+
 #! PrometheusAgent and Prometheus resources are uncommon and are not included in the library.
 #@overlay/match by=lambda i, l, r: l["kind"] in ["PrometheusAgent", "Prometheus"], expects="0+"
 ---

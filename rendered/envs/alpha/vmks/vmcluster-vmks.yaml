@@ -6,10 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/component: victoria-metrics-k8s-stack-vmcluster
     app.kubernetes.io/instance: vmks
-    app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: victoria-metrics-k8s-stack
-    app.kubernetes.io/version: v1.133.0
-    helm.sh/chart: victoria-metrics-k8s-stack-0.67.0
   name: vmks
   namespace: vmks
 spec:
