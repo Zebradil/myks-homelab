@@ -1,0 +1,18 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: vmui-lan
+spec:
+  entryPoints:
+    - lan-web
+    - lan-websecure
+  routes:
+    - kind: Rule
+      match: Host(`vmui.lan.zebradil.dev`) || Host(`vmui.gray.lan.zebradil.dev`) || Host(`vmui.junior.lan.zebradil.dev`)
+      services:
+        - name: vmselect-vmks-long
+          port: http
+    - middlewares:
+        - name: vmui-alias-redirect

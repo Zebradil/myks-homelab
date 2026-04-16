@@ -1,4 +1,5 @@
 #@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
 #@ load("traefik.lib.yaml", "route")
 
 #@ for/end route_doc in route.default("grafana", "vmks-grafana"):
@@ -14,3 +15,26 @@
 
 #@ for/end route_doc in route.default("vmselect", "vmselect-vmks-long"):
 --- #@ route_doc
+
+#@ middleware_name = "vmui-alias-redirect"
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: #@ middleware_name
+spec:
+  redirectRegex:
+    regex: '^https?://vmui\.([^/]+)(/.*)?$'
+    replacement: 'https://vmselect.${1}/select/0/vmui/'
+    permanent: true
+
+---
+#@ def add_middleware():
+spec:
+  routes:
+    - middlewares:
+        - name: #@ middleware_name
+#@ end
+
+#@ for/end route_doc in route.default("vmui", "vmselect-vmks-long"):
+--- #@ overlay.apply(route_doc, add_middleware())
