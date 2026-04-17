@@ -46,6 +46,7 @@ environment:
       name: it-tools
     - proto: jellyfin
     - proto: k3s-private-registries
+    - proto: karma
     - proto: librespeed
     - proto: pacoloco
     - proto: paperless

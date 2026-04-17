@@ -1,0 +1,101 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:yaml", "yaml")
+
+#@ dv = data.values
+#@ name = dv.myks.context.app
+#@ labels = { "app.kubernetes.io/name": name }
+#@ app = dv.application
+#@ port_name = "http"
+#@ config_name = "config"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels: #@ labels
+  name: #@ name
+  namespace: #@ name
+spec:
+  selector:
+    matchLabels: #@ labels
+  template:
+    metadata:
+      labels: #@ labels
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: karma
+          image: #@ app.image
+          env:
+            - name: CONFIG_FILE
+              value: /etc/karma/karma.yaml
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: #@ port_name
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: #@ port_name
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          ports:
+            - containerPort: #@ app.port
+              name: #@ port_name
+              protocol: TCP
+          resources: #@ app.resources
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 2000
+          volumeMounts:
+            - mountPath: /etc/karma
+              name: #@ config_name
+      volumes:
+        - configMap:
+            name: #@ config_name
+          name: #@ config_name
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels: #@ labels
+  name: #@ name
+  namespace: #@ name
+spec:
+  ports:
+    - name: #@ port_name
+      port: #@ app.port
+      protocol: TCP
+      targetPort: #@ port_name
+  selector: #@ labels
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: #@ config_name
+  namespace: #@ name
+data:
+  karma.yaml: #@ yaml.encode(app.config)
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels: #@ labels
+  name: #@ name
+  namespace: #@ name
+spec:
+  endpoints:
+    - port: #@ port_name
+  namespaceSelector:
+    matchNames:
+      -  #@ name
+  selector:
+    matchLabels: #@ labels
+

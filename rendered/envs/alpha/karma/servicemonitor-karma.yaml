@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    app.kubernetes.io/name: karma
+  name: karma
+  namespace: karma
+spec:
+  endpoints:
+    - port: http
+  namespaceSelector:
+    matchNames:
+      - karma
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: karma

@@ -1,0 +1,20 @@
+apiVersion: v1
+data:
+  karma.yaml: |
+    alertmanager:
+      interval: 1m
+      servers:
+      - name: default
+        uri: ""
+        timeout: 20s
+        proxy: true
+      - uri: http://vmalertmanager-vmks.vmks.svc.cluster.local
+    listen:
+      address: 0.0.0.0
+      port: 8080
+kind: ConfigMap
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: config
+  namespace: karma

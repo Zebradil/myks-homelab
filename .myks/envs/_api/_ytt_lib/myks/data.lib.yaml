@@ -80,6 +80,8 @@ environment:
     name: ""
   - proto: k3s-private-registries
     name: ""
+  - proto: karma
+    name: ""
   - proto: librespeed
     name: ""
   - proto: pacoloco

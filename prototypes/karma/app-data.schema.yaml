@@ -1,0 +1,25 @@
+#@data/values-schema
+
+#@ port = 8080
+---
+#@overlay/match-child-defaults missing_ok=True
+application:
+  port: #@ port
+  #! renovate: datasource=docker
+  image: ghcr.io/prymitive/karma:v0.129
+  resources:
+    requests:
+      memory: 64Mi
+      cpu: 50m
+  #@schema/type any=True
+  config:
+    alertmanager:
+      interval: 1m
+      servers:
+        - name: default
+          uri: ''
+          timeout: 20s
+          proxy: true
+    listen:
+      address: '0.0.0.0'
+      port: #@ port
