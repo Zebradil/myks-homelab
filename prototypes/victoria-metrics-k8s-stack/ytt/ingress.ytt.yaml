@@ -32,7 +32,9 @@ spec:
 #@ def add_middleware():
 spec:
   routes:
-    - middlewares:
+    - #@overlay/match by=overlay.all
+      #@overlay/match missing_ok=True
+      middlewares:
         - name: #@ middleware_name
 #@ end
 

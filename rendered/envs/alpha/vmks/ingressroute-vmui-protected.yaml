@@ -14,8 +14,7 @@ spec:
       middlewares:
         - name: chain-authelia-auth
           namespace: authelia
+        - name: vmui-alias-redirect
       services:
         - name: vmselect-vmks-long
           port: http
-    - middlewares:
-        - name: vmui-alias-redirect

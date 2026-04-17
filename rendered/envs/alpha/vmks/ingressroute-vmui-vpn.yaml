@@ -11,8 +11,8 @@ spec:
   routes:
     - kind: Rule
       match: Host(`vmui.ts.zebradil.dev`) || Host(`vmui.gray.ts.zebradil.dev`) || Host(`vmui.junior.ts.zebradil.dev`)
+      middlewares:
+        - name: vmui-alias-redirect
       services:
         - name: vmselect-vmks-long
           port: http
-    - middlewares:
-        - name: vmui-alias-redirect
