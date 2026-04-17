@@ -5,7 +5,7 @@ data:
       interval: 1m
       servers:
       - name: default
-        uri: http://vmalertmanager-vmks.vmks.svc.cluster.local
+        uri: http://vmalertmanager-vmks.vmks.svc.cluster.local:9093
         timeout: 20s
         proxy: true
     listen:
