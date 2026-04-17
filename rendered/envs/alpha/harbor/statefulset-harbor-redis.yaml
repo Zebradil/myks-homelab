@@ -36,7 +36,7 @@ spec:
     spec:
       automountServiceAccountToken: false
       containers:
-        - image: oci.zebradil.dev/index.docker.io-cache/goharbor/redis-photon@sha256:f0e08db4909c21535667bd89676ac28c27003ca967830e259e3bd3aeb8e22f9c
+        - image: oci.zebradil.dev/index.docker.io-cache/goharbor/redis-photon@sha256:5da5570c0a4c2adae897a30656f1f2f6377f84c11e789b1010732a96b938f34e
           livenessProbe:
             initialDelaySeconds: 300
             periodSeconds: 10
