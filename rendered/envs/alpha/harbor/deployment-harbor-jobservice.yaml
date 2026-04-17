@@ -55,7 +55,7 @@ spec:
                 name: harbor-jobservice-env
             - secretRef:
                 name: harbor-jobservice
-          image: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-jobservice@sha256:a22c7cccba4673b26ffb96f5c37971d85d879dd837bc82448e01c0170b68cf28
+          image: oci.zebradil.dev/index.docker.io-cache/goharbor/harbor-jobservice@sha256:e2b0298e894d725d68954b786c61c5dd607114f6129534756c8f7985124c07a6
           livenessProbe:
             httpGet:
               path: /api/v1/stats
