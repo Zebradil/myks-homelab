@@ -1,7 +1,0 @@
-#@data/values
----
-application:
-  config:
-    alertmanager:
-      servers:
-        - uri: http://vmalertmanager-vmks.vmks.svc.cluster.local
