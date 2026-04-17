@@ -51,7 +51,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
-          image: oci.zebradil.dev/index.docker.io-cache/synology/synology-csi@sha256:a9e5bc672a704440e839accb3758c283ffa19ed28930b888985841a0b5dbc134
+          image: index.docker.io/synology/synology-csi@sha256:a9e5bc672a704440e839accb3758c283ffa19ed28930b888985841a0b5dbc134
           name: csi-plugin
           securityContext:
             privileged: true

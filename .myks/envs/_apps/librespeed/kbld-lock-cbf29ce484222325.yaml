@@ -3,5 +3,5 @@ kind: Config
 minimumRequiredVersion: 0.47.2
 overrides:
 - image: linuxserver/librespeed:5.5.1
-  newImage: oci.zebradil.dev/index.docker.io-cache/linuxserver/librespeed@sha256:8013c4e5faaab73db9882292c8a3118f44834b9ddf5a87c0ad82062a11275109
+  newImage: index.docker.io/linuxserver/librespeed@sha256:110df57cd248672c98fd3e6758314ad36755c28620e231a04bddc7c835c19a09
   preresolved: true

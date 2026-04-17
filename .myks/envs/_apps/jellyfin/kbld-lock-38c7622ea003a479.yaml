@@ -3,10 +3,10 @@ kind: Config
 minimumRequiredVersion: 0.47.2
 overrides:
 - image: busybox:1.36.1
-  newImage: oci.zebradil.dev/index.docker.io-cache/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
+  newImage: index.docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
   preresolved: true
 - image: filebrowser/filebrowser:v2.62.1
-  newImage: oci.zebradil.dev/index.docker.io-cache/filebrowser/filebrowser@sha256:6a0b050d4a5aae763783137eb3049f4f960428b363d05182c774bf4cc633becc
+  newImage: index.docker.io/filebrowser/filebrowser@sha256:6a0b050d4a5aae763783137eb3049f4f960428b363d05182c774bf4cc633becc
   preresolved: true
 - image: ghcr.io/hotio/qbittorrent:release-4.6.4
   newImage: oci.zebradil.dev/ghcr.io-cache/hotio/qbittorrent@sha256:39829b3e092a91fb15f6696d5a8b762a2da6436ff59e529e13305e6bfb52f829
@@ -15,5 +15,5 @@ overrides:
   newImage: oci.zebradil.dev/ghcr.io-cache/linuxserver/wireguard@sha256:c417568c79a051a8a73ffc2ad28ef58f58ba76bdb4c420389819c001aa55a03e
   preresolved: true
 - image: jellyfin/jellyfin:10.11.6
-  newImage: oci.zebradil.dev/index.docker.io-cache/jellyfin/jellyfin@sha256:333b647716631443a43c7fabac4b0c46b4e2f036bad19547e00958f10f721b85
+  newImage: index.docker.io/jellyfin/jellyfin@sha256:333b647716631443a43c7fabac4b0c46b4e2f036bad19547e00958f10f721b85
   preresolved: true

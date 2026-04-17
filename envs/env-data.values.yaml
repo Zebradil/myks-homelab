@@ -34,7 +34,9 @@ kbld:
   overrides:
     #@ registries = [
     #@   "ghcr.io",
-    #@   "index.docker.io",
+    #@   # Disabled until https://github.com/goharbor/harbor/issues/23025 fix is released.
+    #@   # FIXME: re-enable when https://github.com/goharbor/harbor/commit/9a43e645f746fef244b0cef99be315e102c9cbf7 is released.
+    #@   #"index.docker.io",
     #@   "quay.io",
     #@   "registry.access.redhat.com",
     #@   "registry.k8s.io",

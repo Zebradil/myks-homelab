@@ -3,5 +3,5 @@ kind: Config
 minimumRequiredVersion: 0.47.2
 overrides:
 - image: mccutchen/go-httpbin:2.21.0
-  newImage: oci.zebradil.dev/index.docker.io-cache/mccutchen/go-httpbin@sha256:809250d14e94397f4729f617931068a9ea048231fc1a11c9e3c7cb8c28bbab8d
+  newImage: index.docker.io/mccutchen/go-httpbin@sha256:809250d14e94397f4729f617931068a9ea048231fc1a11c9e3c7cb8c28bbab8d
   preresolved: true

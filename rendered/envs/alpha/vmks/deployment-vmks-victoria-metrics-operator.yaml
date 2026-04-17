@@ -40,7 +40,7 @@ spec:
               value: victoriametrics/operator:config-reloader-v0.66.1
             - name: VM_ENABLEDPROMETHEUSCONVERTEROWNERREFERENCES
               value: "false"
-          image: oci.zebradil.dev/index.docker.io-cache/victoriametrics/operator@sha256:9576051f79285ece06acdc8fb42dee5198c38e6609c82268a8bb7b4733abcdfe
+          image: index.docker.io/victoriametrics/operator@sha256:9576051f79285ece06acdc8fb42dee5198c38e6609c82268a8bb7b4733abcdfe
           livenessProbe:
             failureThreshold: 3
             initialDelaySeconds: 5

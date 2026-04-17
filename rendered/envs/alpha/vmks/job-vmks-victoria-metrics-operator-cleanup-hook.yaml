@@ -27,7 +27,7 @@ spec:
             - --ignore-not-found=true
           command:
             - kubectl
-          image: oci.zebradil.dev/index.docker.io-cache/rancher/kubectl@sha256:a67abd077eba3565a84e412cff9fb4fe1469b27784ef24329c1104efe15783f3
+          image: index.docker.io/rancher/kubectl@sha256:a67abd077eba3565a84e412cff9fb4fe1469b27784ef24329c1104efe15783f3
           name: kubectl
           resources:
             limits:

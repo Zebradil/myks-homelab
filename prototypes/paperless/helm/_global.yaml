@@ -1,5 +1,4 @@
 ---
 global:
-  imageRegistry: oci.zebradil.dev/index.docker.io-cache
   security:
     allowInsecureImages: true

@@ -151,14 +151,6 @@ kbld:
       repository: ghcr.io-cache/$1
       tag: ""
   - match:
-      registry: index\.docker\.io
-      repository: (.+)
-      tag: ""
-    replace:
-      registry: oci.zebradil.dev
-      repository: index.docker.io-cache/$1
-      tag: ""
-  - match:
       registry: quay\.io
       repository: (.+)
       tag: ""
