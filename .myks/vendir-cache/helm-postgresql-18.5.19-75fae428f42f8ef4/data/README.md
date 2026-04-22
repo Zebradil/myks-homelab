@@ -14,8 +14,6 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://MY-OCI-REGISTRY/postgresql
 ```
 
-> Tip: Did you know that this app is also available as a Kubernetes App on the Azure Marketplace? Kubernetes Apps are the easiest way to deploy Bitnami on AKS. Click [here](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/bitnami.postgresql-cnab) to see the listing on Azure Marketplace.
-
 ## Why use Bitnami Secure Images?
 
 Those are hardened, minimal CVE images built and maintained by Bitnami. Bitnami Secure Images are based on the cloud-optimized, security-hardened enterprise [OS Photon Linux](https://vmware.github.io/photon/). Why choose BSI images?
@@ -47,13 +45,25 @@ For HA, please see [this repo](https://github.com/bitnami/charts/tree/main/bitna
 
 ## Installing the Chart
 
-To install the chart with the release name `my-release`:
+First, log in to the OCI registry and create a secret with your registry credentials:
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/postgresql
+helm registry login REGISTRY_NAME
+kubectl create secret docker-registry SECRET_NAME -n NAMESPACE \
+  --docker-server REGISTRY_NAME \
+  --docker-username "USER" \
+  --docker-password "TOKEN"
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+> **Note** Replace the placeholders in these commands (`REGISTRY_NAME`, `SECRET_NAME`, `NAMESPACE`, `USER`, and `TOKEN`) with your actual values.
+
+Then install the chart with the release name `my-release`:
+
+```console
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/postgresql --set "global.imagePullSecrets[0]=SECRET_NAME" -n NAMESPACE
+```
+
+> **Note** Replace the placeholders in the `helm install` command (`REGISTRY_NAME`, `REPOSITORY_NAME`, `SECRET_NAME`, and `NAMESPACE`) with your actual values.
 
 The command deploys PostgreSQL on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -338,7 +348,7 @@ With NetworkPolicy enabled, traffic will be limited to just port 5432.
 For more precise policy, set `networkPolicy.allowExternal=false`. This will only allow pods with the generated client label to connect to PostgreSQL.
 This label will be displayed in the output of a successful install.
 
-### Differences between Bitnami PostgreSQL image and [Docker Official](https://hub.docker.com/_/postgres) image
+### Differences between Bitnami PostgreSQL image and Docker Official image
 
 - The Docker Official PostgreSQL image does not support replication. If you pass any replication environment variable, this would be ignored. The only environment variables supported by the Docker Official image are POSTGRES_USER, POSTGRES_DB, POSTGRES_PASSWORD, POSTGRES_INITDB_ARGS, POSTGRES_INITDB_WALDIR and PGDATA. All the remaining environment variables are specific to the Bitnami PostgreSQL image.
 - The Bitnami PostgreSQL image is non-root by default. This requires that you run the pod with `securityContext` and updates the permissions of the volume with an `initContainer`. A key benefit of this configuration is that the pod follows security best practices and is prepared to run on Kubernetes distributions with hard security constraints like OpenShift.
