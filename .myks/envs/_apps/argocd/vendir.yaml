@@ -7,7 +7,7 @@ directories:
     lazy: true
     helmChart:
       name: argo-cd
-      version: 9.4.17
+      version: 9.5.2
       repository:
         url: https://argoproj.github.io/argo-helm
 - path: ytt/dashboards
