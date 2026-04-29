@@ -39,7 +39,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-          image: oci.zebradil.dev/quay.io-cache/jetstack/cert-manager-webhook@sha256:b876bcaf46ace2a5e860e8371539a6e1c8ccca54b1988a97c8a7483b3815d985
+          image: oci.zebradil.dev/quay.io-cache/jetstack/cert-manager-webhook@sha256:baf651128b9f05c426cbd5e60e2036bf382c99ca270f49d0757d6f7d2452f4e5
           livenessProbe:
             failureThreshold: 3
             httpGet:
