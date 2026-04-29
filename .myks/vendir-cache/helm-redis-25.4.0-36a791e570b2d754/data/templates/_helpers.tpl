@@ -212,6 +212,15 @@ Return Redis&reg; password
 {{- end }}
 
 {{/*
+Check if password secret is based on user-provided credentials via chart values
+*/}}
+{{- define "redis.valuesBasedSecret" -}}
+{{- if and .Values.auth.enabled (not .Values.auth.existingSecret) (or (not (empty .Values.global.redis.password)) (not (empty .Values.auth.password))) }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Returns the secret value if found or an empty string otherwise
 Used for fetching Redis ACL user passwords from Kubernetes Secrets
 */}}
