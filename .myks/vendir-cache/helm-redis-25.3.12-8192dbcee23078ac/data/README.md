@@ -14,8 +14,6 @@ Disclaimer: Redis is a registered trademark of Redis Ltd. Any rights therein are
 helm install my-release oci://MY-OCI-REGISTRY/redis
 ```
 
-> Tip: Did you know that this app is also available as a Kubernetes App on the Azure Marketplace? Kubernetes Apps are the easiest way to deploy Bitnami on AKS. Click [here](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/bitnami.redis-cnab) to see the listing on Azure Marketplace.
-
 ## Why use Bitnami Secure Images?
 
 Those are hardened, minimal CVE images built and maintained by Bitnami. Bitnami Secure Images are based on the cloud-optimized, security-hardened enterprise [OS Photon Linux](https://vmware.github.io/photon/). Why choose BSI images?
@@ -60,16 +58,17 @@ The main features of each chart are the following:
 
 ## Installing the Chart
 
-First, create a secret with your registry credentials:
+First, log in to the OCI registry and create a secret with your registry credentials:
 
 ```console
+helm registry login REGISTRY_NAME
 kubectl create secret docker-registry SECRET_NAME -n NAMESPACE \
   --docker-server REGISTRY_NAME \
   --docker-username "USER" \
   --docker-password "TOKEN"
 ```
 
-> **Note** You need to substitute the placeholders `SECRET_NAME`, `NAMESPACE`, `REGISTRY_NAME`, `USER`, and `TOKEN` with your actual values.
+> **Note** Replace the placeholders in these commands (`REGISTRY_NAME`, `SECRET_NAME`, `NAMESPACE`, `USER`, and `TOKEN`) with your actual values.
 
 Then install the chart with the release name `my-release`:
 
@@ -77,7 +76,7 @@ Then install the chart with the release name `my-release`:
 helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redis --set "global.imagePullSecrets[0]=SECRET_NAME" -n NAMESPACE
 ```
 
-> **Note** You need to substitute the placeholders `REGISTRY_NAME`, `REPOSITORY_NAME`, `SECRET_NAME`, and `NAMESPACE` with your actual values.
+> **Note** Replace the placeholders in the `helm install` command (`REGISTRY_NAME`, `REPOSITORY_NAME`, `SECRET_NAME`, and `NAMESPACE`) with your actual values.
 
 The command deploys Redis&reg; on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
