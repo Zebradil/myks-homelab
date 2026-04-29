@@ -127,6 +127,8 @@ spec:
             {{- if include "common.fips.enabled" . }}
             - name: OPENSSL_FIPS
               value: {{ include "common.fips.config" (dict "tech" "openssl" "fips" .Values.passwordUpdateJob.fips "global" .Values.global) | quote }}
+            - name: OPENSSL_FIPS_PROVIDER_PATH
+              value: {{ include "common.fips.openssl.provider.path" (dict "fips" .Values.passwordUpdateJob.fips "global" .Values.global) | quote }}
             {{- end }}
             {{- if not (empty .Values.auth.username) }}
             - name: POSTGRESQL_USER

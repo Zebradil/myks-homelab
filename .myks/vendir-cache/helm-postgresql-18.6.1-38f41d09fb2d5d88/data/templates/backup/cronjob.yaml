@@ -78,6 +78,8 @@ spec:
               {{- if include "common.fips.enabled" . }}
               - name: OPENSSL_FIPS
                 value: {{ include "common.fips.config" (dict "tech" "openssl" "fips" .Values.backup.cronjob.fips "global" .Values.global) | quote }}
+              - name: OPENSSL_FIPS_PROVIDER_PATH
+                value: {{ include "common.fips.openssl.provider.path" (dict "fips" .Values.backup.cronjob.fips "global" .Values.global) | quote }}
               {{- end }}
               {{- if .Values.tls.enabled }}
               - name:  PGSSLROOTCERT
