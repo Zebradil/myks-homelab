@@ -49,6 +49,8 @@ spec:
               value: /bitnami/postgresql
             - name: OPENSSL_FIPS
               value: "yes"
+            - name: OPENSSL_FIPS_PROVIDER_PATH
+              value: /etc/ssl/provider_fips.cnf
             - name: PGDATA
               value: /bitnami/postgresql/data
             - name: POSTGRES_USER

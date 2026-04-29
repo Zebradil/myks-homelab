@@ -110,6 +110,8 @@ spec:
           env:
             - name: OPENSSL_FIPS
               value: {{ include "common.fips.config" (dict "tech" "openssl" "fips" .Values.volumePermissions.fips "global" .Values.global) | quote }}
+            - name: OPENSSL_FIPS_PROVIDER_PATH
+              value: {{ include "common.fips.openssl.provider.path" (dict "fips" .Values.volumePermissions.fips "global" .Values.global) | quote }}
           {{- end }}
           volumeMounts:
             - name: empty-dir
@@ -168,6 +170,8 @@ spec:
           env:
             - name: OPENSSL_FIPS
               value: {{ include "common.fips.config" (dict "tech" "openssl" "fips" .Values.volumePermissions.fips "global" .Values.global) | quote }}
+            - name: OPENSSL_FIPS_PROVIDER_PATH
+              value: {{ include "common.fips.openssl.provider.path" (dict "fips" .Values.volumePermissions.fips "global" .Values.global) | quote }}
           {{- end }}
           volumeMounts:
             - name: empty-dir
@@ -224,6 +228,8 @@ spec:
             {{- if include "common.fips.enabled" . }}
             - name: OPENSSL_FIPS
               value: {{ include "common.fips.config" (dict "tech" "openssl" "fips" .Values.readReplicas.fips "global" .Values.global) | quote }}
+            - name: OPENSSL_FIPS_PROVIDER_PATH
+              value: {{ include "common.fips.openssl.provider.path" (dict "fips" .Values.readReplicas.fips "global" .Values.global) | quote }}
             {{- end }}
             # Authentication
             {{- if or (eq $customUser "postgres") (empty $customUser) }}
@@ -473,6 +479,8 @@ spec:
             {{- if include "common.fips.enabled" . }}
             - name: OPENSSL_FIPS
               value: {{ include "common.fips.config" (dict "tech" "openssl" "fips" .Values.metrics.fips "global" .Values.global) | quote }}
+            - name: OPENSSL_FIPS_PROVIDER_PATH
+              value: {{ include "common.fips.openssl.provider.path" (dict "fips" .Values.metrics.fips "global" .Values.global) | quote }}
             - name: GODEBUG
               value: {{ include "common.fips.config" (dict "tech" "golang" "fips" .Values.metrics.fips "global" .Values.global) | quote }}
             {{- end }}
