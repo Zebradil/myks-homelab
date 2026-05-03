@@ -14,7 +14,7 @@ spec:
         app.kubernetes.io/name: httpbingo
     spec:
       containers:
-        - image: index.docker.io/mccutchen/go-httpbin@sha256:809250d14e94397f4729f617931068a9ea048231fc1a11c9e3c7cb8c28bbab8d
+        - image: index.docker.io/mccutchen/go-httpbin@sha256:33aa5d2d563881a55f319cce4530de48ae518386ad742159f4390281a8277915
           name: httpbingo
           ports:
             - containerPort: 8080
