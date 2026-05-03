@@ -2,8 +2,8 @@ apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 minimumRequiredVersion: 0.47.2
 overrides:
-- image: mikefarah/yq:4.52.5
-  newImage: index.docker.io/mikefarah/yq@sha256:603ebff15eb308a05f1c5b8b7613179cad859aed3ec9fdd04f2ef5d32345950e
+- image: mikefarah/yq:4.53.2
+  newImage: index.docker.io/mikefarah/yq@sha256:0cb4a78491b6e62ee8a9bf4fbeacbd15b5013d19bc420591b05383a696315e60
   preresolved: true
 - image: registry.k8s.io/pause:3.10.1
   newImage: oci.zebradil.dev/registry.k8s.io-cache/pause@sha256:278fb9dbcca9518083ad1e11276933a2e96f23de604a3a08cc3c80002767d24c

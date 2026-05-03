@@ -65,7 +65,7 @@ configMap:
           public: false
           authorization_policy: two_factor
           require_pkce: false
-          pkce_challenge_method:
+          pkce_challenge_method: ''
           redirect_uris:
             - https://oci.zebradil.dev/c/oidc/callback
           scopes:
