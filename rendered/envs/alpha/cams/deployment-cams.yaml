@@ -14,7 +14,7 @@ spec:
         app.kubernetes.io/name: cams
     spec:
       containers:
-        - image: oci.zebradil.dev/zebradil/homelab/maks-cams/caddy@sha256:edc9a88c31033ed7d19e47b28f1372baf09527434419d37393e92cb4de3a3ccf
+        - image: oci.zebradil.dev/zebradil/homelab/maks-cams/caddy@sha256:3129450a9d033fe3a8b54afb5172102865634163260dd5aed577d1d5327b866e
           name: caddy
           ports:
             - containerPort: 8080
