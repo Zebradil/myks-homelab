@@ -1,7 +1,0 @@
-apiVersion: kbld.k14s.io/v1alpha1
-kind: Config
-minimumRequiredVersion: 0.47.3
-overrides:
-- image: caddy-image-ref
-  newImage: oci.zebradil.dev/zebradil/homelab/maks-cams/caddy@sha256:c9621a596371a40c1ba58f3ead4457fa2630c3f010a74c94570a999c2dcb20db
-  preresolved: true
