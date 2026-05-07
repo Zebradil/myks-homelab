@@ -1,6 +1,4 @@
 #@ load("@ytt:data", "data")
-#@ load("@ytt:json", "json")
-#@ load("@ytt:md5", "md5")
 #@ load("traefik.lib.yaml", "route")
 
 #@ e = data.values.environment
@@ -30,8 +28,7 @@ spec:
             - name: caddy-data
               mountPath: /data
             - name: cameras-config
-              mountPath: /srv/cameras.json
-              subPath: cameras.json
+              mountPath: /srv/config
           ports:
             - containerPort: 8080
               name: http

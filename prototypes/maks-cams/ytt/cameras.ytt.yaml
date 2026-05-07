@@ -24,7 +24,6 @@ data:
   cameras.json: #@ json.encode({"cameras": cam_list})
 
 #@ for cam_id in sorted(cams.keys()):
-#@ cam_ip = cams[cam_id]["ip"]
 #@ cam_name = name + "-" + cam_id
 #@ for/end route_doc in route.default(cam_name):
 --- #@ route_doc
@@ -45,7 +44,7 @@ metadata:
   name: #@ cam_name
 subsets:
   - addresses:
-      - ip: #@ cam_ip
+      - ip: #@ cams[cam_id]["ip"]
     ports:
       - port: 8889
         name: http

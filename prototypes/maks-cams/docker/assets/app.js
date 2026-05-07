@@ -8,8 +8,6 @@ let cameras = [];        // [{id, label}] from /cameras.json
 let focusedId = null;    // camera id currently in focus mode, or null
 let slideshowActive = false;
 let slideshowTimer = null;
-let slideshowProgressTimer = null;
-let slideshowProgressStart = null;
 let pingTimers = {};     // {camId: intervalId}
 let toolbarHideTimer = null;
 let toolbarAutoHide = false;
@@ -119,6 +117,8 @@ function createCameraCard(cam, url, enabled) {
   const toggleBtn = document.createElement('button');
   toggleBtn.className = 'cam-ctrl-btn toggle-btn' + (enabled ? '' : ' is-disabled');
   toggleBtn.title = enabled ? 'Disable camera' : 'Enable camera';
+  toggleBtn.setAttribute('aria-label', enabled ? 'Disable camera' : 'Enable camera');
+  toggleBtn.setAttribute('aria-pressed', enabled ? 'true' : 'false');
   toggleBtn.innerHTML = enabled ? svgEye(16) : svgEyeOff(16);
   toggleBtn.addEventListener('click', function (e) {
     e.stopPropagation();
@@ -130,6 +130,7 @@ function createCameraCard(cam, url, enabled) {
   const tabBtn = document.createElement('button');
   tabBtn.className = 'cam-ctrl-btn';
   tabBtn.title = 'Open in new tab';
+  tabBtn.setAttribute('aria-label', 'Open ' + cam.label + ' in new tab');
   tabBtn.innerHTML = svgExternalLink(16);
   tabBtn.addEventListener('click', function (e) {
     e.stopPropagation();
@@ -141,6 +142,7 @@ function createCameraCard(cam, url, enabled) {
   const focusBtn = document.createElement('button');
   focusBtn.className = 'cam-ctrl-btn';
   focusBtn.title = 'Fullscreen';
+  focusBtn.setAttribute('aria-label', 'Fullscreen ' + cam.label);
   focusBtn.innerHTML = svgMaximize(16);
   focusBtn.addEventListener('click', function (e) {
     e.stopPropagation();
@@ -196,12 +198,16 @@ function setCameraEnabled(camId, enabled) {
     }
     toggleBtn.innerHTML = svgEye(16);
     toggleBtn.title = 'Disable camera';
+    toggleBtn.setAttribute('aria-label', 'Disable camera');
+    toggleBtn.setAttribute('aria-pressed', 'true');
     toggleBtn.classList.remove('is-disabled');
     startPing(camId);
   } else {
     iframe.src = '';
     toggleBtn.innerHTML = svgEyeOff(16);
     toggleBtn.title = 'Enable camera';
+    toggleBtn.setAttribute('aria-label', 'Enable camera');
+    toggleBtn.setAttribute('aria-pressed', 'false');
     toggleBtn.classList.add('is-disabled');
     stopPing(camId);
     setStatus(camId, 'unknown', '');
@@ -317,7 +323,6 @@ function stopSlideshow() {
   slideshowActive = false;
   document.getElementById('slideshow-btn').classList.remove('active');
   clearTimeout(slideshowTimer);
-  clearInterval(slideshowProgressTimer);
   const bar = document.getElementById('slideshow-progress');
   bar.classList.remove('visible');
   bar.style.width = '0%';
@@ -326,11 +331,8 @@ function stopSlideshow() {
 
 function scheduleNext() {
   clearTimeout(slideshowTimer);
-  clearInterval(slideshowProgressTimer);
 
   const ms = prefs.slideshowInterval * 1000;
-  slideshowProgressStart = Date.now();
-
   const bar = document.getElementById('slideshow-progress');
   bar.style.transition = 'none';
   bar.style.width = '0%';
@@ -432,10 +434,10 @@ function setAutoHide(enabled) {
   toolbarAutoHide = enabled;
   prefs.autoHideToolbar = enabled;
   savePrefs();
-  document.getElementById('autohide-btn').classList.toggle('active', enabled);
-  if (!enabled) {
-    showToolbar();
-  }
+  const btn = document.getElementById('autohide-btn');
+  btn.classList.toggle('active', enabled);
+  btn.setAttribute('aria-pressed', enabled ? 'true' : 'false');
+  showToolbar(); // always run: schedules hide timer when enabled, clears it when disabled
 }
 
 function showToolbar() {
@@ -570,7 +572,7 @@ async function init() {
   // Load camera config
   let config;
   try {
-    const resp = await fetch('/cameras.json');
+    const resp = await fetch('/config/cameras.json');
     config = await resp.json();
   } catch (err) {
     document.getElementById('grid').innerHTML =
