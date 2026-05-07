@@ -3,6 +3,8 @@ FROM caddy:2.11.2-alpine@sha256:834468128c7696cec0ceea6172f7d692daf645ae51983ca7
 # Copy assets to the web root
 COPY assets/Caddyfile /etc/caddy/Caddyfile
 COPY assets/index.html /srv/index.html
+COPY assets/style.css /srv/style.css
+COPY assets/app.js /srv/app.js
 COPY assets/manifest.json /srv/manifest.json
 COPY assets/icon-192.png /srv/icon-192.png
 COPY assets/icon-512.png /srv/icon-512.png

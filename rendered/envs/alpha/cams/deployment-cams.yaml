@@ -35,6 +35,12 @@ spec:
               name: caddy-data
             - mountPath: /data
               name: caddy-data
+            - mountPath: /srv/cameras.json
+              name: cameras-config
+              subPath: cameras.json
       volumes:
         - emptyDir: {}
           name: caddy-data
+        - configMap:
+            name: cams-cameras
+          name: cameras-config

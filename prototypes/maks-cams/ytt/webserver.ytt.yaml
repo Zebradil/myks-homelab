@@ -1,10 +1,13 @@
 #@ load("@ytt:data", "data")
+#@ load("@ytt:json", "json")
+#@ load("@ytt:md5", "md5")
 #@ load("traefik.lib.yaml", "route")
 
 #@ e = data.values.environment
 #@ name = data.values.myks.context.app
 
 #@ pod_labels = { "app.kubernetes.io/name": name }
+#@ cameras_cm = name + "-cameras"
 
 ---
 apiVersion: apps/v1
@@ -26,6 +29,9 @@ spec:
               mountPath: /config
             - name: caddy-data
               mountPath: /data
+            - name: cameras-config
+              mountPath: /srv/cameras.json
+              subPath: cameras.json
           ports:
             - containerPort: 8080
               name: http
@@ -43,6 +49,9 @@ spec:
       volumes:
         - name: caddy-data
           emptyDir: {}
+        - name: cameras-config
+          configMap:
+            name: #@ cameras_cm
 
 ---
 apiVersion: v1

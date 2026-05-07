@@ -1,0 +1,8 @@
+apiVersion: v1
+data:
+  cameras.json: '{"cameras":[{"id":"cam1","label":"Camera 1"},{"id":"cam2","label":"Camera 2"},{"id":"cam3","label":"Camera 3"}]}'
+kind: ConfigMap
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: cams-cameras
