@@ -10,7 +10,7 @@ config-in-root: true
 log-level: info
 # Minimum version of myks required to run this configuration.
 # Myks will print an error message if the version is lower than this.
-min-version: '5.4.0'
+min-version: '5.13.0'
 # Load all binaries from the following folders as myks plugins.
 plugin-sources:
   - ./plugins
