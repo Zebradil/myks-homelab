@@ -2,7 +2,7 @@ apiVersion: v1
 data:
   images.txt: |
     ---
-    - image: index.docker.io/library/traefik@sha256:4cda3393930dceff030e144b46260e96e1337c9cfaa4fed81c90cb8f4d498f57
+    - image: index.docker.io/library/traefik@sha256:8cb20d16e01a53d8d7f7696ac2f1af7d200d5c9984d226ce2299731d9eab6d6c
 kind: ConfigMap
 metadata:
   annotations:
