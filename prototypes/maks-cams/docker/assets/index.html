@@ -6,65 +6,99 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Camera Streams</title>
   <link rel="manifest" href="/manifest.json" />
+  <link rel="stylesheet" href="/style.css" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Cams" />
   <meta name="theme-color" content="#000000" />
-  <style>
-    body,
-    html {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden;
-      background: #000;
-    }
-
-    .container {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      width: 100vw;
-    }
-
-    .cam-frame {
-      flex: 1;
-      width: 100%;
-      border: none;
-      background: #222;
-    }
-  </style>
 </head>
 
 <body>
-  <div class="container">
-    <iframe class="cam-frame" data-cam="cam1"></iframe>
-    <iframe class="cam-frame" data-cam="cam2"></iframe>
-    <iframe class="cam-frame" data-cam="cam3"></iframe>
+
+  <!-- Toolbar -->
+  <div id="toolbar">
+    <!-- Layout selector -->
+    <div class="toolbar-group" id="layout-btns">
+      <button class="tb-btn" data-layout="layout-auto" title="Auto grid">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="1" y="1" width="6" height="6" rx="1"/>
+          <rect x="9" y="1" width="6" height="6" rx="1"/>
+          <rect x="1" y="9" width="6" height="6" rx="1"/>
+          <rect x="9" y="9" width="6" height="6" rx="1"/>
+        </svg>
+        Auto
+      </button>
+      <button class="tb-btn" data-layout="layout-column" title="Single column">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="2" y="1" width="12" height="4" rx="1"/>
+          <rect x="2" y="6" width="12" height="4" rx="1"/>
+          <rect x="2" y="11" width="12" height="4" rx="1"/>
+        </svg>
+        Column
+      </button>
+      <button class="tb-btn" data-layout="layout-2x2" title="2-column grid">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="1" y="1" width="6" height="14" rx="1"/>
+          <rect x="9" y="1" width="6" height="14" rx="1"/>
+        </svg>
+        2×2
+      </button>
+      <button class="tb-btn" data-layout="layout-pip" title="Picture-in-picture">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="1" y="1" width="14" height="9" rx="1"/>
+          <rect x="1" y="11" width="4" height="4" rx="1"/>
+          <rect x="6" y="11" width="4" height="4" rx="1"/>
+          <rect x="11" y="11" width="4" height="4" rx="1"/>
+        </svg>
+        PiP
+      </button>
+    </div>
+
+    <div class="toolbar-sep"></div>
+
+    <!-- Slideshow controls -->
+    <div class="toolbar-group">
+      <button class="tb-btn" id="slideshow-btn" title="Toggle slideshow (Space)">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <polygon points="4,2 14,8 4,14" fill="currentColor" stroke="none"/>
+        </svg>
+        Slideshow
+      </button>
+      <button class="tb-btn" id="interval-btn" title="Slideshow interval">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="8" cy="8" r="6"/>
+          <polyline points="8,4 8,8 11,10"/>
+        </svg>
+        <span id="interval-label">10s</span>
+      </button>
+    </div>
+
+    <div class="toolbar-sep"></div>
+
+    <!-- Enable all / disable all -->
+    <div class="toolbar-group">
+      <button class="tb-btn" id="enable-all-btn" title="Enable all cameras">All on</button>
+      <button class="tb-btn" id="disable-all-btn" title="Disable all cameras">All off</button>
+    </div>
+
+    <div class="toolbar-spacer"></div>
+
+    <!-- Auto-hide toolbar toggle -->
+    <button class="tb-btn" id="autohide-btn" title="Auto-hide toolbar" aria-label="Auto-hide toolbar" aria-pressed="false">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <polyline points="2,12 8,6 14,12"/>
+      </svg>
+    </button>
   </div>
-  <script>
-    // Dynamically set iframe src based on current domain
-    // Example: cams.ts.example.com → cams-cam1.ts.example.com/cam
-    document.addEventListener('DOMContentLoaded', function () {
-      const currentHost = window.location.hostname;
-      const protocol = window.location.protocol;
-      const parts = currentHost.split('.');
 
-      // Get all iframes with data-cam attribute
-      const iframes = document.querySelectorAll('iframe[data-cam]');
+  <!-- Camera grid -->
+  <div id="grid" class="layout-auto"></div>
 
-      iframes.forEach(function (iframe) {
-        const camId = iframe.getAttribute('data-cam');
-        // Insert cam identifier into the subdomain
-        // cams.ts.example.com → cams-cam1.ts.example.com
-        const newHost =
-          parts[0] + '-' + camId + '.' + parts.slice(1).join('.');
-        const newUrl = protocol + '//' + newHost + '/cam';
-        iframe.src = newUrl;
-      });
-    });
-  </script>
+  <!-- Slideshow progress bar -->
+  <div id="slideshow-progress"></div>
+
+  <script src="/app.js"></script>
 </body>
 
 </html>

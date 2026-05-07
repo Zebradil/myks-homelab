@@ -35,6 +35,11 @@ spec:
               name: caddy-data
             - mountPath: /data
               name: caddy-data
+            - mountPath: /srv/config
+              name: cameras-config
       volumes:
         - emptyDir: {}
           name: caddy-data
+        - configMap:
+            name: cams-cameras
+          name: cameras-config

@@ -1,16 +1,29 @@
 #@ load("@ytt:data", "data")
+#@ load("@ytt:json", "json")
 #@ load("traefik.lib.yaml", "route")
 
 #@ name = data.values.myks.context.app
 
 #@ cams = {
-#@   "cam1": "192.168.0.201",
-#@   "cam2": "192.168.0.202",
-#@   "cam3": "192.168.0.203",
+#@   "cam1": {"ip": "192.168.0.201", "label": "Camera 1"},
+#@   "cam2": {"ip": "192.168.0.202", "label": "Camera 2"},
+#@   "cam3": {"ip": "192.168.0.203", "label": "Camera 3"},
 #@ }
 
-#@ for cam_id in cams:
-#@ cam_ip = cams[cam_id]
+#@ cam_list = []
+#@ for cam_id in sorted(cams.keys()):
+#@   cam_list.append({"id": cam_id, "label": cams[cam_id]["label"]})
+#@ end
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: #@ name + "-cameras"
+data:
+  cameras.json: #@ json.encode({"cameras": cam_list})
+
+#@ for cam_id in sorted(cams.keys()):
 #@ cam_name = name + "-" + cam_id
 #@ for/end route_doc in route.default(cam_name):
 --- #@ route_doc
@@ -31,7 +44,7 @@ metadata:
   name: #@ cam_name
 subsets:
   - addresses:
-      - ip: #@ cam_ip
+      - ip: #@ cams[cam_id]["ip"]
     ports:
       - port: 8889
         name: http
