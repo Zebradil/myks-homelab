@@ -8,6 +8,7 @@ sources:
       build:
         pull: true
         buildkit: true
+        rawOptions: ["--platform=linux/amd64"]
 destinations:
   - image: caddy-image-ref
     newImage: oci.zebradil.dev/zebradil/homelab/maks-cams/caddy
