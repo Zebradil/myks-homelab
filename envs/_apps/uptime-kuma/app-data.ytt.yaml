@@ -2,7 +2,7 @@
 ---
 application:
   #! renovate: datasource=docker
-  image: louislam/uptime-kuma:2.2.1
+  image: louislam/uptime-kuma:2.3.0
   ingress: false
   containerPort: 3001
   env:
