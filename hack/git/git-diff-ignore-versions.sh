@@ -11,5 +11,6 @@ yq '(.metadata.labels | select(has("app.kubernetes.io/version"))                
     (.spec.template.metadata.labels | select(has("app.kubernetes.io/version"))             | .["app.kubernetes.io/version"]) = "dummy" |
     (.spec.template.metadata.labels | select(has("chart"))                                 | .["chart"])                     = "dummy" |
     (.spec.template.metadata.labels | select(has("helm.sh/chart"))                         | .["helm.sh/chart"])             = "dummy" |
-    (.metadata.labels | select(has("chart"))                                               | .["chart"])                     = "dummy"' \
+    (.metadata.labels | select(has("chart"))                                               | .["chart"])                     = "dummy" |
+    (.. | select(has("annotations")) | .annotations.[] | select(key | test("checksum")))   = "dummy"' \
   "$1"
