@@ -8,24 +8,24 @@ annotations:
       version: "5"
       image: registry-1.docker.io/bitnami/os-shell:latest
     - name: redis
-      version: 8.6.2
+      version: 8.6.3
       image: registry-1.docker.io/bitnami/redis:latest
     - name: redis-exporter
-      version: 1.82.0
+      version: 1.83.0
       image: registry-1.docker.io/bitnami/redis-exporter:latest
     - name: redis-sentinel
-      version: 8.6.2
+      version: 8.6.3
       image: registry-1.docker.io/bitnami/redis-sentinel:latest
   licenses: Apache-2.0
   tanzuCategory: service
 apiVersion: v2
-appVersion: 8.6.2
+appVersion: 8.6.3
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
   - bitnami-common
-  version: 2.38.0
+  version: 2.39.0
 description: "Redis(R) is an open source, advanced key-value store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets and sorted sets."
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/redis/img/redis-stack-220x234.png
@@ -39,4 +39,4 @@ maintainers:
 name: redis
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/redis
-version: 25.4.1
+version: 25.5.1
