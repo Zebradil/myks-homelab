@@ -28,10 +28,10 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/configmap: d661968ba9969bc7e98d077e5e09f3d85121d2d6d2bd7c0bed7bd7ef3dbcdb83
-        checksum/configmap-env: 394a9f4b9653a7757a7f61b4363bfa7c461836f22dfedad3fec143d6126e2528
-        checksum/secret: 9b22e619df62e020076a8c1889fac7791eb0a615478e70c7ec59f7d1c1d490f7
-        checksum/secret-core: eb5942a796b0cf9c4f8be055d4572cd8dbaf196980734cb24b2fad3f0a65e53e
+        checksum/configmap: 2411c931368555733dde4a17722fdb11c5db6754db0c915b6b053597507555d2
+        checksum/configmap-env: 2ba71fb63a7118fe4cdab5b18624cb90f55206117a6f25c3dd01e43b8fa6c48d
+        checksum/secret: c7405acd093cdb4b3ff5e38c9178164eaf1b2173f7399104cc03caa411b78679
+        checksum/secret-core: fad6177248077f1238ebdb8bd23e4e257f9e0a13c672f338d6925e292d663b7b
       labels:
         app: harbor
         app.kubernetes.io/component: jobservice
@@ -57,22 +57,28 @@ spec:
                 name: harbor-jobservice
           image: index.docker.io/goharbor/harbor-jobservice@sha256:0de4fd2ce3a02d3e6591b439e4674ea085885ddf43652b44004cc67eb19dba12
           livenessProbe:
+            failureThreshold: 3
             httpGet:
               path: /api/v1/stats
               port: 8080
               scheme: HTTP
             initialDelaySeconds: 300
             periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
           name: jobservice
           ports:
             - containerPort: 8080
           readinessProbe:
+            failureThreshold: 3
             httpGet:
               path: /api/v1/stats
               port: 8080
               scheme: HTTP
             initialDelaySeconds: 20
             periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:

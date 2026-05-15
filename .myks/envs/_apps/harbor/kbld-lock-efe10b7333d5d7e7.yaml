@@ -2,6 +2,33 @@ apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 minimumRequiredVersion: 0.47.3
 overrides:
+- image: docker.io/goharbor/harbor-core:v2.15.1
+  newImage: index.docker.io/goharbor/harbor-core@sha256:887a85b8ea98b76bfc9f715f1a0785bb99f9a1034241513902dd6e95be922a83
+  preresolved: true
+- image: docker.io/goharbor/harbor-db:v2.15.1
+  newImage: index.docker.io/goharbor/harbor-db@sha256:7944d8594a48a8d014e1fa440bc788348f2a779fa2c612ed6b79390cd767e6db
+  preresolved: true
+- image: docker.io/goharbor/harbor-exporter:v2.15.1
+  newImage: index.docker.io/goharbor/harbor-exporter@sha256:372275b6b6abeb571fa7bd5de458e3d75f1a1636503b3c0abe02938f2b285d75
+  preresolved: true
+- image: docker.io/goharbor/harbor-jobservice:v2.15.1
+  newImage: index.docker.io/goharbor/harbor-jobservice@sha256:0de4fd2ce3a02d3e6591b439e4674ea085885ddf43652b44004cc67eb19dba12
+  preresolved: true
+- image: docker.io/goharbor/harbor-portal:v2.15.1
+  newImage: index.docker.io/goharbor/harbor-portal@sha256:ac55161c57a8351807adf8f8def264bdd52667c371d0436beefebdac4341c9e2
+  preresolved: true
+- image: docker.io/goharbor/harbor-registryctl:v2.15.1
+  newImage: index.docker.io/goharbor/harbor-registryctl@sha256:554147a956989175f63f8d41573d716c6ddf6052acd1749c88c0f99ce6ee2bff
+  preresolved: true
+- image: docker.io/goharbor/redis-photon:v2.15.1
+  newImage: index.docker.io/goharbor/redis-photon@sha256:5669d4828805d9ed0bbfc18c101c6ec82d26a13cb9242b48f6348a3e3b2e4cca
+  preresolved: true
+- image: docker.io/goharbor/registry-photon:v2.15.1
+  newImage: index.docker.io/goharbor/registry-photon@sha256:ebf0325c2661729dbb317cbf839608eb8b15cfa158911a94976f2c21563c466e
+  preresolved: true
+- image: docker.io/goharbor/trivy-adapter-photon:v2.15.1
+  newImage: index.docker.io/goharbor/trivy-adapter-photon@sha256:f0c52bed36c083ec4fded26cefab01e4cd58c9354c261cb3156c69f57bb50131
+  preresolved: true
 - image: goharbor/harbor-core:v2.15.1
   newImage: index.docker.io/goharbor/harbor-core@sha256:887a85b8ea98b76bfc9f715f1a0785bb99f9a1034241513902dd6e95be922a83
   preresolved: true

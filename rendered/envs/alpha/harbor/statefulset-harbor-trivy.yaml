@@ -25,7 +25,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/secret: 76948f28a6e897fa234c3f7a54bcdf1b5a152404128ca7afac018be72315db3b
+        checksum/secret: e55f99a1f481a3051a72bd0abf7023dcbf949aa8432f82c84da627eab650cf01
       labels:
         app: harbor
         app.kubernetes.io/component: trivy
@@ -107,6 +107,7 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 10
             successThreshold: 1
+            timeoutSeconds: 1
           name: trivy
           ports:
             - containerPort: 8080
@@ -120,6 +121,7 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 10
             successThreshold: 1
+            timeoutSeconds: 1
           resources:
             limits:
               cpu: 1

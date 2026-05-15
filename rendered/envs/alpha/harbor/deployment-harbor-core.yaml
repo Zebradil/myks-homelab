@@ -25,9 +25,9 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/configmap: 77b8592828315f415f4edf504e219fd8d31d3f1fa06c71e60fffb6abf3f00b53
-        checksum/secret: eb5942a796b0cf9c4f8be055d4572cd8dbaf196980734cb24b2fad3f0a65e53e
-        checksum/secret-jobservice: 9b22e619df62e020076a8c1889fac7791eb0a615478e70c7ec59f7d1c1d490f7
+        checksum/configmap: 6f6d4df24baa5751a4ded2046c0f366bd82d6183dcfbc270a054f84d10d2815f
+        checksum/secret: fad6177248077f1238ebdb8bd23e4e257f9e0a13c672f338d6925e292d663b7b
+        checksum/secret-jobservice: c7405acd093cdb4b3ff5e38c9178164eaf1b2173f7399104cc03caa411b78679
       labels:
         app: harbor
         app.kubernetes.io/component: core
@@ -63,7 +63,10 @@ spec:
               path: /api/v2.0/ping
               port: 8080
               scheme: HTTP
+            initialDelaySeconds: 0
             periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
           name: core
           ports:
             - containerPort: 8080
@@ -73,7 +76,10 @@ spec:
               path: /api/v2.0/ping
               port: 8080
               scheme: HTTP
+            initialDelaySeconds: 0
             periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -91,6 +97,8 @@ spec:
               scheme: HTTP
             initialDelaySeconds: 10
             periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
           volumeMounts:
             - mountPath: /etc/core/app.conf
               name: config

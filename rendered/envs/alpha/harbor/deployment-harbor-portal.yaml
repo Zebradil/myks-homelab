@@ -25,7 +25,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/configmap: 67a5d24a4be2482eaeeeb0b460a525257bcc917634227bef22888ba007496c12
+        checksum/configmap: ac3500199b3dbf96a8549550fa6466a04efb316fdedf03997b574152c6f3a096
       labels:
         app: harbor
         app.kubernetes.io/component: portal
@@ -40,22 +40,28 @@ spec:
       containers:
         - image: index.docker.io/goharbor/harbor-portal@sha256:ac55161c57a8351807adf8f8def264bdd52667c371d0436beefebdac4341c9e2
           livenessProbe:
+            failureThreshold: 3
             httpGet:
               path: /
               port: 8080
               scheme: HTTP
             initialDelaySeconds: 300
             periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
           name: portal
           ports:
             - containerPort: 8080
           readinessProbe:
+            failureThreshold: 3
             httpGet:
               path: /
               port: 8080
               scheme: HTTP
             initialDelaySeconds: 1
             periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
