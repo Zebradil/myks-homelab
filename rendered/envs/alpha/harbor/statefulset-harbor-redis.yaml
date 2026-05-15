@@ -36,7 +36,7 @@ spec:
     spec:
       automountServiceAccountToken: false
       containers:
-        - image: index.docker.io/goharbor/redis-photon@sha256:5da5570c0a4c2adae897a30656f1f2f6377f84c11e789b1010732a96b938f34e
+        - image: index.docker.io/goharbor/redis-photon@sha256:5669d4828805d9ed0bbfc18c101c6ec82d26a13cb9242b48f6348a3e3b2e4cca
           livenessProbe:
             initialDelaySeconds: 300
             periodSeconds: 10

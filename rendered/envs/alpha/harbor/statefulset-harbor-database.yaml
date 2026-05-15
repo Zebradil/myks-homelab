@@ -44,7 +44,7 @@ spec:
           envFrom:
             - secretRef:
                 name: harbor-database
-          image: index.docker.io/goharbor/harbor-db@sha256:b54e48a70a7bc173a213f59d826d09bd5d3ad94ab00f2b3335751ff43edeb842
+          image: index.docker.io/goharbor/harbor-db@sha256:7944d8594a48a8d014e1fa440bc788348f2a779fa2c612ed6b79390cd767e6db
           livenessProbe:
             exec:
               command:
@@ -81,7 +81,7 @@ spec:
             - chmod -R 700 /var/lib/postgresql/data/pgdata || true
           command:
             - /bin/sh
-          image: index.docker.io/goharbor/harbor-db@sha256:b54e48a70a7bc173a213f59d826d09bd5d3ad94ab00f2b3335751ff43edeb842
+          image: index.docker.io/goharbor/harbor-db@sha256:7944d8594a48a8d014e1fa440bc788348f2a779fa2c612ed6b79390cd767e6db
           name: data-permissions-ensurer
           securityContext:
             allowPrivilegeEscalation: false
