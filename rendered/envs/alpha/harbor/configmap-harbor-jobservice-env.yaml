@@ -11,6 +11,7 @@ data:
   NO_PROXY: harbor-core,harbor-jobservice,harbor-database,harbor-registry,harbor-portal,harbor-trivy,harbor-exporter,127.0.0.1,localhost,.local,.internal
   REGISTRY_CONTROLLER_URL: http://harbor-registry:8080
   REGISTRY_CREDENTIAL_USERNAME: zebradil
+  REGISTRY_HTTP_CLIENT_TIMEOUT: "30"
   REGISTRY_URL: http://harbor-registry:5000
   TOKEN_SERVICE_URL: http://harbor-core:80/service/token
 kind: ConfigMap

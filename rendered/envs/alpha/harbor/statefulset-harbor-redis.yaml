@@ -38,16 +38,22 @@ spec:
       containers:
         - image: index.docker.io/goharbor/redis-photon@sha256:5669d4828805d9ed0bbfc18c101c6ec82d26a13cb9242b48f6348a3e3b2e4cca
           livenessProbe:
+            failureThreshold: 3
             initialDelaySeconds: 300
             periodSeconds: 10
+            successThreshold: 1
             tcpSocket:
               port: 6379
+            timeoutSeconds: 1
           name: redis
           readinessProbe:
+            failureThreshold: 3
             initialDelaySeconds: 1
             periodSeconds: 10
+            successThreshold: 1
             tcpSocket:
               port: 6379
+            timeoutSeconds: 1
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:

@@ -25,8 +25,8 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/configmap: 21e1eaa92e6dc94fb30cda4a71f275a5ab1b4c966ed5c4af9ef8469b4660ec3e
-        checksum/secret: d3e9d22f05f346b308688539e89ac5ff1edab862ac8dc79e79ada796e9620141
+        checksum/configmap: 2610907e663d873318c9479174544b86a3086542cbe0d20d2be759a9b50a8605
+        checksum/secret: fcb1a98f2fba1533e66928dee0989e477f91adb1cbbf2299f14bf67feb580e32
       labels:
         app: harbor
         app.kubernetes.io/component: exporter
@@ -50,20 +50,26 @@ spec:
                 name: harbor-exporter
           image: index.docker.io/goharbor/harbor-exporter@sha256:372275b6b6abeb571fa7bd5de458e3d75f1a1636503b3c0abe02938f2b285d75
           livenessProbe:
+            failureThreshold: 3
             httpGet:
               path: /
               port: 8001
             initialDelaySeconds: 300
             periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
           name: exporter
           ports:
             - containerPort: 8001
           readinessProbe:
+            failureThreshold: 3
             httpGet:
               path: /
               port: 8001
             initialDelaySeconds: 30
             periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:

@@ -24,6 +24,8 @@ data:
     redis:
       addr: harbor-redis:6379
       db: 2
+      username: ""
+      password: ""
       readtimeout: 10s
       writetimeout: 10s
       dialtimeout: 10s

@@ -28,10 +28,10 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/configmap: 1f89864a74cefa1b6552a77a2dc75b1f2130968def8c6d04b3ccb12facae428b
-        checksum/secret: c6c7c751b6212d26274523f262d23a9b1dfbd1ab97fc5115cc0c5796e43b8cf1
-        checksum/secret-core: eb5942a796b0cf9c4f8be055d4572cd8dbaf196980734cb24b2fad3f0a65e53e
-        checksum/secret-jobservice: 9b22e619df62e020076a8c1889fac7791eb0a615478e70c7ec59f7d1c1d490f7
+        checksum/configmap: 40282bc3af4847d95651e45ac3f03f1917dc2c60a623cce1df08bf8c39e2ae0e
+        checksum/secret: 8f7a41f192ac26d7d4bba278ab90ddee91cd8011823cfe227df9f25da734643c
+        checksum/secret-core: fad6177248077f1238ebdb8bd23e4e257f9e0a13c672f338d6925e292d663b7b
+        checksum/secret-jobservice: c7405acd093cdb4b3ff5e38c9178164eaf1b2173f7399104cc03caa411b78679
       labels:
         app: harbor
         app.kubernetes.io/component: registry
@@ -50,23 +50,29 @@ spec:
                 name: harbor-registry
           image: index.docker.io/goharbor/registry-photon@sha256:ebf0325c2661729dbb317cbf839608eb8b15cfa158911a94976f2c21563c466e
           livenessProbe:
+            failureThreshold: 3
             httpGet:
               path: /
               port: 5000
               scheme: HTTP
             initialDelaySeconds: 300
             periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
           name: registry
           ports:
             - containerPort: 5000
             - containerPort: 8001
           readinessProbe:
+            failureThreshold: 3
             httpGet:
               path: /
               port: 5000
               scheme: HTTP
             initialDelaySeconds: 1
             periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -106,22 +112,28 @@ spec:
                 name: harbor-registryctl
           image: index.docker.io/goharbor/harbor-registryctl@sha256:554147a956989175f63f8d41573d716c6ddf6052acd1749c88c0f99ce6ee2bff
           livenessProbe:
+            failureThreshold: 3
             httpGet:
               path: /api/health
               port: 8080
               scheme: HTTP
             initialDelaySeconds: 300
             periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
           name: registryctl
           ports:
             - containerPort: 8080
           readinessProbe:
+            failureThreshold: 3
             httpGet:
               path: /api/health
               port: 8080
               scheme: HTTP
             initialDelaySeconds: 1
             periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
