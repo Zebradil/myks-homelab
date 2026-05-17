@@ -3,5 +3,5 @@
 argocd = "3.4.1"
 helm = "4.1.4"
 kubeconform = "0.7.0"
-sops = "3.12.2"
+sops = "3.13.0"
 task = "3.50.0"
