@@ -2,8 +2,8 @@ apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 minimumRequiredVersion: 0.47.3
 overrides:
-- image: docker.io/traefik:v3.7.0
-  newImage: index.docker.io/library/traefik@sha256:eb328e2c806c53aafbbace6c451fa54d268961261a85452fcf0fb752a30c17be
+- image: docker.io/traefik:v3.7.1
+  newImage: index.docker.io/library/traefik@sha256:6b9cbca6fac42ab0075f5437d8dc1685cfd188626d8d515839ea94f8b6271c42
   preresolved: true
 - image: registry.access.redhat.com/ubi8/ubi:8.9
   newImage: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8/ubi@sha256:83068ea81dd02717b8e39b55cdeb2c1b2c9a3db260f01381b991755d44b15073
