@@ -8,9 +8,9 @@ overrides:
 - image: ghcr.io/dexidp/dex:v2.45.1
   newImage: oci.zebradil.dev/ghcr.io-cache/dexidp/dex@sha256:8499afd690c437f52301efd2b05b2455da5bd2dfc20332cd697dc9937f808462
   preresolved: true
-- image: quay.io/argoproj/argocd:v3.4.1
-  newImage: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:097c922fb910e6bb0278b0e26382f88de4fa5c966564111bddd334051b0e63d7
+- image: quay.io/argoproj/argocd:v3.4.2
+  newImage: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:c612d570cb6d6ff29afb72932c1bfe98a1ecc234df50f8ea4873fb7066e760fc
   preresolved: true
 - image: registry.access.redhat.com/ubi8
-  newImage: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:af12fdcdf2033c33e08a156e6faf470fb1d2b883c92dc354c3829623a7f40628
+  newImage: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:1551c9a922dbb31c5688380fd955ef57f0f00b395bacb36856bc386eba82897b
   preresolved: true
