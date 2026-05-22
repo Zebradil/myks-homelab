@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 caddy:2.11.2-alpine@sha256:834468128c7696cec0ceea6172f7d692daf645ae51983ca76e39da54a97c570d
+FROM --platform=linux/amd64 caddy:2.11.3-alpine@sha256:86deaf5e3d3408a6ccec08fbb79989783dd26e206ae10bcf78a801dc8c9ab794
 
 # Copy assets to the web root
 COPY assets/Caddyfile /etc/caddy/Caddyfile
