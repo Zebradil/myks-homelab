@@ -17,6 +17,7 @@ grafana:
   sidecar:
     dashboards:
       searchNamespace: ALL
+      skipReload: true
   plugins:
     - victoriametrics-metrics-datasource
     - victoriametrics-logs-datasource

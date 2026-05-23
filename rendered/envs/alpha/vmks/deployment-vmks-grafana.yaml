@@ -43,20 +43,6 @@ spec:
               value: both
             - name: NAMESPACE
               value: ALL
-            - name: REQ_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  key: admin-user
-                  name: vmks-grafana
-            - name: REQ_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: admin-password
-                  name: vmks-grafana
-            - name: REQ_URL
-              value: http://localhost:3000/api/admin/provisioning/dashboards/reload
-            - name: REQ_METHOD
-              value: POST
           image: oci.zebradil.dev/quay.io-cache/kiwigrid/k8s-sidecar@sha256:835d79d8fbae62e42d8a86929d4e3c5eec2e869255dd37756b5a3166c2f22309
           name: grafana-sc-dashboard
           securityContext:
