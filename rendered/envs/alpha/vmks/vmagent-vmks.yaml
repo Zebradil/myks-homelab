@@ -26,5 +26,9 @@ spec:
             - __name__
       url: http://vminsert-vmks-long.vmks.svc.cluster.local.:8480/insert/0/prometheus/api/v1/write
     - url: http://vminsert-vmks.vmks.svc.cluster.local.:8480/insert/0/prometheus/api/v1/write
+  resources:
+    requests:
+      cpu: 100m
+      memory: 200Mi
   scrapeInterval: 20s
   selectAllByDefault: true
