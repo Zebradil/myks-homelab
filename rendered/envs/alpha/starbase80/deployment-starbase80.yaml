@@ -16,7 +16,7 @@ spec:
         app.kubernetes.io/name: starbase80
     spec:
       containers:
-        - image: index.docker.io/library/nginx@sha256:800e7c98538c6bf725f5177e841aa720ae0ed1c378bbea368b6330bfe18a36b3
+        - image: index.docker.io/library/nginx@sha256:5aca99593157f4ae539a5dec1092a0ad8762f8e2eb1789085a13a0f5622369f6
           name: server
           ports:
             - containerPort: 80
