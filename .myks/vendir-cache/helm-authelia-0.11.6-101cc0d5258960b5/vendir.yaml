@@ -5,9 +5,9 @@ directories:
       name: authelia
       repository:
         url: https://charts.authelia.com
-      version: 0.11.5
+      version: 0.11.6
     lazy: true
     path: .
-  path: .myks/vendir-cache/helm-authelia-0.11.5-fb4d9c9622d4ec96/data
+  path: .myks/vendir-cache/helm-authelia-0.11.6-101cc0d5258960b5/data
 kind: Config
 minimumRequiredVersion: ""
