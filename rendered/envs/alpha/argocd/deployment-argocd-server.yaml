@@ -20,8 +20,8 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/cm: ebd71d7fe2632ae6e012926ab64e8b68b3b9e4279946af61e168a14d34d51b42
-        checksum/cmd-params: 589039711463031a7133fd3224e9b5b4d0bce2e03ed45d6738f3bba91dbff02b
+        checksum/cm: 1caf0991e409de25b7a55991c24507c32491c5a8d882d2aeeda634a8f33c90fd
+        checksum/cmd-params: 89d4e2beabc0c534a11db8ec8a77d63f456032980814375a3a53f59e537ccd1e
       labels:
         app.kubernetes.io/component: server
         app.kubernetes.io/instance: argocd
@@ -352,7 +352,7 @@ spec:
                   key: server.sync.replace.allowed
                   name: argocd-cmd-params-cm
                   optional: true
-          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:c612d570cb6d6ff29afb72932c1bfe98a1ecc234df50f8ea4873fb7066e760fc
+          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:b6d161b4984c4bffb8c02250252fdd17f23fa4e2aa25fada0e606e1fa08d2348
           livenessProbe:
             failureThreshold: 3
             httpGet:
