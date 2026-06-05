@@ -22,7 +22,6 @@ data:
     rename-command FLUSHDB ""
     rename-command FLUSHALL ""
     # End of replica configuration
-  users.acl: ""
 kind: ConfigMap
 metadata:
   annotations:
