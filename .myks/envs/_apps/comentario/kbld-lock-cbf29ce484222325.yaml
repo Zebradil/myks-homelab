@@ -1,6 +1,6 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
-minimumRequiredVersion: 0.47.3
+minimumRequiredVersion: 0.48.0
 overrides:
 - image: registry.gitlab.com/comentario/comentario:v3.17.0-ubuntu
   newImage: registry.gitlab.com/comentario/comentario@sha256:e40f33216e9e5eff60ce6f68553721ce3545d2c631d88856fcabac59bfa3a618
