@@ -19,26 +19,14 @@ spec:
     spec:
       containers:
         - env:
-            - name: HOME
-              value: /data/state
             - name: KBMCP_LISTEN
               value: 0.0.0.0:8080
-            - name: KBMCP_KB_PATH
-              value: /data/know
-            - name: KBMCP_AUTH_DB_PATH
-              value: /data/state/auth.sqlite
-            - name: KBMCP_INDEX_DB_PATH
-              value: /data/state/index.sqlite
             - name: KBMCP_LOG_FORMAT
               value: json
             - name: KBMCP_GIT__AUTO_PUSH
               value: "true"
             - name: KBMCP_GIT__REMOTE
               value: origin
-            - name: KBMCP_GIT__BRANCH
-              value: main
-            - name: GIT_SSH_COMMAND
-              value: ssh -i /data/state/git-key -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/data/state/known_hosts
             - name: KBMCP_OAUTH__ENABLED
               value: "true"
             - name: KBMCP_OAUTH__ISSUER
@@ -47,6 +35,18 @@ spec:
               value: https://kb-mcp.zebradil.dev/mcp
             - name: KBMCP_OAUTH__JWKS_URI
               value: https://auth.zebradil.dev/jwks.json
+            - name: HOME
+              value: /data/state
+            - name: GIT_SSH_COMMAND
+              value: ssh -i /data/state/git-key -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/data/state/known_hosts
+            - name: KBMCP_GIT__BRANCH
+              value: main
+            - name: KBMCP_KB_PATH
+              value: /data/know
+            - name: KBMCP_AUTH_DB_PATH
+              value: /data/state/auth.sqlite
+            - name: KBMCP_INDEX_DB_PATH
+              value: /data/state/index.sqlite
           image: oci.zebradil.dev/zebradil/know-mcp@sha256:e644f34a2bd1896b8c57c12a902e860b25b8e563100c5246fb9030ea40a12ce3
           livenessProbe:
             httpGet:
@@ -107,16 +107,20 @@ spec:
             - /bin/sh
             - -c
           env:
-            - name: HOME
-              value: /data/state
             - name: KBMCP_GIT__CLONE_URL
               value: git@github.com:zebradil/know.git
+            - name: HOME
+              value: /data/state
+            - name: GIT_SSH_COMMAND
+              value: ssh -i /data/state/git-key -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/data/state/known_hosts
             - name: KBMCP_GIT__BRANCH
               value: main
             - name: KBMCP_KB_PATH
               value: /data/know
-            - name: GIT_SSH_COMMAND
-              value: ssh -i /data/state/git-key -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/data/state/known_hosts
+            - name: KBMCP_AUTH_DB_PATH
+              value: /data/state/auth.sqlite
+            - name: KBMCP_INDEX_DB_PATH
+              value: /data/state/index.sqlite
           image: oci.zebradil.dev/zebradil/know-mcp@sha256:e644f34a2bd1896b8c57c12a902e860b25b8e563100c5246fb9030ea40a12ce3
           name: init
           resources:

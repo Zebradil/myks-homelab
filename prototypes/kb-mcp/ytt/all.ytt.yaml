@@ -17,6 +17,29 @@
 #@ git_ssh_command = "ssh -i /data/state/git-key -o StrictHostKeyChecking=yes" + \
 #@   " -o UserKnownHostsFile=/data/state/known_hosts"
 
+#@ common_envs = {
+#@   "HOME": "/data/state",
+#@   "GIT_SSH_COMMAND": git_ssh_command,
+#@   "KBMCP_GIT__BRANCH": a.branch,
+#@   "KBMCP_KB_PATH": "/data/know",
+#@   "KBMCP_AUTH_DB_PATH": "/data/state/auth.sqlite",
+#@   "KBMCP_INDEX_DB_PATH": "/data/state/index.sqlite",
+#@ }
+
+#@ init_envs = {"KBMCP_GIT__CLONE_URL": a.kbRepo} | common_envs
+#@ main_envs = {
+#@   "KBMCP_LISTEN": "0.0.0.0:8080",
+#@   "KBMCP_LOG_FORMAT": "json",
+#@   "KBMCP_GIT__AUTO_PUSH": "true",
+#@   "KBMCP_GIT__REMOTE": "origin",
+#@   "KBMCP_OAUTH__ENABLED": "true",
+#@   "KBMCP_OAUTH__ISSUER": a.oauth.issuer,
+#@   "KBMCP_OAUTH__AUDIENCE": audience,
+#@   "KBMCP_OAUTH__JWKS_URI": a.oauth.jwksUri,
+#@ } | common_envs
+
+#@ build_envs = lambda x: [{"name": k, "value": v} for k, v in x.items()]
+
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -88,17 +111,7 @@ spec:
                 kb-mcp init
                 touch /data/state/.kb-initialized
               fi
-          env:
-            - name: HOME
-              value: /data/state
-            - name: KBMCP_GIT__CLONE_URL
-              value: #@ a.kbRepo
-            - name: KBMCP_GIT__BRANCH
-              value: #@ a.branch
-            - name: KBMCP_KB_PATH
-              value: /data/know
-            - name: GIT_SSH_COMMAND
-              value: #@ git_ssh_command
+          env: #@ build_envs(init_envs)
           resources:
             requests:
               cpu: 50m
@@ -116,35 +129,7 @@ spec:
       containers:
         - name: #@ name
           image: #@ a.image
-          env:
-            - name: HOME
-              value: /data/state
-            - name: KBMCP_LISTEN
-              value: 0.0.0.0:8080
-            - name: KBMCP_KB_PATH
-              value: /data/know
-            - name: KBMCP_AUTH_DB_PATH
-              value: /data/state/auth.sqlite
-            - name: KBMCP_INDEX_DB_PATH
-              value: /data/state/index.sqlite
-            - name: KBMCP_LOG_FORMAT
-              value: json
-            - name: KBMCP_GIT__AUTO_PUSH
-              value: 'true'
-            - name: KBMCP_GIT__REMOTE
-              value: origin
-            - name: KBMCP_GIT__BRANCH
-              value: #@ a.branch
-            - name: GIT_SSH_COMMAND
-              value: #@ git_ssh_command
-            - name: KBMCP_OAUTH__ENABLED
-              value: 'true'
-            - name: KBMCP_OAUTH__ISSUER
-              value: #@ a.oauth.issuer
-            - name: KBMCP_OAUTH__AUDIENCE
-              value: #@ audience
-            - name: KBMCP_OAUTH__JWKS_URI
-              value: #@ a.oauth.jwksUri
+          env: #@ build_envs(main_envs)
           ports:
             - containerPort: 8080
               name: http
