@@ -47,7 +47,7 @@ spec:
               value: /data/state/auth.sqlite
             - name: KBMCP_INDEX_DB_PATH
               value: /data/state/index.sqlite
-          image: oci.zebradil.dev/zebradil/know-mcp@sha256:e644f34a2bd1896b8c57c12a902e860b25b8e563100c5246fb9030ea40a12ce3
+          image: oci.zebradil.dev/zebradil/know-mcp@sha256:f8dc097cf06b6669f51b5b7bf0facebad985d83883e152cd9774964fe196ca10
           livenessProbe:
             httpGet:
               path: /healthz
@@ -121,7 +121,7 @@ spec:
               value: /data/state/auth.sqlite
             - name: KBMCP_INDEX_DB_PATH
               value: /data/state/index.sqlite
-          image: oci.zebradil.dev/zebradil/know-mcp@sha256:e644f34a2bd1896b8c57c12a902e860b25b8e563100c5246fb9030ea40a12ce3
+          image: oci.zebradil.dev/zebradil/know-mcp@sha256:f8dc097cf06b6669f51b5b7bf0facebad985d83883e152cd9774964fe196ca10
           name: init
           resources:
             limits:

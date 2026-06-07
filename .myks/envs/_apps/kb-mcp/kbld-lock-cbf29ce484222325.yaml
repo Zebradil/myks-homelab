@@ -3,5 +3,5 @@ kind: Config
 minimumRequiredVersion: 0.48.0
 overrides:
 - image: oci.zebradil.dev/zebradil/know-mcp:latest
-  newImage: oci.zebradil.dev/zebradil/know-mcp@sha256:e644f34a2bd1896b8c57c12a902e860b25b8e563100c5246fb9030ea40a12ce3
+  newImage: oci.zebradil.dev/zebradil/know-mcp@sha256:f8dc097cf06b6669f51b5b7bf0facebad985d83883e152cd9774964fe196ca10
   preresolved: true
