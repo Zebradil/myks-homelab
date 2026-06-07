@@ -1,0 +1,7 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.48.0
+overrides:
+- image: oci.zebradil.dev/zebradil/know-mcp:latest
+  newImage: oci.zebradil.dev/zebradil/know-mcp@sha256:e644f34a2bd1896b8c57c12a902e860b25b8e563100c5246fb9030ea40a12ce3
+  preresolved: true

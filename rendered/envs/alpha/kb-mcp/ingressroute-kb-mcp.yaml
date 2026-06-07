@@ -1,0 +1,16 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: kb-mcp
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - kind: Rule
+      match: (Host(`kb-mcp.zebradil.dev`) || Host(`kb-mcp.gray.zebradil.dev`) || Host(`kb-mcp.junior.zebradil.dev`)) && (PathPrefix(`/mcp`) || Path(`/.well-known/oauth-protected-resource`))
+      services:
+        - name: kb-mcp
+          port: http

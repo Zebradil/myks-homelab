@@ -82,6 +82,8 @@ environment:
     name: ""
   - proto: karma
     name: ""
+  - proto: kb-mcp
+    name: ""
   - proto: librespeed
     name: ""
   - proto: pacoloco

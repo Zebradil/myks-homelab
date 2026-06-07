@@ -1,0 +1,24 @@
+#@data/values-schema
+---
+#@overlay/match-child-defaults missing_ok=True
+application:
+  kbmcp:
+    #! TODO: configure renovate
+    image: oci.zebradil.dev/zebradil/know-mcp:latest
+    #! SSH remote of the knowledge-base repo to clone on first boot and push to.
+    #! Must be set in envs/_apps/kb-mcp/app-data.ytt.yaml. The deploy key's
+    #! public half (printed at provisioning) must be added to this repo with
+    #! write access.
+    #@schema/validation min_len=1
+    kbRepo: ''
+    branch: main
+    storage:
+      #! Minimum size with synology-csi is 1Gi.
+      know: 1Gi
+      state: 1Gi
+    oauth:
+      #! Existing Authelia instance acts as the OAuth AS. Issuer is the root
+      #! domain (no path suffix); JWKS lives at /jwks.json (not the default
+      #! <issuer>/.well-known/jwks.json).
+      issuer: https://auth.zebradil.dev
+      jwksUri: https://auth.zebradil.dev/jwks.json

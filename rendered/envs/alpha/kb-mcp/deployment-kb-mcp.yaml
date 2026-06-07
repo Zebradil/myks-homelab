@@ -1,0 +1,151 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: kb-mcp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kb-mcp
+  strategy:
+    rollingUpdate: null
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: kb-mcp
+    spec:
+      containers:
+        - env:
+            - name: HOME
+              value: /data/state
+            - name: KBMCP_LISTEN
+              value: 0.0.0.0:8080
+            - name: KBMCP_KB_PATH
+              value: /data/know
+            - name: KBMCP_AUTH_DB_PATH
+              value: /data/state/auth.sqlite
+            - name: KBMCP_INDEX_DB_PATH
+              value: /data/state/index.sqlite
+            - name: KBMCP_LOG_FORMAT
+              value: json
+            - name: KBMCP_GIT__AUTO_PUSH
+              value: "true"
+            - name: KBMCP_GIT__REMOTE
+              value: origin
+            - name: KBMCP_GIT__BRANCH
+              value: main
+            - name: GIT_SSH_COMMAND
+              value: ssh -i /data/state/git-key -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/data/state/known_hosts
+            - name: KBMCP_OAUTH__ENABLED
+              value: "true"
+            - name: KBMCP_OAUTH__ISSUER
+              value: https://auth.zebradil.dev
+            - name: KBMCP_OAUTH__AUDIENCE
+              value: https://kb-mcp.zebradil.dev/mcp
+            - name: KBMCP_OAUTH__JWKS_URI
+              value: https://auth.zebradil.dev/jwks.json
+          image: oci.zebradil.dev/zebradil/know-mcp@sha256:e644f34a2bd1896b8c57c12a902e860b25b8e563100c5246fb9030ea40a12ce3
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          name: kb-mcp
+          ports:
+            - containerPort: 8080
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            limits:
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+          volumeMounts:
+            - mountPath: /data/know
+              name: know
+            - mountPath: /data/state
+              name: state
+      initContainers:
+        - args:
+            - |
+              set -eu
+              cp /secrets/git-key /data/state/git-key
+              chmod 600 /data/state/git-key
+              cp /secrets/known_hosts /data/state/known_hosts
+              chmod 644 /data/state/known_hosts
+              #! Sentinel gates the whole bootstrap, written only after clone AND
+              #! kb-mcp init both succeed. If init dies after a successful clone,
+              #! the sentinel is absent so the next start retries init (clone is
+              #! re-skipped because .git already exists).
+              if [ ! -e /data/state/.kb-initialized ]; then
+                if [ ! -e /data/know/.git ]; then
+                  echo "KB checkout empty, cloning ${KBMCP_GIT__CLONE_URL}"
+                  git clone "${KBMCP_GIT__CLONE_URL}" /data/know
+                  #! Pin the working tree to the push branch regardless of the
+                  #! remote default (KBMCP_GIT__AUTO_PUSH targets KBMCP_GIT__BRANCH).
+                  git -C /data/know checkout -B "${KBMCP_GIT__BRANCH}"
+                fi
+                kb-mcp init
+                touch /data/state/.kb-initialized
+              fi
+          command:
+            - /bin/sh
+            - -c
+          env:
+            - name: HOME
+              value: /data/state
+            - name: KBMCP_GIT__CLONE_URL
+              value: git@github.com:zebradil/know.git
+            - name: KBMCP_GIT__BRANCH
+              value: main
+            - name: KBMCP_KB_PATH
+              value: /data/know
+            - name: GIT_SSH_COMMAND
+              value: ssh -i /data/state/git-key -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/data/state/known_hosts
+          image: oci.zebradil.dev/zebradil/know-mcp@sha256:e644f34a2bd1896b8c57c12a902e860b25b8e563100c5246fb9030ea40a12ce3
+          name: init
+          resources:
+            limits:
+              memory: 256Mi
+            requests:
+              cpu: 50m
+              memory: 128Mi
+          volumeMounts:
+            - mountPath: /data/know
+              name: know
+            - mountPath: /data/state
+              name: state
+            - mountPath: /secrets
+              name: git-secret
+              readOnly: true
+      securityContext:
+        fsGroup: 65532
+        runAsGroup: 65532
+        runAsNonRoot: true
+        runAsUser: 65532
+      volumes:
+        - name: know
+          persistentVolumeClaim:
+            claimName: know
+        - name: state
+          persistentVolumeClaim:
+            claimName: state
+        - name: git-secret
+          secret:
+            defaultMode: 288
+            secretName: kb-mcp-git
