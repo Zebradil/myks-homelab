@@ -64,6 +64,12 @@ spec:
               port: http
             initialDelaySeconds: 5
             periodSeconds: 10
+          resources:
+            limits:
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -82,14 +88,20 @@ spec:
               chmod 600 /data/state/git-key
               cp /secrets/known_hosts /data/state/known_hosts
               chmod 644 /data/state/known_hosts
-              if [ ! -e /data/know/.git ]; then
-                if [ -z "${KBMCP_GIT__CLONE_URL}" ]; then
-                  echo "application.kbmcp.kbRepo is empty; set it to the KB SSH remote" >&2
-                  exit 1
+              #! Sentinel gates the whole bootstrap, written only after clone AND
+              #! kb-mcp init both succeed. If init dies after a successful clone,
+              #! the sentinel is absent so the next start retries init (clone is
+              #! re-skipped because .git already exists).
+              if [ ! -e /data/state/.kb-initialized ]; then
+                if [ ! -e /data/know/.git ]; then
+                  echo "KB checkout empty, cloning ${KBMCP_GIT__CLONE_URL}"
+                  git clone "${KBMCP_GIT__CLONE_URL}" /data/know
+                  #! Pin the working tree to the push branch regardless of the
+                  #! remote default (KBMCP_GIT__AUTO_PUSH targets KBMCP_GIT__BRANCH).
+                  git -C /data/know checkout -B "${KBMCP_GIT__BRANCH}"
                 fi
-                echo "KB checkout empty, cloning ${KBMCP_GIT__CLONE_URL}"
-                git clone "${KBMCP_GIT__CLONE_URL}" /data/know
                 kb-mcp init
+                touch /data/state/.kb-initialized
               fi
           command:
             - /bin/sh
@@ -99,12 +111,20 @@ spec:
               value: /data/state
             - name: KBMCP_GIT__CLONE_URL
               value: git@github.com:zebradil/know.git
+            - name: KBMCP_GIT__BRANCH
+              value: main
             - name: KBMCP_KB_PATH
               value: /data/know
             - name: GIT_SSH_COMMAND
               value: ssh -i /data/state/git-key -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/data/state/known_hosts
           image: oci.zebradil.dev/zebradil/know-mcp@sha256:e644f34a2bd1896b8c57c12a902e860b25b8e563100c5246fb9030ea40a12ce3
           name: init
+          resources:
+            limits:
+              memory: 256Mi
+            requests:
+              cpu: 50m
+              memory: 128Mi
           volumeMounts:
             - mountPath: /data/know
               name: know
@@ -127,5 +147,5 @@ spec:
             claimName: state
         - name: git-secret
           secret:
-            defaultMode: 292
+            defaultMode: 288
             secretName: kb-mcp-git

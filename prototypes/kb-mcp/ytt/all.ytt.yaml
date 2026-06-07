@@ -49,7 +49,8 @@ spec:
   selector:
     matchLabels: #@ pod_labels
   strategy:
-    #! RWO PVCs are shared between init and main; avoid two pods at once.
+    #! Recreate: RWO PVCs can't be mounted by an old and a new pod at once
+    #! during a rollout, so tear down the old pod before starting the new one.
     type: Recreate
     rollingUpdate: null
   template:
@@ -72,24 +73,38 @@ spec:
               chmod 600 /data/state/git-key
               cp /secrets/known_hosts /data/state/known_hosts
               chmod 644 /data/state/known_hosts
-              if [ ! -e /data/know/.git ]; then
-                if [ -z "${KBMCP_GIT__CLONE_URL}" ]; then
-                  echo "application.kbmcp.kbRepo is empty; set it to the KB SSH remote" >&2
-                  exit 1
+              #! Sentinel gates the whole bootstrap, written only after clone AND
+              #! kb-mcp init both succeed. If init dies after a successful clone,
+              #! the sentinel is absent so the next start retries init (clone is
+              #! re-skipped because .git already exists).
+              if [ ! -e /data/state/.kb-initialized ]; then
+                if [ ! -e /data/know/.git ]; then
+                  echo "KB checkout empty, cloning ${KBMCP_GIT__CLONE_URL}"
+                  git clone "${KBMCP_GIT__CLONE_URL}" /data/know
+                  #! Pin the working tree to the push branch regardless of the
+                  #! remote default (KBMCP_GIT__AUTO_PUSH targets KBMCP_GIT__BRANCH).
+                  git -C /data/know checkout -B "${KBMCP_GIT__BRANCH}"
                 fi
-                echo "KB checkout empty, cloning ${KBMCP_GIT__CLONE_URL}"
-                git clone "${KBMCP_GIT__CLONE_URL}" /data/know
                 kb-mcp init
+                touch /data/state/.kb-initialized
               fi
           env:
             - name: HOME
               value: /data/state
             - name: KBMCP_GIT__CLONE_URL
               value: #@ a.kbRepo
+            - name: KBMCP_GIT__BRANCH
+              value: #@ a.branch
             - name: KBMCP_KB_PATH
               value: /data/know
             - name: GIT_SSH_COMMAND
               value: #@ git_ssh_command
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              memory: 256Mi
           volumeMounts:
             - name: know
               mountPath: /data/know
@@ -150,6 +165,12 @@ spec:
             capabilities:
               drop:
                 - all
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 512Mi
           volumeMounts:
             - name: know
               mountPath: /data/know
@@ -165,7 +186,10 @@ spec:
         - name: git-secret
           secret:
             secretName: kb-mcp-git
-            defaultMode: 0444
+            #! Private deploy key; init copies it to the state PVC at 0600. Mount
+            #! files are owned root:fsGroup(65532), so 0440 lets the non-root pod
+            #! read via its fsGroup without exposing the key to "other".
+            defaultMode: 0440
 ---
 apiVersion: v1
 kind: Service
