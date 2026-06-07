@@ -47,6 +47,7 @@ environment:
     - proto: jellyfin
     - proto: k3s-private-registries
     - proto: karma
+    - proto: kb-mcp
     - proto: librespeed
     - proto: pacoloco
     - proto: paperless

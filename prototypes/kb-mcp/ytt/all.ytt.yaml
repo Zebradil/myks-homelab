@@ -1,0 +1,179 @@
+#@ load("@ytt:data", "data")
+
+#@ d = data.values
+#@ a = d.application.kbmcp
+#@ e = d.environment
+#@ m = d.myks
+#@ name = m.context.app
+
+#@ host = name + "." + e.hosts[0]
+#@ audience = "https://" + host + "/mcp"
+
+#@ pod_labels = {"app.kubernetes.io/name": name}
+
+#! The deploy key + known_hosts are copied out of the read-only Secret mount
+#! into the state PVC so ssh sees a 0600 key owned by uid 65532 (ssh refuses
+#! group/other-readable keys). Re-copying on every start picks up rotation.
+#@ git_ssh_command = "ssh -i /data/state/git-key -o StrictHostKeyChecking=yes" + \
+#@   " -o UserKnownHostsFile=/data/state/known_hosts"
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: know
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: #@ a.storage.know
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: state
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: #@ a.storage.state
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: #@ name
+spec:
+  replicas: 1
+  selector:
+    matchLabels: #@ pod_labels
+  strategy:
+    #! RWO PVCs are shared between init and main; avoid two pods at once.
+    type: Recreate
+    rollingUpdate: null
+  template:
+    metadata:
+      labels: #@ pod_labels
+    spec:
+      securityContext:
+        runAsUser: 65532
+        runAsGroup: 65532
+        runAsNonRoot: true
+        fsGroup: 65532
+      initContainers:
+        - name: init
+          image: #@ a.image
+          command: ['/bin/sh', '-c']
+          args:
+            - |
+              set -eu
+              cp /secrets/git-key /data/state/git-key
+              chmod 600 /data/state/git-key
+              cp /secrets/known_hosts /data/state/known_hosts
+              chmod 644 /data/state/known_hosts
+              if [ ! -e /data/know/.git ]; then
+                if [ -z "${KBMCP_GIT__CLONE_URL}" ]; then
+                  echo "application.kbmcp.kbRepo is empty; set it to the KB SSH remote" >&2
+                  exit 1
+                fi
+                echo "KB checkout empty, cloning ${KBMCP_GIT__CLONE_URL}"
+                git clone "${KBMCP_GIT__CLONE_URL}" /data/know
+                kb-mcp init
+              fi
+          env:
+            - name: HOME
+              value: /data/state
+            - name: KBMCP_GIT__CLONE_URL
+              value: #@ a.kbRepo
+            - name: KBMCP_KB_PATH
+              value: /data/know
+            - name: GIT_SSH_COMMAND
+              value: #@ git_ssh_command
+          volumeMounts:
+            - name: know
+              mountPath: /data/know
+            - name: state
+              mountPath: /data/state
+            - name: git-secret
+              mountPath: /secrets
+              readOnly: true
+      containers:
+        - name: #@ name
+          image: #@ a.image
+          env:
+            - name: HOME
+              value: /data/state
+            - name: KBMCP_LISTEN
+              value: 0.0.0.0:8080
+            - name: KBMCP_KB_PATH
+              value: /data/know
+            - name: KBMCP_AUTH_DB_PATH
+              value: /data/state/auth.sqlite
+            - name: KBMCP_INDEX_DB_PATH
+              value: /data/state/index.sqlite
+            - name: KBMCP_LOG_FORMAT
+              value: json
+            - name: KBMCP_GIT__AUTO_PUSH
+              value: 'true'
+            - name: KBMCP_GIT__REMOTE
+              value: origin
+            - name: KBMCP_GIT__BRANCH
+              value: #@ a.branch
+            - name: GIT_SSH_COMMAND
+              value: #@ git_ssh_command
+            - name: KBMCP_OAUTH__ENABLED
+              value: 'true'
+            - name: KBMCP_OAUTH__ISSUER
+              value: #@ a.oauth.issuer
+            - name: KBMCP_OAUTH__AUDIENCE
+              value: #@ audience
+            - name: KBMCP_OAUTH__JWKS_URI
+              value: #@ a.oauth.jwksUri
+          ports:
+            - containerPort: 8080
+              name: http
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+          volumeMounts:
+            - name: know
+              mountPath: /data/know
+            - name: state
+              mountPath: /data/state
+      volumes:
+        - name: know
+          persistentVolumeClaim:
+            claimName: know
+        - name: state
+          persistentVolumeClaim:
+            claimName: state
+        - name: git-secret
+          secret:
+            secretName: kb-mcp-git
+            defaultMode: 0444
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #@ name
+spec:
+  selector: #@ pod_labels
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
