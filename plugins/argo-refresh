@@ -1,28 +1,28 @@
 #!/usr/bin/env bash
 
-# Refresh Argo CD application
+# Refresh Argo CD application by setting the refresh annotation on its
+# Application CR. The application controller picks up the annotation, refreshes
+# the app, and removes the annotation when done.
+#
+# Uses the current kubectl context (must be set before running this plugin).
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/lib.sh"
+ctx="${ARGOCD_CONTEXT:?}"
+ns="${ARGOCD_NAMESPACE:-argocd}"
+app="app-${MYKS_ENV}-${MYKS_APP}"
 
-l:ensure_login
+function k() {
+    kubectl --context "$ctx" --namespace "$ns" "$@"
+}
 
-app="${MYKS_ENV}-${MYKS_APP}"
-
-if err="$(l:argocd app get "$app" --refresh 2>&1 >/dev/null)"; then
-  exit 0
+if ! k get application "$app" &>/dev/null; then
+    echo "argo-refresh: app '$app' not found in ArgoCD — skipping refresh." >&2
+    echo "argo-refresh: this is expected for apps just added in this branch; the parent app-of-apps will create it on its next sync." >&2
+    exit 0
 fi
 
-# argocd exits 20 on gRPC PermissionDenied, which ArgoCD also returns for
-# nonexistent apps (anti-enumeration). Probe app list to disambiguate.
-if l:argocd app list -o name 2>/dev/null | grep -Fxq "$app"; then
-  echo "argo-refresh: refresh failed for existing app '$app': $err" >&2
-  echo "argo-refresh: this likely indicates an ArgoCD RBAC issue for your account." >&2
-  exit 20
-fi
+k patch application "$app" --type merge \
+    -p '{"metadata":{"annotations":{"argocd.argoproj.io/refresh":"normal"}}}' >/dev/null
 
-echo "argo-refresh: app '$app' not found in ArgoCD — skipping refresh." >&2
-echo "argo-refresh: this is expected for apps just added in this branch; the parent app-of-apps will create it on its next sync." >&2
-echo "argo-refresh: if the app should already exist, check your ArgoCD project RBAC." >&2
+echo "argo-refresh: triggered refresh for '$app'."
