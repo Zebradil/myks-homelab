@@ -28,6 +28,7 @@
 
 #@ init_envs = {"KBMCP_GIT__CLONE_URL": a.kbRepo} | common_envs
 #@ main_envs = {
+#@   "KBMCP_WATCH": "false",
 #@   "KBMCP_LISTEN": "0.0.0.0:8080",
 #@   "KBMCP_LOG_FORMAT": "json",
 #@   "KBMCP_GIT__AUTO_PUSH": "true",

@@ -19,6 +19,8 @@ spec:
     spec:
       containers:
         - env:
+            - name: KBMCP_WATCH
+              value: "false"
             - name: KBMCP_LISTEN
               value: 0.0.0.0:8080
             - name: KBMCP_LOG_FORMAT
