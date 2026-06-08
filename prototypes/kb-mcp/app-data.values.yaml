@@ -1,0 +1,6 @@
+#@data/values
+---
+kbld:
+  #! Switch off caching to always resolve `latest`.
+  #! Remove when switching to versioned images.
+  cache: false
