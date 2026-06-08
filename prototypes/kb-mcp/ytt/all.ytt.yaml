@@ -32,6 +32,8 @@
 #@   "KBMCP_LISTEN": "0.0.0.0:8080",
 #@   "KBMCP_LOG_FORMAT": "json",
 #@   "KBMCP_GIT__AUTO_PUSH": "true",
+#@   "KBMCP_GIT__AUTO_PULL__ENABLED": "true",
+#@   "KBMCP_GIT__AUTO_PULL__STRATEGY": "rebase",
 #@   "KBMCP_GIT__REMOTE": "origin",
 #@   "KBMCP_OAUTH__ENABLED": "true",
 #@   "KBMCP_OAUTH__ISSUER": a.oauth.issuer,

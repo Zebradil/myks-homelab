@@ -27,6 +27,10 @@ spec:
               value: json
             - name: KBMCP_GIT__AUTO_PUSH
               value: "true"
+            - name: KBMCP_GIT__AUTO_PULL__ENABLED
+              value: "true"
+            - name: KBMCP_GIT__AUTO_PULL__STRATEGY
+              value: rebase
             - name: KBMCP_GIT__REMOTE
               value: origin
             - name: KBMCP_OAUTH__ENABLED
