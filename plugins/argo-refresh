@@ -4,10 +4,25 @@
 
 set -euo pipefail
 
-: "${ARGOCD_SERVER:?Environment variable ARGOCD_SERVER must be set}"
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/lib.sh"
 
 l:ensure_login
-l:argocd app get "app-${MYKS_ENV}-${MYKS_APP}" --refresh >/dev/null
+
+app="${MYKS_ENV}-${MYKS_APP}"
+
+if err="$(l:argocd app get "$app" --refresh 2>&1 >/dev/null)"; then
+  exit 0
+fi
+
+# argocd exits 20 on gRPC PermissionDenied, which ArgoCD also returns for
+# nonexistent apps (anti-enumeration). Probe app list to disambiguate.
+if l:argocd app list -o name 2>/dev/null | grep -Fxq "$app"; then
+  echo "argo-refresh: refresh failed for existing app '$app': $err" >&2
+  echo "argo-refresh: this likely indicates an ArgoCD RBAC issue for your account." >&2
+  exit 20
+fi
+
+echo "argo-refresh: app '$app' not found in ArgoCD — skipping refresh." >&2
+echo "argo-refresh: this is expected for apps just added in this branch; the parent app-of-apps will create it on its next sync." >&2
+echo "argo-refresh: if the app should already exist, check your ArgoCD project RBAC." >&2

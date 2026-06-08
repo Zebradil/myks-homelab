@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
 
-# Print environment variables named MYKS_*
-printenv | grep '^MYKS_'
+# Print environment variables named MYKS_* in a loop
+for var in "${!MYKS_@}"; do
+    printf "=== %s ===\n" "$var"
+    printf "%s\n" "${!var}"
+done
