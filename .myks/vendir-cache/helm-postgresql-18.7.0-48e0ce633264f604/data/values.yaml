@@ -321,6 +321,11 @@ tls:
   ## @param tls.crlFilename File containing a Certificate Revocation List
   ##
   crlFilename: ""
+  ## @param tls.sslMode SSL mode to use when connecting to PostgreSQL. Applied to backup CronJob and password-update Job.
+  ## Accepted values: disable, allow, prefer, require, verify-ca, verify-full
+  ## ref: https://www.postgresql.org/docs/current/libpq-ssl.html
+  ##
+  sslMode: "verify-ca"
 ## @section PostgreSQL Primary parameters
 ##
 primary:
@@ -383,8 +388,15 @@ primary:
     ##
     user: ""
     ## @param primary.initdb.password Specify the PostgreSQL password to execute the initdb scripts
+    ## The password is stored in a Kubernetes Secret and injected via secretKeyRef rather than as a plaintext env value.
     ##
     password: ""
+    ## @param primary.initdb.existingSecret Name of an existing Secret containing the initdb password. The key must be specified via existingSecretKey.
+    ##
+    existingSecret: ""
+    ## @param primary.initdb.existingSecretKey Key in the existing Secret containing the initdb password.
+    ##
+    existingSecretKey: "initdb-password"
   ## Pre-init configuration
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql/#on-container-start
   preInitDb:
