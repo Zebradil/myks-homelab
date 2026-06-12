@@ -5,8 +5,8 @@ overrides:
 - image: busybox:1.36.1
   newImage: index.docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
   preresolved: true
-- image: filebrowser/filebrowser:v2.63.10
-  newImage: index.docker.io/filebrowser/filebrowser@sha256:b0308060fb45b7767f7cf4a21d40e5e0152bad798794907769288a7a12436895
+- image: filebrowser/filebrowser:v2.63.12
+  newImage: index.docker.io/filebrowser/filebrowser@sha256:fc8c3a46c16bbdf97362b20c50164e97de9c1dd5f63230d28a4cb15248b53ec3
   preresolved: true
 - image: ghcr.io/hotio/qbittorrent:release-4.6.4
   newImage: oci.zebradil.dev/ghcr.io-cache/hotio/qbittorrent@sha256:39829b3e092a91fb15f6696d5a8b762a2da6436ff59e529e13305e6bfb52f829
