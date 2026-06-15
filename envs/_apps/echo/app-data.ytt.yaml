@@ -2,5 +2,5 @@
 ---
 application:
   #! renovate: datasource=docker
-  image: ghcr.io/mendhak/http-https-echo:40
+  image: ghcr.io/mendhak/http-https-echo:41
   containerPort: 8080
