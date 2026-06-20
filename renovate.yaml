@@ -43,7 +43,7 @@ customManagers:
     managerFilePatterns:
       - /.*/
     matchStrings:
-      - # #! renovate: datasource=github-releases depName=helm/helm version=4.2.0
+      - # #! renovate: datasource=github-releases depName=helm/helm version=4.2.1
         # lang:regex
         >-
         #! renovate: datasource=(?<datasource>\S+)\s*
