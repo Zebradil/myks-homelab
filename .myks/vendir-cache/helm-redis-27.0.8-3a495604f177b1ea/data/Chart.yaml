@@ -11,7 +11,7 @@ annotations:
       version: 8.8.0
       image: registry-1.docker.io/bitnami/redis:latest
     - name: redis-exporter
-      version: 1.85.0
+      version: 1.86.0
       image: registry-1.docker.io/bitnami/redis-exporter:latest
     - name: redis-sentinel
       version: 8.8.0
@@ -39,4 +39,4 @@ maintainers:
 name: redis
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/redis
-version: 27.0.4
+version: 27.0.8
