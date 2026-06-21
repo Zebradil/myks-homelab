@@ -3,8 +3,8 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
-    controller-gen.kubebuilder.io/version: v0.20.1
-    operator.prometheus.io/version: 0.91.0
+    controller-gen.kubebuilder.io/version: v0.21.0
+    operator.prometheus.io/version: 0.92.0
   name: scrapeconfigs.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
@@ -527,7 +527,7 @@ spec:
                             type: object
                           tokenUrl:
                             description: tokenUrl defines the URL to fetch the token from.
-                            minLength: 1
+                            pattern: ^(http|https)://.+$
                             type: string
                         required:
                           - clientId
@@ -1264,7 +1264,7 @@ spec:
                             type: object
                           tokenUrl:
                             description: tokenUrl defines the URL to fetch the token from.
-                            minLength: 1
+                            pattern: ^(http|https)://.+$
                             type: string
                         required:
                           - clientId
@@ -1894,7 +1894,7 @@ spec:
                             type: object
                           tokenUrl:
                             description: tokenUrl defines the URL to fetch the token from.
-                            minLength: 1
+                            pattern: ^(http|https)://.+$
                             type: string
                         required:
                           - clientId
@@ -2598,7 +2598,7 @@ spec:
                             type: object
                           tokenUrl:
                             description: tokenUrl defines the URL to fetch the token from.
-                            minLength: 1
+                            pattern: ^(http|https)://.+$
                             type: string
                         required:
                           - clientId
@@ -3252,7 +3252,7 @@ spec:
                             type: object
                           tokenUrl:
                             description: tokenUrl defines the URL to fetch the token from.
-                            minLength: 1
+                            pattern: ^(http|https)://.+$
                             type: string
                         required:
                           - clientId
@@ -4213,7 +4213,7 @@ spec:
                             type: object
                           tokenUrl:
                             description: tokenUrl defines the URL to fetch the token from.
-                            minLength: 1
+                            pattern: ^(http|https)://.+$
                             type: string
                         required:
                           - clientId
@@ -4933,7 +4933,7 @@ spec:
                             type: object
                           tokenUrl:
                             description: tokenUrl defines the URL to fetch the token from.
-                            minLength: 1
+                            pattern: ^(http|https)://.+$
                             type: string
                         required:
                           - clientId
@@ -5573,7 +5573,7 @@ spec:
                             type: object
                           tokenUrl:
                             description: tokenUrl defines the URL to fetch the token from.
-                            minLength: 1
+                            pattern: ^(http|https)://.+$
                             type: string
                         required:
                           - clientId
@@ -6140,7 +6140,7 @@ spec:
                             type: object
                           tokenUrl:
                             description: tokenUrl defines the URL to fetch the token from.
-                            minLength: 1
+                            pattern: ^(http|https)://.+$
                             type: string
                         required:
                           - clientId
@@ -6817,7 +6817,7 @@ spec:
                             type: object
                           tokenUrl:
                             description: tokenUrl defines the URL to fetch the token from.
-                            minLength: 1
+                            pattern: ^(http|https)://.+$
                             type: string
                         required:
                           - clientId
@@ -7482,7 +7482,7 @@ spec:
                             type: object
                           tokenUrl:
                             description: tokenUrl defines the URL to fetch the token from.
-                            minLength: 1
+                            pattern: ^(http|https)://.+$
                             type: string
                         required:
                           - clientId
@@ -8145,7 +8145,7 @@ spec:
                             type: object
                           tokenUrl:
                             description: tokenUrl defines the URL to fetch the token from.
-                            minLength: 1
+                            pattern: ^(http|https)://.+$
                             type: string
                         required:
                           - clientId
@@ -8740,7 +8740,7 @@ spec:
                             type: object
                           tokenUrl:
                             description: tokenUrl defines the URL to fetch the token from.
-                            minLength: 1
+                            pattern: ^(http|https)://.+$
                             type: string
                         required:
                           - clientId
@@ -9509,7 +9509,7 @@ spec:
                             type: object
                           tokenUrl:
                             description: tokenUrl defines the URL to fetch the token from.
-                            minLength: 1
+                            pattern: ^(http|https)://.+$
                             type: string
                         required:
                           - clientId
@@ -10029,7 +10029,7 @@ spec:
                       type: object
                     tokenUrl:
                       description: tokenUrl defines the URL to fetch the token from.
-                      minLength: 1
+                      pattern: ^(http|https)://.+$
                       type: string
                   required:
                     - clientId
@@ -10891,7 +10891,7 @@ spec:
                             type: object
                           tokenUrl:
                             description: tokenUrl defines the URL to fetch the token from.
-                            minLength: 1
+                            pattern: ^(http|https)://.+$
                             type: string
                         required:
                           - clientId
