@@ -1,7 +1,7 @@
 #@ load("@ytt:data", "data")
 #@ load("secrets.star", "sops")
 
-#@ debug_receivers = True
+#@ debug_receivers = False
 
 #@ a = data.values.application
 ---
