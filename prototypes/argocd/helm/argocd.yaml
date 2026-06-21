@@ -7,6 +7,10 @@
     serviceMonitor:
       enabled: true
 ---
+redis:
+  exporter:
+    enabled: true
+---
 configs:
   cm:
     application.resourceTrackingMethod: annotation
