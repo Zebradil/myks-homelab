@@ -19,11 +19,12 @@ ports:
     port: 19100
   web:
     port: 80
-    redirections:
-      entryPoint:
-        to: websecure
-        scheme: https
-        permanent: true
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
   websecure:
     port: 443
 
@@ -52,11 +53,10 @@ securityContext:
 additionalArguments:
   -  #@ "--providers.kubernetesingress.ingressendpoint.hostname=" + data.values.application.ingress.hostname
 
-logs:
-  general:
-    level: DEBUG
-  access:
-    enabled: true
+log:
+  level: DEBUG
+accessLog:
+  enabled: true
 
 global:
   checkNewVersion: false
