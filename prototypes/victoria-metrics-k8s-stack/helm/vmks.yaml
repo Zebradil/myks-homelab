@@ -47,3 +47,8 @@ kubeControllerManager:
 kubeScheduler:
   service:
     enabled: false
+
+#! k3s server uses SQLite/kine, not embedded etcd: no etcd metrics endpoint
+#! exists. Disable etcd scrape, rules and dashboards to avoid false alerts.
+kubeEtcd:
+  enabled: false
