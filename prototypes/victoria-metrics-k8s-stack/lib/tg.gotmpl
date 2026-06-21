@@ -33,7 +33,8 @@
 {{- end -}}
 
 {{- define "telegram.alert_list.firing" -}}
-{{- range .Alerts.Firing }}
+{{- range $i, $a := .Alerts.Firing }}
+{{- if lt $i 10 }}
 -
 {{- with $.CommonAnnotations.summary }}{{ else with .Annotations.summary }}
 <b>Sum:</b> {{ . | html }}{{ end }}
@@ -52,10 +53,15 @@
 <a href="{{ . | html }}">Source</a>{{ end }}
 {{- with $.CommonAnnotations.runbook_url }}{{ else with .Annotations.runbook_url }}
 <a href="{{ . | html }}">Runbook</a>{{ end }}{{ end }}
+{{- end }}
+{{- if gt (len .Alerts.Firing) 10 }}
+
+<i>… showing first 10 of {{ len .Alerts.Firing }} firing alerts (truncated)</i>{{ end }}
 {{- end -}}
 
 {{- define "telegram.alert_list.resolved" -}}
-{{- range .Alerts.Resolved }}
+{{- range $i, $a := .Alerts.Resolved }}
+{{- if lt $i 10 }}
 -
 {{- with $.CommonAnnotations.summary }}{{ else with .Annotations.summary }}
 <b>Sum:</b> {{ . | html }}{{ end }}
@@ -74,6 +80,10 @@
 <a href="{{ . | html }}">Source</a>{{ end }}
 {{- with $.CommonAnnotations.runbook_url }}{{ else with .Annotations.runbook_url }}
 <a href="{{ . | html }}">Runbook</a>{{ end }}{{ end }}
+{{- end }}
+{{- if gt (len .Alerts.Resolved) 10 }}
+
+<i>… showing first 10 of {{ len .Alerts.Resolved }} resolved alerts (truncated)</i>{{ end }}
 {{- end -}}
 
 {{- define "telegram.message" }}
