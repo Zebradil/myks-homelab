@@ -2,7 +2,7 @@ annotations:
   fips: "true"
   images: |
     - name: kubectl
-      version: 1.36.1
+      version: 1.36.2
       image: registry-1.docker.io/bitnami/kubectl:latest
     - name: os-shell
       version: "5"
@@ -39,4 +39,4 @@ maintainers:
 name: redis
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/redis
-version: 27.0.8
+version: 27.0.9
