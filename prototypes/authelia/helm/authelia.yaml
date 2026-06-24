@@ -50,6 +50,14 @@ configMap:
   identity_providers:
     oidc:
       enabled: true
+      #! Token lifespans. Without this, Authelia defaults refresh_token to 90m,
+      #! which drops the claude.ai connector after short idle gaps (must re-consent).
+      #! Long refresh_token = connector survives long idle periods; tokens rotate
+      #! on each use so active sessions stay fresh.
+      lifespans:
+        access_token: 1h
+        refresh_token: 90d
+        id_token: 1h
       jwks:
         - key_id: default
           algorithm: RS256

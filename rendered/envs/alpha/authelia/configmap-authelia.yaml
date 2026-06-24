@@ -196,9 +196,9 @@ data:
     identity_providers:
       oidc:
         lifespans:
-          access_token: '1 hour'
-          refresh_token: '1 hour and 30 minutes'
-          id_token: '1 hour'
+          access_token: '1h'
+          refresh_token: '90d'
+          id_token: '1h'
           authorize_code: '1 minute'
           device_code: '10 minutes'
         enforce_pkce: 'public_clients_only'
