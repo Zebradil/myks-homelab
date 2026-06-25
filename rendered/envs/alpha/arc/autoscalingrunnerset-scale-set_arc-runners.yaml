@@ -6,7 +6,7 @@ metadata:
     actions.github.com/cleanup-manager-role-binding: scale-set-gha-rs-manager
     actions.github.com/cleanup-manager-role-name: scale-set-gha-rs-manager
     actions.github.com/cleanup-no-permission-service-account-name: scale-set-gha-rs-no-permission
-    actions.github.com/values-hash: 17f8d0dcce58f32776bac31d4f4e4fba812b5e01c6fdae9f3cde4aa102d3fa6
+    actions.github.com/values-hash: 1176a73f8137289f7d567ce680b118c344abf87549be93bb60475cdbd962728
   labels:
     actions.github.com/scale-set-name: scale-set
     actions.github.com/scale-set-namespace: arc-runners
@@ -21,7 +21,7 @@ metadata:
   namespace: arc-runners
 spec:
   githubConfigSecret: arc-app-credentials
-  githubConfigUrl: https://github.com/zebradil
+  githubConfigUrl: https://github.com/zebradilo
   template:
     spec:
       containers:

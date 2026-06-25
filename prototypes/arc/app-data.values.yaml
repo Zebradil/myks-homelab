@@ -6,7 +6,7 @@
 application:
   arcNamespace: #@ arc_namespace
   runnersNamespace: #@ runners_namespace
-  githubConfigUrl: https://github.com/zebradil
+  githubConfigUrl: https://github.com/zebradilo
 argocd:
   app:
     syncPolicy:
