@@ -1,0 +1,7 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.48.0
+overrides:
+- image: ghcr.io/actions/gha-runner-scale-set-controller:0.14.2
+  newImage: oci.zebradil.dev/ghcr.io-cache/actions/gha-runner-scale-set-controller@sha256:1b4c7f62e971ab259a4b8798e48e2adaad4af747f45990f474ea5feefa03531d
+  preresolved: true

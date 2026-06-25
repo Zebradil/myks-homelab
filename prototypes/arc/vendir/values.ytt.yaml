@@ -1,0 +1,9 @@
+#@data/values
+---
+prototype:
+  sources:
+    arc:
+      helmChart:
+        name: gha-runner-scale-set-controller
+        url: oci://ghcr.io/actions/actions-runner-controller-charts
+        version: 0.14.2

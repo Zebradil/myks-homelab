@@ -54,6 +54,8 @@ environment:
   applications:
   - proto: webapp
     name: airgradient-exporter
+  - proto: arc
+    name: ""
   - proto: argocd
     name: ""
   - proto: authelia

@@ -1,0 +1,7 @@
+#@data/values-schema
+---
+#@overlay/match-child-defaults missing_ok=True
+application:
+  #! values shared across plugins, do not change
+  _:
+    secretName: arc-app-credentials

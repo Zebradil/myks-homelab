@@ -1,0 +1,12 @@
+apiVersion: vendir.k14s.io/v1alpha1
+kind: Config
+directories:
+- path: charts/arc
+  contents:
+  - path: .
+    lazy: true
+    helmChart:
+      name: gha-runner-scale-set-controller
+      version: 0.14.2
+      repository:
+        url: oci://ghcr.io/actions/actions-runner-controller-charts

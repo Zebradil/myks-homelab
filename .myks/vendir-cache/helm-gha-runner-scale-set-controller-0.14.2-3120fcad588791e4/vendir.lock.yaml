@@ -1,0 +1,10 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - configDigest: 509eb7aaf803a8397e4a6630f1d5a0806e1479b936f89f14bde1583e51ce9edf
+    helmChart:
+      appVersion: 0.14.2
+      version: 0.14.2
+    path: .
+  path: .myks/vendir-cache/helm-gha-runner-scale-set-controller-0.14.2-3120fcad588791e4/data
+kind: LockConfig
