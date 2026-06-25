@@ -12,8 +12,11 @@ metadata:
     actions.github.com/scale-set-namespace: arc-runners
     app.kubernetes.io/component: autoscaling-runner-set
     app.kubernetes.io/instance: scale-set
+    app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: scale-set
     app.kubernetes.io/part-of: gha-rs
+    app.kubernetes.io/version: 0.14.2
+    helm.sh/chart: gha-rs-0.14.2
   name: scale-set
   namespace: arc-runners
 spec:

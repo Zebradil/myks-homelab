@@ -6,8 +6,16 @@
 #@ load("@ytt:overlay", "overlay")
 #@ load("/helm/remove-labels.lib.yaml", "apply_overlays")
 
+#! The ARC AutoscalingRunnerSet controller compares the `app.kubernetes.io/version`
+#! label against its own build version and DELETES the resource when they differ.
+#! Stripping helm labels leaves it empty, so the controller deletes the runner set on
+#! every reconcile. Keep all labels on this kind.
+#@ def keep_arc_labels(i, l, r):
+#@   return l["kind"] != "AutoscalingRunnerSet"
+#@ end
+
 #@ if data.values.helm.removeLabels:
-#@overlay/match by=overlay.all, expects="1+"
+#@overlay/match by=keep_arc_labels, expects="1+"
 --- #@overlay/replace via=apply_overlays
 
 #! Handle List-enclosed resources
