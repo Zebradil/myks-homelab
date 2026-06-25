@@ -29,6 +29,11 @@ packageRules:
       - helm/helm
     groupName: helm
     groupSlug: helm
+  - description: Group arc Helm chart updates together
+    matchPackageNames:
+      - ghcr.io/actions/actions-runner-controller-charts/**
+    groupName: arc
+    groupSlug: arc
   - description: Pin latest container image tags
     matchDatasources:
       - docker
