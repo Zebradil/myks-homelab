@@ -24,7 +24,6 @@ spec:
       prune: true
       selfHeal: false
     syncOptions:
-      - CreateNamespace=true
       - FailOnSharedResource=true
       - RespectIgnoreDifferences=true
       - ServerSideApply=true

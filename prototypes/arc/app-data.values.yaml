@@ -7,6 +7,12 @@ application:
   arcNamespace: #@ arc_namespace
   runnersNamespace: #@ runners_namespace
   githubConfigUrl: https://github.com/zebradil
+argocd:
+  app:
+    syncPolicy:
+      syncOptions:
+        #! Since this app is deployed to multiple namespaces, they're managed explicitly
+        CreateNamespace: null
 helm:
   charts:
     - name: arc

@@ -4,7 +4,7 @@
 #@ dv = data.values
 #@ a = dv.application
 
-#@ for/end ns in [a.arcNamespace, a.runnersNamespace]:
+#@ for ns in [a.arcNamespace, a.runnersNamespace]:
 ---
 apiVersion: v1
 kind: Secret
@@ -12,3 +12,9 @@ metadata:
   name: #@ a._.secretName
   namespace: #@ ns
 stringData: #@ { "github_app_" + k: sops("0", k) for k in ["id", "installation_id", "private_key"] }
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: #@ ns
+#@ end
