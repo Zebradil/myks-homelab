@@ -2,6 +2,9 @@ apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 minimumRequiredVersion: 0.48.0
 overrides:
+- image: ghcr.io/actions/actions-runner:latest
+  newImage: oci.zebradil.dev/ghcr.io-cache/actions/actions-runner@sha256:08c30b0a7105f64bddfc485d2487a22aa03932a791402393352fdf674bda2c29
+  preresolved: true
 - image: ghcr.io/actions/gha-runner-scale-set-controller:0.14.2
   newImage: oci.zebradil.dev/ghcr.io-cache/actions/gha-runner-scale-set-controller@sha256:1b4c7f62e971ab259a4b8798e48e2adaad4af747f45990f474ea5feefa03531d
   preresolved: true

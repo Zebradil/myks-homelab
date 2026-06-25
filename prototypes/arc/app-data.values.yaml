@@ -1,4 +1,17 @@
 #@data/values
+
+#@ arc_namespace = "arc-system"
+#@ runners_namespace = "arc-runners"
 ---
+application:
+  arcNamespace: #@ arc_namespace
+  runnersNamespace: #@ runners_namespace
+  githubConfigUrl: https://github.com/zebradil
 helm:
-  namespace: arc-system
+  charts:
+    - name: arc
+      namespace: #@ arc_namespace
+    - name: scale-set
+      namespace: #@ runners_namespace
+render:
+  includeNamespace: true

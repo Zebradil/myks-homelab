@@ -1,0 +1,30 @@
+apiVersion: actions.github.com/v1alpha1
+kind: AutoscalingRunnerSet
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+    actions.github.com/cleanup-manager-role-binding: scale-set-gha-rs-manager
+    actions.github.com/cleanup-manager-role-name: scale-set-gha-rs-manager
+    actions.github.com/cleanup-no-permission-service-account-name: scale-set-gha-rs-no-permission
+    actions.github.com/values-hash: 17f8d0dcce58f32776bac31d4f4e4fba812b5e01c6fdae9f3cde4aa102d3fa6
+  labels:
+    actions.github.com/scale-set-name: scale-set
+    actions.github.com/scale-set-namespace: arc-runners
+    app.kubernetes.io/component: autoscaling-runner-set
+    app.kubernetes.io/instance: scale-set
+    app.kubernetes.io/name: scale-set
+    app.kubernetes.io/part-of: gha-rs
+  name: scale-set
+  namespace: arc-runners
+spec:
+  githubConfigSecret: arc-app-credentials
+  githubConfigUrl: https://github.com/zebradil
+  template:
+    spec:
+      containers:
+        - command:
+            - /home/runner/run.sh
+          image: oci.zebradil.dev/ghcr.io-cache/actions/actions-runner@sha256:08c30b0a7105f64bddfc485d2487a22aa03932a791402393352fdf674bda2c29
+          name: runner
+      restartPolicy: Never
+      serviceAccountName: scale-set-gha-rs-no-permission

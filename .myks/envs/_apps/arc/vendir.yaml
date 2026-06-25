@@ -10,3 +10,12 @@ directories:
       version: 0.14.2
       repository:
         url: oci://ghcr.io/actions/actions-runner-controller-charts
+- path: charts/scale-set
+  contents:
+  - path: .
+    lazy: true
+    helmChart:
+      name: gha-runner-scale-set
+      version: 0.14.2
+      repository:
+        url: oci://ghcr.io/actions/actions-runner-controller-charts

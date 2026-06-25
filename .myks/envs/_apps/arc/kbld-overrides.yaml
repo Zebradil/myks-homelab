@@ -1,5 +1,7 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 overrides:
+    - image: ghcr.io/actions/actions-runner:latest
+      newImage: oci.zebradil.dev/ghcr.io-cache/actions/actions-runner:latest
     - image: ghcr.io/actions/gha-runner-scale-set-controller:0.14.2
       newImage: oci.zebradil.dev/ghcr.io-cache/actions/gha-runner-scale-set-controller:0.14.2

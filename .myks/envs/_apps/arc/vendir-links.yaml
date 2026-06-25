@@ -1,1 +1,2 @@
 charts/arc: helm-gha-runner-scale-set-controller-0.14.2-3120fcad588791e4
+charts/scale-set: helm-gha-runner-scale-set-0.14.2-6d5ee4caa8ea96a1

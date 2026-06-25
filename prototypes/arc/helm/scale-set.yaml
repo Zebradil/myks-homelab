@@ -1,0 +1,10 @@
+#@ load("@ytt:data", "data")
+
+#@ dv = data.values
+#@ a = dv.application
+---
+controllerServiceAccount:
+  namespace: #@ a.arcNamespace
+  #! This value must match the name of the Service rendered by the arc chart
+  name: arc-gha-rs-controller
+githubConfigUrl: #@ a.githubConfigUrl

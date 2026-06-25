@@ -2,6 +2,13 @@
 ---
 #@overlay/match-child-defaults missing_ok=True
 application:
+  #@schema/validation min_len=1
+  arcNamespace: ''
+  #@schema/validation min_len=1
+  runnersNamespace: ''
+  #@schema/validation min_len=1
+  githubConfigUrl: ''
+
   #! values shared across plugins, do not change
   _:
     secretName: arc-app-credentials
