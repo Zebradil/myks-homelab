@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/cmd-params: 0a7a9d23dadc0f691784944ac452da9be9c593ce3c13629a188c1f55cac5706b
+        checksum/cmd-params: 282c5e5f71bb0449f52eabca74f30b449cee4191f53e9272ad5e85eb6de40c68
       labels:
         app.kubernetes.io/component: dex-server
         app.kubernetes.io/instance: argocd
@@ -104,7 +104,7 @@ spec:
             - -n
             - /usr/local/bin/argocd
             - /shared/argocd-dex
-          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:b6d161b4984c4bffb8c02250252fdd17f23fa4e2aa25fada0e606e1fa08d2348
+          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:2fb3efa9eaa42382acb39c9a1485eaac7a1ad7a09e8aa7da7143ca256fa6da09
           name: copyutil
           resources: {}
           securityContext:
