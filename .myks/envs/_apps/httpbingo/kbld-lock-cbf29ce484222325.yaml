@@ -1,6 +1,6 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
-minimumRequiredVersion: 0.48.0
+minimumRequiredVersion: 0.49.0
 overrides:
 - image: mccutchen/go-httpbin:2.23.1
   newImage: index.docker.io/mccutchen/go-httpbin@sha256:90ac1702685468aa592938e65b2ba1b4757e0c006934a962ef7271a8717aaa3b

@@ -1,6 +1,6 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
-minimumRequiredVersion: 0.48.0
+minimumRequiredVersion: 0.49.0
 overrides:
 - image: docker.io/library/python:3.13-slim
   newImage: index.docker.io/library/python@sha256:2b7445fb71ca9cb15e9aab053fe8cb3162796f8e1d92ada12a49c766a811bc1e

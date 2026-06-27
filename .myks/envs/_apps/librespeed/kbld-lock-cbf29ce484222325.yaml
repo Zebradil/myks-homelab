@@ -1,6 +1,6 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
-minimumRequiredVersion: 0.48.0
+minimumRequiredVersion: 0.49.0
 overrides:
 - image: linuxserver/librespeed:6.1.0
   newImage: index.docker.io/linuxserver/librespeed@sha256:ceeb3439fc2ac5dcebe9f78ec34eaf5f8f0d86cb86713462d32b0f09bcc3803a
