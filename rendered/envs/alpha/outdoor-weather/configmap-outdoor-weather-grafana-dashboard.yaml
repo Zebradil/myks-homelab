@@ -58,7 +58,7 @@ data:
             },
             {
               "editorMode": "code",
-              "expr": "avg without(source, station) (outdoor_temp_celsius)",
+              "expr": "avg (outdoor_temp_celsius)",
               "legendFormat": "Outdoor"
             }
           ],
@@ -116,7 +116,7 @@ data:
             },
             {
               "editorMode": "code",
-              "expr": "avg without(source, station) (outdoor_humidity_percent)",
+              "expr": "avg (outdoor_humidity_percent)",
               "legendFormat": "Outdoor"
             }
           ],
@@ -175,7 +175,7 @@ data:
             },
             {
               "editorMode": "code",
-              "expr": "avg without(source, station) (outdoor_pm02_ugm3)",
+              "expr": "avg (outdoor_pm02_ugm3)",
               "legendFormat": "Outdoor (UBA)"
             }
           ],
@@ -234,7 +234,7 @@ data:
             },
             {
               "editorMode": "code",
-              "expr": "avg without(source, station) (outdoor_pm10_ugm3)",
+              "expr": "avg (outdoor_pm10_ugm3)",
               "legendFormat": "Outdoor (UBA)"
             }
           ],
@@ -288,12 +288,12 @@ data:
           "targets": [
             {
               "editorMode": "code",
-              "expr": "avg without(source, station) (outdoor_no2_ugm3)",
+              "expr": "avg (outdoor_no2_ugm3)",
               "legendFormat": "NO₂"
             },
             {
               "editorMode": "code",
-              "expr": "avg without(source, station) (outdoor_o3_ugm3)",
+              "expr": "avg (outdoor_o3_ugm3)",
               "legendFormat": "O₃"
             }
           ],
@@ -347,7 +347,7 @@ data:
           "targets": [
             {
               "editorMode": "code",
-              "expr": "avg without(source, station) (outdoor_wind_speed_ms)",
+              "expr": "avg (outdoor_wind_speed_ms)",
               "legendFormat": "Wind"
             }
           ],
@@ -400,7 +400,7 @@ data:
           "targets": [
             {
               "editorMode": "code",
-              "expr": "avg without(source, station) (outdoor_pressure_hpa)",
+              "expr": "avg (outdoor_pressure_hpa)",
               "legendFormat": "Pressure"
             }
           ],
@@ -454,7 +454,7 @@ data:
           "targets": [
             {
               "editorMode": "code",
-              "expr": "avg without(source, station) (outdoor_precip_mm)",
+              "expr": "avg (outdoor_precip_mm)",
               "legendFormat": "Precip"
             }
           ],

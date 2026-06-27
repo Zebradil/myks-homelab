@@ -175,7 +175,7 @@ func buildPanel(p comparePanel, pos dashboard.GridPos) *timeseries.PanelBuilder 
 	for _, o := range p.outdoor {
 		// Merge provenance sources (archive/forecast/live) and station into one
 		// line; at any timestamp only one source has data for a given metric.
-		expr := fmt.Sprintf("avg without(source, station) (%s)", o.expr)
+		expr := fmt.Sprintf("avg (%s)", o.expr)
 		b = b.WithTarget(prometheusQuery(expr, o.legend))
 	}
 	return b

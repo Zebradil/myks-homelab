@@ -22,13 +22,13 @@
       "type": "timeseries",
       "targets": [
         {
-          "expr": "avg by(serialno) (airgradient_atmp{serialno=~\"$serialno\"})",
           "editorMode": "code",
+          "expr": "avg by(serialno) (airgradient_atmp{serialno=~\"$serialno\"})",
           "legendFormat": "Indoor {{serialno}}"
         },
         {
-          "expr": "avg without(source, station) (outdoor_temp_celsius)",
           "editorMode": "code",
+          "expr": "avg (outdoor_temp_celsius)",
           "legendFormat": "Outdoor"
         }
       ],
@@ -80,13 +80,13 @@
       "type": "timeseries",
       "targets": [
         {
-          "expr": "avg by(serialno) (airgradient_rhum{serialno=~\"$serialno\"})",
           "editorMode": "code",
+          "expr": "avg by(serialno) (airgradient_rhum{serialno=~\"$serialno\"})",
           "legendFormat": "Indoor {{serialno}}"
         },
         {
-          "expr": "avg without(source, station) (outdoor_humidity_percent)",
           "editorMode": "code",
+          "expr": "avg (outdoor_humidity_percent)",
           "legendFormat": "Outdoor"
         }
       ],
@@ -138,13 +138,13 @@
       "type": "timeseries",
       "targets": [
         {
-          "expr": "avg by(serialno) (airgradient_pm02{serialno=~\"$serialno\"})",
           "editorMode": "code",
+          "expr": "avg by(serialno) (airgradient_pm02{serialno=~\"$serialno\"})",
           "legendFormat": "Indoor {{serialno}}"
         },
         {
-          "expr": "avg without(source, station) (outdoor_pm02_ugm3)",
           "editorMode": "code",
+          "expr": "avg (outdoor_pm02_ugm3)",
           "legendFormat": "Outdoor (UBA)"
         }
       ],
@@ -197,13 +197,13 @@
       "type": "timeseries",
       "targets": [
         {
-          "expr": "avg by(serialno) (airgradient_pm10{serialno=~\"$serialno\"})",
           "editorMode": "code",
+          "expr": "avg by(serialno) (airgradient_pm10{serialno=~\"$serialno\"})",
           "legendFormat": "Indoor {{serialno}}"
         },
         {
-          "expr": "avg without(source, station) (outdoor_pm10_ugm3)",
           "editorMode": "code",
+          "expr": "avg (outdoor_pm10_ugm3)",
           "legendFormat": "Outdoor (UBA)"
         }
       ],
@@ -256,13 +256,13 @@
       "type": "timeseries",
       "targets": [
         {
-          "expr": "avg without(source, station) (outdoor_no2_ugm3)",
           "editorMode": "code",
+          "expr": "avg (outdoor_no2_ugm3)",
           "legendFormat": "NO₂"
         },
         {
-          "expr": "avg without(source, station) (outdoor_o3_ugm3)",
           "editorMode": "code",
+          "expr": "avg (outdoor_o3_ugm3)",
           "legendFormat": "O₃"
         }
       ],
@@ -315,8 +315,8 @@
       "type": "timeseries",
       "targets": [
         {
-          "expr": "avg without(source, station) (outdoor_wind_speed_ms)",
           "editorMode": "code",
+          "expr": "avg (outdoor_wind_speed_ms)",
           "legendFormat": "Wind"
         }
       ],
@@ -369,8 +369,8 @@
       "type": "timeseries",
       "targets": [
         {
-          "expr": "avg without(source, station) (outdoor_pressure_hpa)",
           "editorMode": "code",
+          "expr": "avg (outdoor_pressure_hpa)",
           "legendFormat": "Pressure"
         }
       ],
@@ -422,8 +422,8 @@
       "type": "timeseries",
       "targets": [
         {
-          "expr": "avg without(source, station) (outdoor_precip_mm)",
           "editorMode": "code",
+          "expr": "avg (outdoor_precip_mm)",
           "legendFormat": "Precip"
         }
       ],
