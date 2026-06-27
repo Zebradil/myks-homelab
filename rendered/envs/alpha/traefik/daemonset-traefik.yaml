@@ -57,12 +57,16 @@ spec:
             - --entryPoints.web.http.redirections.entryPoint.to=:443
             - --entryPoints.web.http.redirections.entryPoint.scheme=https
             - --entryPoints.web.http.redirections.entryPoint.permanent=true
+            - --entryPoints.web.forwardedHeaders.trustedIPs=2400:cb00::/32,2606:4700::/32,2803:f800::/32,2405:b500::/32,2405:8100::/32,2a06:98c0::/29,2c0f:f248::/32
             - --entryPoints.websecure.http.tls=true
+            - --entryPoints.websecure.forwardedHeaders.trustedIPs=2400:cb00::/32,2606:4700::/32,2803:f800::/32,2405:b500::/32,2405:8100::/32,2a06:98c0::/29,2c0f:f248::/32
             - --log.level=DEBUG
             - --accesslog=true
             - --accesslog.fields.defaultmode=keep
             - --accesslog.fields.headers.defaultmode=drop
             - --providers.kubernetesingress.ingressendpoint.hostname=junior
+            - --entryPoints.web.http.middlewares=traefik-cloudflare-only@kubernetescrd
+            - --entryPoints.websecure.http.middlewares=traefik-cloudflare-only@kubernetescrd
           command:
             - sh
             - -c

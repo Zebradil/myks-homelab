@@ -1,0 +1,18 @@
+#@ load("@ytt:data", "data")
+#@ load("/cloudflare.lib.yaml", "get_all")
+
+#! Rejects any request to the public entrypoints (web/websecure) whose direct
+#! TCP source is not a Cloudflare edge. ipAllowList checks the connection's
+#! remote address by default, so it enforces "must come through Cloudflare" and
+#! cannot be bypassed by spoofing X-Forwarded-For. Attached to the public
+#! entrypoints in envs/_apps/traefik/helm/traefik.yaml as
+#! traefik-cloudflare-only@kubernetescrd.
+#@ if/end data.values.application.allowOnlyCloudflareIPs:
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: cloudflare-only
+spec:
+  ipAllowList:
+    sourceRange: #@ get_all()

@@ -10,6 +10,12 @@ application:
     #! Hostname for the ingress endpoint.
     #! See https://doc.traefik.io/traefik/providers/kubernetes-ingress/#hostname
     hostname: junior
+  #! Allow only Cloudflare edge IP ranges. The public entrypoints are only reachable
+  #! through Cloudflare, so these are used both as forwardedHeaders.trustedIPs (to
+  #! log the real client IP) and as an ipAllowList middleware (to reject traffic
+  #! that did not come through Cloudflare).
+  #! See lib/cloudflare.lib.yaml
+  allowOnlyCloudflareIPs: true
   tls:
     #! Base domains for the cluster. This is used to generate the wildcard certificates.
     #@schema/validation min_len=1
