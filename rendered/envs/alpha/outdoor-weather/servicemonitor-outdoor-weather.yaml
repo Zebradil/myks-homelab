@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    app.kubernetes.io/name: outdoor-weather
+  name: outdoor-weather
+spec:
+  endpoints:
+    - interval: 60s
+      path: /metrics
+      port: metrics
+  namespaceSelector:
+    matchNames:
+      - outdoor-weather
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: outdoor-weather

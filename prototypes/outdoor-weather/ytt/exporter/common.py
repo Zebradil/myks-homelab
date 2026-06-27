@@ -1,0 +1,255 @@
+"""Shared config, models and data fetchers for the outdoor-weather tooling.
+
+Two data sources, one set of metric names so live and backfilled series union
+transparently in VictoriaMetrics:
+
+  * Weather   -> Open-Meteo (https://open-meteo.com), keyless. Model/reanalysis
+    sampled at the exact configured coordinates, which is more representative of
+    "here" than a weather station kilometres away.
+  * Air quality -> Umweltbundesamt (UBA) Luftdaten API, keyless. Physical
+    sensor readings from the nearest official German monitoring station.
+
+The ``source`` label distinguishes provenance so a low-quality recent backfill
+can be deleted and replaced later (see backfill.py):
+
+  * ``open-meteo``          live exporter (current conditions), kept forever
+  * ``open-meteo-archive``  ERA5 historical backfill (authoritative)
+  * ``open-meteo-forecast`` recent backfill before ERA5 catches up (disposable)
+  * ``uba``                 air-quality sensor station
+
+Coordinates and the UBA station are carried as labels on every series, so a
+future location change produces distinguishable time series.
+
+Standard library only.
+"""
+
+import json
+import os
+import urllib.parse
+import urllib.request
+from datetime import datetime, timedelta, timezone
+
+# --------------------------------------------------------------------------- #
+# Configuration (from environment; secret values injected via k8s Secret)
+# --------------------------------------------------------------------------- #
+
+LAT = os.environ["OUTDOOR_LATITUDE"]
+LON = os.environ["OUTDOOR_LONGITUDE"]
+LOCATION = os.environ.get("OUTDOOR_LOCATION", "")
+UBA_STATION = os.environ.get("OUTDOOR_UBA_STATION", "")  # numeric UBA station id
+UBA_STATION_CODE = os.environ.get("OUTDOOR_UBA_STATION_CODE", UBA_STATION)
+
+HTTP_TIMEOUT = int(os.environ.get("OUTDOOR_HTTP_TIMEOUT", "30"))
+
+# Open-Meteo's free historical (ERA5) archive lags real time by a few days.
+ARCHIVE_LAG_DAYS = 6
+
+OPEN_METEO_FORECAST = "https://api.open-meteo.com/v1/forecast"
+OPEN_METEO_ARCHIVE = "https://archive-api.open-meteo.com/v1/archive"
+UBA_MEASURES = "https://luftdaten.umweltbundesamt.de/api/air-data/v2/measures/json"
+
+SOURCE_LIVE = "open-meteo"
+SOURCE_ARCHIVE = "open-meteo-archive"
+SOURCE_FORECAST = "open-meteo-forecast"
+SOURCE_UBA = "uba"
+
+# Open-Meteo hourly variable -> exported metric name. Units pinned via request.
+WEATHER_METRICS = {
+    "temperature_2m": "outdoor_temp_celsius",
+    "relative_humidity_2m": "outdoor_humidity_percent",
+    "wind_speed_10m": "outdoor_wind_speed_ms",
+    "surface_pressure": "outdoor_pressure_hpa",
+    "precipitation": "outdoor_precip_mm",
+}
+
+# UBA component id -> (metric name, scope id). Scope 2 = 1h average. PM uses the
+# hourly sliding daily mean (scope 6), the finest grain UBA publishes for it.
+UBA_COMPONENTS = {
+    "5": ("outdoor_no2_ugm3", "2"),
+    "3": ("outdoor_o3_ugm3", "2"),
+    "1": ("outdoor_pm10_ugm3", "6"),
+    "9": ("outdoor_pm02_ugm3", "6"),
+}
+
+# UBA timestamps are reported in fixed CET (UTC+1, "wahre Ortszeit"), no DST.
+_UBA_TZ = timezone(timedelta(hours=1))
+
+
+def log(msg):
+    print(f"{datetime.now(timezone.utc).isoformat()} {msg}", flush=True)
+
+
+def http_get_json(url, params):
+    full = url + "?" + urllib.parse.urlencode(params)
+    req = urllib.request.Request(full, headers={"User-Agent": "outdoor-weather/1.0"})
+    with urllib.request.urlopen(req, timeout=HTTP_TIMEOUT) as resp:
+        return json.loads(resp.read().decode("utf-8"))
+
+
+def today_utc():
+    return datetime.now(timezone.utc).date()
+
+
+# --------------------------------------------------------------------------- #
+# Sample model
+# --------------------------------------------------------------------------- #
+
+
+class Sample:
+    """One metric data point. ts_ms is None for live (server stamps at scrape)."""
+
+    __slots__ = ("metric", "labels", "value", "ts_ms")
+
+    def __init__(self, metric, labels, value, ts_ms=None):
+        self.metric = metric
+        self.labels = labels
+        self.value = value
+        self.ts_ms = ts_ms
+
+
+def base_labels(source):
+    return {
+        "latitude": LAT,
+        "longitude": LON,
+        "location": LOCATION,
+        "source": source,
+    }
+
+
+def _escape(v):
+    return str(v).replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n")
+
+
+def render_line(s, with_ts):
+    label_str = ",".join(f'{k}="{_escape(v)}"' for k, v in s.labels.items())
+    line = f"{s.metric}{{{label_str}}} {s.value}"
+    if with_ts and s.ts_ms is not None:
+        line += f" {s.ts_ms}"
+    return line
+
+
+# --------------------------------------------------------------------------- #
+# Open-Meteo weather
+# --------------------------------------------------------------------------- #
+
+
+def _parse_iso_utc_ms(iso):
+    # Open-Meteo returns "YYYY-MM-DDTHH:MM" already in UTC (timezone=UTC).
+    dt = datetime.strptime(iso, "%Y-%m-%dT%H:%M").replace(tzinfo=timezone.utc)
+    return int(dt.timestamp() * 1000)
+
+
+def fetch_weather_current():
+    """Latest single value per weather metric (live exporter)."""
+    params = {
+        "latitude": LAT,
+        "longitude": LON,
+        "current": ",".join(WEATHER_METRICS),
+        "wind_speed_unit": "ms",
+        "timezone": "UTC",
+    }
+    data = http_get_json(OPEN_METEO_FORECAST, params)
+    current = data.get("current", {})
+    labels = base_labels(SOURCE_LIVE)
+    out = []
+    for var, metric in WEATHER_METRICS.items():
+        val = current.get(var)
+        if val is not None:
+            out.append(Sample(metric, dict(labels), val))
+    return out
+
+
+def fetch_weather_hourly(endpoint, start_date, end_date, source):
+    """Hourly timestamped samples for [start_date, end_date] from one endpoint."""
+    params = {
+        "latitude": LAT,
+        "longitude": LON,
+        "start_date": start_date.isoformat(),
+        "end_date": end_date.isoformat(),
+        "hourly": ",".join(WEATHER_METRICS),
+        "wind_speed_unit": "ms",
+        "timezone": "UTC",
+    }
+    data = http_get_json(endpoint, params)
+    hourly = data.get("hourly", {})
+    times = hourly.get("time", [])
+    labels = base_labels(source)
+    out = []
+    for var, metric in WEATHER_METRICS.items():
+        values = hourly.get(var, [])
+        for iso, val in zip(times, values):
+            if val is None:
+                continue
+            out.append(Sample(metric, dict(labels), val, _parse_iso_utc_ms(iso)))
+    log(f"weather {source} {start_date}..{end_date}: {len(out)} samples")
+    return out
+
+
+# --------------------------------------------------------------------------- #
+# UBA air quality
+# --------------------------------------------------------------------------- #
+
+
+def _parse_uba_ms(dt_str):
+    # UBA encodes end-of-day as hour "24:00:00"; Python needs "00:00:00" + 1 day.
+    day_str, time_str = dt_str.split(" ")
+    extra = timedelta(0)
+    if time_str.startswith("24:"):
+        time_str = "00" + time_str[2:]
+        extra = timedelta(days=1)
+    dt = datetime.strptime(f"{day_str} {time_str}", "%Y-%m-%d %H:%M:%S")
+    dt = (dt + extra).replace(tzinfo=_UBA_TZ)
+    return int(dt.timestamp() * 1000)
+
+
+def fetch_uba_range(start_date, end_date):
+    """Sensor air-quality samples for [start_date, end_date]."""
+    if not UBA_STATION:
+        log("UBA station not configured; skipping air quality")
+        return []
+    out = []
+    for comp, (metric, scope) in UBA_COMPONENTS.items():
+        out += _fetch_uba_component(comp, metric, scope, start_date, end_date)
+    return out
+
+
+def _fetch_uba_component(comp, metric, scope, start_date, end_date):
+    params = {
+        "station": UBA_STATION,
+        "component": comp,
+        "scope": scope,
+        "date_from": start_date.isoformat(),
+        "time_from": "1",
+        "date_to": end_date.isoformat(),
+        "time_to": "24",
+    }
+    try:
+        data = http_get_json(UBA_MEASURES, params)
+    except Exception as exc:  # noqa: BLE001 - one bad component must not kill the rest
+        log(f"UBA component {comp} fetch failed: {exc}")
+        return []
+    labels = base_labels(SOURCE_UBA)
+    labels["station"] = UBA_STATION_CODE
+    out = []
+    # data -> {station_id: {start_datetime: [component, scope, value, end_dt, idx]}}
+    for _station, rows in (data.get("data") or {}).items():
+        for _start_dt, row in rows.items():
+            if not row or row[2] is None:
+                continue
+            out.append(Sample(metric, dict(labels), row[2], _parse_uba_ms(row[3])))
+    log(f"UBA {metric} {start_date}..{end_date}: {len(out)} samples")
+    return out
+
+
+def fetch_uba_current():
+    """Most recent value per component (live exporter)."""
+    today = today_utc()
+    samples = fetch_uba_range(today - timedelta(days=1), today)
+    latest = {}
+    for s in samples:
+        cur = latest.get(s.metric)
+        if cur is None or s.ts_ms > cur.ts_ms:
+            latest[s.metric] = s
+    for s in latest.values():
+        s.ts_ms = None  # stamp at scrape time
+    return list(latest.values())

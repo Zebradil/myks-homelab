@@ -21,7 +21,7 @@ spec:
   remoteWrite:
     - inlineUrlRelabelConfig:
         - action: keep
-          regex: airgradient_.*
+          regex: airgradient_.*|outdoor_.*
           source_labels:
             - __name__
       url: http://vminsert-vmks-long.vmks.svc.cluster.local.:8480/insert/0/prometheus/api/v1/write

@@ -88,6 +88,8 @@ environment:
     name: ""
   - proto: librespeed
     name: ""
+  - proto: outdoor-weather
+    name: ""
   - proto: pacoloco
     name: ""
   - proto: paperless

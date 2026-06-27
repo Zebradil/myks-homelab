@@ -24,15 +24,15 @@ Two VMCluster resources share the same namespace and are managed together:
 
 - **`vmks` (30d):** receives all scraped metrics. Exists for fast short-term queries and as the primary
   alerting/recording rule backend.
-- **`vmks-long` (5y):** receives only a filtered subset (currently `airgradient_.*` — air quality sensor data). Provides
-  long-term history for metrics worth keeping beyond a month.
+- **`vmks-long` (5y):** receives only a filtered subset (currently `airgradient_.*|outdoor_.*` — indoor air quality plus
+  outdoor weather/air-quality sensor data). Provides long-term history for metrics worth keeping beyond a month.
 
 ## Write path
 
 ```
 vmagent
   ├── → vminsert-vmks          (all metrics, 30d tier)
-  └── → vminsert-vmks-long     (airgradient_.* only, 5y tier)
+  └── → vminsert-vmks-long     (airgradient_.*|outdoor_.* only, 5y tier)
 ```
 
 The filtered second write is configured via `vmagent.additionalRemoteWrites` + `inlineUrlRelabelConfig` in
