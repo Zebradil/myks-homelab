@@ -28,6 +28,9 @@ directories:
         git:
           url: #@ cfg.git.url
           ref: #@ cfg.git.ref
+        #@ if/end "http" in cfg:
+        http:
+          url: #@ cfg.http.url
         #@ if/end "includePaths" in cfg:
         includePaths: #@ cfg.includePaths
         #@ if/end "excludePaths" in cfg:

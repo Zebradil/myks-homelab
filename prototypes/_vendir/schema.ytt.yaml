@@ -17,7 +17,7 @@ prototype:
       #! The configuration keys below correspond to the vendir spec,
       #! with some keys omitted.
       #! See https://carvel.dev/vendir/docs/latest/vendir-spec/
-      #! Only one of [helmChart, git] can be defined
+      #! Only one of [helmChart, git, http] can be defined
       git:
         ref: v2.14.7
         url: https://github.com/argoproj/argo-cd
@@ -26,6 +26,8 @@ prototype:
         name: argocd
         url: https://argoproj.github.io/argo-helm
         version: 2.14.7
+      http:
+        url: https://www.cloudflare.com/ips-v6
       includePaths:
         - some/path/**/*
       excludePaths: []
