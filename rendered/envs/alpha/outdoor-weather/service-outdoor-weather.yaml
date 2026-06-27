@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    app.kubernetes.io/name: outdoor-weather
+  name: outdoor-weather
+spec:
+  ports:
+    - name: metrics
+      port: 9113
+      targetPort: metrics
+  selector:
+    app.kubernetes.io/name: outdoor-weather

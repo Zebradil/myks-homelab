@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    app.kubernetes.io/name: outdoor-weather
+  name: outdoor-weather
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: outdoor-weather
+  template:
+    metadata:
+      annotations:
+        checksum/script: 13ca8af11bf976342fe3c053d24c83b5
+      labels:
+        app.kubernetes.io/name: outdoor-weather
+    spec:
+      containers:
+        - command:
+            - python3
+            - /app/serve.py
+          env:
+            - name: PORT
+              value: "9113"
+            - name: OUTDOOR_REFRESH_SECONDS
+              value: "600"
+          envFrom:
+            - secretRef:
+                name: outdoor-weather-location
+          image: index.docker.io/library/python@sha256:2b7445fb71ca9cb15e9aab053fe8cb3162796f8e1d92ada12a49c766a811bc1e
+          name: exporter
+          ports:
+            - containerPort: 9113
+              name: metrics
+          resources:
+            limits:
+              memory: 64Mi
+            requests:
+              cpu: 10m
+              memory: 32Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+          volumeMounts:
+            - mountPath: /app
+              name: script
+              readOnly: true
+            - mountPath: /tmp
+              name: tmp
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+        - configMap:
+            name: outdoor-weather-script
+          name: script
+        - emptyDir: {}
+          name: tmp

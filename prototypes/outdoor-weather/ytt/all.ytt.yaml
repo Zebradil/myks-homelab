@@ -1,0 +1,112 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:md5", "md5")
+
+#@ a = data.values.application
+#@ name = data.values.myks.context.app
+
+#@ labels = {"app.kubernetes.io/name": name}
+
+#@ common_py = data.read("exporter/common.py")
+#@ serve_py = data.read("exporter/serve.py")
+#@ script_md5 = md5.sum(common_py + serve_py)
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: #@ name + "-script"
+  labels: #@ labels
+data:
+  common.py: #@ common_py
+  serve.py: #@ serve_py
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: #@ name
+  labels: #@ labels
+spec:
+  replicas: 1
+  selector:
+    matchLabels: #@ labels
+  template:
+    metadata:
+      labels: #@ labels
+      annotations:
+        checksum/script: #@ script_md5
+    spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: exporter
+          image: #@ a.image
+          command: ["python3", "/app/serve.py"]
+          ports:
+            - name: metrics
+              containerPort: #@ a.containerPort
+          env:
+            - name: PORT
+              value: #@ str(a.containerPort)
+            - name: OUTDOOR_REFRESH_SECONDS
+              value: #@ str(a.refreshSeconds)
+          envFrom:
+            - secretRef:
+                name: #@ a.secretName
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 64Mi
+          volumeMounts:
+            - name: script
+              mountPath: /app
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: script
+          configMap:
+            name: #@ name + "-script"
+        - name: tmp
+          emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #@ name
+  labels: #@ labels
+spec:
+  ports:
+    - name: metrics
+      port: #@ a.containerPort
+      targetPort: metrics
+  selector: #@ labels
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: #@ name
+  labels: #@ labels
+spec:
+  endpoints:
+    - port: metrics
+      path: /metrics
+      interval: 60s
+  namespaceSelector:
+    matchNames:
+      - #@ name
+  selector:
+    matchLabels: #@ labels

@@ -1,0 +1,11 @@
+#@data/values-schema
+---
+#@overlay/match-child-defaults missing_ok=True
+application:
+  #! renovate: datasource=docker
+  #@schema/validation min_len=1
+  image: docker.io/library/python:3.13-slim
+  containerPort: 9113
+  refreshSeconds: 600
+  #! Name of the sops secret (static/<secretName>.sops.yaml) holding location config.
+  secretName: outdoor-weather-location

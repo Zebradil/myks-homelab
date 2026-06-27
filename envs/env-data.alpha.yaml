@@ -50,6 +50,7 @@ environment:
     - proto: karma
     - proto: kb-mcp
     - proto: librespeed
+    - proto: outdoor-weather
     - proto: pacoloco
     - proto: paperless
     - proto: starbase80

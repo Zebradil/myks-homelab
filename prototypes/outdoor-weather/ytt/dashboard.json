@@ -1,0 +1,499 @@
+{
+  "uid": "outdoor-weather-compare",
+  "title": "Indoor vs Outdoor",
+  "description": "Compares AirGradient indoor air quality against outdoor weather (Open-Meteo) and air quality (UBA).",
+  "tags": [
+    "airgradient",
+    "outdoor",
+    "weather"
+  ],
+  "timezone": "browser",
+  "editable": true,
+  "graphTooltip": 1,
+  "time": {
+    "from": "now-90d",
+    "to": "now"
+  },
+  "fiscalYearStartMonth": 0,
+  "refresh": "5m",
+  "schemaVersion": 42,
+  "panels": [
+    {
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "avg by(serialno) (airgradient_atmp{serialno=~\"$serialno\"})",
+          "editorMode": "code",
+          "legendFormat": "Indoor {{serialno}}"
+        },
+        {
+          "expr": "avg without(source, station) (outdoor_temp_celsius)",
+          "editorMode": "code",
+          "legendFormat": "Outdoor"
+        }
+      ],
+      "title": "Temperature — Indoor vs Outdoor",
+      "description": "Indoor AirGradient ambient temperature vs outdoor temperature at the configured coordinates (Open-Meteo).",
+      "transparent": false,
+      "datasource": {
+        "type": "prometheus"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "repeatDirection": "h",
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max",
+            "mean"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "custom": {
+            "lineWidth": 2,
+            "lineInterpolation": "smooth",
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "spanNulls": true
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "avg by(serialno) (airgradient_rhum{serialno=~\"$serialno\"})",
+          "editorMode": "code",
+          "legendFormat": "Indoor {{serialno}}"
+        },
+        {
+          "expr": "avg without(source, station) (outdoor_humidity_percent)",
+          "editorMode": "code",
+          "legendFormat": "Outdoor"
+        }
+      ],
+      "title": "Relative Humidity — Indoor vs Outdoor",
+      "description": "Indoor vs outdoor relative humidity.",
+      "transparent": false,
+      "datasource": {
+        "type": "prometheus"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "repeatDirection": "h",
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max",
+            "mean"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "custom": {
+            "lineWidth": 2,
+            "lineInterpolation": "smooth",
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "spanNulls": true
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "avg by(serialno) (airgradient_pm02{serialno=~\"$serialno\"})",
+          "editorMode": "code",
+          "legendFormat": "Indoor {{serialno}}"
+        },
+        {
+          "expr": "avg without(source, station) (outdoor_pm02_ugm3)",
+          "editorMode": "code",
+          "legendFormat": "Outdoor (UBA)"
+        }
+      ],
+      "title": "PM2.5 — Indoor vs Outdoor",
+      "description": "Indoor AirGradient PM2.5 vs nearest outdoor sensor station (UBA).",
+      "transparent": false,
+      "datasource": {
+        "type": "prometheus"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 9
+      },
+      "repeatDirection": "h",
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max",
+            "mean"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "conμgm3",
+          "custom": {
+            "lineWidth": 2,
+            "lineInterpolation": "smooth",
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "axisSoftMin": 0,
+            "spanNulls": true
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "avg by(serialno) (airgradient_pm10{serialno=~\"$serialno\"})",
+          "editorMode": "code",
+          "legendFormat": "Indoor {{serialno}}"
+        },
+        {
+          "expr": "avg without(source, station) (outdoor_pm10_ugm3)",
+          "editorMode": "code",
+          "legendFormat": "Outdoor (UBA)"
+        }
+      ],
+      "title": "PM10 — Indoor vs Outdoor",
+      "description": "Indoor AirGradient PM10 vs nearest outdoor sensor station (UBA).",
+      "transparent": false,
+      "datasource": {
+        "type": "prometheus"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 9
+      },
+      "repeatDirection": "h",
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max",
+            "mean"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "conμgm3",
+          "custom": {
+            "lineWidth": 2,
+            "lineInterpolation": "smooth",
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "axisSoftMin": 0,
+            "spanNulls": true
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "avg without(source, station) (outdoor_no2_ugm3)",
+          "editorMode": "code",
+          "legendFormat": "NO₂"
+        },
+        {
+          "expr": "avg without(source, station) (outdoor_o3_ugm3)",
+          "editorMode": "code",
+          "legendFormat": "O₃"
+        }
+      ],
+      "title": "Outdoor Air Quality (NO₂ / O₃)",
+      "description": "Outdoor-only nitrogen dioxide and ozone from the nearest UBA sensor station.",
+      "transparent": false,
+      "datasource": {
+        "type": "prometheus"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 18
+      },
+      "repeatDirection": "h",
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max",
+            "mean"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "conμgm3",
+          "custom": {
+            "lineWidth": 2,
+            "lineInterpolation": "smooth",
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "axisSoftMin": 0,
+            "spanNulls": true
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "avg without(source, station) (outdoor_wind_speed_ms)",
+          "editorMode": "code",
+          "legendFormat": "Wind"
+        }
+      ],
+      "title": "Outdoor Wind Speed",
+      "description": "Outdoor-only wind speed at 10 m (Open-Meteo).",
+      "transparent": false,
+      "datasource": {
+        "type": "prometheus"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 18
+      },
+      "repeatDirection": "h",
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max",
+            "mean"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "velocityms",
+          "custom": {
+            "lineWidth": 2,
+            "lineInterpolation": "smooth",
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "axisSoftMin": 0,
+            "spanNulls": true
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "avg without(source, station) (outdoor_pressure_hpa)",
+          "editorMode": "code",
+          "legendFormat": "Pressure"
+        }
+      ],
+      "title": "Outdoor Surface Pressure",
+      "description": "Outdoor-only surface atmospheric pressure (Open-Meteo).",
+      "transparent": false,
+      "datasource": {
+        "type": "prometheus"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 27
+      },
+      "repeatDirection": "h",
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max",
+            "mean"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "pressurehpa",
+          "custom": {
+            "lineWidth": 2,
+            "lineInterpolation": "smooth",
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "spanNulls": true
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "avg without(source, station) (outdoor_precip_mm)",
+          "editorMode": "code",
+          "legendFormat": "Precip"
+        }
+      ],
+      "title": "Outdoor Precipitation",
+      "description": "Outdoor-only hourly precipitation (Open-Meteo).",
+      "transparent": false,
+      "datasource": {
+        "type": "prometheus"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 27
+      },
+      "repeatDirection": "h",
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max",
+            "mean"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "lengthmm",
+          "custom": {
+            "lineWidth": 2,
+            "lineInterpolation": "smooth",
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "axisSoftMin": 0,
+            "spanNulls": true
+          }
+        },
+        "overrides": []
+      }
+    }
+  ],
+  "templating": {
+    "list": [
+      {
+        "type": "query",
+        "name": "serialno",
+        "skipUrlSync": false,
+        "query": "label_values(airgradient_config_info,serialno)",
+        "datasource": {
+          "type": "prometheus"
+        },
+        "multi": true,
+        "allowCustomValue": true,
+        "refresh": 1,
+        "sort": 1,
+        "includeAll": true,
+        "allValue": ".*",
+        "auto": false,
+        "auto_min": "10s",
+        "auto_count": 30
+      }
+    ]
+  },
+  "annotations": {}
+}
