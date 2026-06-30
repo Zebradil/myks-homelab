@@ -34,7 +34,7 @@
 
 {{- define "telegram.alert_list.firing" -}}
 {{- range $i, $a := .Alerts.Firing }}
-{{- if lt $i 10 }}
+{{- if lt $i 1 }}
 -
 {{- with $.CommonAnnotations.summary }}{{ else with .Annotations.summary }}
 <b>Sum:</b> {{ . | html }}{{ end }}
@@ -48,20 +48,16 @@
 <b>Node:</b> <i>{{ . }}</i>{{ end }}
 {{- with .StartsAt }}
 <b>Started at:</b> <i>{{ tz "Europe/Berlin" . }} ({{ . | since | humanizeDuration }})</i>{{ end }}
-
-{{- with .GeneratorURL }}
-<a href="{{ . | html }}">Source</a>{{ end }}
-{{- with $.CommonAnnotations.runbook_url }}{{ else with .Annotations.runbook_url }}
-<a href="{{ . | html }}">Runbook</a>{{ end }}{{ end }}
 {{- end }}
-{{- if gt (len .Alerts.Firing) 10 }}
+{{- end }}
+{{- if gt (len .Alerts.Firing) 1 }}
 
-<i>… showing first 10 of {{ len .Alerts.Firing }} firing alerts (truncated)</i>{{ end }}
+<i>… 1 of {{ len .Alerts.Firing }} firing alerts shown; open Alertmanager UI for the rest</i>{{ end }}
 {{- end -}}
 
 {{- define "telegram.alert_list.resolved" -}}
 {{- range $i, $a := .Alerts.Resolved }}
-{{- if lt $i 10 }}
+{{- if lt $i 1 }}
 -
 {{- with $.CommonAnnotations.summary }}{{ else with .Annotations.summary }}
 <b>Sum:</b> {{ . | html }}{{ end }}
@@ -75,15 +71,11 @@
 <b>Node:</b> <i>{{ . }}</i>{{ end }}
 {{- with .StartsAt }}
 <b>Started at:</b> <i>{{ tz "Europe/Berlin" . }} ({{ . | since | humanizeDuration }})</i>{{ end }}
-
-{{- with .GeneratorURL }}
-<a href="{{ . | html }}">Source</a>{{ end }}
-{{- with $.CommonAnnotations.runbook_url }}{{ else with .Annotations.runbook_url }}
-<a href="{{ . | html }}">Runbook</a>{{ end }}{{ end }}
 {{- end }}
-{{- if gt (len .Alerts.Resolved) 10 }}
+{{- end }}
+{{- if gt (len .Alerts.Resolved) 1 }}
 
-<i>… showing first 10 of {{ len .Alerts.Resolved }} resolved alerts (truncated)</i>{{ end }}
+<i>… 1 of {{ len .Alerts.Resolved }} resolved alerts shown; open Alertmanager UI for the rest</i>{{ end }}
 {{- end -}}
 
 {{- define "telegram.message" }}
