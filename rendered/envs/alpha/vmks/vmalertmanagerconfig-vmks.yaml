@@ -78,4 +78,8 @@ spec:
           - severity="critical"
         receiver: tg-high-severity
       - continue: false
+        matchers:
+          - alertname="InfoInhibitor"
+        receiver: blackhole
+      - continue: false
         receiver: tg-common

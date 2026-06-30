@@ -27,6 +27,13 @@ alertmanager:
           receiver: tg-high-severity
           continue: false
 
+        #! InfoInhibitor only feeds inhibit_rules, never notify (matched by name so a
+        #! stray severity="none" on a real alert still surfaces in tg-common)
+        - matchers:
+            - alertname="InfoInhibitor"
+          receiver: blackhole
+          continue: false
+
         #! All the rest
         - receiver: tg-common
           continue: false
