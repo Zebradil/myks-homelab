@@ -397,11 +397,12 @@ data:
             pushed_authorization_request_endpoint_auth_method: 'none'
             pushed_authorization_request_endpoint_auth_signing_alg: 'RS256'
           - client_id: 'kb-mcp'
-            client_name: 'kb-mcp (Claude)'
+            client_name: 'kb-mcp'
             public: true
             redirect_uris:
               - 'https://claude.ai/api/mcp/auth_callback'
               - 'https://claude.com/api/mcp/auth_callback'
+              - 'http://127.0.0.1:19876/mcp/oauth/callback'
             audience:
               - 'https://kb-mcp.zebradil.dev/mcp'
             scopes:
