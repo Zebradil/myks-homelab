@@ -51,7 +51,7 @@ spec:
         - env:
             - name: FB_DATABASE
               value: /database/database.db
-          image: index.docker.io/filebrowser/filebrowser@sha256:9805b21cf910f3ef6f4a1c8f441f1dd6cc4197136f9541fe2a1ab6d050706e4b
+          image: index.docker.io/filebrowser/filebrowser@sha256:a6653eb79ecf8312f4f6bf0d0adf65d81016f17a92d64d5b2562340984e39405
           livenessProbe:
             failureThreshold: 3
             httpGet:
