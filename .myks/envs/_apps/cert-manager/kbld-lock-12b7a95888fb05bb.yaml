@@ -1,0 +1,16 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.49.0
+overrides:
+- image: quay.io/jetstack/cert-manager-cainjector:v1.20.3
+  newImage: oci.zebradil.dev/quay.io-cache/jetstack/cert-manager-cainjector@sha256:06ad347fe0dc2eb84cc355c26f6752e05e87dceb6447f5cd29b963dd66dfd8bd
+  preresolved: true
+- image: quay.io/jetstack/cert-manager-controller:v1.20.3
+  newImage: oci.zebradil.dev/quay.io-cache/jetstack/cert-manager-controller@sha256:6c13d61e0348a5bc3477f8ea9a928624300b30d19b1c72a7d2b90372fc713db4
+  preresolved: true
+- image: quay.io/jetstack/cert-manager-startupapicheck:v1.20.3
+  newImage: oci.zebradil.dev/quay.io-cache/jetstack/cert-manager-startupapicheck@sha256:b0c9a2c18d02f3c40a9e091a6fe9afdf39cbf7fb2d9acc18c9881c21c625f2dc
+  preresolved: true
+- image: quay.io/jetstack/cert-manager-webhook:v1.20.3
+  newImage: oci.zebradil.dev/quay.io-cache/jetstack/cert-manager-webhook@sha256:a61e817632cebed3bb59a189327e786fa3fdd7597167d994a1848d98fd55848f
+  preresolved: true
