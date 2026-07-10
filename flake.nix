@@ -29,7 +29,7 @@
             shellHook = ''
               git config core.hooksPath hooks
               mise install
-              source <(mise activate)
+              source <(mise activate bash)
             '';
           };
         }
