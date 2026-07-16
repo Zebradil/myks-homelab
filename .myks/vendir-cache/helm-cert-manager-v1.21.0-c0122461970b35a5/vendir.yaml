@@ -5,9 +5,9 @@ directories:
       name: cert-manager
       repository:
         url: https://charts.jetstack.io
-      version: v1.20.3
+      version: v1.21.0
     lazy: true
     path: .
-  path: .myks/vendir-cache/helm-cert-manager-v1.20.3-8e11ca066886a473/data
+  path: .myks/vendir-cache/helm-cert-manager-v1.21.0-c0122461970b35a5/data
 kind: Config
 minimumRequiredVersion: ""
