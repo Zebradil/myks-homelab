@@ -1,12 +1,12 @@
 {{- if and .Values.prometheus.enabled (and .Values.prometheus.podmonitor.enabled .Values.prometheus.servicemonitor.enabled) }}
 {{- fail "Either .Values.prometheus.podmonitor.enabled or .Values.prometheus.servicemonitor.enabled can be enabled at a time, but not both." }}
-{{- else if and .Values.prometheus.enabled .Values.prometheus.podmonitor.enabled }}
+{{- else if and .Values.prometheus.enabled .Values.prometheus.servicemonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
-kind: PodMonitor
+kind: ServiceMonitor
 metadata:
   name: {{ template "cert-manager.fullname" . }}
-{{- if .Values.prometheus.podmonitor.namespace }}
-  namespace: {{ .Values.prometheus.podmonitor.namespace }}
+{{- if .Values.prometheus.servicemonitor.namespace }}
+  namespace: {{ .Values.prometheus.servicemonitor.namespace }}
 {{- else }}
   namespace: {{ include "cert-manager.namespace" . }}
 {{- end }}
@@ -16,13 +16,15 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/component: "controller"
     {{- include "labels" . | nindent 4 }}
-    prometheus: {{ .Values.prometheus.podmonitor.prometheusInstance }}
-    {{- with .Values.prometheus.podmonitor.labels }}
+    {{- if .Values.prometheus.servicemonitor.prometheusInstance }}
+    prometheus: {{ .Values.prometheus.servicemonitor.prometheusInstance }}
+    {{- end }}
+    {{- with .Values.prometheus.servicemonitor.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
-{{- if .Values.prometheus.podmonitor.annotations }}
+{{- if .Values.prometheus.servicemonitor.annotations }}
   annotations:
-    {{- with .Values.prometheus.podmonitor.annotations }}
+    {{- with .Values.prometheus.servicemonitor.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
 {{- end }}
@@ -46,18 +48,22 @@ spec:
         - cainjector
         - controller
         - webhook
-{{- if .Values.prometheus.podmonitor.namespace }}
+{{- if .Values.prometheus.servicemonitor.namespace }}
   namespaceSelector:
     matchNames:
       - {{ include "cert-manager.namespace" . }}
 {{- end }}
-  podMetricsEndpoints:
-    - port: http-metrics
-      path: {{ .Values.prometheus.podmonitor.path }}
-      interval: {{ .Values.prometheus.podmonitor.interval }}
-      scrapeTimeout: {{ .Values.prometheus.podmonitor.scrapeTimeout }}
-      honorLabels: {{ .Values.prometheus.podmonitor.honorLabels }}
-      {{- with .Values.prometheus.podmonitor.endpointAdditionalProperties }}
-      {{- toYaml . | nindent 6 }}
-      {{- end }}
+  endpoints:
+  - targetPort: http-metrics
+    path: /metrics
+    {{- if .Values.prometheus.servicemonitor.interval }}
+    interval: {{ .Values.prometheus.servicemonitor.interval }}
+    {{- end }}
+    {{- if .Values.prometheus.servicemonitor.scrapeTimeout }}
+    scrapeTimeout: {{ .Values.prometheus.servicemonitor.scrapeTimeout }}
+    {{- end }}
+    honorLabels: {{ .Values.prometheus.servicemonitor.honorLabels }}
+    {{- with .Values.prometheus.servicemonitor.endpointAdditionalProperties }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 {{- end }}
