@@ -5,9 +5,9 @@ directories:
       name: prometheus-operator-crds
       repository:
         url: https://prometheus-community.github.io/helm-charts
-      version: 30.0.0
+      version: 30.0.1
     lazy: true
     path: .
-  path: .myks/vendir-cache/helm-prometheus-operator-crds-30.0.0-58cb31bdf12e8648/data
+  path: .myks/vendir-cache/helm-prometheus-operator-crds-30.0.1-b8f7d18d31642d73/data
 kind: Config
 minimumRequiredVersion: ""
