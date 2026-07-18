@@ -43,6 +43,16 @@ spec:
       annotations:
         checksum/config: #@ md5.sum(registries_yaml)
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - gray
+                      - junior
       tolerations:
         - operator: Exists
           effect: NoSchedule
