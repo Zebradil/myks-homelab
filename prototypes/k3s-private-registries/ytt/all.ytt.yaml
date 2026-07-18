@@ -50,9 +50,7 @@ spec:
               - matchExpressions:
                   - key: kubernetes.io/hostname
                     operator: In
-                    values:
-                      - gray
-                      - junior
+                    values: #@ e.nodes
       tolerations:
         - operator: Exists
           effect: NoSchedule

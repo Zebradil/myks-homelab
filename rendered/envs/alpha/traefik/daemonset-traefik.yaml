@@ -24,6 +24,16 @@ spec:
         app.kubernetes.io/instance: traefik-traefik
         app.kubernetes.io/name: traefik
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - gray
+                      - junior
       automountServiceAccountToken: true
       containers:
         - args:
