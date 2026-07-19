@@ -1,0 +1,15 @@
+#@data/values-schema
+---
+#@overlay/match-child-defaults missing_ok=True
+application:
+  #! renovate: datasource=docker
+  image: ghcr.io/zebradil/kasha-box:sha-4b6a40056e5b
+  #! No GC in the MVP — the store only grows. Size generously and watch disk.
+  storageSize: 100Gi
+  port: 5000
+  #! Public key(s) clients verify against. Space-separated if more than one.
+  trustedPublicKeys: znix.zebradil.dev:nvr0OQFRddbHGopQbyLbLXQnntFBDKp23tqQq+msppw=
+  #! Space-separated flake ids under roots/<flake>/ in R2.
+  flakes: znix
+  #! Seconds between mirror-down sweeps.
+  mirrorDownInterval: 300

@@ -1,0 +1,7 @@
+#@ load("@ytt:data", "data")
+#@ load("traefik.lib.yaml", "route")
+
+#@ name = data.values.myks.context.app
+#@ t = data.values.environment.traefik
+
+--- #@ route.unprotected(name, t.hosts.lan, ["lan-web", "lan-websecure"])

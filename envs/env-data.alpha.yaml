@@ -48,6 +48,7 @@ environment:
     - proto: jellyfin
     - proto: k3s-private-registries
     - proto: karma
+    - proto: kasha
     - proto: kb-mcp
     - proto: librespeed
     - proto: outdoor-weather
