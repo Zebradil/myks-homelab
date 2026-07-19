@@ -34,7 +34,6 @@ spec:
   resources:
     requests:
       storage: #@ a.storageSize
-  storageClassName: n-btrfs-retain-v1
 ---
 apiVersion: apps/v1
 kind: Deployment
