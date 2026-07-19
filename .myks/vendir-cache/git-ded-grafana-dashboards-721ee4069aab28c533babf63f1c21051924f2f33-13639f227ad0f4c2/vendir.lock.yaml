@@ -1,0 +1,10 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - configDigest: 9b1e8750488b59a23494803645b273308a75b9d57a2d53ab1b0cc0168c2aa110
+    git:
+      commitTitle: Update README.md
+      sha: 721ee4069aab28c533babf63f1c21051924f2f33
+    path: .
+  path: .myks/vendir-cache/git-ded-grafana-dashboards-721ee4069aab28c533babf63f1c21051924f2f33-13639f227ad0f4c2/data
+kind: LockConfig

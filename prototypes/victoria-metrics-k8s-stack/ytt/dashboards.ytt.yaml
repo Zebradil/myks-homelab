@@ -1,0 +1,30 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:json", "json")
+#@ load("grafana.lib.yaml", "gen_dashboard")
+
+#! PVC usage dashboards. Two of them for now to compare; drop one later.
+
+#! 1. Vendored via vendir from dfds/ded-grafana-dashboards (Grafana.com 13646).
+#!    Its panels hard-code the datasource name "Prometheus"; our provisioned
+#!    default is named "VictoriaMetrics", so rewrite the name (couples to the
+#!    datasource name set in vmks.grafana.yaml).
+#@ def gen_13646(file):
+#@   content = data.read(file).replace('"Prometheus"', '"VictoriaMetrics"')
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vmks-pvc-usage-13646
+  labels:
+    grafana_dashboard: '1'
+data:
+  kubernetes-persistent-volumes.json: #@ json.encode(json.decode(content), indent=2)
+#@ end
+#@ for file in data.list():
+#@ if/end file.endswith("kubernetes-persistent-volumes.json"):
+--- #@ gen_13646(file)
+#@ end
+
+#! 2. kubernetes-mixin "persistentvolumesusage", copy-pasted from kube-prometheus
+#!    compiled output. Uses a templated ${datasource} var, binds to the default.
+#!    TODO: move to jsonnet generation once myks supports it.
+--- #@ gen_dashboard("persistentvolumesusage.json", name="vmks-pvc-usage-mixin")
