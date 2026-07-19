@@ -36,7 +36,7 @@ spec:
           envFrom:
             - secretRef:
                 name: kasha
-          image: oci.zebradil.dev/ghcr.io-cache/zebradil/kasha-box@sha256:cbc5b094f1d521f19c643b1e5cc242943fc8568e2fa370ffd94ebb90642f2d5f
+          image: oci.zebradil.dev/ghcr.io-cache/zebradil/kasha-box@sha256:7920596a751b54e0b76c50886a0f8dd151772f2e2796d700b977bbb618b10f47
           livenessProbe:
             httpGet:
               path: /nix-cache-info

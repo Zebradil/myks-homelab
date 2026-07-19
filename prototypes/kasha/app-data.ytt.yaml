@@ -3,7 +3,8 @@
 #@overlay/match-child-defaults missing_ok=True
 application:
   #! renovate: datasource=docker
-  image: ghcr.io/zebradil/kasha-box:sha-4b6a40056e5b
+  #! Use `edge` floating tag for now, switch to version tags when they're available
+  image: ghcr.io/zebradil/kasha-box:edge
   #! No GC in the MVP — the store only grows. Size generously and watch disk.
   storageSize: 100Gi
   port: 5000
