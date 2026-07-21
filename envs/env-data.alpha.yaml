@@ -46,7 +46,6 @@ environment:
     - proto: webapp
       name: it-tools
     - proto: jellyfin
-    - proto: k3s-private-registries
     - proto: karma
     - proto: kasha
     - proto: kb-mcp
