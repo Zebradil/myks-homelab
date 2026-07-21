@@ -30,6 +30,12 @@ vmcluster:
     retentionPeriod: 30d
     vmstorage:
       replicaCount: 1
+      storage:
+        volumeClaimTemplate:
+          spec:
+            resources:
+              requests:
+                storage: 20Gi
     vmselect:
       enabled: false
     vminsert:
