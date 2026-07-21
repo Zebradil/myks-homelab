@@ -10,7 +10,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`traefik.zebradil.dev`) || Host(`traefik.gray.zebradil.dev`) || Host(`traefik.junior.zebradil.dev`)
+      match: Host(`traefik.zebradil.dev`) || Host(`traefik.junior.zebradil.dev`)
       middlewares:
         - name: chain-authelia-auth
           namespace: authelia

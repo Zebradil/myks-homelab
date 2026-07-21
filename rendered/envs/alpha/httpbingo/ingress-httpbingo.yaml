@@ -16,16 +16,6 @@ spec:
                   name: http
             path: /
             pathType: Prefix
-    - host: httpbingo.gray.zebradil.dev
-      http:
-        paths:
-          - backend:
-              service:
-                name: httpbingo
-                port:
-                  name: http
-            path: /
-            pathType: Prefix
     - host: httpbingo.junior.zebradil.dev
       http:
         paths:
@@ -46,16 +36,6 @@ spec:
                   name: http
             path: /
             pathType: Prefix
-    - host: httpbingo.gray.ts.zebradil.dev
-      http:
-        paths:
-          - backend:
-              service:
-                name: httpbingo
-                port:
-                  name: http
-            path: /
-            pathType: Prefix
     - host: httpbingo.junior.ts.zebradil.dev
       http:
         paths:
@@ -67,16 +47,6 @@ spec:
             path: /
             pathType: Prefix
     - host: httpbingo.lan.zebradil.dev
-      http:
-        paths:
-          - backend:
-              service:
-                name: httpbingo
-                port:
-                  name: http
-            path: /
-            pathType: Prefix
-    - host: httpbingo.gray.lan.zebradil.dev
       http:
         paths:
           - backend:

@@ -80,8 +80,6 @@ environment:
     name: it-tools
   - proto: jellyfin
     name: ""
-  - proto: k3s-private-registries
-    name: ""
   - proto: karma
     name: ""
   - proto: kasha
@@ -111,30 +109,28 @@ environment:
   baseDomain: zebradil.dev
   hosts:
   - zebradil.dev
-  - gray.zebradil.dev
   - junior.zebradil.dev
   - ts.zebradil.dev
-  - gray.ts.zebradil.dev
   - junior.ts.zebradil.dev
   - lan.zebradil.dev
-  - gray.lan.zebradil.dev
   - junior.lan.zebradil.dev
   traefik:
     hosts:
       lan:
       - lan.zebradil.dev
-      - gray.lan.zebradil.dev
       - junior.lan.zebradil.dev
       vpn:
       - ts.zebradil.dev
-      - gray.ts.zebradil.dev
       - junior.ts.zebradil.dev
       web:
       - zebradil.dev
-      - gray.zebradil.dev
       - junior.zebradil.dev
   nodes:
-  - gray
+  - junior
+  - d1
+  - d2
+  - d3
+  edgeNodes:
   - junior
 helm:
   buildDependencies: false

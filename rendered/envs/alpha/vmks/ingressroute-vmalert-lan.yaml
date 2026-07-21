@@ -10,7 +10,7 @@ spec:
     - lan-websecure
   routes:
     - kind: Rule
-      match: Host(`vmalert.lan.zebradil.dev`) || Host(`vmalert.gray.lan.zebradil.dev`) || Host(`vmalert.junior.lan.zebradil.dev`)
+      match: Host(`vmalert.lan.zebradil.dev`) || Host(`vmalert.junior.lan.zebradil.dev`)
       services:
         - name: vmalert-vmks
           port: http

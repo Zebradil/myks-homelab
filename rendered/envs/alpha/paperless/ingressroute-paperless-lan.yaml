@@ -10,7 +10,7 @@ spec:
     - lan-websecure
   routes:
     - kind: Rule
-      match: Host(`paperless.lan.zebradil.dev`) || Host(`paperless.gray.lan.zebradil.dev`) || Host(`paperless.junior.lan.zebradil.dev`)
+      match: Host(`paperless.lan.zebradil.dev`) || Host(`paperless.junior.lan.zebradil.dev`)
       services:
         - name: paperless
           port: http

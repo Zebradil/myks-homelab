@@ -10,7 +10,7 @@ spec:
     - lan-websecure
   routes:
     - kind: Rule
-      match: Host(`jellyfin.lan.zebradil.dev`) || Host(`jellyfin.gray.lan.zebradil.dev`) || Host(`jellyfin.junior.lan.zebradil.dev`)
+      match: Host(`jellyfin.lan.zebradil.dev`) || Host(`jellyfin.junior.lan.zebradil.dev`)
       services:
         - name: jellyfin
           port: http

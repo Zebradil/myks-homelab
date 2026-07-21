@@ -10,7 +10,7 @@ spec:
     - vpn-websecure
   routes:
     - kind: Rule
-      match: Host(`starbase80.ts.zebradil.dev`) || Host(`starbase80.gray.ts.zebradil.dev`) || Host(`starbase80.junior.ts.zebradil.dev`)
+      match: Host(`starbase80.ts.zebradil.dev`) || Host(`starbase80.junior.ts.zebradil.dev`)
       services:
         - name: starbase80
           port: http

@@ -42,7 +42,7 @@ affinity:
         - matchExpressions:
             - key: kubernetes.io/hostname
               operator: In
-              values: #@ data.values.environment.nodes
+              values: #@ data.values.environment.edgeNodes
 
 updateStrategy:
   rollingUpdate:

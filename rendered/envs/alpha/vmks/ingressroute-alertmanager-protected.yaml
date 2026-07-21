@@ -10,7 +10,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`alertmanager.zebradil.dev`) || Host(`alertmanager.gray.zebradil.dev`) || Host(`alertmanager.junior.zebradil.dev`)
+      match: Host(`alertmanager.zebradil.dev`) || Host(`alertmanager.junior.zebradil.dev`)
       middlewares:
         - name: chain-authelia-auth
           namespace: authelia

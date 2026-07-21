@@ -10,7 +10,7 @@ spec:
     - lan-websecure
   routes:
     - kind: Rule
-      match: Host(`kasha.lan.zebradil.dev`) || Host(`kasha.gray.lan.zebradil.dev`) || Host(`kasha.junior.lan.zebradil.dev`)
+      match: Host(`kasha.lan.zebradil.dev`) || Host(`kasha.junior.lan.zebradil.dev`)
       services:
         - name: kasha
           port: http

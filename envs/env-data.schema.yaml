@@ -11,6 +11,8 @@ environment:
       web: ['']
   nodes:
     - ''
+  edgeNodes:
+    - ''
 
 #! Extra features for the helm plugin
 #@overlay/match-child-defaults missing_ok=True

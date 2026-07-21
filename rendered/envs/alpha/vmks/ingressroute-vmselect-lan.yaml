@@ -10,7 +10,7 @@ spec:
     - lan-websecure
   routes:
     - kind: Rule
-      match: Host(`vmselect.lan.zebradil.dev`) || Host(`vmselect.gray.lan.zebradil.dev`) || Host(`vmselect.junior.lan.zebradil.dev`)
+      match: Host(`vmselect.lan.zebradil.dev`) || Host(`vmselect.junior.lan.zebradil.dev`)
       services:
         - name: vmselect-vmks-long
           port: http

@@ -10,7 +10,7 @@ spec:
     - lan-websecure
   routes:
     - kind: Rule
-      match: Host(`traefik.lan.zebradil.dev`) || Host(`traefik.gray.lan.zebradil.dev`) || Host(`traefik.junior.lan.zebradil.dev`)
+      match: Host(`traefik.lan.zebradil.dev`) || Host(`traefik.junior.lan.zebradil.dev`)
       services:
         - kind: TraefikService
           name: api@internal

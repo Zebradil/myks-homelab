@@ -10,7 +10,7 @@ spec:
     - lan-websecure
   routes:
     - kind: Rule
-      match: Host(`authelia.lan.zebradil.dev`) || Host(`authelia.gray.lan.zebradil.dev`) || Host(`authelia.junior.lan.zebradil.dev`)
+      match: Host(`authelia.lan.zebradil.dev`) || Host(`authelia.junior.lan.zebradil.dev`)
       services:
         - name: authelia
           port: http

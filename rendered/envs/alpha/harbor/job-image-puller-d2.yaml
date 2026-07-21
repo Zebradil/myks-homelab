@@ -4,8 +4,8 @@ metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
     argocd.argoproj.io/hook: PreSync
-  name: image-puller-gray
-  namespace: traefik
+  name: image-puller-d2
+  namespace: harbor
 spec:
   template:
     spec:
@@ -82,7 +82,7 @@ spec:
               name: config-volume
             - mountPath: /run/k3s/containerd/containerd.sock
               name: k3s-containerd-socket
-      nodeName: gray
+      nodeName: d2
       restartPolicy: Never
       volumes:
         - configMap:

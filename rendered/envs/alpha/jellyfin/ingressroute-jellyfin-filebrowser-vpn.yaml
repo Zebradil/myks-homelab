@@ -10,7 +10,7 @@ spec:
     - vpn-websecure
   routes:
     - kind: Rule
-      match: Host(`jellyfin-filebrowser.ts.zebradil.dev`) || Host(`jellyfin-filebrowser.gray.ts.zebradil.dev`) || Host(`jellyfin-filebrowser.junior.ts.zebradil.dev`)
+      match: Host(`jellyfin-filebrowser.ts.zebradil.dev`) || Host(`jellyfin-filebrowser.junior.ts.zebradil.dev`)
       services:
         - name: jellyfin-filebrowser
           port: http

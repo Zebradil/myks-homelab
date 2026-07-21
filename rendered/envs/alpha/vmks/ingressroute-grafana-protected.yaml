@@ -10,7 +10,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`grafana.zebradil.dev`) || Host(`grafana.gray.zebradil.dev`) || Host(`grafana.junior.zebradil.dev`)
+      match: Host(`grafana.zebradil.dev`) || Host(`grafana.junior.zebradil.dev`)
       middlewares:
         - name: chain-authelia-auth
           namespace: authelia

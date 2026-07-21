@@ -10,7 +10,7 @@ spec:
     - vpn-websecure
   routes:
     - kind: Rule
-      match: Host(`vmagent.ts.zebradil.dev`) || Host(`vmagent.gray.ts.zebradil.dev`) || Host(`vmagent.junior.ts.zebradil.dev`)
+      match: Host(`vmagent.ts.zebradil.dev`) || Host(`vmagent.junior.ts.zebradil.dev`)
       services:
         - name: vmagent-vmks
           port: http

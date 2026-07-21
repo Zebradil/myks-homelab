@@ -32,7 +32,6 @@ spec:
                   - key: kubernetes.io/hostname
                     operator: In
                     values:
-                      - gray
                       - junior
       automountServiceAccountToken: true
       containers:

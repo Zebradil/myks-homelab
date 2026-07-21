@@ -10,7 +10,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`uptime-kuma.zebradil.dev`) || Host(`uptime-kuma.gray.zebradil.dev`) || Host(`uptime-kuma.junior.zebradil.dev`)
+      match: Host(`uptime-kuma.zebradil.dev`) || Host(`uptime-kuma.junior.zebradil.dev`)
       middlewares:
         - name: chain-authelia-auth
           namespace: authelia

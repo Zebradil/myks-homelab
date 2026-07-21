@@ -16,16 +16,6 @@ spec:
                   name: http
             path: /
             pathType: Prefix
-    - host: it-tools.gray.zebradil.dev
-      http:
-        paths:
-          - backend:
-              service:
-                name: it-tools
-                port:
-                  name: http
-            path: /
-            pathType: Prefix
     - host: it-tools.junior.zebradil.dev
       http:
         paths:
@@ -46,16 +36,6 @@ spec:
                   name: http
             path: /
             pathType: Prefix
-    - host: it-tools.gray.ts.zebradil.dev
-      http:
-        paths:
-          - backend:
-              service:
-                name: it-tools
-                port:
-                  name: http
-            path: /
-            pathType: Prefix
     - host: it-tools.junior.ts.zebradil.dev
       http:
         paths:
@@ -67,16 +47,6 @@ spec:
             path: /
             pathType: Prefix
     - host: it-tools.lan.zebradil.dev
-      http:
-        paths:
-          - backend:
-              service:
-                name: it-tools
-                port:
-                  name: http
-            path: /
-            pathType: Prefix
-    - host: it-tools.gray.lan.zebradil.dev
       http:
         paths:
           - backend:

@@ -16,16 +16,6 @@ spec:
                   name: http
             path: /
             pathType: Prefix
-    - host: vaultwarden.gray.zebradil.dev
-      http:
-        paths:
-          - backend:
-              service:
-                name: vaultwarden
-                port:
-                  name: http
-            path: /
-            pathType: Prefix
     - host: vaultwarden.junior.zebradil.dev
       http:
         paths:
@@ -46,16 +36,6 @@ spec:
                   name: http
             path: /
             pathType: Prefix
-    - host: vaultwarden.gray.ts.zebradil.dev
-      http:
-        paths:
-          - backend:
-              service:
-                name: vaultwarden
-                port:
-                  name: http
-            path: /
-            pathType: Prefix
     - host: vaultwarden.junior.ts.zebradil.dev
       http:
         paths:
@@ -67,16 +47,6 @@ spec:
             path: /
             pathType: Prefix
     - host: vaultwarden.lan.zebradil.dev
-      http:
-        paths:
-          - backend:
-              service:
-                name: vaultwarden
-                port:
-                  name: http
-            path: /
-            pathType: Prefix
-    - host: vaultwarden.gray.lan.zebradil.dev
       http:
         paths:
           - backend:

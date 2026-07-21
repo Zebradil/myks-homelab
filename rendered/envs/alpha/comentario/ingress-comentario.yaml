@@ -16,16 +16,6 @@ spec:
                   name: http
             path: /
             pathType: Prefix
-    - host: comentario.gray.zebradil.dev
-      http:
-        paths:
-          - backend:
-              service:
-                name: comentario
-                port:
-                  name: http
-            path: /
-            pathType: Prefix
     - host: comentario.junior.zebradil.dev
       http:
         paths:
@@ -46,16 +36,6 @@ spec:
                   name: http
             path: /
             pathType: Prefix
-    - host: comentario.gray.ts.zebradil.dev
-      http:
-        paths:
-          - backend:
-              service:
-                name: comentario
-                port:
-                  name: http
-            path: /
-            pathType: Prefix
     - host: comentario.junior.ts.zebradil.dev
       http:
         paths:
@@ -67,16 +47,6 @@ spec:
             path: /
             pathType: Prefix
     - host: comentario.lan.zebradil.dev
-      http:
-        paths:
-          - backend:
-              service:
-                name: comentario
-                port:
-                  name: http
-            path: /
-            pathType: Prefix
-    - host: comentario.gray.lan.zebradil.dev
       http:
         paths:
           - backend:

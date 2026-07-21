@@ -6,7 +6,7 @@
 namespace: #@ data.values.myks.context.app
 images:
   -  #@ "docker.io/traefik:" + data.values.application.version
-nodes: #@ data.values.environment.nodes
+nodes: #@ data.values.environment.edgeNodes
 kbld:
   enabled: #@ data.values.kbld.enabled
 #@ end

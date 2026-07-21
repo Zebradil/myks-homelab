@@ -10,7 +10,7 @@ spec:
     - vpn-websecure
   routes:
     - kind: Rule
-      match: Host(`paperless.ts.zebradil.dev`) || Host(`paperless.gray.ts.zebradil.dev`) || Host(`paperless.junior.ts.zebradil.dev`)
+      match: Host(`paperless.ts.zebradil.dev`) || Host(`paperless.junior.ts.zebradil.dev`)
       services:
         - name: paperless
           port: http

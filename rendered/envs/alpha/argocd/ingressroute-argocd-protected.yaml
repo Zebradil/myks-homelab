@@ -11,7 +11,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`argocd.zebradil.dev`) || Host(`argocd.gray.zebradil.dev`) || Host(`argocd.junior.zebradil.dev`)
+      match: Host(`argocd.zebradil.dev`) || Host(`argocd.junior.zebradil.dev`)
       middlewares:
         - name: chain-authelia-auth
           namespace: authelia

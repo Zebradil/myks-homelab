@@ -10,7 +10,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`vmselect.zebradil.dev`) || Host(`vmselect.gray.zebradil.dev`) || Host(`vmselect.junior.zebradil.dev`)
+      match: Host(`vmselect.zebradil.dev`) || Host(`vmselect.junior.zebradil.dev`)
       middlewares:
         - name: chain-authelia-auth
           namespace: authelia

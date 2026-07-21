@@ -10,7 +10,7 @@ spec:
     - vpn-websecure
   routes:
     - kind: Rule
-      match: Host(`cams-cam3.ts.zebradil.dev`) || Host(`cams-cam3.gray.ts.zebradil.dev`) || Host(`cams-cam3.junior.ts.zebradil.dev`)
+      match: Host(`cams-cam3.ts.zebradil.dev`) || Host(`cams-cam3.junior.ts.zebradil.dev`)
       services:
         - name: cams-cam3
           port: http
