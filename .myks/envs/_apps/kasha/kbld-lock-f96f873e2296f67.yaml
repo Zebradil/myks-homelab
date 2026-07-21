@@ -3,5 +3,5 @@ kind: Config
 minimumRequiredVersion: 0.49.0
 overrides:
 - image: ghcr.io/zebradil/kasha-box:edge
-  newImage: oci.zebradil.dev/ghcr.io-cache/zebradil/kasha-box@sha256:ed4e304269e63da968536ef19e2898e8b13b1deccc3a9b001a50c2f2c6cbca56
+  newImage: oci.zebradil.dev/ghcr.io-cache/zebradil/kasha-box@sha256:f73a48ee96b3e157aa9cf4d00df6b1c295e64e9a4cdea5a35e9b65696c1a23ec
   preresolved: true
