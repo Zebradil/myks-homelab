@@ -6,7 +6,7 @@ application:
   #! Use `edge` floating tag for now, switch to version tags when they're available
   image: ghcr.io/zebradil/kasha-box:edge
   #! No GC in the MVP — the store only grows. Size generously and watch disk.
-  storageSize: 100Gi
+  storageSize: 150Gi
   port: 5000
   #! Public key(s) clients verify against. Space-separated if more than one.
   trustedPublicKeys: znix.zebradil.dev:nvr0OQFRddbHGopQbyLbLXQnntFBDKp23tqQq+msppw=
