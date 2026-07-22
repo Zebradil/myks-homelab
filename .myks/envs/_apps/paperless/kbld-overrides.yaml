@@ -1,5 +1,5 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 overrides:
-    - image: ghcr.io/paperless-ngx/paperless-ngx:2.20.3
-      newImage: oci.zebradil.dev/ghcr.io-cache/paperless-ngx/paperless-ngx:2.20.3
+    - image: ghcr.io/paperless-ngx/paperless-ngx:3.0.0
+      newImage: oci.zebradil.dev/ghcr.io-cache/paperless-ngx/paperless-ngx:3.0.0
