@@ -10,7 +10,7 @@ spec:
     - lan-websecure
   routes:
     - kind: Rule
-      match: Host(`alertmanager.lan.zebradil.dev`) || Host(`alertmanager.gray.lan.zebradil.dev`) || Host(`alertmanager.junior.lan.zebradil.dev`)
+      match: Host(`alertmanager.lan.zebradil.dev`) || Host(`alertmanager.junior.lan.zebradil.dev`)
       services:
         - name: vmalertmanager-vmks
           port: http

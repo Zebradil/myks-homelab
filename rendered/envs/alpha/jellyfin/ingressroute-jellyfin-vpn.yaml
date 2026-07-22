@@ -10,7 +10,7 @@ spec:
     - vpn-websecure
   routes:
     - kind: Rule
-      match: Host(`jellyfin.ts.zebradil.dev`) || Host(`jellyfin.gray.ts.zebradil.dev`) || Host(`jellyfin.junior.ts.zebradil.dev`)
+      match: Host(`jellyfin.ts.zebradil.dev`) || Host(`jellyfin.junior.ts.zebradil.dev`)
       services:
         - name: jellyfin
           port: http

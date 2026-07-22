@@ -42,3 +42,10 @@ spec:
           resources:
             requests:
               storage: 2Gi
+  vmstorage:
+    storage:
+      volumeClaimTemplate:
+        spec:
+          resources:
+            requests:
+              storage: 10Gi

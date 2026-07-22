@@ -10,7 +10,7 @@ spec:
     - vpn-websecure
   routes:
     - kind: Rule
-      match: Host(`authelia.ts.zebradil.dev`) || Host(`authelia.gray.ts.zebradil.dev`) || Host(`authelia.junior.ts.zebradil.dev`)
+      match: Host(`authelia.ts.zebradil.dev`) || Host(`authelia.junior.ts.zebradil.dev`)
       services:
         - name: authelia
           port: http

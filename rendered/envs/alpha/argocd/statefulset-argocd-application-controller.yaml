@@ -21,8 +21,8 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/cm: 60a6dc990b1fed5837bf64272f3e2600abaaa2061e116cbc260aa35fefa64baa
-        checksum/cmd-params: a6476aaea98cbc7961b40137143a84c65e3415b524d96e7934e3ebf191c001fb
+        checksum/cm: e0f720897ec066296498e1abe1244f8f4621024c22db7c4e469ad653e28a3660
+        checksum/cmd-params: 6fe0865c9cb26d44c5a2e45c29448dbf223a387b705e89da9dd6a6596ac46b8f
       labels:
         app.kubernetes.io/component: application-controller
         app.kubernetes.io/instance: argocd
@@ -326,7 +326,7 @@ spec:
                   optional: true
             - name: KUBECACHEDIR
               value: /tmp/kubecache
-          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:2fb3efa9eaa42382acb39c9a1485eaac7a1ad7a09e8aa7da7143ca256fa6da09
+          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:224e454cfd8c1818fec3ed17b72b2034c9a3915fa819e1dcccafc753776d446a
           name: application-controller
           ports:
             - containerPort: 8082

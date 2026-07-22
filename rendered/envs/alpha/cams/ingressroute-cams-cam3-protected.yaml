@@ -10,7 +10,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`cams-cam3.zebradil.dev`) || Host(`cams-cam3.gray.zebradil.dev`) || Host(`cams-cam3.junior.zebradil.dev`)
+      match: Host(`cams-cam3.zebradil.dev`) || Host(`cams-cam3.junior.zebradil.dev`)
       middlewares:
         - name: chain-authelia-auth
           namespace: authelia

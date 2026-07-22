@@ -10,7 +10,7 @@ spec:
     - vpn-websecure
   routes:
     - kind: Rule
-      match: Host(`librespeed.ts.zebradil.dev`) || Host(`librespeed.gray.ts.zebradil.dev`) || Host(`librespeed.junior.ts.zebradil.dev`)
+      match: Host(`librespeed.ts.zebradil.dev`) || Host(`librespeed.junior.ts.zebradil.dev`)
       services:
         - name: librespeed
           port: http

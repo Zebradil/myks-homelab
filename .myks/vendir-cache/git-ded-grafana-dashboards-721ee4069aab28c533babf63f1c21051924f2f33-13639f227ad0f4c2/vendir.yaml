@@ -1,0 +1,13 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - git:
+      ref: 721ee4069aab28c533babf63f1c21051924f2f33
+      url: https://github.com/dfds/ded-grafana-dashboards
+    includePaths:
+    - kubernetes-persistent-volumes.json
+    lazy: true
+    path: .
+  path: .myks/vendir-cache/git-ded-grafana-dashboards-721ee4069aab28c533babf63f1c21051924f2f33-13639f227ad0f4c2/data
+kind: Config
+minimumRequiredVersion: ""

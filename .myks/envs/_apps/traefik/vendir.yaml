@@ -7,7 +7,7 @@ directories:
     lazy: true
     helmChart:
       name: traefik
-      version: 41.0.0
+      version: 41.0.2
       repository:
         url: https://traefik.github.io/charts
 - path: ytt/dashboard

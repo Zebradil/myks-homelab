@@ -10,7 +10,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`jellyfin-torrent.zebradil.dev`) || Host(`jellyfin-torrent.gray.zebradil.dev`) || Host(`jellyfin-torrent.junior.zebradil.dev`)
+      match: Host(`jellyfin-torrent.zebradil.dev`) || Host(`jellyfin-torrent.junior.zebradil.dev`)
       middlewares:
         - name: chain-authelia-auth
           namespace: authelia

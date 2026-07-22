@@ -10,7 +10,7 @@ spec:
     - vpn-websecure
   routes:
     - kind: Rule
-      match: Host(`uptime-kuma.ts.zebradil.dev`) || Host(`uptime-kuma.gray.ts.zebradil.dev`) || Host(`uptime-kuma.junior.ts.zebradil.dev`)
+      match: Host(`uptime-kuma.ts.zebradil.dev`) || Host(`uptime-kuma.junior.ts.zebradil.dev`)
       services:
         - name: uptime-kuma
           port: http

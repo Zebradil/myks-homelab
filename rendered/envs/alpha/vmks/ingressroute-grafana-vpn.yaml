@@ -10,7 +10,7 @@ spec:
     - vpn-websecure
   routes:
     - kind: Rule
-      match: Host(`grafana.ts.zebradil.dev`) || Host(`grafana.gray.ts.zebradil.dev`) || Host(`grafana.junior.ts.zebradil.dev`)
+      match: Host(`grafana.ts.zebradil.dev`) || Host(`grafana.junior.ts.zebradil.dev`)
       services:
         - name: vmks-grafana
           port: http

@@ -24,6 +24,15 @@ spec:
         app.kubernetes.io/instance: traefik-traefik
         app.kubernetes.io/name: traefik
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - junior
       automountServiceAccountToken: true
       containers:
         - args:
@@ -148,7 +157,7 @@ spec:
               value: traefik
             - name: BASE_DOMAIN
               value: zebradil.dev
-          image: index.docker.io/library/traefik@sha256:d6858791f9e74df44ca4014166647c41cdc2abd3bf2a71b832ca4e1c6a91b257
+          image: index.docker.io/library/traefik@sha256:4299bbed850421258fc5448c2e0e6ad350981d4d335a68de11b92448aedbefe5
           lifecycle: null
           livenessProbe:
             failureThreshold: 3

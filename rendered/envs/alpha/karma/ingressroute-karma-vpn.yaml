@@ -10,7 +10,7 @@ spec:
     - vpn-websecure
   routes:
     - kind: Rule
-      match: Host(`karma.ts.zebradil.dev`) || Host(`karma.gray.ts.zebradil.dev`) || Host(`karma.junior.ts.zebradil.dev`)
+      match: Host(`karma.ts.zebradil.dev`) || Host(`karma.junior.ts.zebradil.dev`)
       services:
         - name: karma
           port: http

@@ -1,0 +1,108 @@
+#@ load("@ytt:data", "data")
+#@ load("secrets.star", "sops")
+
+#@ a = data.values.application
+#@ m = data.values.myks
+#@ name = m.context.app
+
+#@ pod_labels = {"app.kubernetes.io/name": name}
+
+#@ data_root = "/kasha"
+
+#! Non-secret env. AWS_* R2 creds come from the Secret (see secret.ytt.yaml).
+#! Push (KASHA_PUSH_ENABLE) and mirror-up (KASHA_MIRROR_UP_ENABLE) stay unset —
+#! Phase 2, they need a raw-TCP endpoint.
+#@ envs = {
+#@   "KASHA_DATA_ROOT": data_root,
+#@   "KASHA_PORT": str(a.port),
+#@   "KASHA_TRUSTED_PUBLIC_KEYS": a.trustedPublicKeys,
+#@   "KASHA_MIRROR_DOWN_ENABLE": "1",
+#@   "KASHA_REMOTE": sops("0", "cache-s3-url"),
+#@   "KASHA_FLAKES": a.flakes,
+#@   "KASHA_MIRROR_DOWN_INTERVAL": str(a.mirrorDownInterval),
+#@ }
+#@ build_envs = lambda x: [{"name": k, "value": v} for k, v in x.items()]
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: #@ name
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: #@ a.storageSize
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: #@ name
+spec:
+  replicas: 1
+  selector:
+    matchLabels: #@ pod_labels
+  strategy:
+    #! RWO PVC can't be mounted by old and new pods at once during a rollout.
+    type: Recreate
+    rollingUpdate: null
+  template:
+    metadata:
+      labels: #@ pod_labels
+    spec:
+      containers:
+        - name: #@ name
+          image: #@ a.image
+          env: #@ build_envs(envs)
+          envFrom:
+            - secretRef:
+                name: #@ name
+          ports:
+            - containerPort: #@ a.port
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /nix-cache-info
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /nix-cache-info
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 30
+          securityContext:
+            #! Runs as root: writes /etc/nix/nix.conf, /run/*, runs
+            #! nix-store --init at start. Do NOT force runAsNonRoot.
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 1Gi
+          volumeMounts:
+            #! PVC at /kasha (= KASHA_DATA_ROOT), NEVER /nix — the image keeps
+            #! its own binaries under the container's /nix/store.
+            - name: #@ name
+              mountPath: #@ data_root
+      volumes:
+        - name: #@ name
+          persistentVolumeClaim:
+            claimName: #@ name
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #@ name
+spec:
+  selector: #@ pod_labels
+  ports:
+    - name: http
+      port: 80
+      targetPort: http

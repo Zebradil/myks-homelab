@@ -10,7 +10,7 @@ spec:
     - vpn-websecure
   routes:
     - kind: Rule
-      match: Host(`fluidd.ts.zebradil.dev`) || Host(`fluidd.gray.ts.zebradil.dev`) || Host(`fluidd.junior.ts.zebradil.dev`)
+      match: Host(`fluidd.ts.zebradil.dev`) || Host(`fluidd.junior.ts.zebradil.dev`)
       services:
         - name: fluidd
           port: http

@@ -1,0 +1,7 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.49.0
+overrides:
+- image: ghcr.io/zebradil/kasha-box:edge
+  newImage: oci.zebradil.dev/ghcr.io-cache/zebradil/kasha-box@sha256:d81f0be5e20c3a74a10fa1a872e1541de85bc3e383e670b7cefcdbab4c731d99
+  preresolved: true

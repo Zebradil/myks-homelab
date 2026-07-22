@@ -10,7 +10,7 @@ spec:
     - vpn-websecure
   routes:
     - kind: Rule
-      match: Host(`traefik.ts.zebradil.dev`) || Host(`traefik.gray.ts.zebradil.dev`) || Host(`traefik.junior.ts.zebradil.dev`)
+      match: Host(`traefik.ts.zebradil.dev`) || Host(`traefik.junior.ts.zebradil.dev`)
       services:
         - kind: TraefikService
           name: api@internal

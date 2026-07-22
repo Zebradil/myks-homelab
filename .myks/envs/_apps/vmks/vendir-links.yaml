@@ -1,2 +1,3 @@
-charts/prom-crds: helm-prometheus-operator-crds-30.0.0-58cb31bdf12e8648
+charts/prom-crds: helm-prometheus-operator-crds-30.0.1-b8f7d18d31642d73
 charts/vmks: helm-victoria-metrics-k8s-stack-0.67.0-3415c5c13b2dbf13
+ytt/pvc-dashboard: git-ded-grafana-dashboards-721ee4069aab28c533babf63f1c21051924f2f33-13639f227ad0f4c2

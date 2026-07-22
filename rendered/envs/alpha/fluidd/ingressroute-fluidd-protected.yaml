@@ -10,7 +10,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`fluidd.zebradil.dev`) || Host(`fluidd.gray.zebradil.dev`) || Host(`fluidd.junior.zebradil.dev`)
+      match: Host(`fluidd.zebradil.dev`) || Host(`fluidd.junior.zebradil.dev`)
       middlewares:
         - name: chain-authelia-auth
           namespace: authelia

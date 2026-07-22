@@ -10,7 +10,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`paperless.zebradil.dev`) || Host(`paperless.gray.zebradil.dev`) || Host(`paperless.junior.zebradil.dev`)
+      match: Host(`paperless.zebradil.dev`) || Host(`paperless.junior.zebradil.dev`)
       middlewares:
         - name: chain-authelia-auth
           namespace: authelia

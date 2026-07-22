@@ -16,16 +16,6 @@ spec:
                   name: http
             path: /
             pathType: Prefix
-    - host: echo.gray.zebradil.dev
-      http:
-        paths:
-          - backend:
-              service:
-                name: echo
-                port:
-                  name: http
-            path: /
-            pathType: Prefix
     - host: echo.junior.zebradil.dev
       http:
         paths:
@@ -46,16 +36,6 @@ spec:
                   name: http
             path: /
             pathType: Prefix
-    - host: echo.gray.ts.zebradil.dev
-      http:
-        paths:
-          - backend:
-              service:
-                name: echo
-                port:
-                  name: http
-            path: /
-            pathType: Prefix
     - host: echo.junior.ts.zebradil.dev
       http:
         paths:
@@ -67,16 +47,6 @@ spec:
             path: /
             pathType: Prefix
     - host: echo.lan.zebradil.dev
-      http:
-        paths:
-          - backend:
-              service:
-                name: echo
-                port:
-                  name: http
-            path: /
-            pathType: Prefix
-    - host: echo.gray.lan.zebradil.dev
       http:
         paths:
           - backend:

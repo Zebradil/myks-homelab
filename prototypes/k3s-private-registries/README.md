@@ -1,6 +1,7 @@
 # K3s Private Registries Prototype
 
-This prototype configures K3s nodes to use private Docker registries by creating a DaemonSet that writes the `/etc/rancher/k3s/registries.yaml` file on each node.
+This prototype configures K3s nodes to use private Docker registries by creating a DaemonSet that writes the
+`/etc/rancher/k3s/registries.yaml` file on each node.
 
 ## Features
 
@@ -15,7 +16,8 @@ This prototype configures K3s nodes to use private Docker registries by creating
 
 ## Configuration
 
-The prototype accepts a standard K3s `registries.yaml` configuration. You can use any structure documented in the [K3s Private Registry Documentation](https://docs.k3s.io/installation/private-registry).
+The prototype accepts a standard K3s `registries.yaml` configuration. You can use any structure documented in the
+[K3s Private Registry Documentation](https://docs.k3s.io/installation/private-registry).
 
 ### Basic Registry Mirrors
 
@@ -25,12 +27,12 @@ application:
     mirrors:
       docker.io:
         endpoint:
-          - "https://registry.example.com:5000"
+          - 'https://registry.example.com:5000'
       registry.example.com:
         endpoint:
-          - "https://registry.example.com:5000"
+          - 'https://registry.example.com:5000'
         rewrite:
-          "^rancher/(.*)": "mirrorproject/rancher-images/$1"
+          '^rancher/(.*)': 'mirrorproject/rancher-images/$1'
 ```
 
 ### Registry with Authentication
@@ -45,9 +47,9 @@ application:
     mirrors:
       docker.io:
         endpoint:
-          - "https://registry.example.com:5000"
+          - 'https://registry.example.com:5000'
     configs:
-      "registry.example.com:5000":
+      'registry.example.com:5000':
         auth:
           username: #@ sops("0", "my_registry_username")
           password: #@ sops("0", "my_registry_password")
@@ -63,11 +65,11 @@ application:
 application:
   registries:
     configs:
-      "registry.example.com:5000":
+      'registry.example.com:5000':
         tls:
-          ca_file: "/etc/ssl/certs/ca.pem"
-          cert_file: "/etc/ssl/certs/client.pem"
-          key_file: "/etc/ssl/certs/client-key.pem"
+          ca_file: '/etc/ssl/certs/ca.pem'
+          cert_file: '/etc/ssl/certs/client.pem'
+          key_file: '/etc/ssl/certs/client-key.pem'
           insecure_skip_verify: false
 ```
 
@@ -81,24 +83,24 @@ application:
     mirrors:
       docker.io:
         endpoint:
-          - "https://registry.example.com:5000"
-      "*.gcr.io":
+          - 'https://registry.example.com:5000'
+      '*.gcr.io':
         endpoint:
-          - "https://gcr-mirror.example.com"
+          - 'https://gcr-mirror.example.com'
         rewrite:
-          "^(.*)": "mirror-project/$1"
+          '^(.*)': 'mirror-project/$1'
     configs:
-      "registry.example.com:5000":
+      'registry.example.com:5000':
         auth:
           username: #@ sops("0", "private_registry_user")
           password: #@ sops("0", "private_registry_pass")
         tls:
           insecure_skip_verify: true
-      "gcr-mirror.example.com":
+      'gcr-mirror.example.com':
         auth:
           token: #@ sops("0", "gcr_access_token")
         tls:
-          ca_file: "/etc/ssl/certs/gcr-ca.pem"
+          ca_file: '/etc/ssl/certs/gcr-ca.pem'
 ```
 
 ### Wildcard Support
@@ -109,14 +111,14 @@ K3s supports wildcard configurations for default settings:
 application:
   registries:
     mirrors:
-      "*":
+      '*':
         endpoint:
-          - "https://registry.example.com:5000"
+          - 'https://registry.example.com:5000'
     configs:
-      "*":
+      '*':
         tls:
           insecure_skip_verify: true
-      "docker.io": {}  # Override wildcard for docker.io
+      'docker.io': {} # Override wildcard for docker.io
 ```
 
 ## How it Works
@@ -134,6 +136,7 @@ application:
 ## Example Log Output
 
 ### When updating existing configuration:
+
 ```bash
 Comparing old and new configurations...
 --- OLD /etc/rancher/k3s/registries.yaml
@@ -152,6 +155,7 @@ Configuration changes detected (secrets redacted in diff above)
 ```
 
 ### When creating new configuration:
+
 ```bash
 Creating new registries configuration file
 New configuration preview (secrets redacted):
@@ -171,11 +175,13 @@ New configuration preview (secrets redacted):
 After deploying this prototype:
 
 1. **Monitor the logs**: Check that configuration was applied successfully:
+
    ```bash
    kubectl logs -l app=<your-app-name>-writer
    ```
 
 2. **Restart K3s**: The registries configuration only takes effect after restarting K3s on each node:
+
    ```bash
    sudo systemctl restart k3s
    # or for k3s agent nodes:
@@ -183,6 +189,7 @@ After deploying this prototype:
    ```
 
 3. **Verify Configuration**: Check that the file was written correctly:
+
    ```bash
    cat /etc/rancher/k3s/registries.yaml
    ```
@@ -212,4 +219,4 @@ After deploying this prototype:
 
 - [K3s Private Registry Documentation](https://docs.k3s.io/installation/private-registry)
 - [Containerd Registry Configuration](https://github.com/containerd/containerd/blob/main/docs/cri/registry.md)
-- [yq YAML Processor](https://mikefarah.gitbook.io/yq/) 
+- [yq YAML Processor](https://mikefarah.gitbook.io/yq/)

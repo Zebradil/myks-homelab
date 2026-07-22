@@ -10,7 +10,7 @@ spec:
     - vpn-websecure
   routes:
     - kind: Rule
-      match: Host(`vmalert.ts.zebradil.dev`) || Host(`vmalert.gray.ts.zebradil.dev`) || Host(`vmalert.junior.ts.zebradil.dev`)
+      match: Host(`vmalert.ts.zebradil.dev`) || Host(`vmalert.junior.ts.zebradil.dev`)
       services:
         - name: vmalert-vmks
           port: http

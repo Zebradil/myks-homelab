@@ -10,7 +10,7 @@ spec:
     - lan-websecure
   routes:
     - kind: Rule
-      match: Host(`vmagent.lan.zebradil.dev`) || Host(`vmagent.gray.lan.zebradil.dev`) || Host(`vmagent.junior.lan.zebradil.dev`)
+      match: Host(`vmagent.lan.zebradil.dev`) || Host(`vmagent.junior.lan.zebradil.dev`)
       services:
         - name: vmagent-vmks
           port: http

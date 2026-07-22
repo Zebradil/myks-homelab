@@ -10,7 +10,7 @@ spec:
     - vpn-websecure
   routes:
     - kind: Rule
-      match: Host(`vmselect.ts.zebradil.dev`) || Host(`vmselect.gray.ts.zebradil.dev`) || Host(`vmselect.junior.ts.zebradil.dev`)
+      match: Host(`vmselect.ts.zebradil.dev`) || Host(`vmselect.junior.ts.zebradil.dev`)
       services:
         - name: vmselect-vmks-long
           port: http

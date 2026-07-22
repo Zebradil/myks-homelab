@@ -10,7 +10,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`jellyfin.zebradil.dev`) || Host(`jellyfin.gray.zebradil.dev`) || Host(`jellyfin.junior.zebradil.dev`)
+      match: Host(`jellyfin.zebradil.dev`) || Host(`jellyfin.junior.zebradil.dev`)
       middlewares:
         - name: chain-authelia-auth
           namespace: authelia

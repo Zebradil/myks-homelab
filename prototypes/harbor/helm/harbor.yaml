@@ -10,7 +10,7 @@ externalURL: #@ "https://" + host
 persistence:
   persistentVolumeClaim:
     registry:
-      size: 20Gi
+      size: 50Gi
     jobservice:
       jobLog:
         size: 1Gi
