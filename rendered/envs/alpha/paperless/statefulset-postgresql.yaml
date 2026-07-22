@@ -82,8 +82,9 @@ spec:
             exec:
               command:
                 - /bin/sh
-                - -c
-                - exec pg_isready -U "paperless" -d "dbname=paperless" -h 127.0.0.1 -p 5432
+                - -ec
+                - |
+                  exec pg_isready -U "paperless" -d "dbname=paperless" -h 127.0.0.1 -p 5432
             failureThreshold: 6
             initialDelaySeconds: 30
             periodSeconds: 10
@@ -97,8 +98,7 @@ spec:
             exec:
               command:
                 - /bin/sh
-                - -c
-                - -e
+                - -ec
                 - |
                   exec pg_isready -U "paperless" -d "dbname=paperless" -h 127.0.0.1 -p 5432
                   [ -f /opt/bitnami/postgresql/tmp/.initialized ] || [ -f /bitnami/postgresql/.initialized ]

@@ -309,10 +309,10 @@ tls:
   certificatesSecret: ""
   ## @param tls.certFilename Certificate filename
   ##
-  certFilename: ""
+  certFilename: tls.crt
   ## @param tls.certKeyFilename Certificate key filename
   ##
-  certKeyFilename: ""
+  certKeyFilename: tls.key
   ## @param tls.certCAFilename CA Certificate filename
   ## If provided, PostgreSQL will authenticate TLS/SSL clients by requesting them a certificate
   ## ref: https://www.postgresql.org/docs/9.6/auth-methods.html
@@ -1954,7 +1954,7 @@ metrics:
     ##
     labels: {}
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
-    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+    ## ref: https://techdocs.broadcom.com/us/en/vmware-tanzu/bitnami-secure-images/bitnami-secure-images/services/bsi-app-doc/apps-charts-kube-prometheus-index.html#-additional-scrape-configurations
     ##
     selector: {}
     ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
