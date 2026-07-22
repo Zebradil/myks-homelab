@@ -2,8 +2,8 @@ apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 minimumRequiredVersion: 0.49.0
 overrides:
-- image: jordanroher/starbase-80:1.6.4
-  newImage: index.docker.io/jordanroher/starbase-80@sha256:0000ccf33ef464d20096ac36e75a7878017783f5d2f0dc483ed14142413a7f74
+- image: jordanroher/starbase-80:1.6.6
+  newImage: index.docker.io/jordanroher/starbase-80@sha256:6eb898bfa3ad2d38aca9e1e5597b3b1046112deb35c194887942a421fa822991
   preresolved: true
 - image: nginx:1.31.2
   newImage: index.docker.io/library/nginx@sha256:ec4ed8b5299e5e90694af7750eb6dffd2627317d30544d056b0371f8082f7bce
