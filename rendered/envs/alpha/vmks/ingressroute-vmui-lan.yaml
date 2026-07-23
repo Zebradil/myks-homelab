@@ -10,7 +10,7 @@ spec:
     - lan-websecure
   routes:
     - kind: Rule
-      match: Host(`vmui.lan.zebradil.dev`) || Host(`vmui.junior.lan.zebradil.dev`)
+      match: Host(`vmui.lan.zebradil.dev`) || Host(`vmui.junior.lan.zebradil.dev`) || Host(`vmui.zebradil.dev`) || Host(`vmui.junior.zebradil.dev`)
       middlewares:
         - name: vmui-alias-redirect
       services:

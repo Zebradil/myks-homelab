@@ -10,7 +10,7 @@ spec:
     - lan-websecure
   routes:
     - kind: Rule
-      match: Host(`cams-cam3.lan.zebradil.dev`) || Host(`cams-cam3.junior.lan.zebradil.dev`)
+      match: Host(`cams-cam3.lan.zebradil.dev`) || Host(`cams-cam3.junior.lan.zebradil.dev`) || Host(`cams-cam3.zebradil.dev`) || Host(`cams-cam3.junior.zebradil.dev`)
       services:
         - name: cams-cam3
           port: http

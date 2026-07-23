@@ -10,7 +10,7 @@ spec:
     - lan-websecure
   routes:
     - kind: Rule
-      match: Host(`librespeed.lan.zebradil.dev`) || Host(`librespeed.junior.lan.zebradil.dev`)
+      match: Host(`librespeed.lan.zebradil.dev`) || Host(`librespeed.junior.lan.zebradil.dev`) || Host(`librespeed.zebradil.dev`) || Host(`librespeed.junior.zebradil.dev`)
       services:
         - name: librespeed
           port: http

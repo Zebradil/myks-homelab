@@ -10,7 +10,7 @@ spec:
     - lan-websecure
   routes:
     - kind: Rule
-      match: Host(`jellyfin-torrent.lan.zebradil.dev`) || Host(`jellyfin-torrent.junior.lan.zebradil.dev`)
+      match: Host(`jellyfin-torrent.lan.zebradil.dev`) || Host(`jellyfin-torrent.junior.lan.zebradil.dev`) || Host(`jellyfin-torrent.zebradil.dev`) || Host(`jellyfin-torrent.junior.zebradil.dev`)
       services:
         - name: jellyfin-torrent
           port: http

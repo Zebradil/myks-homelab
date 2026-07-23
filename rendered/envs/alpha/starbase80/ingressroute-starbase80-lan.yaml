@@ -10,7 +10,7 @@ spec:
     - lan-websecure
   routes:
     - kind: Rule
-      match: Host(`starbase80.lan.zebradil.dev`) || Host(`starbase80.junior.lan.zebradil.dev`)
+      match: Host(`starbase80.lan.zebradil.dev`) || Host(`starbase80.junior.lan.zebradil.dev`) || Host(`starbase80.zebradil.dev`) || Host(`starbase80.junior.zebradil.dev`)
       services:
         - name: starbase80
           port: http

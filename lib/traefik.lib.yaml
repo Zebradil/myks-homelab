@@ -52,7 +52,7 @@ spec:
 #@   t = data.values.environment.traefik
 #@   return [
 #@     gen_protected_ingress_route(name, t.hosts.web, ["web", "websecure"], service),
-#@     gen_ingress_route(name, t.hosts.lan, ["lan-web", "lan-websecure"], "-lan", service),
+#@     gen_ingress_route(name, t.hosts.lan + t.hosts.web, ["lan-web", "lan-websecure"], "-lan", service),
 #@     gen_ingress_route(name, t.hosts.vpn, ["vpn-web", "vpn-websecure"], "-vpn", service),
 #@   ]
 #@ end

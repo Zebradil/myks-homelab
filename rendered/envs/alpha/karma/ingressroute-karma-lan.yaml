@@ -10,7 +10,7 @@ spec:
     - lan-websecure
   routes:
     - kind: Rule
-      match: Host(`karma.lan.zebradil.dev`) || Host(`karma.junior.lan.zebradil.dev`)
+      match: Host(`karma.lan.zebradil.dev`) || Host(`karma.junior.lan.zebradil.dev`) || Host(`karma.zebradil.dev`) || Host(`karma.junior.zebradil.dev`)
       services:
         - name: karma
           port: http

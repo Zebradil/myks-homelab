@@ -10,7 +10,7 @@ spec:
     - lan-websecure
   routes:
     - kind: Rule
-      match: Host(`uptime-kuma.lan.zebradil.dev`) || Host(`uptime-kuma.junior.lan.zebradil.dev`)
+      match: Host(`uptime-kuma.lan.zebradil.dev`) || Host(`uptime-kuma.junior.lan.zebradil.dev`) || Host(`uptime-kuma.zebradil.dev`) || Host(`uptime-kuma.junior.zebradil.dev`)
       services:
         - name: uptime-kuma
           port: http

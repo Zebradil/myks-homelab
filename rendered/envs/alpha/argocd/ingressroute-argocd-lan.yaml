@@ -11,7 +11,7 @@ spec:
     - lan-websecure
   routes:
     - kind: Rule
-      match: Host(`argocd.lan.zebradil.dev`) || Host(`argocd.junior.lan.zebradil.dev`)
+      match: Host(`argocd.lan.zebradil.dev`) || Host(`argocd.junior.lan.zebradil.dev`) || Host(`argocd.zebradil.dev`) || Host(`argocd.junior.zebradil.dev`)
       services:
         - name: argocd-server
           port: http
