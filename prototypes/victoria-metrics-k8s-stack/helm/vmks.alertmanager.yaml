@@ -6,6 +6,8 @@
 #@ a = data.values.application
 ---
 alertmanager:
+  spec:
+    externalURL: 'https://alertmanager.zebradil.dev'
   useManagedConfig: true
   config:
     route:
