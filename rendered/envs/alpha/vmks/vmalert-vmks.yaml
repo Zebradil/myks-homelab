@@ -4,7 +4,7 @@ metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
-    app.kubernetes.io/component: victoria-metrics-k8s-stack-vmalert
+    app.kubernetes.io/component: vmalert
     app.kubernetes.io/instance: vmks
     app.kubernetes.io/name: victoria-metrics-k8s-stack
   name: vmks
@@ -17,12 +17,11 @@ spec:
   externalLabels: {}
   extraArgs:
     external.alert.source: explore?left={"datasource":"VictoriaMetrics","queries":[{"expr":{{ .Expr|jsonEscape|queryEscape }},"refId":"A"}],"range":{"from":"{{ .ActiveAt.UnixMilli }}","to":"now"}}
-    external.url: http://grafana.lan.zebradil.dev
+    external.url: http://
     http.pathPrefix: /
     remoteWrite.disablePathAppend: "true"
   image:
-    tag: v1.133.0
-  license: {}
+    tag: v1.148.0
   notifiers:
     - url: http://vmalertmanager-vmks-0.vmalertmanager-vmks.vmks.svc.cluster.local.:9093
   port: "8080"

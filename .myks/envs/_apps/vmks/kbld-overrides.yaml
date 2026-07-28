@@ -1,9 +1,13 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 overrides:
-    - image: quay.io/kiwigrid/k8s-sidecar:1.30.10
-      newImage: oci.zebradil.dev/quay.io-cache/kiwigrid/k8s-sidecar:1.30.10
-    - image: quay.io/prometheus/node-exporter:v1.10.2
-      newImage: oci.zebradil.dev/quay.io-cache/prometheus/node-exporter:v1.10.2
-    - image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.17.0
-      newImage: oci.zebradil.dev/registry.k8s.io-cache/kube-state-metrics/kube-state-metrics:v2.17.0
+    - image: ghcr.io/victoriametrics/sync-job:v0.0.11
+      newImage: oci.zebradil.dev/ghcr.io-cache/victoriametrics/sync-job:v0.0.11
+    - image: quay.io/kiwigrid/k8s-sidecar:2.8.1
+      newImage: oci.zebradil.dev/quay.io-cache/kiwigrid/k8s-sidecar:2.8.1
+    - image: quay.io/prometheus/node-exporter:v1.11.1
+      newImage: oci.zebradil.dev/quay.io-cache/prometheus/node-exporter:v1.11.1
+    - image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.19.1
+      newImage: oci.zebradil.dev/registry.k8s.io-cache/kube-state-metrics/kube-state-metrics:v2.19.1
+    - image: registry.k8s.io/kubectl:v1.33.1
+      newImage: oci.zebradil.dev/registry.k8s.io-cache/kubectl:v1.33.1

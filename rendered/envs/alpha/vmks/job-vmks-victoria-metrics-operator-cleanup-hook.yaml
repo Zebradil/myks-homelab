@@ -22,12 +22,12 @@ spec:
       containers:
         - args:
             - delete
-            - vlagent,vlcluster,vlogs,vlsingle,vmagent,vmalert,vmalertmanager,vmalertmanagerconfig,vmanomaly,vmauth,vmcluster,vmnodescrape,vmpodscrape,vmprobe,vmrule,vmscrapeconfig,vmservicescrape,vmsingle,vmstaticscrape,vmuser,vtcluster,vtsingle
+            - vlagent,vlcluster,vlogs,vlsingle,vmagent,vmalert,vmalertmanager,vmalertmanagerconfig,vmanomaly,vmanomalyconfig,vmauth,vmcluster,vmdistributed,vmnodescrape,vmpodscrape,vmprobe,vmrule,vmscrapeconfig,vmservicescrape,vmsingle,vmstaticscrape,vmuser,vtcluster,vtsingle
             - --all
             - --ignore-not-found=true
           command:
             - kubectl
-          image: index.docker.io/rancher/kubectl@sha256:a67abd077eba3565a84e412cff9fb4fe1469b27784ef24329c1104efe15783f3
+          image: oci.zebradil.dev/registry.k8s.io-cache/kubectl@sha256:b678a2eb762525ff5064ed6064071fc0728bf0f009a6afbe7f49fbad3ac56dbf
           name: kubectl
           resources:
             limits:

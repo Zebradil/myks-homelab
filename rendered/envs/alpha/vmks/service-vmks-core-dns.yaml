@@ -4,10 +4,9 @@ metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
-    app: vmks-core-dns
+    app.kubernetes.io/component: core-dns
     app.kubernetes.io/instance: vmks
     app.kubernetes.io/name: victoria-metrics-k8s-stack
-    jobLabel: core-dns
   name: vmks-core-dns
   namespace: kube-system
 spec:

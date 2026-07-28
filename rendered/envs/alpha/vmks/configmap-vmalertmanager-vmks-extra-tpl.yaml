@@ -6,7 +6,7 @@ metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
-    app.kubernetes.io/component: victoria-metrics-k8s-stack-alertmanager
+    app.kubernetes.io/component: alertmanager
     app.kubernetes.io/instance: vmks
     app.kubernetes.io/name: victoria-metrics-k8s-stack
   name: vmalertmanager-vmks-extra-tpl
