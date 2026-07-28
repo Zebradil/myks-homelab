@@ -1,0 +1,25 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.49.0
+overrides:
+- image: docker.io/grafana/grafana:13.0.1-security-01
+  newImage: index.docker.io/grafana/grafana@sha256:2d1f9ae67c1778d33e291d4c3c759cd8b650e67491f02533499eb950e075eeb5
+  preresolved: true
+- image: docker.io/library/busybox:1.37.0
+  newImage: index.docker.io/library/busybox@sha256:9532d8c39891ca2ecde4d30d7710e01fb739c87a8b9299685c63704296b16028
+  preresolved: true
+- image: quay.io/kiwigrid/k8s-sidecar:2.7.3
+  newImage: oci.zebradil.dev/quay.io-cache/kiwigrid/k8s-sidecar@sha256:694950d736c8b532eba4006527ccbdac98fefc9f30b3346ba2de50b6cad91c94
+  preresolved: true
+- image: quay.io/prometheus/node-exporter:v1.11.1
+  newImage: oci.zebradil.dev/quay.io-cache/prometheus/node-exporter@sha256:0f422f62c15f154af8d8572b23d623aebfb10cec73a5c654d18f911f3f9df241
+  preresolved: true
+- image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.19.1
+  newImage: oci.zebradil.dev/registry.k8s.io-cache/kube-state-metrics/kube-state-metrics@sha256:85108987d044b18a098126732f98602df408888c0f7d456241f5abefb9744bc1
+  preresolved: true
+- image: registry.k8s.io/kubectl:v1.33.1
+  newImage: oci.zebradil.dev/registry.k8s.io-cache/kubectl@sha256:b678a2eb762525ff5064ed6064071fc0728bf0f009a6afbe7f49fbad3ac56dbf
+  preresolved: true
+- image: victoriametrics/operator:v0.72.0
+  newImage: index.docker.io/victoriametrics/operator@sha256:5137b8ddeed33429845595394d1537b53ff8b054d92578cfb4e999554d310e93
+  preresolved: true

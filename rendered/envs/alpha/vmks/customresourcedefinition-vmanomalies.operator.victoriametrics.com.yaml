@@ -319,6 +319,8 @@ spec:
                   type: object
                 dnsPolicy:
                   type: string
+                enableServiceLinks:
+                  type: boolean
                 extraArgs:
                   additionalProperties:
                     type: string
@@ -674,6 +676,9 @@ spec:
                   type: object
                 port:
                   type: string
+                preStopSleepSeconds:
+                  format: int32
+                  type: integer
                 priorityClassName:
                   type: string
                 reader:
@@ -743,6 +748,8 @@ spec:
                       type: string
                     maxPointsPerQuery:
                       type: integer
+                    offset:
+                      type: string
                     queryFromLastSeenTimestamp:
                       type: boolean
                     queryRangePath:
@@ -914,7 +921,6 @@ spec:
                     addr:
                       type: string
                     maxConcurrentTasks:
-                      maximum: 20
                       minimum: 1
                       type: integer
                     pathPrefix:
@@ -923,6 +929,8 @@ spec:
                       type: string
                     uiDefaultState:
                       type: string
+                    useReaderConnectionSettings:
+                      type: boolean
                   type: object
                 serviceAccountName:
                   type: string
@@ -1238,6 +1246,9 @@ spec:
                           type: object
                           x-kubernetes-map-type: atomic
                       type: object
+                    connectionRetryAttempts:
+                      minimum: 1
+                      type: integer
                     datasourceURL:
                       type: string
                     healthPath:

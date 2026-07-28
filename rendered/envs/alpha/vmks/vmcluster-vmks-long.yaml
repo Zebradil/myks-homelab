@@ -10,7 +10,7 @@ metadata:
   name: vmks-long
   namespace: vmks
 spec:
-  clusterVersion: v1.144.0-cluster
+  clusterVersion: v1.145.0-cluster
   replicationFactor: 1
   retentionPeriod: 5y
   vminsert:

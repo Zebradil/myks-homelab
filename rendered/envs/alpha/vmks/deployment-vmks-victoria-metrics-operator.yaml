@@ -41,7 +41,7 @@ spec:
               value: victoria-metrics-operator
             - name: VM_ENABLEDPROMETHEUSCONVERTEROWNERREFERENCES
               value: "false"
-          image: index.docker.io/victoriametrics/operator@sha256:fb5ebef9cba3746d73ee0dee1bb9e4bc80539687518fd1e2e6ab7776b438048a
+          image: index.docker.io/victoriametrics/operator@sha256:5137b8ddeed33429845595394d1537b53ff8b054d92578cfb4e999554d310e93
           livenessProbe:
             failureThreshold: 3
             initialDelaySeconds: 5
