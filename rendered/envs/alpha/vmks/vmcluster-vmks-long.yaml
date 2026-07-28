@@ -4,14 +4,13 @@ metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
-    app.kubernetes.io/component: victoria-metrics-k8s-stack-vmcluster
+    app.kubernetes.io/component: vmcluster
     app.kubernetes.io/instance: vmks
     app.kubernetes.io/name: victoria-metrics-k8s-stack
   name: vmks-long
   namespace: vmks
 spec:
-  clusterVersion: v1.133.0-cluster
-  license: {}
+  clusterVersion: v1.148.0-cluster
   replicationFactor: 1
   retentionPeriod: 5y
   vminsert:
