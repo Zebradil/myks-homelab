@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    app.kubernetes.io/source: https://github.com/Zebradil/myks-homelab
+    myks.dev/environment: alpha
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: app-alpha-snmp-exporter
+  namespace: argocd
+spec:
+  destination:
+    name: in-cluster
+    namespace: snmp-exporter
+  project: env-alpha
+  source:
+    path: rendered/envs/alpha/snmp-exporter
+    plugin:
+      name: vals
+    repoURL: https://github.com/Zebradil/myks-homelab
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
+    syncOptions:
+      - CreateNamespace=true
+      - FailOnSharedResource=true
+      - RespectIgnoreDifferences=true
+      - ServerSideApply=true

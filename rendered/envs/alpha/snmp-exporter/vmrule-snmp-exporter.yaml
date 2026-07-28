@@ -1,0 +1,66 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: snmp-exporter
+spec:
+  groups:
+    - name: synology
+      rules:
+        - alert: SynologyPoolSpaceLow
+          annotations:
+            description: Pool {{ $labels.raidName }} on {{ $labels.instance }} is {{ $value | printf "%.1f" }}% used.
+            summary: Synology storage pool {{ $labels.raidName }} over 85% full
+          expr: raidTotalSize{job="snmp-synology"} > 0 and (1 - raidFreeSize{job="snmp-synology"} / raidTotalSize{job="snmp-synology"}) * 100 > 85
+          for: 10m
+          labels:
+            severity: warning
+        - alert: SynologyPoolSpaceCritical
+          annotations:
+            description: Pool {{ $labels.raidName }} on {{ $labels.instance }} is {{ $value | printf "%.1f" }}% used — iSCSI LUNs will fail on exhaustion.
+            summary: Synology storage pool {{ $labels.raidName }} over 95% full
+          expr: raidTotalSize{job="snmp-synology"} > 0 and (1 - raidFreeSize{job="snmp-synology"} / raidTotalSize{job="snmp-synology"}) * 100 > 95
+          for: 5m
+          labels:
+            severity: critical
+        - alert: SynologyDiskUnhealthy
+          annotations:
+            description: Disk {{ $labels.diskID }} on {{ $labels.instance }} reports health status {{ $value }}.
+            summary: Synology disk {{ $labels.diskID }} unhealthy
+          expr: diskHealthStatus{job="snmp-synology"} > 1
+          for: 5m
+          labels:
+            severity: critical
+        - alert: SynologyRaidDegraded
+          annotations:
+            description: RAID {{ $labels.raidName }} on {{ $labels.instance }} reports status {{ $value }}.
+            summary: Synology RAID {{ $labels.raidName }} degraded or crashed
+          expr: raidStatus{job="snmp-synology"} >= 11
+          for: 5m
+          labels:
+            severity: critical
+        - alert: SynologyDiskTempHigh
+          annotations:
+            description: Disk {{ $labels.diskID }} on {{ $labels.instance }} is at {{ $value }}°C.
+            summary: Synology disk {{ $labels.diskID }} temperature high
+          expr: diskTemperature{job="snmp-synology"} > 55
+          for: 15m
+          labels:
+            severity: warning
+        - alert: SynologySystemTempHigh
+          annotations:
+            description: '{{ $labels.instance }} system temperature is {{ $value }}°C.'
+            summary: Synology system temperature high
+          expr: temperature{job="snmp-synology"} > 65
+          for: 15m
+          labels:
+            severity: warning
+        - alert: SynologySnmpTargetDown
+          annotations:
+            description: snmp_exporter cannot reach {{ $labels.instance }} — no NAS metrics.
+            summary: Synology SNMP target down
+          expr: up{job="snmp-synology"} == 0
+          for: 5m
+          labels:
+            severity: warning

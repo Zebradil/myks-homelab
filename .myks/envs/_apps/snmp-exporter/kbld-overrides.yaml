@@ -1,0 +1,5 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+overrides:
+    - image: quay.io/prometheus/snmp-exporter:v0.30.1
+      newImage: oci.zebradil.dev/quay.io-cache/prometheus/snmp-exporter:v0.30.1

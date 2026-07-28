@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: snmp-exporter
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: snmp-exporter
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: snmp-exporter
+    spec:
+      containers:
+        - args:
+            - --config.file=/etc/snmp/modules/snmp.yml
+            - --config.file=/etc/snmp/auths/snmp.yml
+          image: oci.zebradil.dev/quay.io-cache/prometheus/snmp-exporter@sha256:e5fd5e8b43ace6c088fe9bf0b37b7fff0e04380bee352be7ec41b853a4dd5859
+          name: snmp-exporter
+          ports:
+            - containerPort: 9116
+              name: http
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+            privileged: false
+            runAsNonRoot: true
+          volumeMounts:
+            - mountPath: /etc/snmp/modules
+              name: modules
+              readOnly: true
+            - mountPath: /etc/snmp/auths
+              name: auths
+              readOnly: true
+      volumes:
+        - configMap:
+            name: snmp-exporter-modules
+          name: modules
+        - name: auths
+          secret:
+            secretName: snmp-exporter-auths

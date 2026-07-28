@@ -1,0 +1,31 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMStaticScrape
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: snmp-exporter
+spec:
+  jobName: snmp-synology
+  targetEndpoints:
+    - params:
+        auth:
+          - synology_v3
+        module:
+          - synology
+          - if_mib
+          - ucd_la_table
+          - ucd_memory
+          - ucd_system_stats
+          - system
+      path: /snmp
+      relabelConfigs:
+        - sourceLabels:
+            - __address__
+          targetLabel: __param_target
+        - sourceLabels:
+            - __param_target
+          targetLabel: instance
+        - replacement: snmp-exporter.snmp-exporter.svc.cluster.local.:9116
+          targetLabel: __address__
+      targets:
+        - 192.168.0.30

@@ -1,0 +1,13 @@
+#@data/values-schema
+---
+#@overlay/match-child-defaults missing_ok=True
+application:
+  #! renovate: datasource=docker
+  image: quay.io/prometheus/snmp-exporter:v0.30.1
+  nasAddress: 192.168.0.30
+  #! snmp_exporter port (upstream default).
+  port: 9116
+  #! Modules to walk, matched to the vendored snmp-modules.json + dashboard 14284.
+  #@schema/default ["synology", "if_mib", "ucd_la_table", "ucd_memory", "ucd_system_stats", "system"]
+  modules:
+    - ''

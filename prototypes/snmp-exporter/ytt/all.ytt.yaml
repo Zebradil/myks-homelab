@@ -1,0 +1,211 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:yaml", "yaml")
+#@ load("secrets.star", "sops")
+
+#@ a = data.values.application
+#@ name = "snmp-exporter"
+#@ ns = "snmp-exporter"
+
+#! ---------------------------------------------------------------------------
+#! Synology NAS monitoring — SNMP only.
+#!
+#! snmp_exporter runs as a multi-target proxy: vmagent scrapes /snmp with a
+#! target= param, the exporter SNMP-walks the NAS and returns Prometheus metrics.
+#! Config is split across two --config.file: public module walk-maps (ConfigMap,
+#! vendored from prometheus/snmp_exporter) + SNMPv3 creds (sops Secret).
+#!
+#! Covers: pool space (raidFreeSize/raidTotalSize), disk health/temp, RAID
+#! status, CPU/mem/net, per-LUN thin-provision free (iSCSILUNThinProvisionVolFreeMBs),
+#! UPS.
+#!
+#! Deliberately NOT built (add only if the gap bites):
+#!   * node_exporter in a DSM Container-Manager container — generic host
+#!     filesystem/proc/systemd metrics SNMP doesn't expose. Runs on the NAS,
+#!     outside this repo's GitOps flow.
+#!   * DSM Web API exporter (same API synology-csi authenticates against) —
+#!     per-share folder usage and richer per-LUN allocation than SNMP exposes.
+#!     Needs a custom exporter.
+#! ---------------------------------------------------------------------------
+
+#! Rendered to a single YAML string for the Secret. vals inline-expands each
+#! ref+sops://…+ at deploy time (the trailing + is vals' inline delimiter).
+#@ def auths_config():
+auths:
+  synology_v3:
+    version: 3
+    security_level: authPriv
+    username: #@ sops("0", "username")
+    password: #@ sops("0", "authPassword")
+    auth_protocol: SHA
+    priv_protocol: AES
+    priv_password: #@ sops("0", "privPassword")
+#@ end
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: #@ name
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: #@ name
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: #@ name
+    spec:
+      containers:
+        - name: #@ name
+          image: #@ a.image
+          args:
+            - --config.file=/etc/snmp/modules/snmp.yml
+            - --config.file=/etc/snmp/auths/snmp.yml
+          ports:
+            - containerPort: #@ a.port
+              name: http
+          volumeMounts:
+            - name: modules
+              mountPath: /etc/snmp/modules
+              readOnly: true
+            - name: auths
+              mountPath: /etc/snmp/auths
+              readOnly: true
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+            privileged: false
+            runAsNonRoot: true
+      volumes:
+        - name: modules
+          configMap:
+            name: #@ name + "-modules"
+        - name: auths
+          secret:
+            secretName: #@ name + "-auths"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #@ name
+spec:
+  ports:
+    - name: http
+      port: #@ a.port
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: #@ name
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: #@ name + "-modules"
+data:
+  #! JSON is valid YAML; snmp_exporter parses it as its config.
+  snmp.yml: #@ data.read("snmp-modules.json")
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: #@ name + "-auths"
+stringData:
+  snmp.yml: #@ yaml.encode(auths_config())
+
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMStaticScrape
+metadata:
+  name: #@ name
+spec:
+  jobName: snmp-synology
+  targetEndpoints:
+    - targets:
+        -  #@ a.nasAddress
+      path: /snmp
+      params:
+        auth:
+          - synology_v3
+        module: #@ a.modules
+      relabelConfigs:
+        #! Multi-target snmp_exporter pattern: move the real target into the
+        #! target param and instance label, then point the scrape at the exporter.
+        - sourceLabels: [__address__]
+          targetLabel: __param_target
+        - sourceLabels: [__param_target]
+          targetLabel: instance
+        - targetLabel: __address__
+          replacement: #@ name + "." + ns + ".svc.cluster.local.:" + str(a.port)
+
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: #@ name
+spec:
+  groups:
+    - name: synology
+      rules:
+        - alert: SynologyPoolSpaceLow
+          expr: raidTotalSize{job="snmp-synology"} > 0 and (1 - raidFreeSize{job="snmp-synology"} / raidTotalSize{job="snmp-synology"}) * 100 > 85
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: Synology storage pool {{ $labels.raidName }} over 85% full
+            description: 'Pool {{ $labels.raidName }} on {{ $labels.instance }} is {{ $value | printf "%.1f" }}% used.'
+        - alert: SynologyPoolSpaceCritical
+          expr: raidTotalSize{job="snmp-synology"} > 0 and (1 - raidFreeSize{job="snmp-synology"} / raidTotalSize{job="snmp-synology"}) * 100 > 95
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: Synology storage pool {{ $labels.raidName }} over 95% full
+            description: 'Pool {{ $labels.raidName }} on {{ $labels.instance }} is {{ $value | printf "%.1f" }}% used — iSCSI LUNs will fail on exhaustion.'
+        - alert: SynologyDiskUnhealthy
+          #! diskHealthStatus: 1=Normal, 2=Warning, 3=Critical, 4=Failing.
+          expr: diskHealthStatus{job="snmp-synology"} > 1
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: Synology disk {{ $labels.diskID }} unhealthy
+            description: 'Disk {{ $labels.diskID }} on {{ $labels.instance }} reports health status {{ $value }}.'
+        - alert: SynologyRaidDegraded
+          #! raidStatus 2..10 are transient normal ops (repair/expand/sync);
+          #! 11=Degrade, 12=Crashed are the failure states.
+          expr: raidStatus{job="snmp-synology"} >= 11
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: Synology RAID {{ $labels.raidName }} degraded or crashed
+            description: 'RAID {{ $labels.raidName }} on {{ $labels.instance }} reports status {{ $value }}.'
+        - alert: SynologyDiskTempHigh
+          expr: diskTemperature{job="snmp-synology"} > 55
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: Synology disk {{ $labels.diskID }} temperature high
+            description: 'Disk {{ $labels.diskID }} on {{ $labels.instance }} is at {{ $value }}°C.'
+        - alert: SynologySystemTempHigh
+          expr: temperature{job="snmp-synology"} > 65
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: Synology system temperature high
+            description: '{{ $labels.instance }} system temperature is {{ $value }}°C.'
+        - alert: SynologySnmpTargetDown
+          expr: up{job="snmp-synology"} == 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: Synology SNMP target down
+            description: 'snmp_exporter cannot reach {{ $labels.instance }} — no NAS metrics.'

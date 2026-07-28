@@ -94,6 +94,8 @@ environment:
     name: ""
   - proto: paperless
     name: ""
+  - proto: snmp-exporter
+    name: ""
   - proto: starbase80
     name: ""
   - proto: synology-csi

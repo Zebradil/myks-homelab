@@ -1,0 +1,7 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.49.0
+overrides:
+- image: quay.io/prometheus/snmp-exporter:v0.30.1
+  newImage: oci.zebradil.dev/quay.io-cache/prometheus/snmp-exporter@sha256:e5fd5e8b43ace6c088fe9bf0b37b7fff0e04380bee352be7ec41b853a4dd5859
+  preresolved: true

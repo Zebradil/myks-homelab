@@ -55,6 +55,7 @@ environment:
     - proto: outdoor-weather
     - proto: pacoloco
     - proto: paperless
+    - proto: snmp-exporter
     - proto: starbase80
     - proto: synology-csi
     - proto: traefik
