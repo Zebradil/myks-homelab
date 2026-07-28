@@ -77,7 +77,7 @@ spec:
               drop:
                 - all
             privileged: false
-            runAsNonRoot: true
+            #! runAsNonRoot: true
       volumes:
         - name: modules
           configMap:

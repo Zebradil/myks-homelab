@@ -28,7 +28,6 @@ spec:
               drop:
                 - all
             privileged: false
-            runAsNonRoot: true
           volumeMounts:
             - mountPath: /etc/snmp/modules
               name: modules
