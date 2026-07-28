@@ -1,0 +1,12 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - configDigest: 6d612018a53f4394e9319213a28b1c5789c5c943aadc9f514617071f5b1e6f30
+    git:
+      commitTitle: 'chore(release): 1.2.8 [skip ci]...'
+      sha: 562098a0978843bdd51a1601233ba3cec36342ae
+      tags:
+      - 1.2.8
+    path: .
+  path: .myks/vendir-cache/git-airgradient-exporter-1.2.8-664ed0dbcec0385/data
+kind: LockConfig

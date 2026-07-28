@@ -7,7 +7,7 @@ directories:
     lazy: true
     git:
       url: https://github.com/zebradil/airgradient-exporter
-      ref: 1.1.1
+      ref: 1.2.8
     includePaths:
     - dashboard/dashboard.json
     newRootPath: dashboard

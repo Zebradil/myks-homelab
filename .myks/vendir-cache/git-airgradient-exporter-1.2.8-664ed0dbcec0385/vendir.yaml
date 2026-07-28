@@ -2,13 +2,13 @@ apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
   - git:
-      ref: 1.1.1
+      ref: 1.2.8
       url: https://github.com/zebradil/airgradient-exporter
     includePaths:
     - dashboard/dashboard.json
     lazy: true
     newRootPath: dashboard
     path: .
-  path: .myks/vendir-cache/git-airgradient-exporter-1.1.1-41488d930dcf25e7/data
+  path: .myks/vendir-cache/git-airgradient-exporter-1.2.8-664ed0dbcec0385/data
 kind: Config
 minimumRequiredVersion: ""

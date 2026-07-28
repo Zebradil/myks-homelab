@@ -84,14 +84,14 @@ data:
             "textMode": "auto",
             "wideLayout": true
           },
+          "repeatDirection": "h",
           "targets": [
             {
               "editorMode": "code",
               "expr": "sum by(serialno) (airgradient_atmp{serialno=~\"$serialno\"})",
               "instant": true,
               "legendFormat": "{{sensor}}",
-              "range": false,
-              "refId": ""
+              "range": false
             }
           ],
           "title": "Temperature (°C)",
@@ -159,14 +159,14 @@ data:
             "textMode": "auto",
             "wideLayout": true
           },
+          "repeatDirection": "h",
           "targets": [
             {
               "editorMode": "code",
               "expr": "sum by(serialno) (airgradient_rhum{serialno=~\"$serialno\"})",
               "instant": true,
               "legendFormat": "{{sensor}}",
-              "range": false,
-              "refId": ""
+              "range": false
             }
           ],
           "title": "Relative Humidity (%)",
@@ -242,14 +242,14 @@ data:
             "textMode": "auto",
             "wideLayout": true
           },
+          "repeatDirection": "h",
           "targets": [
             {
               "editorMode": "code",
               "expr": "sum by(serialno) (airgradient_rco2{serialno=~\"$serialno\"})",
               "instant": true,
               "legendFormat": "{{sensor}}",
-              "range": false,
-              "refId": ""
+              "range": false
             }
           ],
           "title": "CO2 Level (ppm)",
@@ -296,14 +296,14 @@ data:
             "textMode": "auto",
             "wideLayout": true
           },
+          "repeatDirection": "h",
           "targets": [
             {
               "editorMode": "code",
               "expr": "sum by(serialno) (airgradient_pm01{serialno=~\"$serialno\"})",
               "instant": true,
               "legendFormat": "{{sensor}}",
-              "range": false,
-              "refId": ""
+              "range": false
             }
           ],
           "title": "PM1 μg/m3",
@@ -350,14 +350,14 @@ data:
             "textMode": "auto",
             "wideLayout": true
           },
+          "repeatDirection": "h",
           "targets": [
             {
               "editorMode": "code",
               "expr": "sum by(serialno) (airgradient_pm02{serialno=~\"$serialno\"})",
               "instant": true,
               "legendFormat": "{{sensor}}",
-              "range": false,
-              "refId": ""
+              "range": false
             }
           ],
           "title": "PM2.5 μg/m3",
@@ -404,14 +404,14 @@ data:
             "textMode": "auto",
             "wideLayout": true
           },
+          "repeatDirection": "h",
           "targets": [
             {
               "editorMode": "code",
               "expr": "sum by(serialno) (airgradient_pm10{serialno=~\"$serialno\"})",
               "instant": true,
               "legendFormat": "{{sensor}}",
-              "range": false,
-              "refId": ""
+              "range": false
             }
           ],
           "title": "PM10 μg/m3",
@@ -458,14 +458,14 @@ data:
             "textMode": "auto",
             "wideLayout": true
           },
+          "repeatDirection": "h",
           "targets": [
             {
               "editorMode": "code",
               "expr": "sum by(serialno) (airgradient_pm003_count{serialno=~\"$serialno\"})",
               "instant": true,
               "legendFormat": "{{sensor}}",
-              "range": false,
-              "refId": ""
+              "range": false
             }
           ],
           "title": "PM0.3 particles/dL",
@@ -521,14 +521,14 @@ data:
             "textMode": "auto",
             "wideLayout": true
           },
+          "repeatDirection": "h",
           "targets": [
             {
               "editorMode": "code",
               "expr": "sum by(serialno) (airgradient_nox_index{serialno=~\"$serialno\"})",
               "instant": true,
               "legendFormat": "{{sensor}}",
-              "range": false,
-              "refId": ""
+              "range": false
             }
           ],
           "title": "NOx Index",
@@ -588,14 +588,14 @@ data:
             "textMode": "auto",
             "wideLayout": true
           },
+          "repeatDirection": "h",
           "targets": [
             {
               "editorMode": "code",
               "expr": "sum by(serialno) (airgradient_tvoc_index{serialno=~\"$serialno\"})",
               "instant": true,
               "legendFormat": "{{sensor}}",
-              "range": false,
-              "refId": ""
+              "range": false
             }
           ],
           "title": "TVOC Index",
@@ -692,14 +692,14 @@ data:
               "sort": "desc"
             }
           },
+          "repeatDirection": "h",
           "targets": [
             {
               "editorMode": "code",
               "expr": "sum by(serialno) (airgradient_atmp{serialno=~\"$serialno\"})",
               "instant": false,
               "legendFormat": "{{sensor}}",
-              "range": true,
-              "refId": ""
+              "range": true
             }
           ],
           "title": "Temperature (°C)",
@@ -783,14 +783,14 @@ data:
               "sort": "desc"
             }
           },
+          "repeatDirection": "h",
           "targets": [
             {
               "editorMode": "code",
               "expr": "sum by(serialno) (airgradient_rhum{serialno=~\"$serialno\"})",
               "instant": false,
               "legendFormat": "{{sensor}}",
-              "range": true,
-              "refId": ""
+              "range": true
             }
           ],
           "title": "Relative Humidity (%)",
@@ -896,14 +896,14 @@ data:
               "sort": "desc"
             }
           },
+          "repeatDirection": "h",
           "targets": [
             {
               "editorMode": "code",
               "expr": "sum by(serialno) (airgradient_rco2{serialno=~\"$serialno\"})",
               "instant": false,
               "legendFormat": "{{sensor}}",
-              "range": true,
-              "refId": ""
+              "range": true
             }
           ],
           "title": "CO2 Level (ppm)",
@@ -972,14 +972,14 @@ data:
               "sort": "desc"
             }
           },
+          "repeatDirection": "h",
           "targets": [
             {
               "editorMode": "code",
               "expr": "sum by(serialno) (airgradient_pm003_count{serialno=~\"$serialno\"})",
               "instant": false,
               "legendFormat": "{{sensor}}",
-              "range": true,
-              "refId": ""
+              "range": true
             }
           ],
           "title": "PM0.3 particles/dL",
@@ -1035,14 +1035,14 @@ data:
               "sort": "desc"
             }
           },
+          "repeatDirection": "h",
           "targets": [
             {
               "editorMode": "code",
               "expr": "sum by(serialno) (airgradient_pm01{serialno=~\"$serialno\"})",
               "instant": false,
               "legendFormat": "{{sensor}}",
-              "range": true,
-              "refId": ""
+              "range": true
             }
           ],
           "title": "PM1 μg/m3",
@@ -1098,14 +1098,14 @@ data:
               "sort": "desc"
             }
           },
+          "repeatDirection": "h",
           "targets": [
             {
               "editorMode": "code",
               "expr": "sum by(serialno) (airgradient_pm02{serialno=~\"$serialno\"})",
               "instant": false,
               "legendFormat": "{{sensor}}",
-              "range": true,
-              "refId": ""
+              "range": true
             }
           ],
           "title": "PM2.5 μg/m3",
@@ -1161,14 +1161,14 @@ data:
               "sort": "desc"
             }
           },
+          "repeatDirection": "h",
           "targets": [
             {
               "editorMode": "code",
               "expr": "sum by(serialno) (airgradient_pm10{serialno=~\"$serialno\"})",
               "instant": false,
               "legendFormat": "{{sensor}}",
-              "range": true,
-              "refId": ""
+              "range": true
             }
           ],
           "title": "PM10 μg/m3",
@@ -1257,14 +1257,14 @@ data:
               "sort": "desc"
             }
           },
+          "repeatDirection": "h",
           "targets": [
             {
               "editorMode": "code",
               "expr": "sum by(serialno) (airgradient_tvoc_index{serialno=~\"$serialno\"})",
               "instant": false,
               "legendFormat": "{{sensor}}",
-              "range": true,
-              "refId": ""
+              "range": true
             }
           ],
           "title": "TVOC Index",
@@ -1336,14 +1336,14 @@ data:
               "sort": "desc"
             }
           },
+          "repeatDirection": "h",
           "targets": [
             {
               "editorMode": "code",
               "expr": "sum by(serialno) (airgradient_nox_index{serialno=~\"$serialno\"})",
               "instant": false,
               "legendFormat": "{{sensor}}",
-              "range": true,
-              "refId": ""
+              "range": true
             }
           ],
           "title": "NOx Index",
@@ -1352,7 +1352,7 @@ data:
         }
       ],
       "refresh": "",
-      "schemaVersion": 41,
+      "schemaVersion": 42,
       "templating": {
         "list": [
           {
