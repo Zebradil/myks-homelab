@@ -4,7 +4,7 @@ prototype:
   sources:
     dashboard:
       git:
-        ref: 1.1.1
+        ref: 1.2.8
         url: https://github.com/zebradil/airgradient-exporter
       includePaths:
         - dashboard/dashboard.json
