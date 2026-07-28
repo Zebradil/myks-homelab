@@ -12,7 +12,7 @@
   "fiscalYearStartMonth": 0,
   "liveNow": true,
   "refresh": "",
-  "schemaVersion": 41,
+  "schemaVersion": 42,
   "panels": [
     {
       "type": "row",
@@ -36,8 +36,7 @@
           "instant": true,
           "range": false,
           "editorMode": "code",
-          "legendFormat": "{{sensor}}",
-          "refId": ""
+          "legendFormat": "{{sensor}}"
         }
       ],
       "title": "Temperature (°C)",
@@ -52,6 +51,7 @@
         "x": 0,
         "y": 1
       },
+      "repeatDirection": "h",
       "options": {
         "graphMode": "none",
         "colorMode": "background",
@@ -111,8 +111,7 @@
           "instant": true,
           "range": false,
           "editorMode": "code",
-          "legendFormat": "{{sensor}}",
-          "refId": ""
+          "legendFormat": "{{sensor}}"
         }
       ],
       "title": "Relative Humidity (%)",
@@ -127,6 +126,7 @@
         "x": 4,
         "y": 1
       },
+      "repeatDirection": "h",
       "options": {
         "graphMode": "none",
         "colorMode": "background",
@@ -186,8 +186,7 @@
           "instant": true,
           "range": false,
           "editorMode": "code",
-          "legendFormat": "{{sensor}}",
-          "refId": ""
+          "legendFormat": "{{sensor}}"
         }
       ],
       "title": "CO2 Level (ppm)",
@@ -202,6 +201,7 @@
         "x": 8,
         "y": 1
       },
+      "repeatDirection": "h",
       "options": {
         "graphMode": "none",
         "colorMode": "background",
@@ -269,8 +269,7 @@
           "instant": true,
           "range": false,
           "editorMode": "code",
-          "legendFormat": "{{sensor}}",
-          "refId": ""
+          "legendFormat": "{{sensor}}"
         }
       ],
       "title": "PM1 μg/m3",
@@ -285,6 +284,7 @@
         "x": 12,
         "y": 1
       },
+      "repeatDirection": "h",
       "options": {
         "graphMode": "none",
         "colorMode": "value",
@@ -323,8 +323,7 @@
           "instant": true,
           "range": false,
           "editorMode": "code",
-          "legendFormat": "{{sensor}}",
-          "refId": ""
+          "legendFormat": "{{sensor}}"
         }
       ],
       "title": "PM2.5 μg/m3",
@@ -339,6 +338,7 @@
         "x": 16,
         "y": 1
       },
+      "repeatDirection": "h",
       "options": {
         "graphMode": "none",
         "colorMode": "value",
@@ -377,8 +377,7 @@
           "instant": true,
           "range": false,
           "editorMode": "code",
-          "legendFormat": "{{sensor}}",
-          "refId": ""
+          "legendFormat": "{{sensor}}"
         }
       ],
       "title": "PM10 μg/m3",
@@ -393,6 +392,7 @@
         "x": 20,
         "y": 1
       },
+      "repeatDirection": "h",
       "options": {
         "graphMode": "none",
         "colorMode": "value",
@@ -431,8 +431,7 @@
           "instant": true,
           "range": false,
           "editorMode": "code",
-          "legendFormat": "{{sensor}}",
-          "refId": ""
+          "legendFormat": "{{sensor}}"
         }
       ],
       "title": "PM0.3 particles/dL",
@@ -447,6 +446,7 @@
         "x": 0,
         "y": 5
       },
+      "repeatDirection": "h",
       "options": {
         "graphMode": "none",
         "colorMode": "value",
@@ -485,8 +485,7 @@
           "instant": true,
           "range": false,
           "editorMode": "code",
-          "legendFormat": "{{sensor}}",
-          "refId": ""
+          "legendFormat": "{{sensor}}"
         }
       ],
       "title": "NOx Index",
@@ -501,6 +500,7 @@
         "x": 4,
         "y": 5
       },
+      "repeatDirection": "h",
       "options": {
         "graphMode": "none",
         "colorMode": "background",
@@ -548,8 +548,7 @@
           "instant": true,
           "range": false,
           "editorMode": "code",
-          "legendFormat": "{{sensor}}",
-          "refId": ""
+          "legendFormat": "{{sensor}}"
         }
       ],
       "title": "TVOC Index",
@@ -564,6 +563,7 @@
         "x": 8,
         "y": 5
       },
+      "repeatDirection": "h",
       "options": {
         "graphMode": "none",
         "colorMode": "background",
@@ -628,8 +628,7 @@
           "instant": false,
           "range": true,
           "editorMode": "code",
-          "legendFormat": "{{sensor}}",
-          "refId": ""
+          "legendFormat": "{{sensor}}"
         }
       ],
       "title": "Temperature (°C)",
@@ -644,6 +643,7 @@
         "x": 0,
         "y": 10
       },
+      "repeatDirection": "h",
       "options": {
         "legend": {
           "displayMode": "table",
@@ -719,8 +719,7 @@
           "instant": false,
           "range": true,
           "editorMode": "code",
-          "legendFormat": "{{sensor}}",
-          "refId": ""
+          "legendFormat": "{{sensor}}"
         }
       ],
       "title": "Relative Humidity (%)",
@@ -735,6 +734,7 @@
         "x": 12,
         "y": 10
       },
+      "repeatDirection": "h",
       "options": {
         "legend": {
           "displayMode": "table",
@@ -823,8 +823,7 @@
           "instant": false,
           "range": true,
           "editorMode": "code",
-          "legendFormat": "{{sensor}}",
-          "refId": ""
+          "legendFormat": "{{sensor}}"
         }
       ],
       "title": "CO2 Level (ppm)",
@@ -839,6 +838,7 @@
         "x": 0,
         "y": 24
       },
+      "repeatDirection": "h",
       "options": {
         "legend": {
           "displayMode": "table",
@@ -936,8 +936,7 @@
           "instant": false,
           "range": true,
           "editorMode": "code",
-          "legendFormat": "{{sensor}}",
-          "refId": ""
+          "legendFormat": "{{sensor}}"
         }
       ],
       "title": "PM0.3 particles/dL",
@@ -952,6 +951,7 @@
         "x": 0,
         "y": 38
       },
+      "repeatDirection": "h",
       "options": {
         "legend": {
           "displayMode": "table",
@@ -999,8 +999,7 @@
           "instant": false,
           "range": true,
           "editorMode": "code",
-          "legendFormat": "{{sensor}}",
-          "refId": ""
+          "legendFormat": "{{sensor}}"
         }
       ],
       "title": "PM1 μg/m3",
@@ -1015,6 +1014,7 @@
         "x": 12,
         "y": 38
       },
+      "repeatDirection": "h",
       "options": {
         "legend": {
           "displayMode": "table",
@@ -1062,8 +1062,7 @@
           "instant": false,
           "range": true,
           "editorMode": "code",
-          "legendFormat": "{{sensor}}",
-          "refId": ""
+          "legendFormat": "{{sensor}}"
         }
       ],
       "title": "PM2.5 μg/m3",
@@ -1078,6 +1077,7 @@
         "x": 0,
         "y": 52
       },
+      "repeatDirection": "h",
       "options": {
         "legend": {
           "displayMode": "table",
@@ -1125,8 +1125,7 @@
           "instant": false,
           "range": true,
           "editorMode": "code",
-          "legendFormat": "{{sensor}}",
-          "refId": ""
+          "legendFormat": "{{sensor}}"
         }
       ],
       "title": "PM10 μg/m3",
@@ -1141,6 +1140,7 @@
         "x": 12,
         "y": 52
       },
+      "repeatDirection": "h",
       "options": {
         "legend": {
           "displayMode": "table",
@@ -1201,8 +1201,7 @@
           "instant": false,
           "range": true,
           "editorMode": "code",
-          "legendFormat": "{{sensor}}",
-          "refId": ""
+          "legendFormat": "{{sensor}}"
         }
       ],
       "title": "TVOC Index",
@@ -1217,6 +1216,7 @@
         "x": 0,
         "y": 67
       },
+      "repeatDirection": "h",
       "options": {
         "legend": {
           "displayMode": "table",
@@ -1284,8 +1284,7 @@
           "instant": false,
           "range": true,
           "editorMode": "code",
-          "legendFormat": "{{sensor}}",
-          "refId": ""
+          "legendFormat": "{{sensor}}"
         }
       ],
       "title": "NOx Index",
@@ -1300,6 +1299,7 @@
         "x": 12,
         "y": 67
       },
+      "repeatDirection": "h",
       "options": {
         "legend": {
           "displayMode": "table",
