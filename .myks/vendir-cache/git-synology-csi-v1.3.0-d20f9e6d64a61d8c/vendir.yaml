@@ -2,13 +2,13 @@ apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
   - git:
-      ref: v1.2.1
+      ref: v1.3.0
       url: https://github.com/SynologyOpenSource/synology-csi
     includePaths:
     - deploy/kubernetes/v1.20/*
     lazy: true
     newRootPath: deploy/kubernetes/v1.20
     path: .
-  path: .myks/vendir-cache/git-synology-csi-v1.2.1-f40356a206d2d28/data
+  path: .myks/vendir-cache/git-synology-csi-v1.3.0-d20f9e6d64a61d8c/data
 kind: Config
 minimumRequiredVersion: ""
