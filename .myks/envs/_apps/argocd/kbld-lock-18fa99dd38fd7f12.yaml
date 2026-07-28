@@ -8,8 +8,8 @@ overrides:
 - image: ghcr.io/dexidp/dex:v2.45.1
   newImage: oci.zebradil.dev/ghcr.io-cache/dexidp/dex@sha256:8499afd690c437f52301efd2b05b2455da5bd2dfc20332cd697dc9937f808462
   preresolved: true
-- image: ghcr.io/oliver006/redis_exporter:v1.87.0
-  newImage: oci.zebradil.dev/ghcr.io-cache/oliver006/redis_exporter@sha256:9ca6f929a8abc518d78158757922444f1cf807661a2238f44b28c3cd08a1b652
+- image: ghcr.io/oliver006/redis_exporter:v1.88.0
+  newImage: oci.zebradil.dev/ghcr.io-cache/oliver006/redis_exporter@sha256:2c8c55c63ce4d915389f03d337b8acef56aaaca9fab8728291287e612d4d6398
   preresolved: true
 - image: quay.io/argoproj/argocd:v3.4.5
   newImage: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:224e454cfd8c1818fec3ed17b72b2034c9a3915fa819e1dcccafc753776d446a
