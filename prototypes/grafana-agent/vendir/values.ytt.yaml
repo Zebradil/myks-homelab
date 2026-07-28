@@ -4,7 +4,7 @@ prototype:
   sources:
     k8s-monitoring:
       git:
-        ref: v1.6.29
+        ref: v1.6.38
         url: https://github.com/grafana/k8s-monitoring-helm
       includePaths:
         - charts/k8s-monitoring-v1/**
