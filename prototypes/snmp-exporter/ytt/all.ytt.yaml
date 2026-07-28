@@ -105,8 +105,11 @@ kind: ConfigMap
 metadata:
   name: #@ name + "-modules"
 data:
-  #! JSON is valid YAML; snmp_exporter parses it as its config.
-  snmp.yml: #@ data.read("snmp-modules.json")
+  #! Vendored from the snmp_exporter generator. Must be YAML, not JSON:
+  #! enum_values is a map[int]string and JSON forces string keys, which the
+  #! exporter's YAML parser refuses to coerce ("cannot unmarshal !!str into int").
+  #! The .data extension keeps ytt from templating it as a manifest.
+  snmp.yml: #@ data.read("snmp-modules.yaml.data")
 
 ---
 apiVersion: v1
