@@ -1,5 +1,5 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 overrides:
-    - image: ghcr.io/anatol/pacoloco:1.7
-      newImage: oci.zebradil.dev/ghcr.io-cache/anatol/pacoloco:1.7
+    - image: ghcr.io/anatol/pacoloco:1.8
+      newImage: oci.zebradil.dev/ghcr.io-cache/anatol/pacoloco:1.8

@@ -5,7 +5,7 @@ application:
   containerPort: 9129
   host: ""
   #! renovate: datasource=docker
-  image: ghcr.io/anatol/pacoloco:1.7
+  image: ghcr.io/anatol/pacoloco:1.8
   storageSize: 20Gi
   name: ""
   config:
