@@ -8,7 +8,7 @@ prototype:
         version: 0.11.6
     dashboard:
       git:
-        ref: v4.39.15
+        ref: v4.39.20
         url: https://github.com/authelia/authelia
       includePaths:
         - examples/grafana-dashboards/simple.json
