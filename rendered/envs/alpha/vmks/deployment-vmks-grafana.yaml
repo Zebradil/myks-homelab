@@ -43,7 +43,7 @@ spec:
               value: both
             - name: NAMESPACE
               value: ALL
-          image: oci.zebradil.dev/quay.io-cache/kiwigrid/k8s-sidecar@sha256:a6b3f707f883108376514489a94d6629109a327b2978e1d826cd104c4ca436df
+          image: oci.zebradil.dev/quay.io-cache/kiwigrid/k8s-sidecar@sha256:694950d736c8b532eba4006527ccbdac98fefc9f30b3346ba2de50b6cad91c94
           name: grafana-sc-dashboard
           securityContext:
             allowPrivilegeEscalation: false
@@ -80,7 +80,7 @@ spec:
               value: http://localhost:3000/api/admin/provisioning/datasources/reload
             - name: REQ_METHOD
               value: POST
-          image: oci.zebradil.dev/quay.io-cache/kiwigrid/k8s-sidecar@sha256:a6b3f707f883108376514489a94d6629109a327b2978e1d826cd104c4ca436df
+          image: oci.zebradil.dev/quay.io-cache/kiwigrid/k8s-sidecar@sha256:694950d736c8b532eba4006527ccbdac98fefc9f30b3346ba2de50b6cad91c94
           name: grafana-sc-datasources
           securityContext:
             allowPrivilegeEscalation: false
@@ -107,7 +107,7 @@ spec:
                 secretKeyRef:
                   key: admin-password
                   name: vmks-grafana
-            - name: GF_INSTALL_PLUGINS
+            - name: GF_PLUGINS_PREINSTALL_SYNC
               valueFrom:
                 configMapKeyRef:
                   key: plugins
@@ -122,7 +122,7 @@ spec:
               value: /etc/grafana/provisioning
             - name: GF_UNIFIED_STORAGE_INDEX_PATH
               value: /var/lib/grafana-search/bleve
-          image: index.docker.io/grafana/grafana@sha256:2175aaa91c96733d86d31cf270d5310b278654b03f5718c59de12a865380a31f
+          image: index.docker.io/grafana/grafana@sha256:2d1f9ae67c1778d33e291d4c3c759cd8b650e67491f02533499eb950e075eeb5
           livenessProbe:
             failureThreshold: 10
             httpGet:

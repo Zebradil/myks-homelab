@@ -4,7 +4,7 @@ metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
-    app: victoria-metrics-k8s-stack
+    app.kubernetes.io/component: vmalert
     app.kubernetes.io/instance: vmks
     app.kubernetes.io/name: victoria-metrics-k8s-stack
   name: vmks-kubernetes-apps
@@ -28,7 +28,7 @@ spec:
             description: Pod {{ $labels.namespace }}/{{ $labels.pod }} has been in a non-ready state for longer than 15 minutes on cluster {{ $labels.cluster }}.
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepodnotready
             summary: Pod has been in a non-ready state for more than 15 minutes.
-          expr: sum(max(kube_pod_status_phase{namespace=~".*",job="kube-state-metrics",phase=~"Pending|Unknown"}) by(namespace,pod,job,cluster) * on(namespace,pod,cluster) group_left(owner_kind) topk(1, max(kube_pod_owner{owner_kind!="Job"}) by(namespace,pod,owner_kind,cluster)) by(namespace,pod,cluster)) by(namespace,pod,job,cluster) > 0
+          expr: sum(max(kube_pod_status_phase{namespace=~".*",job="kube-state-metrics",phase=~"Pending|Unknown"}) by(namespace,pod,job,cluster) * on(namespace,pod,cluster) group_left() topk(1, max(kube_pod_owner{owner_kind!="Job"}) by(namespace,pod,owner_kind,cluster)) by(namespace,pod,cluster)) by(namespace,pod,job,cluster) > 0
           for: 15m
           labels:
             severity: warning
@@ -153,7 +153,7 @@ spec:
             description: HPA {{ $labels.namespace }}/{{ $labels.horizontalpodautoscaler  }} has been running at max replicas for longer than 15 minutes on cluster {{ $labels.cluster }}.
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubehpamaxedout
             summary: HPA is running at max replicas
-          expr: kube_horizontalpodautoscaler_status_current_replicas{namespace=~".*",job="kube-state-metrics"} == kube_horizontalpodautoscaler_spec_max_replicas{namespace=~".*",job="kube-state-metrics"}
+          expr: (kube_horizontalpodautoscaler_status_current_replicas{namespace=~".*",job="kube-state-metrics"} == kube_horizontalpodautoscaler_spec_max_replicas{namespace=~".*",job="kube-state-metrics"}) and on(namespace,horizontalpodautoscaler,cluster) (kube_horizontalpodautoscaler_spec_max_replicas{namespace=~".*",job="kube-state-metrics"} != kube_horizontalpodautoscaler_spec_min_replicas{namespace=~".*",job="kube-state-metrics"})
           for: 15m
           labels:
             severity: warning

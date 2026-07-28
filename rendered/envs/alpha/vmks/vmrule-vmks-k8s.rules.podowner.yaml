@@ -4,7 +4,7 @@ metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
-    app: victoria-metrics-k8s-stack
+    app.kubernetes.io/component: vmalert
     app.kubernetes.io/instance: vmks
     app.kubernetes.io/name: victoria-metrics-k8s-stack
   name: vmks-k8s.rules.podowner

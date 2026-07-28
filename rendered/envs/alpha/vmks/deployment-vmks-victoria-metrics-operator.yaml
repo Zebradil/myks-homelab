@@ -14,6 +14,11 @@ spec:
     matchLabels:
       app.kubernetes.io/instance: vmks
       app.kubernetes.io/name: victoria-metrics-operator
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -36,7 +41,7 @@ spec:
               value: victoria-metrics-operator
             - name: VM_ENABLEDPROMETHEUSCONVERTEROWNERREFERENCES
               value: "false"
-          image: index.docker.io/victoriametrics/operator@sha256:8d95f21b6885d7c54ef4e7e022d80f5c4f0da0dcce670e3cd6c0945277b714a6
+          image: index.docker.io/victoriametrics/operator@sha256:fb5ebef9cba3746d73ee0dee1bb9e4bc80539687518fd1e2e6ab7776b438048a
           livenessProbe:
             failureThreshold: 3
             initialDelaySeconds: 5

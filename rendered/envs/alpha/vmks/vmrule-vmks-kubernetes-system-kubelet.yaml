@@ -4,7 +4,7 @@ metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
-    app: victoria-metrics-k8s-stack
+    app.kubernetes.io/component: vmalert
     app.kubernetes.io/instance: vmks
     app.kubernetes.io/name: victoria-metrics-k8s-stack
   name: vmks-kubernetes-system-kubelet
@@ -136,12 +136,21 @@ spec:
           for: 15m
           labels:
             severity: warning
+        - alert: KubeletInstanceUnreachable
+          annotations:
+            description: A Kubelet instance has been unreachable for more than 15 minutes.
+            runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletinstanceunreachable
+            summary: Kubelet instance is unreachable.
+          expr: up{job="kubelet",metrics_path="/metrics"} == 0
+          for: 15m
+          labels:
+            severity: warning
         - alert: KubeletDown
           annotations:
-            description: Kubelet has disappeared from Prometheus target discovery.
+            description: Kubelet has disappeared from Prometheus target discovery on cluster {{ $labels.cluster }}.
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletdown
             summary: Target disappeared from Prometheus target discovery.
-          expr: absent(up{job="kubelet",metrics_path="/metrics"})
+          expr: count(kube_node_info{job="kube-state-metrics"}) by(cluster) unless on(cluster) count(up{job="kubelet",metrics_path="/metrics"} == 1) by(cluster)
           for: 15m
           labels:
             severity: critical

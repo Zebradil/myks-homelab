@@ -4,7 +4,7 @@ metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
-    app: victoria-metrics-k8s-stack
+    app.kubernetes.io/component: vmalert
     app.kubernetes.io/instance: vmks
     app.kubernetes.io/name: victoria-metrics-k8s-stack
   name: vmks-general.rules
@@ -47,6 +47,6 @@ spec:
               This alert should be routed to a null receiver and configured to inhibit alerts with severity="info".
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/general/infoinhibitor
             summary: Info-level alert inhibition.
-          expr: (ALERTS{severity="info"} == 1) unless on(namespace,cluster) (ALERTS{alertname!="InfoInhibitor",severity=~"warning|critical",alertstate="firing"} == 1)
+          expr: group(ALERTS{severity="info"} == 1) by(namespace,cluster) unless on(namespace,cluster) group(ALERTS{alertname!="InfoInhibitor",alertstate="firing",severity=~"warning|critical"} == 1) by(namespace,cluster)
           labels:
             severity: none

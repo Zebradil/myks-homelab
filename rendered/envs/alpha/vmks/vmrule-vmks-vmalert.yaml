@@ -4,7 +4,7 @@ metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
-    app: victoria-metrics-k8s-stack
+    app.kubernetes.io/component: vmalert
     app.kubernetes.io/instance: vmks
     app.kubernetes.io/name: victoria-metrics-k8s-stack
   name: vmks-vmalert
@@ -24,7 +24,7 @@ spec:
             severity: warning
         - alert: AlertingRulesError
           annotations:
-            dashboard: http://grafana.lan.zebradil.dev/d/LzldHAVnz?viewPanel=13&var-instance={{ $labels.instance }}&var-file={{ $labels.file }}&var-group={{ $labels.group }}&var-cluster={{ $labels.cluster }}
+            dashboard: '{{ $externalURL }}/d/LzldHAVnz?viewPanel=13&var-instance={{ $labels.instance }}&var-file={{ $labels.file }}&var-group={{ $labels.group }}'
             description: Alerting rules execution is failing for "{{ $labels.alertname }}" from group "{{ $labels.group }}" in file "{{ $labels.file }}". Check vmalert's logs for detailed error message.
             summary: Alerting rules are failing for vmalert instance {{ $labels.instance }}
           expr: sum(increase(vmalert_alerting_rules_errors_total[5m])) without(id) > 0
@@ -33,7 +33,7 @@ spec:
             severity: warning
         - alert: RecordingRulesError
           annotations:
-            dashboard: http://grafana.lan.zebradil.dev/d/LzldHAVnz?viewPanel=30&var-instance={{ $labels.instance }}&var-file={{ $labels.file }}&var-group={{ $labels.group }}&var-cluster={{ $labels.cluster }}
+            dashboard: '{{ $externalURL }}/d/LzldHAVnz?viewPanel=30&var-instance={{ $labels.instance }}&var-file={{ $labels.file }}&var-group={{ $labels.group }}'
             description: Recording rules execution is failing for "{{ $labels.recording }}" from group "{{ $labels.group }}" in file "{{ $labels.file }}". Check vmalert's logs for detailed error message.
             summary: Recording rules are failing for vmalert instance {{ $labels.instance }}
           expr: sum(increase(vmalert_recording_rules_errors_total[5m])) without(id) > 0
@@ -42,7 +42,7 @@ spec:
             severity: warning
         - alert: RecordingRulesNoData
           annotations:
-            dashboard: http://grafana.lan.zebradil.dev/d/LzldHAVnz?viewPanel=33&var-file={{ $labels.file }}&var-group={{ $labels.group }}&var-cluster={{ $labels.cluster }}
+            dashboard: '{{ $externalURL }}/d/LzldHAVnz?viewPanel=33&var-file={{ $labels.file }}&var-group={{ $labels.group }}'
             description: Recording rule "{{ $labels.recording }}" from group "{{ $labels.group }} in file "{{ $labels.file }}" produces 0 samples over the last 30min. It might be caused by a misconfiguration or incorrect query expression.
             summary: Recording rule {{ $labels.recording }} ({{ $labels.group }}) produces no data
           expr: sum(vmalert_recording_rules_last_evaluation_samples) without(id) < 1
@@ -73,6 +73,14 @@ spec:
           for: 5m
           labels:
             severity: critical
+        - alert: RemoteWriteQueueHighUsage
+          annotations:
+            description: 'The remote write queue on vmalert instance {{ $labels.instance }} has consistently high utilization. The queue acts as a buffer between rules generating series and remote-write client consuming and pushing these series. When queue overflows, vmalert will start dropping newly generated series. Queue may overflow due to multiple reasons: 1. Some bad rules produce too many series at once. This can be limited using the global `-rule.resultsLimit` flag or `limit` param at the rule group level. 2. Remote write connection is slow.  Increase `-remoteWrite.concurrency`,  so vmalert could establish more concurrent connections. 3. The queue size is too small. Increase `-remoteWrite.maxQueueSize` to extend the buffer size. Note that a larger queue will result in higher memory consumption when the queue is full.'
+            summary: Remote write queue capacity on the vmalert instance {{ $labels.instance }} has exceeded 80% utilization
+          expr: (histogram_quantile(0.99, sum(increase(vmalert_remotewrite_queue_size_bucket[5m])) by(job,instance,vmrange,cluster)) / vmalert_remotewrite_queue_capacity) > 0.8
+          for: 15m
+          labels:
+            severity: warning
         - alert: AlertmanagerErrors
           annotations:
             description: vmalert instance {{ $labels.instance }} is failing to send alert notifications to "{{ $labels.addr }}". Check vmalert's logs for detailed error message.

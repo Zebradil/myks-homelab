@@ -4,7 +4,7 @@ metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
-    app: victoria-metrics-k8s-stack
+    app.kubernetes.io/component: vmalert
     app.kubernetes.io/instance: vmks
     app.kubernetes.io/name: victoria-metrics-k8s-stack
   name: vmks-node-exporter.rules
@@ -58,3 +58,19 @@ spec:
           expr: sum(rate(node_network_transmit_drop_total{job="node-exporter",device!="lo"}[5m])) without(device)
           labels: {}
           record: instance:node_network_transmit_drop_excluding_lo:rate5m
+        - annotations: {}
+          expr: sum(rate(node_network_receive_bytes_total{job="node-exporter",device!~"lo|veth.+"}[5m])) without(device)
+          labels: {}
+          record: instance:node_network_receive_bytes_physical:rate5m
+        - annotations: {}
+          expr: sum(rate(node_network_transmit_bytes_total{job="node-exporter",device!~"lo|veth.+"}[5m])) without(device)
+          labels: {}
+          record: instance:node_network_transmit_bytes_physical:rate5m
+        - annotations: {}
+          expr: sum(rate(node_network_receive_drop_total{job="node-exporter",device!~"lo|veth.+"}[5m])) without(device)
+          labels: {}
+          record: instance:node_network_receive_drop_physical:rate5m
+        - annotations: {}
+          expr: sum(rate(node_network_transmit_drop_total{job="node-exporter",device!~"lo|veth.+"}[5m])) without(device)
+          labels: {}
+          record: instance:node_network_transmit_drop_physical:rate5m

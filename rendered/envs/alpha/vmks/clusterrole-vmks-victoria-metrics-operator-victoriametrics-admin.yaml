@@ -39,12 +39,18 @@ rules:
       - vmanomalies
       - vmanomalies/finalizers
       - vmanomalies/status
+      - vmanomalyconfigs
+      - vmanomalyconfigs/finalizers
+      - vmanomalyconfigs/status
       - vmauths
       - vmauths/finalizers
       - vmauths/status
       - vmclusters
       - vmclusters/finalizers
       - vmclusters/status
+      - vmdistributed
+      - vmdistributed/finalizers
+      - vmdistributed/status
       - vmnodescrapes
       - vmnodescrapes/finalizers
       - vmnodescrapes/status

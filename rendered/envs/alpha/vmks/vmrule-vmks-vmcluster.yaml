@@ -4,7 +4,7 @@ metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
-    app: victoria-metrics-k8s-stack
+    app.kubernetes.io/component: vmalert
     app.kubernetes.io/instance: vmks
     app.kubernetes.io/name: victoria-metrics-k8s-stack
   name: vmks-vmcluster
@@ -18,7 +18,7 @@ spec:
       rules:
         - alert: DiskRunsOutOfSpaceIn3Days
           annotations:
-            dashboard: http://grafana.lan.zebradil.dev/d/oS7Bi_0Wz?viewPanel=20&var-instance={{ $labels.instance }}&var-cluster={{ $labels.cluster }}
+            dashboard: '{{ $externalURL }}/d/oS7Bi_0Wz?viewPanel=20&var-instance={{ $labels.instance }}'
             description: |-
               Taking into account current ingestion rate, free disk space will be enough only for {{ $value | humanizeDuration }} on instance {{ $labels.instance }}.
                Consider to limit the ingestion rate, decrease retention or scale the disk space up if possible.
@@ -29,7 +29,7 @@ spec:
             severity: critical
         - alert: NodeBecomesReadonlyIn3Days
           annotations:
-            dashboard: http://grafana.lan.zebradil.dev/d/oS7Bi_0Wz?viewPanel=20&var-instance={{ $labels.instance }}&var-cluster={{ $labels.cluster }}
+            dashboard: '{{ $externalURL }}/d/oS7Bi_0Wz?viewPanel=20&var-instance={{ $labels.instance }}'
             description: |-
               Taking into account current ingestion rate, free disk space and -storage.minFreeDiskSpaceBytes instance {{ $labels.instance }} will remain writable for {{ $value | humanizeDuration }}.
                Consider to limit the ingestion rate, decrease retention or scale the disk space up if possible.
@@ -40,7 +40,7 @@ spec:
             severity: warning
         - alert: DiskRunsOutOfSpace
           annotations:
-            dashboard: http://grafana.lan.zebradil.dev/d/oS7Bi_0Wz?viewPanel=20&var-instance={{ $labels.instance }}&var-cluster={{ $labels.cluster }}
+            dashboard: '{{ $externalURL }}/d/oS7Bi_0Wz?viewPanel=20&var-instance={{ $labels.instance }}'
             description: |-
               Disk utilisation on instance {{ $labels.instance }} is more than 80%.
                Having less than 20% of free disk space could cripple merges processes and overall performance. Consider to limit the ingestion rate, decrease retention or scale the disk space if possible.
@@ -51,7 +51,7 @@ spec:
             severity: critical
         - alert: RequestErrorsToAPI
           annotations:
-            dashboard: http://grafana.lan.zebradil.dev/d/oS7Bi_0Wz?viewPanel=52&var-instance={{ $labels.instance }}&var-cluster={{ $labels.cluster }}
+            dashboard: '{{ $externalURL }}/d/oS7Bi_0Wz?viewPanel=52&var-instance={{ $labels.instance }}'
             description: Requests to path {{ $labels.path }} are receiving errors. Please verify if clients are sending correct requests.
             summary: Too many errors served for {{ $labels.job }} path {{ $labels.path }} (instance {{ $labels.instance }})
           expr: increase(vm_http_request_errors_total[5m]) > 0
@@ -61,7 +61,7 @@ spec:
             show_at: dashboard
         - alert: RPCErrors
           annotations:
-            dashboard: http://grafana.lan.zebradil.dev/d/oS7Bi_0Wz?viewPanel=44&var-instance={{ $labels.instance }}&var-cluster={{ $labels.cluster }}
+            dashboard: '{{ $externalURL }}/d/oS7Bi_0Wz?viewPanel=44&var-instance={{ $labels.instance }}'
             description: |-
               RPC errors are interconnection errors between cluster components.
                Possible reasons for errors are misconfiguration, overload, network blips or unreachable components.
@@ -73,7 +73,7 @@ spec:
             show_at: dashboard
         - alert: TooHighChurnRate
           annotations:
-            dashboard: http://grafana.lan.zebradil.dev/d/oS7Bi_0Wz?viewPanel=102&var-cluster={{ $labels.cluster }}
+            dashboard: '{{ $externalURL }}/d/oS7Bi_0Wz?viewPanel=102'
             description: |-
               VM constantly creates new time series.
                This effect is known as Churn Rate.
@@ -85,7 +85,7 @@ spec:
             severity: warning
         - alert: TooHighChurnRate24h
           annotations:
-            dashboard: http://grafana.lan.zebradil.dev/d/oS7Bi_0Wz?viewPanel=102&var-cluster={{ $labels.cluster }}
+            dashboard: '{{ $externalURL }}/d/oS7Bi_0Wz?viewPanel=102'
             description: |-
               The number of created new time series over last 24h is 3x times higher than current number of active series.
                This effect is known as Churn Rate.
@@ -97,7 +97,7 @@ spec:
             severity: warning
         - alert: TooHighSlowInsertsRate
           annotations:
-            dashboard: http://grafana.lan.zebradil.dev/d/oS7Bi_0Wz?viewPanel=108&var-cluster={{ $labels.cluster }}
+            dashboard: '{{ $externalURL }}/d/oS7Bi_0Wz?viewPanel=108'
             description: High rate of slow inserts may be a sign of resource exhaustion for the current load. It is likely more RAM is needed for optimal handling of the current number of active time series. See also https://github.com/VictoriaMetrics/VictoriaMetrics/issues/3976#issuecomment-1476883183
             summary: Percentage of slow inserts is more than 5% for the last 15m
           expr: (sum(rate(vm_slow_row_inserts_total[5m])) by(job,cluster) / sum(rate(vm_rows_inserted_total[5m])) by(job,cluster)) > 0.05
@@ -106,7 +106,7 @@ spec:
             severity: warning
         - alert: VminsertVmstorageConnectionIsSaturated
           annotations:
-            dashboard: http://grafana.lan.zebradil.dev/d/oS7Bi_0Wz?viewPanel=139&var-instance={{ $labels.instance }}&var-cluster={{ $labels.cluster }}
+            dashboard: '{{ $externalURL }}/d/oS7Bi_0Wz?viewPanel=139&var-instance={{ $labels.instance }}'
             description: |-
               The connection between vminsert (instance {{ $labels.instance }}) and vmstorage (instance {{ $labels.addr }}) is saturated by more than 90% and vminsert won't be able to keep up.
                This usually means that more vminsert or vmstorage nodes must be added to the cluster in order to increase the total number of vminsert -> vmstorage links.
@@ -116,3 +116,38 @@ spec:
           labels:
             severity: warning
             show_at: dashboard
+        - alert: MetadataCacheUtilizationIsTooHigh
+          annotations:
+            description: Metadata cache stores meta information about ingested time series - see https://docs.victoriametrics.com/victoriametrics/#metrics-metadata. When cache is overutilized, the oldest entries will be dropped out automatically. It may result into incomplete response for /api/v1/metadata API calls. It doesn't impact regular queries or alerts. Cache size is controlled via -storage.maxMetadataStorageSize cmd-line flag.
+            summary: Metadata cache capacity on {{ $labels.instance }} (job={{ $labels.job }}) is utilized for more than 95% for the last 15min
+          expr: (vm_metrics_metadata_storage_size_bytes / vm_metrics_metadata_storage_max_size_bytes) > 0.95
+          for: 15m
+          labels:
+            severity: warning
+        - alert: MetricNameStatsCacheUtilizationIsTooHigh
+          annotations:
+            description: 'Metric names usage cache stores information about unique metric names and how frequently they are queried - see https://docs.victoriametrics.com/victoriametrics/#track-ingested-metrics-usage. When cache is overutilized, it will stop tracking the new metric names. It has no other negative impact. Usually, the number of unique metric names is very limited (thousands). The cache can be overutilized only if metric names are changing too frequently or if the cache size is too low. There are following ways to mitigate cache overutilization: - disable cache via `--storage.trackMetricNamesStats=false` flag, so metric names usage will stop tracking - increase the cache size via `--storage.cacheSizeMetricNamesStats` flag - reset the cache (see docs for details)'
+            summary: Cache capacity for tracking metric names usage on {{ $labels.instance }} (job={{ $labels.job }}) is utilized for more than 95% during the last 15min
+          expr: (vm_cache_size_bytes{type="storage/metricNamesStatsTracker"} / vm_cache_size_max_bytes{type="storage/metricNamesStatsTracker"}) > 0.95
+          for: 15m
+          labels:
+            severity: warning
+        - alert: IndexDBRecordsDrop
+          annotations:
+            description: "VictoriaMetrics could skip registering new timeseries during ingestion if they fail the validation process. \nFor example, `reason=too_long_item` means that time series cannot exceed 64KB. Please, reduce the number \nof labels or label values for such series. Or enforce these limits via `-maxLabelsPerTimeseries` and \n`-maxLabelValueLen` command-line flags.\n"
+            summary: IndexDB skipped registering items during data ingestion with reason={{ $labels.reason }}.
+          expr: increase(vm_indexdb_items_dropped_total[5m]) > 0
+          labels:
+            severity: critical
+        - alert: TooManyTSIDMisses
+          annotations:
+            description: |-
+              Unexpected TSID misses for \"{{ $labels.job }}\" ({{ $labels.instance }}) for the last 15 minutes.
+              If this happens after unclean shutdown of VictoriaMetrics process (via \"kill -9\", OOM or power off),
+              then this is OK - the alert must go away in a few minutes after the restart.
+              Otherwise this may point to the corruption of index data.
+            summary: Unexpected TSID misses for job "{{ $labels.job }}" ({{ $labels.instance }}) for the last 15 minutes
+          expr: increase(vm_missing_tsids_for_metric_id_total[5m]) > 0
+          for: 15m
+          labels:
+            severity: critical
