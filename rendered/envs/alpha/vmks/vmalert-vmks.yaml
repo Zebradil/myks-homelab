@@ -21,7 +21,7 @@ spec:
     http.pathPrefix: /
     remoteWrite.disablePathAppend: "true"
   image:
-    tag: v1.133.0
+    tag: v1.136.0
   license: {}
   notifiers:
     - url: http://vmalertmanager-vmks-0.vmalertmanager-vmks.vmks.svc.cluster.local.:9093

@@ -10,7 +10,7 @@ metadata:
   name: vmks
   namespace: vmks
 spec:
-  clusterVersion: v1.133.0-cluster
+  clusterVersion: v1.136.0-cluster
   license: {}
   replicationFactor: 1
   retentionPeriod: 30d

@@ -34,13 +34,9 @@ spec:
                   fieldPath: metadata.name
             - name: OPERATOR_NAME
               value: victoria-metrics-operator
-            - name: VM_USECUSTOMCONFIGRELOADER
-              value: "true"
-            - name: VM_CUSTOMCONFIGRELOADERIMAGE
-              value: victoriametrics/operator:config-reloader-v0.66.1
             - name: VM_ENABLEDPROMETHEUSCONVERTEROWNERREFERENCES
               value: "false"
-          image: index.docker.io/victoriametrics/operator@sha256:9576051f79285ece06acdc8fb42dee5198c38e6609c82268a8bb7b4733abcdfe
+          image: index.docker.io/victoriametrics/operator@sha256:8d95f21b6885d7c54ef4e7e022d80f5c4f0da0dcce670e3cd6c0945277b714a6
           livenessProbe:
             failureThreshold: 3
             initialDelaySeconds: 5

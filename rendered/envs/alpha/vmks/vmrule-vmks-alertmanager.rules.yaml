@@ -46,7 +46,7 @@ spec:
             description: The minimum notification failure rate to {{ $labels.integration }} sent from any instance in the {{$labels.job}} cluster is {{ $value | humanizePercentage }}.
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/alertmanager/alertmanagerclusterfailedtosendalerts
             summary: All Alertmanager instances in a cluster failed to send notifications to a critical integration.
-          expr: min(rate(alertmanager_notifications_failed_total{job="vmalertmanager-vmks",container="alertmanager",namespace="vmks",integration=~".*"}[15m]) / ignoring(reason) group_left() rate(alertmanager_notifications_total{job="vmalertmanager-vmks",container="alertmanager",namespace="vmks",integration=~".*"}[15m])) by(namespace,service,integration,cluster) > 0.01
+          expr: min((rate(alertmanager_notifications_failed_total{job="vmalertmanager-vmks",container="alertmanager",namespace="vmks",integration=~".*"}[15m]) / ignoring(reason) group_left() rate(alertmanager_notifications_total{job="vmalertmanager-vmks",container="alertmanager",namespace="vmks",integration=~".*"}[15m])) > 0) by(namespace,service,integration,cluster) > 0.01
           for: 5m
           labels:
             severity: critical
@@ -55,7 +55,7 @@ spec:
             description: The minimum notification failure rate to {{ $labels.integration }} sent from any instance in the {{$labels.job}} cluster is {{ $value | humanizePercentage }}.
             runbook_url: https://runbooks.prometheus-operator.dev/runbooks/alertmanager/alertmanagerclusterfailedtosendalerts
             summary: All Alertmanager instances in a cluster failed to send notifications to a non-critical integration.
-          expr: min(rate(alertmanager_notifications_failed_total{job="vmalertmanager-vmks",container="alertmanager",namespace="vmks",integration!~".*"}[15m]) / ignoring(reason) group_left() rate(alertmanager_notifications_total{job="vmalertmanager-vmks",container="alertmanager",namespace="vmks",integration!~".*"}[15m])) by(namespace,service,integration,cluster) > 0.01
+          expr: min((rate(alertmanager_notifications_failed_total{job="vmalertmanager-vmks",container="alertmanager",namespace="vmks",integration!~".*"}[15m]) / ignoring(reason) group_left() rate(alertmanager_notifications_total{job="vmalertmanager-vmks",container="alertmanager",namespace="vmks",integration!~".*"}[15m])) > 0) by(namespace,service,integration,cluster) > 0.01
           for: 5m
           labels:
             severity: warning
