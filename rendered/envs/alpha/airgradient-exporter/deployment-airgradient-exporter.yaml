@@ -17,7 +17,7 @@ spec:
         - env:
             - name: AIRGRADIENT_MONITORS
               value: 192.168.1.99
-          image: oci.zebradil.dev/ghcr.io-cache/zebradil/airgradient-exporter@sha256:61dfc2b9f68172617e085602b14063f678c732e2caf13e8d03baa4dffed3f867
+          image: oci.zebradil.dev/ghcr.io-cache/zebradil/airgradient-exporter@sha256:e1c4fe838bc42b32f6883bc068c69d13ae08c02125d571dfcd2ecb2ededdcce7
           name: airgradient-exporter
           ports:
             - containerPort: 9112
