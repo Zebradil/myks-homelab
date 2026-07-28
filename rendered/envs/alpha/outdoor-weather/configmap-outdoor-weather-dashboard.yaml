@@ -506,4 +506,4 @@ metadata:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
     grafana_dashboard: "1"
-  name: outdoor-weather-grafana-dashboard
+  name: outdoor-weather-dashboard

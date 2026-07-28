@@ -1,7 +1,8 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:json", "json")
+#@ load("@ytt:assert", "assert")
 
-#! Example usage:
+#! Wrap a dashboard JSON file in a grafana_dashboard ConfigMap.
 #!
 #!   #@ load("@ytt:data", "data")
 #!   #@ load("grafana.lib.yaml", "gen_dashboard")
@@ -27,4 +28,28 @@ metadata:
   labels:
     grafana_dashboard: '1'
 data: #@ { basename: content }
+#@ end
+
+---
+#! Wrap an already-decoded dashboard object in a grafana_dashboard ConfigMap.
+#! Use when the dashboard JSON needs mutating (datasource rewrites, dropping
+#! __inputs, injecting template vars) before emit — do that on the object, then
+#! pass it here.
+#!
+#!   #@ load("grafana.lib.yaml", "gen_dashboard_obj")
+#!   #@ dash = json.decode(data.read("board.json").replace("${DS_PROMETHEUS}", "${datasource}"))
+#!   #@ dash.pop("__inputs", None)
+#!   --- #@ gen_dashboard_obj("my-dashboard", dash)
+
+#@ def gen_dashboard_obj(name, dash):
+#@   if len(name) > 63:
+#@     assert.fail("dashboard ConfigMap name {} exceeds 63 chars".format(name))
+#@   end
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: #@ name
+  labels:
+    grafana_dashboard: '1'
+data: #@ { name + ".json": json.encode(dash, indent=2) }
 #@ end

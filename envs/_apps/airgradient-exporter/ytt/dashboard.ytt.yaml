@@ -1,11 +1,2 @@
-#@ load("@ytt:json", "json")
-#@ load("@ytt:data", "data")
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: airgradient-exporter-grafana-dashboard
-  labels:
-    grafana_dashboard: '1'
-data:
-  airgradient-exporter-dashboard.json: #@ json.encode(json.decode(data.read("dashboard.json")), indent=2)
+#@ load("grafana.lib.yaml", "gen_dashboard")
+--- #@ gen_dashboard("dashboard.json", name="airgradient-exporter-dashboard")

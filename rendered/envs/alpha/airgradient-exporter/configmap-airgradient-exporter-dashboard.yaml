@@ -1389,4 +1389,4 @@ metadata:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
     grafana_dashboard: "1"
-  name: airgradient-exporter-grafana-dashboard
+  name: airgradient-exporter-dashboard

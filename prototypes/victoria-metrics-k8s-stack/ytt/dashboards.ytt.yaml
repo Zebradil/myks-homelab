@@ -1,6 +1,6 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:json", "json")
-#@ load("grafana.lib.yaml", "gen_dashboard")
+#@ load("grafana.lib.yaml", "gen_dashboard", "gen_dashboard_obj")
 
 #! PVC usage dashboards. Two of them for now to compare; drop one later.
 
@@ -8,20 +8,11 @@
 #!    Its panels hard-code the datasource name "Prometheus"; our provisioned
 #!    default is named "VictoriaMetrics", so rewrite the name (couples to the
 #!    datasource name set in vmks.grafana.yaml).
-#@ def gen_13646(file):
-#@   content = data.read(file).replace('"Prometheus"', '"VictoriaMetrics"')
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: vmks-pvc-usage-13646
-  labels:
-    grafana_dashboard: '1'
-data:
-  kubernetes-persistent-volumes.json: #@ json.encode(json.decode(content), indent=2)
-#@ end
 #@ for file in data.list():
-#@ if/end file.endswith("kubernetes-persistent-volumes.json"):
---- #@ gen_13646(file)
+#@ if file.endswith("kubernetes-persistent-volumes.json"):
+#@ dash = json.decode(data.read(file).replace('"Prometheus"', '"VictoriaMetrics"'))
+--- #@ gen_dashboard_obj("vmks-pvc-usage-13646", dash)
+#@ end
 #@ end
 
 #! 2. kubernetes-mixin "persistentvolumesusage", copy-pasted from kube-prometheus
