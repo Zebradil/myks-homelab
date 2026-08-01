@@ -7,3 +7,9 @@ metadata:
 spec:
   path: /metrics
   port: "19100"
+  selector:
+    matchExpressions:
+      - key: kubernetes.io/hostname
+        operator: In
+        values:
+          - junior

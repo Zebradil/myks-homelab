@@ -13,3 +13,10 @@ metadata:
 spec:
   path: /metrics
   port: '19100'
+  #! Traefik is pinned to the edge nodes, so only they listen on 19100.
+  #! Without the selector the scrape targets every node and reports 3/4 down.
+  selector:
+    matchExpressions:
+      - key: kubernetes.io/hostname
+        operator: In
+        values: #@ data.values.environment.edgeNodes
