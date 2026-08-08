@@ -20,8 +20,8 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/cm: aea687b18d73c48a48dbe7e12c53ccc954d3c6286650962d4ec8aee892d68b3e
-        checksum/cmd-params: 348b40427b68163d42400e89a1685cedd60510dfd9585d0f87dcf7595866592a
+        checksum/cm: a091e2f38b224ce02242ad0bd6a1bc57d72a8bb856ec8615354077b8b03cab6c
+        checksum/cmd-params: a45dc893bef1d911c8482a86e2d94990698de4818583466aa8168f55423a6928
       labels:
         app.kubernetes.io/component: repo-server
         app.kubernetes.io/instance: argocd
@@ -304,7 +304,7 @@ spec:
               value: /helm-working-dir
             - name: HELM_DATA_HOME
               value: /helm-working-dir
-          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:224e454cfd8c1818fec3ed17b72b2034c9a3915fa819e1dcccafc753776d446a
+          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:6e9f4f1d646d9056c8e285495d0c8043b5f553c784181b3522ef324dcefdcc82
           livenessProbe:
             failureThreshold: 3
             httpGet:
@@ -366,7 +366,7 @@ spec:
                 secretKeyRef:
                   key: key
                   name: sops-age-key
-          image: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:bd18177f9f1682ae91fb335aa1939f6eff5c8c2426381824444d3eb4bb583ad3
+          image: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:efe7eaa64e1efb79c34d0e9ec4ac6d0a95f512dfa8673c2d0d7dfa78a6787efe
           name: vals
           securityContext:
             allowPrivilegeEscalation: false
@@ -393,7 +393,7 @@ spec:
           command:
             - sh
             - -c
-          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:224e454cfd8c1818fec3ed17b72b2034c9a3915fa819e1dcccafc753776d446a
+          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:6e9f4f1d646d9056c8e285495d0c8043b5f553c784181b3522ef324dcefdcc82
           name: copyutil
           resources: {}
           securityContext:
@@ -420,7 +420,7 @@ spec:
           env:
             - name: VALS_VERSION
               value: v0.43.1
-          image: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:bd18177f9f1682ae91fb335aa1939f6eff5c8c2426381824444d3eb4bb583ad3
+          image: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:efe7eaa64e1efb79c34d0e9ec4ac6d0a95f512dfa8673c2d0d7dfa78a6787efe
           name: download-tools
           volumeMounts:
             - mountPath: /custom-tools
