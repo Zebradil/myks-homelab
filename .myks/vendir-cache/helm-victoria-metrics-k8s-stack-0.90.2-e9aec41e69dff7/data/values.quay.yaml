@@ -1,0 +1,6 @@
+victoria-metrics-operator:
+  image:
+    registry: "quay.io"
+  env:
+    - name: "VM_VMALERTMANAGER_ALERTMANAGERDEFAULTBASEIMAGE"
+      value: "prometheus/alertmanager"

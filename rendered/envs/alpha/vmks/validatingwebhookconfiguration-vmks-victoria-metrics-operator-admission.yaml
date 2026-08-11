@@ -70,6 +70,33 @@ webhooks:
       service:
         name: vmks-victoria-metrics-operator
         namespace: vmks
+        path: /validate-operator-victoriametrics-com-v1alpha1-vldistributed
+        port: 9443
+    failurePolicy: Ignore
+    name: vldistributed.operator.victoriametrics.com
+    objectSelector:
+      matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: NotIn
+          values:
+            - victoria-metrics-operator
+    rules:
+      - apiGroups:
+          - operator.victoriametrics.com
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - vldistributed
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vmks-victoria-metrics-operator
+        namespace: vmks
         path: /validate-operator-victoriametrics-com-v1beta1-vlogs
         port: 9443
     failurePolicy: Ignore

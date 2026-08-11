@@ -109,13 +109,7 @@ rules:
     resources:
       - ingresses
       - ingresses/finalizers
-    verbs:
-      - '*'
-  - apiGroups:
-      - gateway.networking.k8s.io
-    resources:
-      - httproutes
-      - httproutes/finalizers
+      - networkpolicies
     verbs:
       - '*'
   - apiGroups:
@@ -142,6 +136,9 @@ rules:
       - vlclusters
       - vlclusters/finalizers
       - vlclusters/status
+      - vldistributed
+      - vldistributed/finalizers
+      - vldistributed/status
       - vlogs
       - vlogs/finalizers
       - vlogs/status
