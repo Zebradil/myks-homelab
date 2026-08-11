@@ -11,8 +11,8 @@ overrides:
 - image: ghcr.io/oliver006/redis_exporter:v1.88.0
   newImage: oci.zebradil.dev/ghcr.io-cache/oliver006/redis_exporter@sha256:2c8c55c63ce4d915389f03d337b8acef56aaaca9fab8728291287e612d4d6398
   preresolved: true
-- image: quay.io/argoproj/argocd:v3.4.6
-  newImage: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:6e9f4f1d646d9056c8e285495d0c8043b5f553c784181b3522ef324dcefdcc82
+- image: quay.io/argoproj/argocd:v3.5.0
+  newImage: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:c298cedbaeb31532ba8d4e9904eba9e4987e067293fbd86400c5194e78f743d5
   preresolved: true
 - image: registry.access.redhat.com/ubi8
   newImage: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:efe7eaa64e1efb79c34d0e9ec4ac6d0a95f512dfa8673c2d0d7dfa78a6787efe
