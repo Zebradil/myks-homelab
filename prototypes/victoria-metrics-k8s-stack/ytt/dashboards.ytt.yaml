@@ -1,6 +1,79 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:json", "json")
+#@ load("@ytt:overlay", "overlay")
+#@ load("@ytt:yaml", "yaml")
 #@ load("grafana.lib.yaml", "gen_dashboard", "gen_dashboard_obj")
+
+#! Chart 0.85.0 stopped rendering dashboards; its sync-job pulls them from the
+#! upstream repos at deploy time instead. We disable that job (see
+#! helm/vmks.yaml), vendir the same sources and build the ConfigMaps here, so
+#! the dashboards stay in git. See ytt/rules.ytt.yaml for the same treatment of
+#! the alerting rules.
+
+#! Mixin dashboards template a `cluster` variable and filter on it. This is a
+#! single cluster and no `cluster` label is attached to the metrics, so bind the
+#! variable to a hidden catch-all, matching what the chart used to render.
+#@ def unset_cluster_var(content):
+#@   dash = json.decode(content.replace('cluster="$cluster"', 'cluster=~"$cluster"'))
+#@   variables = dash.get("templating", {}).get("list", [])
+#@   for i in range(len(variables)):
+#@     if variables[i]["name"] == "cluster":
+#@       variables[i] = {
+#@         "name": "cluster",
+#@         "label": "cluster",
+#@         "type": "constant",
+#@         "query": ".*",
+#@         "allValue": ".*",
+#@         "hide": 2,
+#@         "multi": False,
+#@         "includeAll": False,
+#@       }
+#@     end
+#@   end
+#@   return dash
+#@ end
+
+#! Standalone dashboard files, keyed by their path in the vendored sources.
+#@ dashboards = {
+#@   "k8s-system-api-server.json": "vmks-kubernetes-system-api-server",
+#@   "k8s-system-coredns.json": "vmks-kubernetes-system-coredns",
+#@   "k8s-views-global.json": "vmks-kubernetes-views-global",
+#@   "k8s-views-namespaces.json": "vmks-kubernetes-views-namespaces",
+#@   "k8s-views-nodes.json": "vmks-kubernetes-views-nodes",
+#@   "k8s-views-pods.json": "vmks-kubernetes-views-pods",
+#@   "node-exporter-full.json": "vmks-node-exporter-full",
+#@   "dashboards/operator.json": "vmks-victoriametrics-operator",
+#@   "dashboards/victoriametrics-cluster.json": "vmks-victoriametrics-cluster",
+#@   "dashboards/vmagent.json": "vmks-victoriametrics-vmagent",
+#@   "dashboards/vmalert.json": "vmks-victoriametrics-vmalert",
+#@ }
+
+#! kube-prometheus ships its dashboards as one ConfigMapList. Only the ones the
+#! chart used to render are picked; the rest of the bundle is kube-state-metrics
+#! and Windows views we do not run.
+#@ bundled_dashboards = {
+#@   "alertmanager-overview.json": "vmks-alertmanager-overview",
+#@   "controller-manager.json": "vmks-kubernetes-controller-manager",
+#@   "grafana-overview.json": "vmks-grafana-overview",
+#@   "kubelet.json": "vmks-kubernetes-kubelet",
+#@   "scheduler.json": "vmks-kubernetes-scheduler",
+#@ }
+
+#! The vendored bundle is a ytt package, so ytt also emits it verbatim.
+#@overlay/match by=overlay.subset({"kind": "ConfigMapList"})
+#@overlay/remove
+---
+
+#@ for file, name in dashboards.items():
+--- #@ gen_dashboard_obj(name, unset_cluster_var(data.read(file)))
+#@ end
+
+#@ for item in yaml.decode(data.read("grafana-dashboardDefinitions.yaml"))["items"]:
+#@   for filename, content in item["data"].items():
+#@     if/end filename in bundled_dashboards:
+--- #@ gen_dashboard_obj(bundled_dashboards[filename], unset_cluster_var(content))
+#@   end
+#@ end
 
 #! PVC usage dashboards. Two of them for now to compare; drop one later.
 
@@ -8,12 +81,8 @@
 #!    Its panels hard-code the datasource name "Prometheus"; our provisioned
 #!    default is named "VictoriaMetrics", so rewrite the name (couples to the
 #!    datasource name set in vmks.grafana.yaml).
-#@ for file in data.list():
-#@ if file.endswith("kubernetes-persistent-volumes.json"):
-#@ dash = json.decode(data.read(file).replace('"Prometheus"', '"VictoriaMetrics"'))
+#@ dash = json.decode(data.read("kubernetes-persistent-volumes.json").replace('"Prometheus"', '"VictoriaMetrics"'))
 --- #@ gen_dashboard_obj("vmks-pvc-usage-13646", dash)
-#@ end
-#@ end
 
 #! 2. kubernetes-mixin "persistentvolumesusage", copy-pasted from kube-prometheus
 #!    compiled output. Uses a templated ${datasource} var, binds to the default.

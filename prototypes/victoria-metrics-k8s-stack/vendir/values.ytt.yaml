@@ -12,6 +12,69 @@ prototype:
         name: prometheus-operator-crds
         url: https://prometheus-community.github.io/helm-charts
         version: 31.0.1
+    #! Since chart 0.85.0 the chart no longer renders dashboards and rules; its
+    #! sync-job fetches them from the upstream repos below at deploy time. We
+    #! vendir the same sources instead and render them ourselves (ytt/rules.ytt.yaml,
+    #! ytt/dashboards.ytt.yaml) so everything stays in git and reviewable.
+    kube-prometheus:
+      git:
+        ref: v0.18.0
+        url: https://github.com/prometheus-operator/kube-prometheus
+      includePaths:
+        - manifests/alertmanager-prometheusRule.yaml
+        - manifests/grafana-dashboardDefinitions.yaml
+        - manifests/kubePrometheus-prometheusRule.yaml
+        - manifests/kubeStateMetrics-prometheusRule.yaml
+        - manifests/kubernetesControlPlane-prometheusRule.yaml
+        - manifests/nodeExporter-prometheusRule.yaml
+      newRootPath: manifests
+      plugin: ytt
+    victoria-metrics:
+      #! Big repo for eight small files, but it is the only place upstream
+      #! publishes the VictoriaMetrics alerts and dashboards.
+      git:
+        ref: v1.149.0
+        url: https://github.com/VictoriaMetrics/VictoriaMetrics
+      includePaths:
+        - dashboards/operator.json
+        - dashboards/victoriametrics-cluster.json
+        - dashboards/vmagent.json
+        - dashboards/vmalert.json
+        - deployment/docker/rules/alerts-cluster.yml
+        - deployment/docker/rules/alerts-health.yml
+        - deployment/docker/rules/alerts-vmagent.yml
+        - deployment/docker/rules/alerts-vmalert.yml
+      plugin: ytt
+    vm-operator:
+      git:
+        ref: v0.74.1
+        url: https://github.com/VictoriaMetrics/operator
+      includePaths:
+        - config/alerting/vmoperator-rules.yaml
+      newRootPath: config/alerting
+      plugin: ytt
+    dotdc-dashboards:
+      git:
+        ref: v3.0.6
+        url: https://github.com/dotdc/grafana-dashboards-kubernetes
+      includePaths:
+        - dashboards/k8s-system-api-server.json
+        - dashboards/k8s-system-coredns.json
+        - dashboards/k8s-views-global.json
+        - dashboards/k8s-views-namespaces.json
+        - dashboards/k8s-views-nodes.json
+        - dashboards/k8s-views-pods.json
+      newRootPath: dashboards
+      plugin: ytt
+    node-exporter-dashboard:
+      #! No releases in this repo, so the ref is a commit sha.
+      git:
+        ref: 27aaf9d90dd0080c784e6d25eec25cd58d6e1d7d
+        url: https://github.com/rfmoz/grafana-dashboards
+      includePaths:
+        - prometheus/node-exporter-full.json
+      newRootPath: prometheus
+      plugin: ytt
     pvc-dashboard:
       #! Archived repo, so the ref never moves; the dashboard tracks the stable
       #! kubelet_volume_stats_* metrics. Grafana.com dashboard 13646.

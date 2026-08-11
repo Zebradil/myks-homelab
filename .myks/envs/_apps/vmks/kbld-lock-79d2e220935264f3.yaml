@@ -8,9 +8,6 @@ overrides:
 - image: docker.io/library/busybox:1.38.0
   newImage: index.docker.io/library/busybox@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
   preresolved: true
-- image: ghcr.io/victoriametrics/sync-job:v0.0.13
-  newImage: oci.zebradil.dev/ghcr.io-cache/victoriametrics/sync-job@sha256:9e23b7db57492d30ac9c785d2fde8c93c81b3b82b7550f0786b162d38c86f5a4
-  preresolved: true
 - image: quay.io/kiwigrid/k8s-sidecar:2.8.1
   newImage: oci.zebradil.dev/quay.io-cache/kiwigrid/k8s-sidecar@sha256:abb55b2165c60e8f97e473862c7a3123df6f67d44f592949577c29b8fb2df9d6
   preresolved: true

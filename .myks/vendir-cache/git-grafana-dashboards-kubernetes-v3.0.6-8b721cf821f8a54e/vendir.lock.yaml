@@ -1,0 +1,12 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - configDigest: eb15c5582627ca8955fb155339de72fb4c0f3581472db6c23c6a1fc45bc82fc3
+    git:
+      commitTitle: 'fix: namespaces inode query...'
+      sha: a5ce3d43e0c970f464cada289ec1a691426c7eaf
+      tags:
+      - v3.0.6
+    path: .
+  path: .myks/vendir-cache/git-grafana-dashboards-kubernetes-v3.0.6-8b721cf821f8a54e/data
+kind: LockConfig

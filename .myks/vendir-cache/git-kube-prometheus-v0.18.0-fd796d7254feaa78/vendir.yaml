@@ -1,0 +1,19 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - git:
+      ref: v0.18.0
+      url: https://github.com/prometheus-operator/kube-prometheus
+    includePaths:
+    - manifests/alertmanager-prometheusRule.yaml
+    - manifests/grafana-dashboardDefinitions.yaml
+    - manifests/kubePrometheus-prometheusRule.yaml
+    - manifests/kubeStateMetrics-prometheusRule.yaml
+    - manifests/kubernetesControlPlane-prometheusRule.yaml
+    - manifests/nodeExporter-prometheusRule.yaml
+    lazy: true
+    newRootPath: manifests
+    path: .
+  path: .myks/vendir-cache/git-kube-prometheus-v0.18.0-fd796d7254feaa78/data
+kind: Config
+minimumRequiredVersion: ""

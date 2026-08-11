@@ -1,0 +1,12 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - configDigest: 7a2750446295bdbe55445650289d38291b97725aca8bb1ad136286ad40b24d78
+    git:
+      commitTitle: 'docs/changelog: cut release v1.149.0...'
+      sha: a8759a539c199849ead239c79ba4df04ade089bb
+      tags:
+      - v1.149.0
+    path: .
+  path: .myks/vendir-cache/git-VictoriaMetrics-v1.149.0-bc8e2d9586edbde7/data
+kind: LockConfig
