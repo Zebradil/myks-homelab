@@ -18,6 +18,9 @@ rules:
       - vlclusters
       - vlclusters/finalizers
       - vlclusters/status
+      - vldistributed
+      - vldistributed/finalizers
+      - vldistributed/status
       - vlogs
       - vlogs/finalizers
       - vlogs/status
