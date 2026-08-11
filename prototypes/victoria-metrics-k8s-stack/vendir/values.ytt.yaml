@@ -6,7 +6,7 @@ prototype:
       helmChart:
         name: victoria-metrics-k8s-stack
         url: oci://ghcr.io/victoriametrics/helm-charts
-        version: 0.84.0
+        version: 0.90.2
     prom-crds:
       helmChart:
         name: prometheus-operator-crds
