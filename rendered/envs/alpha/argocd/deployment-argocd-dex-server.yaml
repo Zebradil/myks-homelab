@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/cmd-params: 0060482ac89e2e634e415e562865a6b7e564f40c9974e94d5d24ca47f1149378
+        checksum/cmd-params: 8518c3d265f4687bb5a4a6b9ca3d7baae10259e8d59212d72fc3a6521a07d022
       labels:
         app.kubernetes.io/component: dex-server
         app.kubernetes.io/instance: argocd
