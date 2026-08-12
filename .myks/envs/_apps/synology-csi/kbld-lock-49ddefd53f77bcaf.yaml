@@ -14,6 +14,6 @@ overrides:
 - image: registry.k8s.io/sig-storage/csi-resizer:v1.3.0
   newImage: oci.zebradil.dev/registry.k8s.io-cache/sig-storage/csi-resizer@sha256:6e0546563b18872b0aa0cad7255a26bb9a87cb879b7fc3e2383c867ef4f706fb
   preresolved: true
-- image: synology/synology-csi:v1.3.0
-  newImage: index.docker.io/synology/synology-csi@sha256:2e6f9c55e7ee6011800ec772482791fdd3023aa3e9dbc3dc000af9fcdaa710ed
+- image: synology/synology-csi:v1.3.1
+  newImage: index.docker.io/synology/synology-csi@sha256:8aa84848187648a65c899f54e96061d3f22cdba0ad8926d770b431d4b274406f
   preresolved: true
