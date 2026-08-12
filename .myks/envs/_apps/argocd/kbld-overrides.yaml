@@ -3,8 +3,8 @@ kind: Config
 overrides:
     - image: ghcr.io/dexidp/dex:v2.45.1
       newImage: oci.zebradil.dev/ghcr.io-cache/dexidp/dex:v2.45.1
-    - image: ghcr.io/oliver006/redis_exporter:v1.88.0
-      newImage: oci.zebradil.dev/ghcr.io-cache/oliver006/redis_exporter:v1.88.0
+    - image: ghcr.io/oliver006/redis_exporter:v1.89.0
+      newImage: oci.zebradil.dev/ghcr.io-cache/oliver006/redis_exporter:v1.89.0
     - image: quay.io/argoproj/argocd:v3.5.0
       newImage: oci.zebradil.dev/quay.io-cache/argoproj/argocd:v3.5.0
     - image: registry.access.redhat.com/ubi8
