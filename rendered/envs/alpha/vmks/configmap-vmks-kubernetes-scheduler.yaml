@@ -45,7 +45,7 @@ data:
                 "type": "prometheus",
                 "uid": "${datasource}"
               },
-              "expr": "sum(up{cluster=\"$cluster\", job=\"kube-scheduler\"})",
+              "expr": "sum(up{cluster=~\"$cluster\", job=\"kube-scheduler\"})",
               "instant": true
             }
           ],
@@ -96,7 +96,7 @@ data:
                 "type": "prometheus",
                 "uid": "${datasource}"
               },
-              "expr": "sum(rate(scheduler_scheduling_attempt_duration_seconds_count{cluster=\"$cluster\", job=\"kube-scheduler\", instance=~\"$instance\"}[$__rate_interval])) by (cluster, instance)",
+              "expr": "sum(rate(scheduler_scheduling_attempt_duration_seconds_count{cluster=~\"$cluster\", job=\"kube-scheduler\", instance=~\"$instance\"}[$__rate_interval])) by (cluster, instance)",
               "legendFormat": "{{cluster}} {{instance}} e2e"
             },
             {
@@ -104,7 +104,7 @@ data:
                 "type": "prometheus",
                 "uid": "${datasource}"
               },
-              "expr": "sum(rate(scheduler_pod_scheduling_sli_duration_seconds_count{cluster=\"$cluster\", job=\"kube-scheduler\", instance=~\"$instance\"}[$__rate_interval])) by (cluster, instance)",
+              "expr": "sum(rate(scheduler_pod_scheduling_sli_duration_seconds_count{cluster=~\"$cluster\", job=\"kube-scheduler\", instance=~\"$instance\"}[$__rate_interval])) by (cluster, instance)",
               "legendFormat": "{{cluster}} {{instance}} binding"
             },
             {
@@ -112,7 +112,7 @@ data:
                 "type": "prometheus",
                 "uid": "${datasource}"
               },
-              "expr": "sum(rate(scheduler_scheduling_algorithm_duration_seconds_count{cluster=\"$cluster\", job=\"kube-scheduler\", instance=~\"$instance\"}[$__rate_interval])) by (cluster, instance)",
+              "expr": "sum(rate(scheduler_scheduling_algorithm_duration_seconds_count{cluster=~\"$cluster\", job=\"kube-scheduler\", instance=~\"$instance\"}[$__rate_interval])) by (cluster, instance)",
               "legendFormat": "{{cluster}} {{instance}} scheduling algorithm"
             },
             {
@@ -120,7 +120,7 @@ data:
                 "type": "prometheus",
                 "uid": "${datasource}"
               },
-              "expr": "sum(rate(scheduler_volume_scheduling_duration_seconds_count{cluster=\"$cluster\", job=\"kube-scheduler\", instance=~\"$instance\"}[$__rate_interval])) by (cluster, instance)",
+              "expr": "sum(rate(scheduler_volume_scheduling_duration_seconds_count{cluster=~\"$cluster\", job=\"kube-scheduler\", instance=~\"$instance\"}[$__rate_interval])) by (cluster, instance)",
               "legendFormat": "{{cluster}} {{instance}} volume"
             }
           ],
@@ -171,7 +171,7 @@ data:
                 "type": "prometheus",
                 "uid": "${datasource}"
               },
-              "expr": "histogram_quantile(0.99, sum(rate(scheduler_scheduling_attempt_duration_seconds_bucket{cluster=\"$cluster\", job=\"kube-scheduler\",instance=~\"$instance\"}[$__rate_interval])) by (cluster, instance, le))",
+              "expr": "histogram_quantile(0.99, sum(rate(scheduler_scheduling_attempt_duration_seconds_bucket{cluster=~\"$cluster\", job=\"kube-scheduler\",instance=~\"$instance\"}[$__rate_interval])) by (cluster, instance, le))",
               "legendFormat": "{{cluster}} {{instance}} e2e"
             },
             {
@@ -179,7 +179,7 @@ data:
                 "type": "prometheus",
                 "uid": "${datasource}"
               },
-              "expr": "histogram_quantile(0.99, sum(rate(scheduler_pod_scheduling_sli_duration_seconds_bucket{cluster=\"$cluster\", job=\"kube-scheduler\",instance=~\"$instance\"}[$__rate_interval])) by (cluster, instance, le))",
+              "expr": "histogram_quantile(0.99, sum(rate(scheduler_pod_scheduling_sli_duration_seconds_bucket{cluster=~\"$cluster\", job=\"kube-scheduler\",instance=~\"$instance\"}[$__rate_interval])) by (cluster, instance, le))",
               "legendFormat": "{{cluster}} {{instance}} binding"
             },
             {
@@ -187,7 +187,7 @@ data:
                 "type": "prometheus",
                 "uid": "${datasource}"
               },
-              "expr": "histogram_quantile(0.99, sum(rate(scheduler_scheduling_algorithm_duration_seconds_bucket{cluster=\"$cluster\", job=\"kube-scheduler\",instance=~\"$instance\"}[$__rate_interval])) by (cluster, instance, le))",
+              "expr": "histogram_quantile(0.99, sum(rate(scheduler_scheduling_algorithm_duration_seconds_bucket{cluster=~\"$cluster\", job=\"kube-scheduler\",instance=~\"$instance\"}[$__rate_interval])) by (cluster, instance, le))",
               "legendFormat": "{{cluster}} {{instance}} scheduling algorithm"
             },
             {
@@ -195,7 +195,7 @@ data:
                 "type": "prometheus",
                 "uid": "${datasource}"
               },
-              "expr": "histogram_quantile(0.99, sum(rate(scheduler_volume_scheduling_duration_seconds_bucket{cluster=\"$cluster\", job=\"kube-scheduler\",instance=~\"$instance\"}[$__rate_interval])) by (cluster, instance, le))",
+              "expr": "histogram_quantile(0.99, sum(rate(scheduler_volume_scheduling_duration_seconds_bucket{cluster=~\"$cluster\", job=\"kube-scheduler\",instance=~\"$instance\"}[$__rate_interval])) by (cluster, instance, le))",
               "legendFormat": "{{cluster}} {{instance}} volume"
             }
           ],
@@ -246,7 +246,7 @@ data:
                 "type": "prometheus",
                 "uid": "${datasource}"
               },
-              "expr": "sum(rate(rest_client_requests_total{cluster=\"$cluster\", job=\"kube-scheduler\", instance=~\"$instance\",code=~\"2..\"}[$__rate_interval]))",
+              "expr": "sum(rate(rest_client_requests_total{cluster=~\"$cluster\", job=\"kube-scheduler\", instance=~\"$instance\",code=~\"2..\"}[$__rate_interval]))",
               "legendFormat": "2xx"
             },
             {
@@ -254,7 +254,7 @@ data:
                 "type": "prometheus",
                 "uid": "${datasource}"
               },
-              "expr": "sum(rate(rest_client_requests_total{cluster=\"$cluster\", job=\"kube-scheduler\", instance=~\"$instance\",code=~\"3..\"}[$__rate_interval]))",
+              "expr": "sum(rate(rest_client_requests_total{cluster=~\"$cluster\", job=\"kube-scheduler\", instance=~\"$instance\",code=~\"3..\"}[$__rate_interval]))",
               "legendFormat": "3xx"
             },
             {
@@ -262,7 +262,7 @@ data:
                 "type": "prometheus",
                 "uid": "${datasource}"
               },
-              "expr": "sum(rate(rest_client_requests_total{cluster=\"$cluster\", job=\"kube-scheduler\", instance=~\"$instance\",code=~\"4..\"}[$__rate_interval]))",
+              "expr": "sum(rate(rest_client_requests_total{cluster=~\"$cluster\", job=\"kube-scheduler\", instance=~\"$instance\",code=~\"4..\"}[$__rate_interval]))",
               "legendFormat": "4xx"
             },
             {
@@ -270,7 +270,7 @@ data:
                 "type": "prometheus",
                 "uid": "${datasource}"
               },
-              "expr": "sum(rate(rest_client_requests_total{cluster=\"$cluster\", job=\"kube-scheduler\", instance=~\"$instance\",code=~\"5..\"}[$__rate_interval]))",
+              "expr": "sum(rate(rest_client_requests_total{cluster=~\"$cluster\", job=\"kube-scheduler\", instance=~\"$instance\",code=~\"5..\"}[$__rate_interval]))",
               "legendFormat": "5xx"
             }
           ],
@@ -321,7 +321,7 @@ data:
                 "type": "prometheus",
                 "uid": "${datasource}"
               },
-              "expr": "histogram_quantile(0.99, sum(rate(rest_client_request_duration_seconds_bucket{cluster=\"$cluster\", job=\"kube-scheduler\", instance=~\"$instance\", verb=\"POST\"}[$__rate_interval])) by (verb, le))",
+              "expr": "histogram_quantile(0.99, sum(rate(rest_client_request_duration_seconds_bucket{cluster=~\"$cluster\", job=\"kube-scheduler\", instance=~\"$instance\", verb=\"POST\"}[$__rate_interval])) by (verb, le))",
               "legendFormat": "{{verb}}"
             }
           ],
@@ -372,7 +372,7 @@ data:
                 "type": "prometheus",
                 "uid": "${datasource}"
               },
-              "expr": "histogram_quantile(0.99, sum(rate(rest_client_request_duration_seconds_bucket{cluster=\"$cluster\", job=\"kube-scheduler\", instance=~\"$instance\", verb=\"GET\"}[$__rate_interval])) by (verb, le))",
+              "expr": "histogram_quantile(0.99, sum(rate(rest_client_request_duration_seconds_bucket{cluster=~\"$cluster\", job=\"kube-scheduler\", instance=~\"$instance\", verb=\"GET\"}[$__rate_interval])) by (verb, le))",
               "legendFormat": "{{verb}}"
             }
           ],
@@ -423,7 +423,7 @@ data:
                 "type": "prometheus",
                 "uid": "${datasource}"
               },
-              "expr": "process_resident_memory_bytes{cluster=\"$cluster\", job=\"kube-scheduler\", instance=~\"$instance\"}",
+              "expr": "process_resident_memory_bytes{cluster=~\"$cluster\", job=\"kube-scheduler\", instance=~\"$instance\"}",
               "legendFormat": "{{instance}}"
             }
           ],
@@ -474,7 +474,7 @@ data:
                 "type": "prometheus",
                 "uid": "${datasource}"
               },
-              "expr": "rate(process_cpu_seconds_total{cluster=\"$cluster\", job=\"kube-scheduler\", instance=~\"$instance\"}[$__rate_interval])",
+              "expr": "rate(process_cpu_seconds_total{cluster=~\"$cluster\", job=\"kube-scheduler\", instance=~\"$instance\"}[$__rate_interval])",
               "legendFormat": "{{instance}}"
             }
           ],
@@ -525,7 +525,7 @@ data:
                 "type": "prometheus",
                 "uid": "${datasource}"
               },
-              "expr": "go_goroutines{cluster=\"$cluster\", job=\"kube-scheduler\",instance=~\"$instance\"}",
+              "expr": "go_goroutines{cluster=~\"$cluster\", job=\"kube-scheduler\",instance=~\"$instance\"}",
               "legendFormat": "{{instance}}"
             }
           ],
@@ -573,7 +573,7 @@ data:
             "includeAll": true,
             "label": "instance",
             "name": "instance",
-            "query": "label_values(up{job=\"kube-scheduler\", cluster=\"$cluster\"}, instance)",
+            "query": "label_values(up{job=\"kube-scheduler\", cluster=~\"$cluster\"}, instance)",
             "refresh": 2,
             "type": "query"
           }

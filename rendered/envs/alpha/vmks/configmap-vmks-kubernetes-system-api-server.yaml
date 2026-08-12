@@ -1375,7 +1375,7 @@ data:
               "type": "prometheus",
               "uid": "${datasource}"
             },
-            "definition": "label_values(apiserver_request_total{cluster=\"$cluster\"}, job)",
+            "definition": "label_values(apiserver_request_total{cluster=~\"$cluster\"}, job)",
             "hide": 0,
             "includeAll": false,
             "multi": true,
@@ -1383,7 +1383,7 @@ data:
             "options": [],
             "query": {
               "qryType": 1,
-              "query": "label_values(apiserver_request_total{cluster=\"$cluster\"}, job)",
+              "query": "label_values(apiserver_request_total{cluster=~\"$cluster\"}, job)",
               "refId": "PrometheusVariableQueryEditor-VariableQuery"
             },
             "refresh": 1,

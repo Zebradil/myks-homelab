@@ -30,6 +30,13 @@
 #@   "deployment/docker/rules/alerts-vmalert.yml": "vmalert",
 #@ }
 
+#! kube-prometheus alerts on its own Alertmanager deployment; ours is the one the
+#! chart deploys, scraped under a different job in a different namespace.
+#@ def spec_groups(file):
+#@   text = data.read(file).replace('job="alertmanager-main"', 'job="vmalertmanager-vmks"').replace('namespace="monitoring"', 'namespace="vmks"')
+#@   return yaml.decode(text)["spec"]["groups"]
+#@ end
+
 #@ def vmrule(name, groups):
 apiVersion: operator.victoriametrics.com/v1beta1
 kind: VMRule
@@ -51,7 +58,7 @@ spec:
 ---
 
 #@ for file, name in spec_sources.items():
---- #@ vmrule(name, yaml.decode(data.read(file))["spec"]["groups"])
+--- #@ vmrule(name, spec_groups(file))
 #@ end
 
 #@ for file, name in bare_sources.items():

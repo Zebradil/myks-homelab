@@ -12,9 +12,12 @@
 
 #! Mixin dashboards template a `cluster` variable and filter on it. This is a
 #! single cluster and no `cluster` label is attached to the metrics, so bind the
-#! variable to a hidden catch-all, matching what the chart used to render.
+#! variable to a hidden catch-all, matching what the chart used to render. The
+#! matcher has to become a regex too: `cluster=".*"` is an exact match on the
+#! literal string. The selectors sit inside JSON string values, so the quotes
+#! are backslash-escaped in the undecoded document.
 #@ def unset_cluster_var(content):
-#@   dash = json.decode(content.replace('cluster="$cluster"', 'cluster=~"$cluster"'))
+#@   dash = json.decode(content.replace('cluster=\\"$cluster\\"', 'cluster=~\\"$cluster\\"'))
 #@   variables = dash.get("templating", {}).get("list", [])
 #@   for i in range(len(variables)):
 #@     if variables[i]["name"] == "cluster":
