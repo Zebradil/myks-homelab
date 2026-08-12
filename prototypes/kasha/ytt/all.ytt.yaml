@@ -82,10 +82,10 @@ spec:
                 - all
           resources:
             requests:
-              cpu: 100m
-              memory: 256Mi
+              cpu: 300m
+              memory: 1100Mi
             limits:
-              memory: 1Gi
+              memory: 1100Mi
           volumeMounts:
             #! PVC at /kasha (= KASHA_DATA_ROOT), NEVER /nix — the image keeps
             #! its own binaries under the container's /nix/store.
