@@ -51,7 +51,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
-          image: index.docker.io/synology/synology-csi@sha256:2e6f9c55e7ee6011800ec772482791fdd3023aa3e9dbc3dc000af9fcdaa710ed
+          image: index.docker.io/synology/synology-csi@sha256:8aa84848187648a65c899f54e96061d3f22cdba0ad8926d770b431d4b274406f
           name: csi-plugin
           securityContext:
             privileged: true
