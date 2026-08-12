@@ -9,7 +9,7 @@
 #@   "harbor-jobservice",
 #@   "harbor-portal",
 #@   "harbor-registryctl",
-#@   "redis-photon",
+#@   "valkey-photon",
 #@   "registry-photon",
 #@   "trivy-adapter-photon",
 #@ ]

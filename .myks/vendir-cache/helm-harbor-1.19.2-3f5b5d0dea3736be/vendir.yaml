@@ -5,9 +5,9 @@ directories:
       name: harbor
       repository:
         url: https://helm.goharbor.io
-      version: 1.19.1
+      version: 1.19.2
     lazy: true
     path: .
-  path: .myks/vendir-cache/helm-harbor-1.19.1-ea0888842e33f2e7/data
+  path: .myks/vendir-cache/helm-harbor-1.19.2-3f5b5d0dea3736be/data
 kind: Config
 minimumRequiredVersion: ""

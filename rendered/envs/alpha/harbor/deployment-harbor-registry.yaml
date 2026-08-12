@@ -28,10 +28,10 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/configmap: d29a5a2cbbbb523346464132291d37a6714740807acf9110a8349e0637c49930
-        checksum/secret: 3365f0841cf067517d6b693d38019ae6d370c9747aa41e379517cc95c5064170
-        checksum/secret-core: feb463b80c644f39ddc4b5ec3c9fdc2cbab73993d1ceca38841ec68dd5d55720
-        checksum/secret-jobservice: 8489a000235e1ffd3b6a8786aa6f6c79354a7a8e3ddeb72954062ecb634f4e45
+        checksum/configmap: c6c8065f17cb43d8c18bead46606e8b15a4a5841a3427a6183a829b98dacb565
+        checksum/secret: 283d4d6d858ed570ea7652030beb21c113afa4c6e40684bf96dc212c0a82605b
+        checksum/secret-core: ef9bbc865fe5226cb89cc896c97f97838f7d99a346e9b00821e401066effe9d4
+        checksum/secret-jobservice: 8c3e9c98b8f712f949224070a182d9427f19c1da92209e918ffff2a792626f4b
       labels:
         app: harbor
         app.kubernetes.io/component: registry
@@ -48,7 +48,7 @@ spec:
           envFrom:
             - secretRef:
                 name: harbor-registry
-          image: index.docker.io/goharbor/registry-photon@sha256:ebf0325c2661729dbb317cbf839608eb8b15cfa158911a94976f2c21563c466e
+          image: index.docker.io/goharbor/registry-photon@sha256:c4ebef61ceb50a3d8bc21d149bc280422db20a1e69df317b64b74098c3615855
           livenessProbe:
             failureThreshold: 3
             httpGet:
@@ -110,7 +110,7 @@ spec:
                 name: harbor-registry
             - secretRef:
                 name: harbor-registryctl
-          image: index.docker.io/goharbor/harbor-registryctl@sha256:554147a956989175f63f8d41573d716c6ddf6052acd1749c88c0f99ce6ee2bff
+          image: index.docker.io/goharbor/harbor-registryctl@sha256:223d5cb49d5dbf0ba4ae022e7dd9775fa459904112dc12084d3aaa36c1408362
           livenessProbe:
             failureThreshold: 3
             httpGet:

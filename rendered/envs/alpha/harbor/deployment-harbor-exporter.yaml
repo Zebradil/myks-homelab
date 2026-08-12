@@ -25,8 +25,8 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/configmap: d0b03878398a843e26ba2c333a7cbb12f4ed60d684b8fe3b65a6a1a83e5172d2
-        checksum/secret: 48a6e83b31a698a758365b4728e54718b3748b345cee0dc56631273e9d09de3e
+        checksum/configmap: fc5dad7a6b2d9cb73265db1263da810ed84f002eef460c907bb15a9d58483365
+        checksum/secret: e8362ff964a7c09bac9ab55e53f68317a251f96a40f2b944b9223a80ef41d6d4
       labels:
         app: harbor
         app.kubernetes.io/component: exporter
@@ -48,7 +48,7 @@ spec:
                 name: harbor-exporter-env
             - secretRef:
                 name: harbor-exporter
-          image: index.docker.io/goharbor/harbor-exporter@sha256:372275b6b6abeb571fa7bd5de458e3d75f1a1636503b3c0abe02938f2b285d75
+          image: index.docker.io/goharbor/harbor-exporter@sha256:e1b0a248f61aad5084c5d1612d5f1da89f99c23ce743eaf8cba913d6d00c0547
           livenessProbe:
             failureThreshold: 3
             httpGet:
