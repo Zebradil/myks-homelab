@@ -6,7 +6,7 @@
 application:
   port: #@ port
   #! renovate: datasource=docker
-  image: ghcr.io/prymitive/karma:v0.131
+  image: ghcr.io/prymitive/karma:v0.132
   resources:
     requests:
       memory: 64Mi
