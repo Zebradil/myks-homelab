@@ -1,5 +1,13 @@
 ---
 fullnameOverride: vmks
+
+#! Since 0.85.0 the chart ships dashboards and rules through a Job that fetches
+#! them from GitHub on every sync, which puts them outside git and makes every
+#! ArgoCD sync depend on github.com being reachable. We vendir the same upstream
+#! sources and render them instead: see ytt/dashboards.ytt.yaml, ytt/rules.ytt.yaml.
+syncJob:
+  enabled: false
+
 victoria-metrics-operator:
   admissionWebhooks:
     certManager:

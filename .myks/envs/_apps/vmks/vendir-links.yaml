@@ -1,3 +1,8 @@
 charts/prom-crds: helm-prometheus-operator-crds-31.0.1-e4e7042222b74708
-charts/vmks: helm-victoria-metrics-k8s-stack-0.84.0-3c9f0b8844e3dac6
+charts/vmks: helm-victoria-metrics-k8s-stack-0.90.2-e9aec41e69dff7
+ytt/dotdc-dashboards: git-grafana-dashboards-kubernetes-v3.0.6-8b721cf821f8a54e
+ytt/kube-prometheus: git-kube-prometheus-v0.18.0-fd796d7254feaa78
+ytt/node-exporter-dashboard: git-grafana-dashboards-27aaf9d90dd0080c784e6d25eec25cd58d6e1d7d-89c3a59a9bfef13b
 ytt/pvc-dashboard: git-ded-grafana-dashboards-721ee4069aab28c533babf63f1c21051924f2f33-13639f227ad0f4c2
+ytt/victoria-metrics: git-VictoriaMetrics-v1.149.0-bc8e2d9586edbde7
+ytt/vm-operator: git-operator-v0.74.1-fe1077cde94b80a5

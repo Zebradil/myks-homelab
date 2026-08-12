@@ -1,0 +1,14 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - git:
+      ref: 27aaf9d90dd0080c784e6d25eec25cd58d6e1d7d
+      url: https://github.com/rfmoz/grafana-dashboards
+    includePaths:
+    - prometheus/node-exporter-full.json
+    lazy: true
+    newRootPath: prometheus
+    path: .
+  path: .myks/vendir-cache/git-grafana-dashboards-27aaf9d90dd0080c784e6d25eec25cd58d6e1d7d-89c3a59a9bfef13b/data
+kind: Config
+minimumRequiredVersion: ""

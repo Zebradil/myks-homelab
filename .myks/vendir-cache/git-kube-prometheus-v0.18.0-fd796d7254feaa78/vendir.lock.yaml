@@ -1,0 +1,12 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - configDigest: 4a6035ca22b086f168c349e821327603eefebf37686c2377095e7a9effb6d9ab
+    git:
+      commitTitle: 'Merge pull request #2840 from simonpasquier/release-0.18...'
+      sha: 4775d44d1aacfab7effa08293357521a3c603b87
+      tags:
+      - v0.18.0
+    path: .
+  path: .myks/vendir-cache/git-kube-prometheus-v0.18.0-fd796d7254feaa78/data
+kind: LockConfig

@@ -22,7 +22,7 @@ spec:
       containers:
         - args:
             - delete
-            - vlagent,vlcluster,vlogs,vlsingle,vmagent,vmalert,vmalertmanager,vmalertmanagerconfig,vmanomaly,vmanomalyconfig,vmauth,vmcluster,vmdistributed,vmnodescrape,vmpodscrape,vmprobe,vmrule,vmscrapeconfig,vmservicescrape,vmsingle,vmstaticscrape,vmuser,vtcluster,vtsingle
+            - vlagent,vlcluster,vldistributed,vlogs,vlsingle,vmagent,vmalert,vmalertmanager,vmalertmanagerconfig,vmanomaly,vmanomalyconfig,vmauth,vmcluster,vmdistributed,vmnodescrape,vmpodscrape,vmprobe,vmrule,vmscrapeconfig,vmservicescrape,vmsingle,vmstaticscrape,vmuser,vtcluster,vtsingle
             - --all
             - --ignore-not-found=true
           command:

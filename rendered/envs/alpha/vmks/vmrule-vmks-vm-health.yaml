@@ -3,16 +3,10 @@ kind: VMRule
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
-  labels:
-    app.kubernetes.io/component: vmalert
-    app.kubernetes.io/instance: vmks
-    app.kubernetes.io/name: victoria-metrics-k8s-stack
   name: vmks-vm-health
-  namespace: vmks
 spec:
   groups:
     - name: vm-health
-      params: {}
       rules:
         - alert: TooManyRestarts
           annotations:
@@ -55,7 +49,7 @@ spec:
             description: |
               Too high CPU usage may be a sign of insufficient resources and make process unstable. Consider to either increase available CPU resources or decrease the load on the process.
             summary: More than 90% of CPU is used by "{{ $labels.job }}"("{{ $labels.instance }}") during the last 5m
-          expr: (rate(process_cpu_seconds_total[5m]) / process_cpu_cores_available) > 0.9
+          expr: rate(process_cpu_seconds_total[5m]) / process_cpu_cores_available > 0.9
           for: 5m
           labels:
             severity: critical
@@ -64,7 +58,7 @@ spec:
             description: |
               Go runtime is unable to schedule goroutines execution in acceptable time. This is usually a sign of insufficient CPU resources or CPU throttling. Verify that service has enough CPU resources. Otherwise, the service could work unreliably with delays in processing.
             summary: '"{{ $labels.job }}"("{{ $labels.instance }}") has insufficient CPU resources for >15m'
-          expr: histogram_quantile(0.99, sum(rate(go_sched_latencies_seconds_bucket{job=~".*(victoriametrics|vmselect|vminsert|vmstorage|vmagent|vmalert|vmsingle|vmalertmanager|vmauth).*"}[5m])) by(le,job,instance,cluster)) > 0.1
+          expr: histogram_quantile(0.99, sum(rate(go_sched_latencies_seconds_bucket{job=~".*(victoriametrics|vmselect|vminsert|vmstorage|vmagent|vmalert|vmsingle|vmalertmanager|vmauth).*"}[5m])) by (le, job, instance)) > 0.1
           for: 15m
           labels:
             severity: critical
@@ -73,7 +67,7 @@ spec:
             description: |
               The job \"{{ $labels.job }}\" ({{ $labels.instance }}) generated {{ $value }} log messages with the level higher than info for the last 5 minutes. Check the logs for the given target. Check also the \"location\" label at the vm_log_messages_total metric if -loggerLevel command-line flag is set to value other than INFO. This label contains code locations responsible for generating log messages suppressed by -loggerLevel.
             summary: Too many logs are generated for job "{{ $labels.job }}" ({{ $labels.instance }})
-          expr: sum(increase(vm_log_messages_total{level!="info"}[5m])) without(app_version,location,is_printed) > 0
+          expr: sum(increase(vm_log_messages_total{level!="info"}[5m])) without (app_version, location, is_printed) > 0
           for: 15m
           labels:
             severity: warning

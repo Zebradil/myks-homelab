@@ -1,0 +1,14 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - git:
+      ref: v0.74.1
+      url: https://github.com/VictoriaMetrics/operator
+    includePaths:
+    - config/alerting/vmoperator-rules.yaml
+    lazy: true
+    newRootPath: config/alerting
+    path: .
+  path: .myks/vendir-cache/git-operator-v0.74.1-fe1077cde94b80a5/data
+kind: Config
+minimumRequiredVersion: ""

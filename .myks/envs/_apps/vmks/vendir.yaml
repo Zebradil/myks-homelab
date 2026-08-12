@@ -7,7 +7,7 @@ directories:
     lazy: true
     helmChart:
       name: victoria-metrics-k8s-stack
-      version: 0.84.0
+      version: 0.90.2
       repository:
         url: oci://ghcr.io/victoriametrics/helm-charts
 - path: charts/prom-crds
@@ -19,6 +19,72 @@ directories:
       version: 31.0.1
       repository:
         url: https://prometheus-community.github.io/helm-charts
+- path: ytt/kube-prometheus
+  contents:
+  - path: .
+    lazy: true
+    git:
+      url: https://github.com/prometheus-operator/kube-prometheus
+      ref: v0.18.0
+    includePaths:
+    - manifests/alertmanager-prometheusRule.yaml
+    - manifests/grafana-dashboardDefinitions.yaml
+    - manifests/kubePrometheus-prometheusRule.yaml
+    - manifests/kubeStateMetrics-prometheusRule.yaml
+    - manifests/kubernetesControlPlane-prometheusRule.yaml
+    - manifests/nodeExporter-prometheusRule.yaml
+    newRootPath: manifests
+- path: ytt/victoria-metrics
+  contents:
+  - path: .
+    lazy: true
+    git:
+      url: https://github.com/VictoriaMetrics/VictoriaMetrics
+      ref: v1.149.0
+    includePaths:
+    - dashboards/operator.json
+    - dashboards/victoriametrics-cluster.json
+    - dashboards/vmagent.json
+    - dashboards/vmalert.json
+    - deployment/docker/rules/alerts-cluster.yml
+    - deployment/docker/rules/alerts-health.yml
+    - deployment/docker/rules/alerts-vmagent.yml
+    - deployment/docker/rules/alerts-vmalert.yml
+- path: ytt/vm-operator
+  contents:
+  - path: .
+    lazy: true
+    git:
+      url: https://github.com/VictoriaMetrics/operator
+      ref: v0.74.1
+    includePaths:
+    - config/alerting/vmoperator-rules.yaml
+    newRootPath: config/alerting
+- path: ytt/dotdc-dashboards
+  contents:
+  - path: .
+    lazy: true
+    git:
+      url: https://github.com/dotdc/grafana-dashboards-kubernetes
+      ref: v3.0.6
+    includePaths:
+    - dashboards/k8s-system-api-server.json
+    - dashboards/k8s-system-coredns.json
+    - dashboards/k8s-views-global.json
+    - dashboards/k8s-views-namespaces.json
+    - dashboards/k8s-views-nodes.json
+    - dashboards/k8s-views-pods.json
+    newRootPath: dashboards
+- path: ytt/node-exporter-dashboard
+  contents:
+  - path: .
+    lazy: true
+    git:
+      url: https://github.com/rfmoz/grafana-dashboards
+      ref: 27aaf9d90dd0080c784e6d25eec25cd58d6e1d7d
+    includePaths:
+    - prometheus/node-exporter-full.json
+    newRootPath: prometheus
 - path: ytt/pvc-dashboard
   contents:
   - path: .

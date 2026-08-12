@@ -1,0 +1,59 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
+#@ load("@ytt:yaml", "yaml")
+#@ load("/overlay-matchers.star", m="matchers")
+
+#! Chart 0.85.0 stopped rendering alerting and recording rules; its sync-job
+#! pulls them from the upstream repos at deploy time instead. We disable that
+#! job (see helm/vmks.yaml), vendir the same sources and build the VMRules here,
+#! so the rules stay in git and land in a reviewable diff.
+#!
+#! Vendored ytt packages are also emitted verbatim into the stream, so every
+#! source document is dropped below and re-emitted in VMRule shape.
+
+#! Sources shaped like a Kubernetes object with `spec.groups`.
+#@ spec_sources = {
+#@   "alertmanager-prometheusRule.yaml": "alertmanager",
+#@   "kubePrometheus-prometheusRule.yaml": "kube-prometheus",
+#@   "kubeStateMetrics-prometheusRule.yaml": "kube-state-metrics",
+#@   "kubernetesControlPlane-prometheusRule.yaml": "kubernetes-control-plane",
+#@   "nodeExporter-prometheusRule.yaml": "node-exporter",
+#@   "vmoperator-rules.yaml": "vmoperator",
+#@ }
+
+#! Sources that are a bare Prometheus rule file with `groups` at the top level.
+#! alerts-single-node.yml is deliberately absent: vmsingle is disabled.
+#@ bare_sources = {
+#@   "deployment/docker/rules/alerts-cluster.yml": "vmcluster",
+#@   "deployment/docker/rules/alerts-health.yml": "vm-health",
+#@   "deployment/docker/rules/alerts-vmagent.yml": "vmagent",
+#@   "deployment/docker/rules/alerts-vmalert.yml": "vmalert",
+#@ }
+
+#@ def vmrule(name, groups):
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: #@ "vmks-" + name
+spec:
+  groups: #@ groups
+#@ end
+
+#@overlay/match by=overlay.subset({"kind": "PrometheusRule"}), expects=5
+#@overlay/remove
+---
+#@overlay/match by=m.kind_name("VMRule", "vmoperator-rules")
+#@overlay/remove
+---
+#! The bare rule files have no `kind`, so they can only be matched structurally.
+#@overlay/match by=lambda _, left, __: "groups" in left, expects=len(bare_sources)
+#@overlay/remove
+---
+
+#@ for file, name in spec_sources.items():
+--- #@ vmrule(name, yaml.decode(data.read(file))["spec"]["groups"])
+#@ end
+
+#@ for file, name in bare_sources.items():
+--- #@ vmrule(name, yaml.decode(data.read(file))["groups"])
+#@ end

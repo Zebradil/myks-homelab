@@ -3,23 +3,24 @@ kind: VMRule
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
-  labels:
-    app.kubernetes.io/component: vmalert
-    app.kubernetes.io/instance: vmks
-    app.kubernetes.io/name: victoria-metrics-k8s-stack
   name: vmks-vmoperator
-  namespace: vmks
 spec:
   groups:
     - name: vmoperator
-      params: {}
       rules:
         - alert: LogErrors
           annotations:
             dashboard: '{{ $externalURL }}/d/1H179hunk/victoriametrics-operator?ds={{ $labels.dc }}&orgId=1&viewPanel=16'
             description: 'Operator has too many errors at logs: {{ $value}}, check operator logs'
             summary: 'Too many errors at logs of operator: {{ $value}}'
-          expr: sum(rate(operator_log_messages_total{level="error",job=~".*((victoria.*)|vm)-?operator"}[5m])) by(cluster) > 0
+          expr: |
+            sum(
+              rate(
+                operator_log_messages_total{
+                  level="error",job=~".*((victoria.*)|vm)-?operator"
+                }[5m]
+              )
+            ) by (cluster) > 0
           for: 15m
           labels:
             severity: warning
@@ -29,7 +30,14 @@ spec:
             dashboard: '{{ $externalURL }}/d/1H179hunk/victoriametrics-operator?ds={{ $labels.dc }}&orgId=1&viewPanel=10'
             description: 'Operator cannot parse response from k8s api server, possible bug: {{ $value }}, check operator logs'
             summary: 'Too many errors at reconcile loop of operator: {{ $value}}'
-          expr: sum(rate(controller_runtime_reconcile_errors_total{job=~".*((victoria.*)|vm)-?operator"}[5m])) by(cluster) > 0
+          expr: |
+            sum(
+              rate(
+                controller_runtime_reconcile_errors_total{
+                  job=~".*((victoria.*)|vm)-?operator"
+                }[5m]
+              )
+            ) by (cluster) > 0
           for: 10m
           labels:
             severity: warning
@@ -39,7 +47,13 @@ spec:
             dashboard: '{{ $externalURL }}/d/1H179hunk/victoriametrics-operator?ds={{ $labels.dc }}&orgId=1&viewPanel=20'
             description: 'Operator cannot handle reconciliation load for controller: `{{- $labels.name }}`, current depth: {{ $value }}'
             summary: 'Too many `{{- $labels.name }}` in queue: {{ $value }}'
-          expr: sum(workqueue_depth{job=~".*((victoria.*)|vm)-?operator",name=~"(vmagent|vmalert|vmalertmanager|vmauth|vmcluster|vmnodescrape|vmpodscrape|vmprobe|vmrule|vmservicescrape|vmsingle|vmstaticscrape)"}) by(name,cluster) > 10
+          expr: |
+            sum(
+              workqueue_depth{
+                job=~".*((victoria.*)|vm)-?operator",
+                name=~"(vmagent|vmalert|vmalertmanager|vmauth|vmcluster|vmnodescrape|vmpodscrape|vmprobe|vmrule|vmservicescrape|vmsingle|vmstaticscrape)"
+              }
+            ) by(name, cluster) > 10
           for: 15m
           labels:
             severity: warning

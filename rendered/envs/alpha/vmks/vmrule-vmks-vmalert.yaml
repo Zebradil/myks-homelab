@@ -3,17 +3,11 @@ kind: VMRule
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
-  labels:
-    app.kubernetes.io/component: vmalert
-    app.kubernetes.io/instance: vmks
-    app.kubernetes.io/name: victoria-metrics-k8s-stack
   name: vmks-vmalert
-  namespace: vmks
 spec:
   groups:
     - interval: 30s
       name: vmalert
-      params: {}
       rules:
         - alert: ConfigurationReloadFailure
           annotations:
@@ -57,6 +51,14 @@ spec:
           for: 15m
           labels:
             severity: warning
+        - alert: GroupIterationReset
+          annotations:
+            description: Evaluation iteration for group "{{ $labels.group }}" in file "{{ $labels.file }}" is reset on vmalert instance {{ $labels.instance }}. This can be caused by irregular delays during evaluation or by the system wall clock being moved backward. If it is caused by host clock changes, vmalert could generate duplicate results for the group rules since some evaluations could be repeated. Check host clock time synchronization configurations if this happens frequently.
+            summary: Evaluation iteration for group {{ $labels.group }} in file {{ $labels.file }} is reset
+          expr: increase(vmalert_iteration_reset_total[5m]) > 0
+          for: 5m
+          labels:
+            severity: warning
         - alert: RemoteWriteErrors
           annotations:
             description: vmalert instance {{ $labels.instance }} is failing to push metrics generated via alerting or recording rules to the configured remote write URL. Check vmalert's logs for detailed error message.
@@ -77,7 +79,7 @@ spec:
           annotations:
             description: 'The remote write queue on vmalert instance {{ $labels.instance }} has consistently high utilization. The queue acts as a buffer between rules generating series and remote-write client consuming and pushing these series. When queue overflows, vmalert will start dropping newly generated series. Queue may overflow due to multiple reasons: 1. Some bad rules produce too many series at once. This can be limited using the global `-rule.resultsLimit` flag or `limit` param at the rule group level. 2. Remote write connection is slow.  Increase `-remoteWrite.concurrency`,  so vmalert could establish more concurrent connections. 3. The queue size is too small. Increase `-remoteWrite.maxQueueSize` to extend the buffer size. Note that a larger queue will result in higher memory consumption when the queue is full.'
             summary: Remote write queue capacity on the vmalert instance {{ $labels.instance }} has exceeded 80% utilization
-          expr: (histogram_quantile(0.99, sum(increase(vmalert_remotewrite_queue_size_bucket[5m])) by(job,instance,vmrange,cluster)) / vmalert_remotewrite_queue_capacity) > 0.8
+          expr: histogram_quantile(0.99, sum(increase(vmalert_remotewrite_queue_size_bucket[5m])) by (job, instance, vmrange)) / vmalert_remotewrite_queue_capacity > 0.8
           for: 15m
           labels:
             severity: warning
@@ -87,5 +89,35 @@ spec:
             summary: vmalert instance {{ $labels.instance }} is failing to send notifications to Alertmanager
           expr: increase(vmalert_alerts_send_errors_total[5m]) > 0
           for: 15m
+          labels:
+            severity: warning
+        - alert: AlertingRuleResultsApproachingLimit
+          annotations:
+            description: Alerting rule "{{ $labels.alertname }}" from group "{{ $labels.group }}" in file "{{ $labels.file }}" produced {{ $value }} samples in last evaluation, which approaches the configured results limit. If the produced results exceed the limit, the rule will be marked with an error and all its results will be discarded. Try increasing the results limit for the group or reducing the number of series produced by the rule. See https://docs.victoriametrics.com/victoriametrics/vmalert/#groups.
+            summary: Alerting rule {{ $labels.alertname }} in group {{ $labels.group }} is approaching the configured results limit
+          expr: |
+            (
+              vmalert_alerting_rules_last_evaluation_samples
+                > on(group,file) group_left()
+              (vmalert_group_rule_results_limit * 0.9)
+            )
+              and on(group,file)
+            (vmalert_group_rule_results_limit > 0)
+          for: 5m
+          labels:
+            severity: warning
+        - alert: RecordingRuleResultsApproachingLimit
+          annotations:
+            description: Recording rule "{{ $labels.recording }}" from group "{{ $labels.group }}" in file "{{ $labels.file }}" produced {{ $value }} samples in last evaluation, which approaches the configured results limit. If the produced results exceed the limit, the rule will be marked with an error and all its results will be discarded. Try increasing the results limit for the group or reducing the number of series produced by the rule. See https://docs.victoriametrics.com/victoriametrics/vmalert/#groups.
+            summary: Recording rule {{ $labels.recording }} in group {{ $labels.group }} is approaching the configured results limit
+          expr: |
+            (
+              vmalert_recording_rules_last_evaluation_samples
+                > on(group,file) group_left()
+              (vmalert_group_rule_results_limit * 0.9)
+            )
+              and on(group,file)
+            (vmalert_group_rule_results_limit > 0)
+          for: 5m
           labels:
             severity: warning

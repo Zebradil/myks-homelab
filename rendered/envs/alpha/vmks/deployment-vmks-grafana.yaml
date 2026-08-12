@@ -43,7 +43,7 @@ spec:
               value: both
             - name: NAMESPACE
               value: ALL
-          image: oci.zebradil.dev/quay.io-cache/kiwigrid/k8s-sidecar@sha256:694950d736c8b532eba4006527ccbdac98fefc9f30b3346ba2de50b6cad91c94
+          image: oci.zebradil.dev/quay.io-cache/kiwigrid/k8s-sidecar@sha256:abb55b2165c60e8f97e473862c7a3123df6f67d44f592949577c29b8fb2df9d6
           name: grafana-sc-dashboard
           securityContext:
             allowPrivilegeEscalation: false
@@ -80,7 +80,7 @@ spec:
               value: http://localhost:3000/api/admin/provisioning/datasources/reload
             - name: REQ_METHOD
               value: POST
-          image: oci.zebradil.dev/quay.io-cache/kiwigrid/k8s-sidecar@sha256:694950d736c8b532eba4006527ccbdac98fefc9f30b3346ba2de50b6cad91c94
+          image: oci.zebradil.dev/quay.io-cache/kiwigrid/k8s-sidecar@sha256:abb55b2165c60e8f97e473862c7a3123df6f67d44f592949577c29b8fb2df9d6
           name: grafana-sc-datasources
           securityContext:
             allowPrivilegeEscalation: false
@@ -122,7 +122,7 @@ spec:
               value: /etc/grafana/provisioning
             - name: GF_UNIFIED_STORAGE_INDEX_PATH
               value: /var/lib/grafana-search/bleve
-          image: index.docker.io/grafana/grafana@sha256:2d1f9ae67c1778d33e291d4c3c759cd8b650e67491f02533499eb950e075eeb5
+          image: index.docker.io/grafana/grafana@sha256:7cb8c64c4d57a57e734073f3cc94620adb24a0acb929bd80ba9f14017e3a975b
           livenessProbe:
             failureThreshold: 10
             httpGet:
@@ -178,12 +178,13 @@ spec:
             - -R
             - 472:472
             - /var/lib/grafana
-          image: index.docker.io/library/busybox@sha256:9532d8c39891ca2ecde4d30d7710e01fb739c87a8b9299685c63704296b16028
+          image: index.docker.io/library/busybox@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
           name: init-chown-data
           securityContext:
             capabilities:
               add:
                 - CHOWN
+                - DAC_OVERRIDE
               drop:
                 - ALL
             readOnlyRootFilesystem: false

@@ -36,6 +36,16 @@ spec:
               type: object
             spec:
               properties:
+                access_log:
+                  properties:
+                    filters:
+                      properties:
+                        skip_status_codes:
+                          items:
+                            type: integer
+                          type: array
+                      type: object
+                  type: object
                 bearerToken:
                   type: string
                 default_url:
@@ -69,6 +79,37 @@ spec:
                   type: object
                 jwt:
                   properties:
+                    defaultVMAccessClaim:
+                      properties:
+                        logsAccountID:
+                          format: int32
+                          type: integer
+                        logsExtraFilters:
+                          items:
+                            type: string
+                          type: array
+                        logsExtraStreamFilters:
+                          items:
+                            type: string
+                          type: array
+                        logsProjectID:
+                          format: int32
+                          type: integer
+                        metricsAccountID:
+                          format: int32
+                          type: integer
+                        metricsExtraFilters:
+                          items:
+                            type: string
+                          type: array
+                        metricsExtraLabels:
+                          items:
+                            type: string
+                          type: array
+                        metricsProjectID:
+                          format: int32
+                          type: integer
+                      type: object
                     matchClaims:
                       additionalProperties:
                         type: string
@@ -187,11 +228,15 @@ spec:
                                   type: string
                                 namespace:
                                   type: string
+                                useExtraService:
+                                  type: boolean
                               required:
                                 - name
                                 - namespace
                               type: object
                             type: array
+                          useExtraService:
+                            type: boolean
                         required:
                           - kind
                           - name
@@ -392,6 +437,8 @@ spec:
                     - key
                   type: object
                   x-kubernetes-map-type: atomic
+                useLegacyNaming:
+                  type: boolean
                 username:
                   type: string
               required:

@@ -1,0 +1,20 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - git:
+      ref: v1.149.0
+      url: https://github.com/VictoriaMetrics/VictoriaMetrics
+    includePaths:
+    - dashboards/operator.json
+    - dashboards/victoriametrics-cluster.json
+    - dashboards/vmagent.json
+    - dashboards/vmalert.json
+    - deployment/docker/rules/alerts-cluster.yml
+    - deployment/docker/rules/alerts-health.yml
+    - deployment/docker/rules/alerts-vmagent.yml
+    - deployment/docker/rules/alerts-vmalert.yml
+    lazy: true
+    path: .
+  path: .myks/vendir-cache/git-VictoriaMetrics-v1.149.0-bc8e2d9586edbde7/data
+kind: Config
+minimumRequiredVersion: ""
