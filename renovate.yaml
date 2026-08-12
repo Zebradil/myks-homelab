@@ -34,6 +34,13 @@ packageRules:
       - ghcr.io/actions/actions-runner-controller-charts/**
     groupName: arc
     groupSlug: arc
+  - description: >-
+      Group Harbor updates together. The chart version and the application version pin the same image tags
+      (see prototypes/harbor/helm/harbor.yaml), so bumping one without the other resolves to a nonexistent tag.
+    matchFileNames:
+      - prototypes/harbor/**
+    groupName: harbor
+    groupSlug: harbor
   - description: Pin latest container image tags
     matchDatasources:
       - docker
