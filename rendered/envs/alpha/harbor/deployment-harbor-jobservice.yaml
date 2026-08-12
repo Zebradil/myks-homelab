@@ -28,10 +28,10 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/configmap: 1515330d66735484b2aad4e2a25314ddf5733c2e6528486c52680e03dfe2108a
-        checksum/configmap-env: 9cf528010f33a1110036431173e7d1ee893bacd675ec2b86288ca0fa22954698
-        checksum/secret: 8489a000235e1ffd3b6a8786aa6f6c79354a7a8e3ddeb72954062ecb634f4e45
-        checksum/secret-core: feb463b80c644f39ddc4b5ec3c9fdc2cbab73993d1ceca38841ec68dd5d55720
+        checksum/configmap: 94b5afd02defef05a914101efd4c48de142a5891dfc12aeeda36c6497c5c7cee
+        checksum/configmap-env: 287e57ecdc102385a1875fcd4ff5dc34e7b3bbd1322a3c028bd498b0597f6fdb
+        checksum/secret: 8c3e9c98b8f712f949224070a182d9427f19c1da92209e918ffff2a792626f4b
+        checksum/secret-core: ef9bbc865fe5226cb89cc896c97f97838f7d99a346e9b00821e401066effe9d4
       labels:
         app: harbor
         app.kubernetes.io/component: jobservice
@@ -55,7 +55,7 @@ spec:
                 name: harbor-jobservice-env
             - secretRef:
                 name: harbor-jobservice
-          image: index.docker.io/goharbor/harbor-jobservice@sha256:0de4fd2ce3a02d3e6591b439e4674ea085885ddf43652b44004cc67eb19dba12
+          image: index.docker.io/goharbor/harbor-jobservice@sha256:f71a4452a095bcd2a8f0683648a3ae28415432df87ccfb00ec7625f3e340a598
           livenessProbe:
             failureThreshold: 3
             httpGet:

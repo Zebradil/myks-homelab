@@ -25,7 +25,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/secret: b2fdf1e0f0e3faeb2ea66d75b5c4538dfe5af0b8a7700982d66492dc8d5c73f6
+        checksum/secret: 9e785c09b3438ea9d6b6f82e238c0cb7b7041fa17cb693c497f6b883d05302e6
       labels:
         app: harbor
         app.kubernetes.io/component: database
@@ -44,7 +44,7 @@ spec:
           envFrom:
             - secretRef:
                 name: harbor-database
-          image: index.docker.io/goharbor/harbor-db@sha256:7944d8594a48a8d014e1fa440bc788348f2a779fa2c612ed6b79390cd767e6db
+          image: index.docker.io/goharbor/harbor-db@sha256:5ebfb345b33d673fa8483ffc997013113b7d14ea56abfa65cfcb621b4acf3039
           livenessProbe:
             exec:
               command:
@@ -85,7 +85,7 @@ spec:
             - chmod -R 700 /var/lib/postgresql/data/pgdata || true
           command:
             - /bin/sh
-          image: index.docker.io/goharbor/harbor-db@sha256:7944d8594a48a8d014e1fa440bc788348f2a779fa2c612ed6b79390cd767e6db
+          image: index.docker.io/goharbor/harbor-db@sha256:5ebfb345b33d673fa8483ffc997013113b7d14ea56abfa65cfcb621b4acf3039
           name: data-permissions-ensurer
           securityContext:
             allowPrivilegeEscalation: false

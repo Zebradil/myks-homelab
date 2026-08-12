@@ -25,7 +25,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/configmap: 267d1f5ce3b8ddc8800e2c9a41b927222697b43ed5ff44775ced7a4049ee44a9
+        checksum/configmap: 73569a3421a43a548fe583644952943508f44cbd79b84ccb52821a54deff86d1
       labels:
         app: harbor
         app.kubernetes.io/component: portal
@@ -38,7 +38,7 @@ spec:
     spec:
       automountServiceAccountToken: false
       containers:
-        - image: index.docker.io/goharbor/harbor-portal@sha256:ac55161c57a8351807adf8f8def264bdd52667c371d0436beefebdac4341c9e2
+        - image: index.docker.io/goharbor/harbor-portal@sha256:b811b67f7a7f6f1614e4bdf7478b207d13e8aa3f815ff6ad84f216a5098d213d
           livenessProbe:
             failureThreshold: 3
             httpGet:

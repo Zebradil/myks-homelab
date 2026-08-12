@@ -25,9 +25,9 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/configmap: ad96be87e76fab37b8bd9cdf071cf29b2d9711ea880f0de11c0c5bcfeb565571
-        checksum/secret: feb463b80c644f39ddc4b5ec3c9fdc2cbab73993d1ceca38841ec68dd5d55720
-        checksum/secret-jobservice: 8489a000235e1ffd3b6a8786aa6f6c79354a7a8e3ddeb72954062ecb634f4e45
+        checksum/configmap: 37c8c4ddac71140611f94ebcc530ffea019c17380cc087f4aa2d48b76ee3eda4
+        checksum/secret: ef9bbc865fe5226cb89cc896c97f97838f7d99a346e9b00821e401066effe9d4
+        checksum/secret-jobservice: 8c3e9c98b8f712f949224070a182d9427f19c1da92209e918ffff2a792626f4b
       labels:
         app: harbor
         app.kubernetes.io/component: core
@@ -56,7 +56,7 @@ spec:
                 name: harbor-core
             - secretRef:
                 name: harbor-core
-          image: index.docker.io/goharbor/harbor-core@sha256:887a85b8ea98b76bfc9f715f1a0785bb99f9a1034241513902dd6e95be922a83
+          image: index.docker.io/goharbor/harbor-core@sha256:d7b780d23721a000f0fb8e181add6675eafa336de5d033b77fd7da0c171ff7f7
           livenessProbe:
             failureThreshold: 2
             httpGet:
