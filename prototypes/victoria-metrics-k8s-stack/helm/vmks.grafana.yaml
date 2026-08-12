@@ -3,7 +3,7 @@
 grafana:
   persistence:
     enabled: true
-    size: 1Gi
+    size: 2Gi
     accessModes:
       - ReadWriteMany
   adminPassword: #@ sops("0", "adminPassword")
