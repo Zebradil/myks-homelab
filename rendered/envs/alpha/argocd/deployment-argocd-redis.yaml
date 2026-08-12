@@ -47,7 +47,7 @@ spec:
                 secretKeyRef:
                   key: auth
                   name: argocd-redis
-          image: ecr-public.aws.com/docker/library/redis@sha256:08ad0b1d280850169a790dba1393ff7a90aef951fc19632cf4d3ce4f78e679ba
+          image: ecr-public.aws.com/docker/library/redis@sha256:2cc044fc5a07c9b701f8f1255a309ae9ad7856e694ac03513bf3648c01e40763
           name: redis
           ports:
             - containerPort: 6379
@@ -73,7 +73,7 @@ spec:
                 secretKeyRef:
                   key: auth
                   name: argocd-redis
-          image: oci.zebradil.dev/ghcr.io-cache/oliver006/redis_exporter@sha256:2c8c55c63ce4d915389f03d337b8acef56aaaca9fab8728291287e612d4d6398
+          image: oci.zebradil.dev/ghcr.io-cache/oliver006/redis_exporter@sha256:fed773ffd2bb2eac706e0ed9cc2fff41651193ee4977e2a4f6919658ad2313f4
           name: metrics
           ports:
             - containerPort: 9121

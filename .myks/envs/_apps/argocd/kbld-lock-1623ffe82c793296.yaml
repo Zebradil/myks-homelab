@@ -2,18 +2,18 @@ apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 minimumRequiredVersion: 0.49.0
 overrides:
-- image: ecr-public.aws.com/docker/library/redis:8.2.3-alpine
-  newImage: ecr-public.aws.com/docker/library/redis@sha256:08ad0b1d280850169a790dba1393ff7a90aef951fc19632cf4d3ce4f78e679ba
+- image: ecr-public.aws.com/docker/library/redis:8.6.4-alpine
+  newImage: ecr-public.aws.com/docker/library/redis@sha256:2cc044fc5a07c9b701f8f1255a309ae9ad7856e694ac03513bf3648c01e40763
   preresolved: true
 - image: ghcr.io/dexidp/dex:v2.45.1
   newImage: oci.zebradil.dev/ghcr.io-cache/dexidp/dex@sha256:8499afd690c437f52301efd2b05b2455da5bd2dfc20332cd697dc9937f808462
   preresolved: true
-- image: ghcr.io/oliver006/redis_exporter:v1.88.0
-  newImage: oci.zebradil.dev/ghcr.io-cache/oliver006/redis_exporter@sha256:2c8c55c63ce4d915389f03d337b8acef56aaaca9fab8728291287e612d4d6398
+- image: ghcr.io/oliver006/redis_exporter:v1.89.0
+  newImage: oci.zebradil.dev/ghcr.io-cache/oliver006/redis_exporter@sha256:fed773ffd2bb2eac706e0ed9cc2fff41651193ee4977e2a4f6919658ad2313f4
   preresolved: true
 - image: quay.io/argoproj/argocd:v3.5.0
   newImage: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:c298cedbaeb31532ba8d4e9904eba9e4987e067293fbd86400c5194e78f743d5
   preresolved: true
 - image: registry.access.redhat.com/ubi8
-  newImage: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:efe7eaa64e1efb79c34d0e9ec4ac6d0a95f512dfa8673c2d0d7dfa78a6787efe
+  newImage: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:a94c5e31450d30190afe6f7a09628dd1dd7a3dc98784ba5ed1d19fd77098fcb2
   preresolved: true
