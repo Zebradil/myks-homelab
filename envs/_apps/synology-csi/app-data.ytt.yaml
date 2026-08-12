@@ -8,9 +8,33 @@ application:
     - host: #@ sops("dsm-1", "host")
       port: 5001
       https: true
-      #! DSM serves a self-signed cert for CN=synology with no IP SAN, and it is
-      #! reached by IP. Replace with tlsCACert + tlsServerName once DSM has a cert
-      #! that validates.
-      insecureSkipVerify: true
+      #! The DSM certificate is signed by the built-in Synology CA and carries
+      #! only DNS:synology, while the host above is an IP, so both the CA and the
+      #! name to verify against have to be supplied. DSM regenerates this
+      #! certificate on some upgrades — refresh tlsCACert if logins start failing.
+      tlsServerName: synology
+      tlsCACert: |
+        -----BEGIN CERTIFICATE-----
+        MIIDujCCAqKgAwIBAgIUIYoGcfy6c/ubQkHOEkvK0IMIwDwwDQYJKoZIhvcNAQEL
+        BQAwUTELMAkGA1UEBhMCVFcxDzANBgNVBAcMBlRhaXBlbDEWMBQGA1UECgwNU3lu
+        b2xvZ3kgSW5jLjEZMBcGA1UEAwwQU3lub2xvZ3kgSW5jLiBDQTAeFw0yNjA2MjMy
+        MTE1MDlaFw0yNzA2MjQyMTE1MDlaMFExCzAJBgNVBAYTAlRXMQ8wDQYDVQQHDAZU
+        YWlwZWwxFjAUBgNVBAoMDVN5bm9sb2d5IEluYy4xGTAXBgNVBAMMEFN5bm9sb2d5
+        IEluYy4gQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCYKLCWF5i8
+        ZEXMl+rl/ATTvvKFbdbFMONQv9Hc/3SfAki8BAAKHotIz831Ru3Anb2YzDXoG9jE
+        JttvO1MRe2ZbhqEQWcDOAnG4SHZTssvy7vyunYDKuHNBHKAuphXW1izs9Ir2PfOH
+        MQjH/sg7cf+IckZ1g3/S/GxUJm9qdm+OB/B2kDz9k4I+JNRqCcejQBSkvSmZfwaP
+        WSACW7lyS1DCIpNvlNjRwOb0UqjhPmq0JfH4RhMpsAbf2WHbXspnAWhAV4MNydxm
+        bjZq0HEX47PPpIyxm/VzNwnZec3o9zY0QJDzrwKKJP8/G3ncxOf5mEaHUUV83ccd
+        YG7/xbVlrpdrAgMBAAGjgYkwgYYwCQYDVR0RBAIwADAPBgNVHRMECDAGAQH/AgEA
+        MDYGCWCGSAGG+EIBDQQpFidtb2Rfc3NsIGdlbmVyYXRlZCBjdXN0b20gQ0EgY2Vy
+        dGlmaWNhdGUwEQYJYIZIAYb4QgEBBAQDAgIEMB0GA1UdDgQWBBREoVF4L8iTR5t5
+        cnmPDvG1IHjKDzANBgkqhkiG9w0BAQsFAAOCAQEAgahEn5OnKeRAzikN93tT3Qzl
+        muqkUrb1BKMZHAWs07TybokWhCvyloX3kcPdp006H44EvSNeHCYQHpkRwg6wRCpY
+        ebSAjKCeEPUs26YTFfxbMMv3YIYVUF60REnU7NqhjV+7xfAeyWb3qIsl4N2u1IM/
+        AJR1wnANLLAuTpTV/uZMgIKfElgRzMQ7IZrUhIZWPkqckI0+oRBkkR4t1y/GXhE2
+        rNsMWcmEyMG/PA9yvtwTmOS/cTTsf6w+/UDPrG2ZrlPJXCDQ87h4MnnsuiLnoOzu
+        /wjkmizWBpHQeljBpFbTfUkCljWnoHIgZpJnN0JJQ70teT7mHcbQM6xjwJytgw==
+        -----END CERTIFICATE-----
       password: #@ sops("dsm-1", "password")
       username: #@ sops("dsm-1", "username")
