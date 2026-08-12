@@ -6,5 +6,6 @@ application:
     - host: ""
       port: 5001
       https: true
+      insecureSkipVerify: false
       username: ""
       password: ""

@@ -8,5 +8,9 @@ application:
     - host: #@ sops("dsm-1", "host")
       port: 5001
       https: true
+      #! DSM serves a self-signed cert for CN=synology with no IP SAN, and it is
+      #! reached by IP. Replace with tlsCACert + tlsServerName once DSM has a cert
+      #! that validates.
+      insecureSkipVerify: true
       password: #@ sops("dsm-1", "password")
       username: #@ sops("dsm-1", "username")
