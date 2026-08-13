@@ -51,7 +51,15 @@ data:
       keep_stdout: true
     telemetry:
       metrics:
-        enabled: false
+        enabled: true
+        address: 'tcp://0.0.0.0:9959'
+        buffers:
+          read: 4096
+          write: 4096
+        timeouts:
+          read: '6 seconds'
+          write: '6 seconds'
+          idle: '30 seconds'
     identity_validation:
       elevated_session:
         code_lifespan: '5 minutes'

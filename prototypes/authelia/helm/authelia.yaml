@@ -22,6 +22,9 @@ pod:
 
 configMap:
   theme: auto
+  telemetry:
+    metrics:
+      enabled: true
   authentication_backend:
     file:
       enabled: true

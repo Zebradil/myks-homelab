@@ -1,0 +1,20 @@
+#@ load("@ytt:data", "data")
+
+#@ name = data.values.myks.context.app
+#@ labels = {"app.kubernetes.io/name": name}
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels: #@ labels
+  name: #@ name
+  namespace: #@ name
+spec:
+  endpoints:
+    - port: metrics
+  namespaceSelector:
+    matchNames:
+      - #@ name
+  selector:
+    matchLabels: #@ labels
