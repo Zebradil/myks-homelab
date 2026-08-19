@@ -1,6 +1,6 @@
 [tools]
 "github:mykso/myks" = "5.13.2"
-argocd = "3.5.0"
+argocd = "3.5.1"
 helm = "4.2.3"
 kubeconform = "0.8.0"
 sops = "3.13.3"
