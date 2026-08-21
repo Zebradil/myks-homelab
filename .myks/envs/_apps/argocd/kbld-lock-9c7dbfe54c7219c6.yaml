@@ -1,6 +1,6 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
-minimumRequiredVersion: 0.49.0
+minimumRequiredVersion: 0.49.1
 overrides:
 - image: ecr-public.aws.com/docker/library/redis:8.6.4-alpine
   newImage: ecr-public.aws.com/docker/library/redis@sha256:2cc044fc5a07c9b701f8f1255a309ae9ad7856e694ac03513bf3648c01e40763

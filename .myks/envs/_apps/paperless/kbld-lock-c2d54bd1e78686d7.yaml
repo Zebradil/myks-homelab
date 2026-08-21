@@ -1,6 +1,6 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
-minimumRequiredVersion: 0.49.0
+minimumRequiredVersion: 0.49.1
 overrides:
 - image: ghcr.io/paperless-ngx/paperless-ngx:2.20.15
   newImage: oci.zebradil.dev/ghcr.io-cache/paperless-ngx/paperless-ngx@sha256:6c86cad803970ea782683a8e80e7403444c5bf3cf70de63b4d3c8e87500db92f
