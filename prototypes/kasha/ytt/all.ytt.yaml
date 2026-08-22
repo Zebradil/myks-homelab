@@ -9,17 +9,14 @@
 
 #@ data_root = "/kasha"
 
-#! Non-secret env. AWS_* R2 creds come from the Secret (see secret.ytt.yaml).
-#! Push (KASHA_PUSH_ENABLE) and mirror-up (KASHA_MIRROR_UP_ENABLE) stay unset —
-#! Phase 2, they need a raw-TCP endpoint.
+#! Non-secret env. AWS_* R2 creds and the write token come from the Secret
+#! (see secret.ytt.yaml).
 #@ envs = {
-#@   "KASHA_DATA_ROOT": data_root,
-#@   "KASHA_PORT": str(a.port),
-#@   "KASHA_TRUSTED_PUBLIC_KEYS": a.trustedPublicKeys,
-#@   "KASHA_MIRROR_DOWN_ENABLE": "1",
+#@   "KASHA_DATA": data_root,
+#@   "KASHA_LISTEN": "0.0.0.0:" + str(a.port),
+#@   "KASHA_TRUSTED_KEYS": a.trustedKeys,
 #@   "KASHA_REMOTE": sops("0", "cache-s3-url"),
-#@   "KASHA_FLAKES": a.flakes,
-#@   "KASHA_MIRROR_DOWN_INTERVAL": str(a.mirrorDownInterval),
+#@   "KASHA_SYNC_INTERVAL": str(a.syncInterval),
 #@ }
 #@ build_envs = lambda x: [{"name": k, "value": v} for k, v in x.items()]
 
@@ -74,8 +71,6 @@ spec:
             initialDelaySeconds: 15
             periodSeconds: 30
           securityContext:
-            #! Runs as root: writes /etc/nix/nix.conf, /run/*, runs
-            #! nix-store --init at start. Do NOT force runAsNonRoot.
             allowPrivilegeEscalation: false
             capabilities:
               drop:
@@ -87,8 +82,7 @@ spec:
             limits:
               memory: 1100Mi
           volumeMounts:
-            #! PVC at /kasha (= KASHA_DATA_ROOT), NEVER /nix — the image keeps
-            #! its own binaries under the container's /nix/store.
+            #! PVC at /kasha (= KASHA_DATA): the flat binary-cache store.
             - name: #@ name
               mountPath: #@ data_root
       volumes:

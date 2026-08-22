@@ -19,19 +19,15 @@ spec:
     spec:
       containers:
         - env:
-            - name: KASHA_DATA_ROOT
+            - name: KASHA_DATA
               value: /kasha
-            - name: KASHA_PORT
-              value: "5000"
-            - name: KASHA_TRUSTED_PUBLIC_KEYS
+            - name: KASHA_LISTEN
+              value: 0.0.0.0:5000
+            - name: KASHA_TRUSTED_KEYS
               value: znix.zebradil.dev:nvr0OQFRddbHGopQbyLbLXQnntFBDKp23tqQq+msppw=
-            - name: KASHA_MIRROR_DOWN_ENABLE
-              value: "1"
             - name: KASHA_REMOTE
               value: ref+sops://static/0.sops.yaml#/cache-s3-url+
-            - name: KASHA_FLAKES
-              value: znix
-            - name: KASHA_MIRROR_DOWN_INTERVAL
+            - name: KASHA_SYNC_INTERVAL
               value: "300"
           envFrom:
             - secretRef:

@@ -5,12 +5,9 @@ application:
   #! renovate: datasource=docker
   #! Use `edge` floating tag for now, switch to version tags when they're available
   image: ghcr.io/zebradil/kasha-box:edge
-  #! No GC in the MVP — the store only grows. Size generously and watch disk.
   storageSize: 250Gi
   port: 5000
-  #! Public key(s) clients verify against. Space-separated if more than one.
-  trustedPublicKeys: znix.zebradil.dev:nvr0OQFRddbHGopQbyLbLXQnntFBDKp23tqQq+msppw=
-  #! Space-separated flake ids under roots/<flake>/ in R2.
-  flakes: znix
-  #! Seconds between mirror-down sweeps.
-  mirrorDownInterval: 300
+  #! Public key(s) narinfos must be signed by. Space-separated if more than one.
+  trustedKeys: znix.zebradil.dev:nvr0OQFRddbHGopQbyLbLXQnntFBDKp23tqQq+msppw=
+  #! Seconds between mirror sweeps.
+  syncInterval: 300

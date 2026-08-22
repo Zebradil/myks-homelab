@@ -2,6 +2,7 @@ cache-s3-url: ENC[AES256_GCM,data:X054JbSjVcSW1CdCcAH+k3TlAFfyJKMPRMvtivbphPbDaU
 signing-key: ENC[AES256_GCM,data:liZDuYKfKZY4WiiTLKq5kf660Wgf469SVF9PWQEQslzd8jSng4pbGTclsSF9kGZRhj3huoTixT7qkN1T+s2zYunhMgW81jS2AEVnzaYmuSUnVXNl/DoXQsLyeULxsZ/LT/jcpDLqfDNB4Q==,iv:HGfwY8bXiB1x+ZmTAHjrZcB+ce9p7PXiPW4glqIIZCo=,tag:FBUs7wp3h1WN0/RfTQYMTQ==,type:str]
 aws-access-key-id: ENC[AES256_GCM,data:LXUsg9WZnRefUOo2sYz3MNosxBJVITtojYsMv2nur9Q=,iv:bz5TJQkXlAtJgUdc/phdCy6d0oe8tcZYgA7u18wPda0=,tag:ehUSYIioAxHb6Hg036eerA==,type:str]
 aws-secret-access-key: ENC[AES256_GCM,data:/n91km/sUkKgobSJQKL2QL8vG8Rzk+Ehr+jvHKJh7WEH/5Bpx/twBk74iUgF8UWSAOHGvxZ8g1H65w8ua9+ZRg==,iv:aC4ho4yIP8FT4bX2sOKtfp5de9mSorjPz2RzBkZW8pk=,tag:rJL77PzGknLpqvbvrWVE7w==,type:str]
+token: ENC[AES256_GCM,data:tyQ3mjYHMgQvwNocmK2Pmki5T1ZobzSFfVAA6yXr9XkSGDo1lshwIpvpc1vzvnnprv75GKDs+iQJ0r5fsp6e7Q==,iv:wxw5KSmpwY3G0QuR7TL/IroPekG51pE9VXZLM25imyk=,tag:nnlKQtBlx3TIDqyqP7/SQw==,type:str]
 sops:
     age:
         - enc: |
@@ -32,6 +33,6 @@ sops:
             -----END AGE ENCRYPTED FILE-----
           recipient: age13vh8ef8lgqfgr7aljd2y9c82syxlf7u35lxwrr9yxlhrhjdxfptsc9uk7v
     encrypted_regex: .
-    lastmodified: "2026-07-19T19:15:30Z"
-    mac: ENC[AES256_GCM,data:GCJx95yUHt7RV5Xy2j+hlhRi2FWMPF0sNPF8jXmAOStCIRlzej74pMa5vtcgWUBzteLRtY0FAwji+smMF90fkAHcMrx+APx4pssmH6D1N00C3Z5Kc3ot/oneTwY+0rQKaunyJJMt37BXYELygnw7aU65qByremi/FerC1y3b9fY=,iv:dEtAmKzVWo6DR708okv5Eyr56ibq9lecmIvcjAdgrqY=,tag:v9Xou0YZ/KMvexCb3pB8wA==,type:str]
+    lastmodified: "2026-08-22T23:37:27Z"
+    mac: ENC[AES256_GCM,data:rtNPQevVcnXnyLImIOlQJmTyRxchQrGFkrzzXPy/jx8Jf4P/Rf9tlt+qp+HNMizaBaFDaUgAS4WMfrsBWY+xcUyATn1sgzs0Jo3N4Gwc7Fwf8l8sHA+R2t4eCpzUGYKWGnWYSN7P47GWDHIFSrU0khtZL7HrYo6NzTWy8877h70=,iv:FicK0wEZoeEWKpCZeZcg5RmmcfeCS8NdBYH4ikWR7Wo=,tag:KAKnXyJwaKEEsA/ufjB9NA==,type:str]
     version: 3.13.2
