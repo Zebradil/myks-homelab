@@ -25,7 +25,7 @@ spec:
               value: 0.0.0.0:5000
             - name: KASHA_TRUSTED_KEYS
               value: |
-                znix.zebradil.dev:nvr0OQFRddbHGopQbyLbLXQnntFBDKp23tqQq+msppw= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
+                cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= kasha-ci-1:KNW/sz+Zz800U/IFZ38vH5rvlHtM3Fb0Q/wmDJquG+U= znix.zebradil.dev:nvr0OQFRddbHGopQbyLbLXQnntFBDKp23tqQq+msppw=
             - name: KASHA_REMOTE
               value: ref+sops://static/0.sops.yaml#/cache-s3-url+
             - name: KASHA_SYNC_INTERVAL
@@ -33,7 +33,7 @@ spec:
           envFrom:
             - secretRef:
                 name: kasha
-          image: oci.zebradil.dev/ghcr.io-cache/zebradil/kasha-box@sha256:3f3bca3b687f7677e8a628cf5241a8991ac934960317d4787a6a6a0b58094b48
+          image: oci.zebradil.dev/ghcr.io-cache/zebradil/kasha-box@sha256:aa79e53f5280e2f3108dc4b9befaa0e745aed3d7cd7a2630f59dfaca22db9856
           livenessProbe:
             httpGet:
               path: /nix-cache-info

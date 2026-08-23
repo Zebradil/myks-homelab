@@ -9,7 +9,8 @@ application:
   port: 5000
   #! Public key(s) narinfos must be signed by. Space-separated if more than one.
   trustedKeys: >
-    znix.zebradil.dev:nvr0OQFRddbHGopQbyLbLXQnntFBDKp23tqQq+msppw=
     cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
+    kasha-ci-1:KNW/sz+Zz800U/IFZ38vH5rvlHtM3Fb0Q/wmDJquG+U=
+    znix.zebradil.dev:nvr0OQFRddbHGopQbyLbLXQnntFBDKp23tqQq+msppw=
   #! Seconds between mirror sweeps.
   syncInterval: 300
