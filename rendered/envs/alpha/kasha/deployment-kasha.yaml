@@ -24,7 +24,8 @@ spec:
             - name: KASHA_LISTEN
               value: 0.0.0.0:5000
             - name: KASHA_TRUSTED_KEYS
-              value: znix.zebradil.dev:nvr0OQFRddbHGopQbyLbLXQnntFBDKp23tqQq+msppw=
+              value: |
+                znix.zebradil.dev:nvr0OQFRddbHGopQbyLbLXQnntFBDKp23tqQq+msppw= cache.nixos.org-1:SbbH7aRvhIiHXRxlclqu5JiOB/MjQEL/qpkoLRUkECm4dKfuu89FWRqXDflFrUfQOgbtUll8XrNOFUQ1+0ixBw==
             - name: KASHA_REMOTE
               value: ref+sops://static/0.sops.yaml#/cache-s3-url+
             - name: KASHA_SYNC_INTERVAL

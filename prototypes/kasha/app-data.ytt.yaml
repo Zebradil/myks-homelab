@@ -8,6 +8,8 @@ application:
   storageSize: 250Gi
   port: 5000
   #! Public key(s) narinfos must be signed by. Space-separated if more than one.
-  trustedKeys: znix.zebradil.dev:nvr0OQFRddbHGopQbyLbLXQnntFBDKp23tqQq+msppw=
+  trustedKeys: >
+    znix.zebradil.dev:nvr0OQFRddbHGopQbyLbLXQnntFBDKp23tqQq+msppw=
+    cache.nixos.org-1:SbbH7aRvhIiHXRxlclqu5JiOB/MjQEL/qpkoLRUkECm4dKfuu89FWRqXDflFrUfQOgbtUll8XrNOFUQ1+0ixBw==
   #! Seconds between mirror sweeps.
   syncInterval: 300
