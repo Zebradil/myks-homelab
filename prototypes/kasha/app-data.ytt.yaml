@@ -10,6 +10,6 @@ application:
   #! Public key(s) narinfos must be signed by. Space-separated if more than one.
   trustedKeys: >
     znix.zebradil.dev:nvr0OQFRddbHGopQbyLbLXQnntFBDKp23tqQq+msppw=
-    cache.nixos.org-1:SbbH7aRvhIiHXRxlclqu5JiOB/MjQEL/qpkoLRUkECm4dKfuu89FWRqXDflFrUfQOgbtUll8XrNOFUQ1+0ixBw==
+    cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
   #! Seconds between mirror sweeps.
   syncInterval: 300
