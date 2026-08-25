@@ -411,6 +411,7 @@ data:
               - 'https://claude.ai/api/mcp/auth_callback'
               - 'https://claude.com/api/mcp/auth_callback'
               - 'http://127.0.0.1:19876/mcp/oauth/callback'
+              - 'http://localhost:41234/callback'
             audience:
               - 'https://kb-mcp.zebradil.dev/mcp'
             scopes:

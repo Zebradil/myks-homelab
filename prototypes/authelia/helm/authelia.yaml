@@ -156,6 +156,8 @@ configMap:
             - https://claude.com/api/mcp/auth_callback
             #! opencode client
             - http://127.0.0.1:19876/mcp/oauth/callback
+            #! Claude Code CLI (fixed callback port, no DCR available)
+            - http://localhost:41234/callback
           #! RFC 8707: claude.ai sends resource=<audience>; Authelia stamps it
           #! into the access token aud. "explicit" = only granted when requested.
           audience:
