@@ -32,3 +32,25 @@ spec:
       services:
         - name: #@ name
           port: http
+---
+#! Same route on the LAN entrypoints. The public one binds the node's IPv6
+#! address, but split-horizon DNS points the host at the LAN IPv4, so without
+#! this an IPv4 client at home matches only authelia-catch-all and gets an
+#! Authelia interstitial instead of the server. Keeps the canonical web hosts in
+#! the match: the URL is the OAuth audience, so a LAN-only hostname would make
+#! kb-mcp reject the JWT's `aud`. Unauthenticated at the edge for the same
+#! reason as the public route — kb-mcp enforces bearer/JWT auth itself.
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: #@ name + "-lan"
+spec:
+  entryPoints:
+    - lan-web
+    - lan-websecure
+  routes:
+    - kind: Rule
+      match: #@ host_matches(t.hosts.lan + t.hosts.web) + " && " + path_match
+      services:
+        - name: #@ name
+          port: http
