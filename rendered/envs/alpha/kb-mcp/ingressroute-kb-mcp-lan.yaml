@@ -10,7 +10,7 @@ spec:
     - lan-websecure
   routes:
     - kind: Rule
-      match: (Host(`kb-mcp.lan.zebradil.dev`) || Host(`kb-mcp.junior.lan.zebradil.dev`) || Host(`kb-mcp.zebradil.dev`) || Host(`kb-mcp.junior.zebradil.dev`)) && (PathPrefix(`/mcp`) || Path(`/.well-known/oauth-protected-resource`))
+      match: (Host(`kb-mcp.lan.zebradil.dev`) || Host(`kb-mcp.junior.lan.zebradil.dev`) || Host(`kb-mcp.zebradil.dev`) || Host(`kb-mcp.junior.zebradil.dev`)) && (PathPrefix(`/mcp`) || PathPrefix(`/.well-known/oauth-protected-resource`))
       services:
         - name: kb-mcp
           port: http

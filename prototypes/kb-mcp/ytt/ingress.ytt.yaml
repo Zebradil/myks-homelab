@@ -16,7 +16,12 @@
 #! UNAUTHENTICATED (no chain-authelia-auth middleware) and limited to the MCP
 #! transport + the OAuth protected-resource metadata. /healthz, /readyz and
 #! /metrics stay off the public edge (reachable only via the Service).
-#@ path_match = "(PathPrefix(`/mcp`) || Path(`/.well-known/oauth-protected-resource`))"
+#! PathPrefix, not Path: RFC 9728 §3.1 puts the resource's path after the
+#! well-known segment (`…/oauth-protected-resource/mcp`), and that is the URL
+#! MCP clients try first. Anything not matched here falls through to
+#! authelia-catch-all, which answers discovery with a login redirect instead of
+#! a 404 — clients then give up and fall back to legacy /authorize on this host.
+#@ path_match = "(PathPrefix(`/mcp`) || PathPrefix(`/.well-known/oauth-protected-resource`))"
 ---
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
