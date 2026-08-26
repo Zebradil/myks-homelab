@@ -154,10 +154,16 @@ configMap:
             - https://claude.ai/api/mcp/auth_callback
             #! Future-proofing: Anthropic is migrating the callback host.
             - https://claude.com/api/mcp/auth_callback
-            #! opencode client
-            - http://127.0.0.1:19876/mcp/oauth/callback
+            #! opencode. No port: RFC 8252 §7.3 port flexibility applies to
+            #! loopback IP literals, so this matches whatever port opencode
+            #! binds. Only the host literal and path have to match.
+            - http://127.0.0.1/mcp/oauth/callback
             #! Claude Code CLI (fixed callback port, no DCR available)
             - http://localhost:41234/callback
+            #! Cursor: fixed, unconfigurable callbacks — desktop app and CLI
+            - http://localhost:8787/callback
+            #! Cursor: web and cloud agents
+            - https://www.cursor.com/agents/mcp/oauth/callback
           #! RFC 8707: claude.ai sends resource=<audience>; Authelia stamps it
           #! into the access token aud. "explicit" = only granted when requested.
           audience:
