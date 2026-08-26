@@ -58,18 +58,28 @@ spec:
           ports:
             - containerPort: #@ a.port
               name: http
+          #! Probes share the request path with NAR downloads, so they answer
+          #! slowly under load. The 1s default timeout turned a busy box into a
+          #! NotReady one, which made Traefik 503 the very build that was
+          #! loading it.
           readinessProbe:
             httpGet:
               path: /nix-cache-info
               port: http
             initialDelaySeconds: 5
             periodSeconds: 10
+            timeoutSeconds: 5
+          #! Tolerant on purpose: a restart drops every in-flight download, so
+          #! it must only fire for a genuinely wedged process (5 min silent),
+          #! never for a slow one.
           livenessProbe:
             httpGet:
               path: /nix-cache-info
               port: http
             initialDelaySeconds: 15
             periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 10
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
