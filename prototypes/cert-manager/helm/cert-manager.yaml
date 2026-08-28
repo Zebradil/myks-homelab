@@ -12,3 +12,11 @@ crds:
 prometheus:
   servicemonitor:
     enabled: true
+
+#! Node DNS points at Tailscale MagicDNS, which resolves *.zebradil.dev via the
+#! internal split-horizon resolver. That resolver answers every name under the
+#! zone with a wildcard CNAME to lan.zebradil.dev, so the ACME _acme-challenge
+#! TXT records are invisible from inside the cluster and the DNS-01 self-check
+#! never passes. Force the self-check onto public recursive resolvers.
+dns01RecursiveNameservers: 1.1.1.1:53,9.9.9.9:53
+dns01RecursiveNameserversOnly: true
