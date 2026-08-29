@@ -13,26 +13,25 @@
         "x86_64-linux"
       ];
       forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
+      pkgsFor = system: import nixpkgs { inherit system; };
     in
     {
-      devShells = forAllSystems (
-        system:
-        let
-          pkgs = import nixpkgs { inherit system; };
-        in
-        {
-          default = pkgs.mkShell {
-            packages = with pkgs; [
-              mise
-              yq-go
-            ];
-            shellHook = ''
-              git config core.hooksPath hooks
-              mise install
-              source <(mise activate bash)
-            '';
-          };
-        }
-      );
+      formatter = forAllSystems (system: (pkgsFor system).nixfmt-tree);
+      devShells = forAllSystems (system: {
+        default = (pkgsFor system).mkShell {
+          packages = with (pkgsFor system); [
+            jq
+            mise
+          ];
+          shellHook = ''
+            git config core.hooksPath hooks
+
+            mise install
+            if [[ $(mise doctor --json | jq ".activated") != "true" ]]; then
+              source <(mise activate)
+            fi
+          '';
+        };
+      });
     };
 }
