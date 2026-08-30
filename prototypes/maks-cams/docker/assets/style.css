@@ -141,24 +141,32 @@ html, body {
   grid-auto-rows: 1fr;
 }
 
-/* --- Layout: picture-in-picture (first camera prominent) --- */
+/* --- Layout: picture-in-picture --- */
+/* --pip-cols and .pip-solo come from refresh(), counting the cameras actually
+   on screen: auto-fit would size the bottom row to the viewport instead, and
+   leave empty tracks whenever fewer cameras are visible than fit. */
 #grid.layout-pip {
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr auto;
+  grid-template-columns: repeat(var(--pip-cols, 1), 1fr);
+  grid-template-rows: 3fr 1fr;
 }
 
-#grid.layout-pip .cam-card:first-child {
+#grid.layout-pip.pip-solo {
+  grid-template-rows: 1fr;
+}
+
+#grid.layout-pip .cam-card.pip-main {
   grid-row: 1;
-  grid-column: 1;
+  grid-column: 1 / -1;
 }
 
-#grid.layout-pip .cam-card:not(:first-child) {
+#grid.layout-pip .cam-card:not(.pip-main) {
   grid-row: 2;
 }
 
-#grid.layout-pip:has(.cam-card:nth-child(2)) {
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  grid-template-rows: 3fr 1fr;
+/* A cross-origin iframe swallows clicks, so a small feed could otherwise never
+   be promoted; nobody interacts with a thumbnail-sized WebRTC page anyway. */
+#grid.layout-pip .cam-card:not(.pip-main) .cam-iframe {
+  pointer-events: none;
 }
 
 /* Toolbar hidden: stretch grid to fill full viewport */
@@ -179,6 +187,64 @@ html, body {
 
 .cam-card.disabled {
   background: #111;
+}
+
+/* Collapsed cards keep their iframe in the DOM but leave the grid; a matching
+   row appears in #strip. Only dead feeds collapse, so nothing live is paused. */
+.cam-card.collapsed {
+  display: none;
+}
+
+/* ============================================================
+   Collapsed camera strip
+   ============================================================ */
+
+#strip {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 180;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: #111;
+}
+
+#strip:empty {
+  display: none;
+}
+
+.strip-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 28px;
+  padding: 0 10px;
+  background: #1a1a1a;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Outranks the absolute positioning .cam-status carries inside a card. */
+.strip-row .cam-status {
+  position: static;
+  flex-shrink: 0;
+}
+
+.strip-label {
+  font-weight: 500;
+}
+
+.strip-state {
+  color: rgba(255, 255, 255, 0.4);
+  margin-left: auto;
+}
+
+.strip-btn {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
 }
 
 /* The iframe itself */
@@ -338,6 +404,11 @@ html, body {
   inset: 0;
 }
 
+/* Native fullscreen has no toolbar to leave room for. */
+#grid.has-focus .cam-card.focused:fullscreen {
+  inset: 0;
+}
+
 /* ============================================================
    Slideshow Progress Bar
    ============================================================ */
@@ -395,10 +466,31 @@ html, body {
     grid-auto-rows: 1fr;
   }
 
-  /* Reset pip special row for the first card on mobile */
-  #grid.layout-pip .cam-card:first-child,
-  #grid.layout-pip .cam-card:not(:first-child) {
+  /* One column leaves nothing for PiP to be: every card is the same size, so
+     the main slot and the click-to-promote shim both go away. */
+  #grid.layout-pip {
+    grid-template-rows: none;
+  }
+
+  #grid.layout-pip .cam-card.pip-main,
+  #grid.layout-pip .cam-card:not(.pip-main) {
     grid-row: auto;
     grid-column: auto;
+  }
+
+  #grid.layout-pip .cam-card:not(.pip-main) .cam-iframe {
+    pointer-events: auto;
+  }
+}
+
+/* ============================================================
+   Touch: no hover, so the overlays have to be permanent
+   ============================================================ */
+
+@media (hover: none) {
+  .cam-label,
+  .cam-controls,
+  .cam-latency {
+    opacity: 1;
   }
 }
