@@ -20,7 +20,7 @@ spec:
                 secretKeyRef:
                   key: password
                   name: librespeed
-          image: index.docker.io/linuxserver/librespeed@sha256:e236f2c4473bd85ee0f594e2d1762c4b1497dc48aa2cd7884b7da539d89f6729
+          image: index.docker.io/linuxserver/librespeed@sha256:3d245bb0bc414d0ebe405dcd4f97c660e11b332cea033a73138ce4429064ba8a
           name: librespeed
           ports:
             - containerPort: 80
