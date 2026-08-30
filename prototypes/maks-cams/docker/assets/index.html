@@ -80,6 +80,15 @@
     <div class="toolbar-group">
       <button class="tb-btn" id="enable-all-btn" title="Enable all cameras">All on</button>
       <button class="tb-btn" id="disable-all-btn" title="Disable all cameras">All off</button>
+      <button class="tb-btn" id="collapse-btn" title="Collapse disabled and offline cameras"
+        aria-label="Collapse disabled and offline cameras" aria-pressed="true">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="2" y="2" width="12" height="7" rx="1"/>
+          <line x1="2" y1="12" x2="14" y2="12"/>
+          <line x1="2" y1="15" x2="14" y2="15"/>
+        </svg>
+        Tidy
+      </button>
     </div>
 
     <div class="toolbar-spacer"></div>
@@ -95,10 +104,13 @@
   <!-- Camera grid -->
   <div id="grid" class="layout-auto"></div>
 
+  <!-- Collapsed cameras (disabled / offline) -->
+  <div id="strip"></div>
+
   <!-- Slideshow progress bar -->
   <div id="slideshow-progress"></div>
 
-  <script src="/app.js"></script>
+  <script type="module" src="/app.js"></script>
 </body>
 
 </html>

@@ -6,21 +6,80 @@
 
 let cameras = [];        // [{id, label}] from /cameras.json
 let focusedId = null;    // camera id currently in focus mode, or null
+let pipMainId = null;    // camera promoted to the PiP main slot, or null
 let slideshowActive = false;
 let slideshowTimer = null;
 let pingTimers = {};     // {camId: intervalId}
+let statuses = {};       // {camId: 'unknown'|'online'|'degraded'|'offline'}
+let fails = {};          // {camId: consecutive failed probes}
 let toolbarHideTimer = null;
 let toolbarAutoHide = false;
 
 const PREFS_KEY = 'maks-cams-prefs';
 const SLIDESHOW_INTERVALS = [5, 10, 15, 30, 60]; // seconds
 
+// A camera is only pulled out of the grid after this many consecutive failed
+// probes, so a single dropped packet doesn't reflow the whole page.
+export const FAIL_LIMIT = 2;
+
 let prefs = {
   layout: 'layout-auto',
   enabled: {},        // {camId: bool}
   slideshowInterval: 10,  // seconds
   autoHideToolbar: false,
+  collapseDead: true,
 };
+
+// ============================================================
+// Pure decision logic (exported for test.mjs)
+//
+// A "state" is {id, enabled, status, fails} — see camStates().
+// ============================================================
+
+export function probeStatus(ok, ms) {
+  if (!ok) return 'offline';
+  return ms < 300 ? 'online' : 'degraded';
+}
+
+export function isLive(state) {
+  return state.enabled && (state.status === 'online' || state.status === 'degraded');
+}
+
+// Cameras to pull out of the grid: switched off, or offline past FAIL_LIMIT.
+// When that would empty the grid entirely, collapse nothing — a page of dead
+// tiles beats a page of nothing.
+export function collapsedIds(states, collapseEnabled) {
+  if (!collapseEnabled) return [];
+  const dead = states.filter(function (s) {
+    return !s.enabled || s.fails >= FAIL_LIMIT;
+  });
+  if (dead.length === states.length) return [];
+  return dead.map(function (s) { return s.id; });
+}
+
+// Which camera gets the big PiP slot: the promoted one if it is still visible,
+// else the first live one, else whatever is left.
+export function pickPipMain(states, collapsed, preferredId) {
+  const visible = states.filter(function (s) { return collapsed.indexOf(s.id) === -1; });
+  if (visible.length === 0) return null;
+  const preferred = visible.find(function (s) { return s.id === preferredId; });
+  if (preferred) return preferred.id;
+  const live = visible.find(isLive);
+  return (live || visible[0]).id;
+}
+
+// Slideshow skips dead feeds, but never dead-ends: with nothing live it falls
+// back to every enabled camera.
+export function slideshowOrder(states) {
+  const enabled = states.filter(function (s) { return s.enabled; });
+  const live = enabled.filter(isLive);
+  return (live.length ? live : enabled).map(function (s) { return s.id; });
+}
+
+// The iframe holds a dead error page until something reloads it.
+export function shouldReload(prevStatus, nextStatus) {
+  return prevStatus === 'offline' && nextStatus !== 'offline';
+}
 
 // ============================================================
 // Preferences persistence
@@ -156,9 +215,14 @@ function createCameraCard(cam, url, enabled) {
 
   card.appendChild(controls);
 
-  // Click card body (not buttons) to focus
+  // Click card body (not buttons): promote into the PiP main slot, or focus
   card.addEventListener('click', function (e) {
     if (e.target === card || e.target === iframe || e.target === label || e.target === placeholder) {
+      if (prefs.layout === 'layout-pip' && !card.classList.contains('pip-main')) {
+        pipMainId = cam.id;
+        refresh();
+        return;
+      }
       if (focusedId === cam.id) {
         exitFocus();
       } else {
@@ -168,6 +232,107 @@ function createCameraCard(cam, url, enabled) {
   });
 
   return card;
+}
+
+// ============================================================
+// Collapsed strip / layout refresh
+// ============================================================
+
+function camStates() {
+  return cameras.map(function (cam) {
+    return {
+      id: cam.id,
+      enabled: prefs.enabled[cam.id] !== false,
+      status: statuses[cam.id] || 'unknown',
+      fails: fails[cam.id] || 0,
+    };
+  });
+}
+
+let stripKey = null;
+
+function renderStrip(collapsed) {
+  const strip = document.getElementById('strip');
+  // refresh() runs on every probe; rebuilding unchanged rows would throw away
+  // keyboard focus a few times a minute.
+  const key = collapsed.map(function (id) {
+    return id + ':' + (prefs.enabled[id] !== false);
+  }).join(',');
+  if (key === stripKey) return;
+  stripKey = key;
+
+  strip.innerHTML = '';
+
+  collapsed.forEach(function (camId) {
+    const cam = cameras.find(function (c) { return c.id === camId; });
+    if (!cam) return;
+    const enabled = prefs.enabled[camId] !== false;
+
+    const row = document.createElement('div');
+    row.className = 'strip-row';
+
+    const dot = document.createElement('span');
+    dot.className = 'cam-status strip-dot';
+    dot.dataset.status = enabled ? 'offline' : 'unknown';
+    row.appendChild(dot);
+
+    const label = document.createElement('span');
+    label.className = 'strip-label';
+    label.textContent = cam.label;
+    row.appendChild(label);
+
+    const state = document.createElement('span');
+    state.className = 'strip-state';
+    state.textContent = enabled ? 'Offline' : 'Disabled';
+    row.appendChild(state);
+
+    if (!enabled) {
+      const btn = document.createElement('button');
+      btn.className = 'cam-ctrl-btn strip-btn';
+      btn.title = 'Enable camera';
+      btn.setAttribute('aria-label', 'Enable ' + cam.label);
+      btn.innerHTML = svgEyeOff(14);
+      btn.addEventListener('click', function () { setCameraEnabled(camId, true); });
+      row.appendChild(btn);
+    }
+
+    strip.appendChild(row);
+  });
+}
+
+// Recompute everything derived from camera state. Never touches iframe.src —
+// a layout change must not restart the WebRTC streams.
+function refresh() {
+  const grid = document.getElementById('grid');
+  const strip = document.getElementById('strip');
+  const states = camStates();
+  const collapsed = collapsedIds(states, prefs.collapseDead !== false);
+
+  if (focusedId && collapsed.indexOf(focusedId) !== -1) {
+    exitFocus();
+  }
+
+  const mainId = pickPipMain(states, collapsed, pipMainId);
+
+  cameras.forEach(function (cam) {
+    const card = getCard(cam.id);
+    if (!card) return;
+    card.classList.toggle('collapsed', collapsed.indexOf(cam.id) !== -1);
+    card.classList.toggle('pip-main', cam.id === mainId);
+  });
+
+  renderStrip(collapsed);
+
+  const secondary = states.length - collapsed.length - (mainId ? 1 : 0);
+  grid.style.setProperty('--pip-cols', String(Math.max(secondary, 1)));
+  grid.classList.toggle('pip-solo', secondary <= 0);
+
+  // Focus mode owns the whole viewport; the strip would only be in the way.
+  strip.style.display = focusedId ? 'none' : '';
+  const stripHeight = focusedId ? 0 : strip.offsetHeight;
+  grid.style.bottom = stripHeight ? stripHeight + 'px' : '';
+  document.getElementById('slideshow-progress').style.bottom =
+    stripHeight ? stripHeight + 'px' : '';
 }
 
 // ============================================================
@@ -210,12 +375,16 @@ function setCameraEnabled(camId, enabled) {
     toggleBtn.setAttribute('aria-pressed', 'false');
     toggleBtn.classList.add('is-disabled');
     stopPing(camId);
+    statuses[camId] = 'unknown';
+    fails[camId] = 0;
     setStatus(camId, 'unknown', '');
     // Exit focus if this camera was focused
     if (focusedId === camId) {
       exitFocus();
     }
   }
+
+  refresh();
 }
 
 function enableAll() {
@@ -231,6 +400,15 @@ function disableAll() {
     setCameraEnabled(cam.id, false);
   });
   if (slideshowActive) stopSlideshow();
+}
+
+function setCollapseDead(enabled) {
+  prefs.collapseDead = enabled;
+  savePrefs();
+  const btn = document.getElementById('collapse-btn');
+  btn.classList.toggle('active', enabled);
+  btn.setAttribute('aria-pressed', enabled ? 'true' : 'false');
+  refresh();
 }
 
 // ============================================================
@@ -250,6 +428,7 @@ function enterFocus(camId) {
   focusedId = camId;
   card.classList.add('focused');
   document.getElementById('grid').classList.add('has-focus');
+  refresh();
 
   // Try native fullscreen (may not work in iOS PWA)
   if (document.fullscreenEnabled && !document.fullscreenElement) {
@@ -270,27 +449,19 @@ function exitFocus() {
   }
 
   if (slideshowActive) stopSlideshow();
+  refresh();
 }
 
-function focusNext() {
-  const enabled = enabledCameras();
-  if (enabled.length === 0) return;
-  const idx = enabled.findIndex(function (c) { return c.id === focusedId; });
-  const next = enabled[(idx + 1) % enabled.length];
-  enterFocus(next.id);
+function focusStep(direction) {
+  const order = slideshowOrder(camStates());
+  if (order.length === 0) return;
+  const idx = order.indexOf(focusedId);
+  const next = order[(idx + direction + order.length) % order.length];
+  enterFocus(next);
 }
 
-function focusPrev() {
-  const enabled = enabledCameras();
-  if (enabled.length === 0) return;
-  const idx = enabled.findIndex(function (c) { return c.id === focusedId; });
-  const prev = enabled[(idx - 1 + enabled.length) % enabled.length];
-  enterFocus(prev.id);
-}
-
-function enabledCameras() {
-  return cameras.filter(function (c) { return prefs.enabled[c.id] !== false; });
-}
+function focusNext() { focusStep(1); }
+function focusPrev() { focusStep(-1); }
 
 // ============================================================
 // Slideshow
@@ -305,15 +476,15 @@ function toggleSlideshow() {
 }
 
 function startSlideshow() {
-  const enabled = enabledCameras();
-  if (enabled.length === 0) return;
+  const order = slideshowOrder(camStates());
+  if (order.length === 0) return;
 
   slideshowActive = true;
   document.getElementById('slideshow-btn').classList.add('active');
 
   // Focus first camera if none focused
-  if (!focusedId || prefs.enabled[focusedId] === false) {
-    enterFocus(enabled[0].id);
+  if (!focusedId || order.indexOf(focusedId) === -1) {
+    enterFocus(order[0]);
   }
 
   scheduleNext();
@@ -379,6 +550,8 @@ function setLayout(layout) {
   document.querySelectorAll('[data-layout]').forEach(function (btn) {
     btn.classList.toggle('active', btn.dataset.layout === layout);
   });
+
+  refresh();
 }
 
 // ============================================================
@@ -406,15 +579,33 @@ function pingOnce(camId) {
   const url = card.dataset.url;
   const t0 = Date.now();
 
-  fetch(url, { method: 'HEAD', mode: 'no-cors', cache: 'no-store' })
-    .then(function () {
-      const ms = Date.now() - t0;
-      const status = ms < 300 ? 'online' : 'degraded';
-      setStatus(camId, status, ms + ' ms');
-    })
-    .catch(function () {
-      setStatus(camId, 'offline', 'Offline');
-    });
+  // Must be a CORS request, not no-cors: an opaque response resolves on any
+  // reply, so Traefik's 502 for a powered-off camera would read as online.
+  fetch(url, { method: 'HEAD', mode: 'cors', cache: 'no-store' })
+    .then(function (resp) { finishPing(camId, resp.ok, Date.now() - t0); })
+    .catch(function () { finishPing(camId, false, 0); });
+}
+
+function finishPing(camId, ok, ms) {
+  const prev = statuses[camId] || 'unknown';
+  const next = probeStatus(ok, ms);
+
+  statuses[camId] = next;
+  fails[camId] = ok ? 0 : (fails[camId] || 0) + 1;
+
+  setStatus(camId, next, ok ? ms + ' ms' : 'Offline');
+  if (shouldReload(prev, next)) reloadFeed(camId);
+  refresh();
+}
+
+function reloadFeed(camId) {
+  const card = getCard(camId);
+  if (!card) return;
+  const iframe = card.querySelector('.cam-iframe');
+  const url = card.dataset.url;
+  // about:blank first: re-assigning the same src is a no-op in some browsers.
+  iframe.src = 'about:blank';
+  setTimeout(function () { iframe.src = url; }, 0);
 }
 
 function setStatus(camId, status, text) {
@@ -601,6 +792,9 @@ async function init() {
   // Restore auto-hide
   setAutoHide(prefs.autoHideToolbar);
 
+  // Restore collapse-dead toggle
+  setCollapseDead(prefs.collapseDead !== false);
+
   // Start connectivity pings for enabled cameras
   cameras.forEach(function (cam) {
     if (prefs.enabled[cam.id] !== false) {
@@ -617,19 +811,17 @@ async function init() {
   document.getElementById('interval-btn').addEventListener('click', cycleInterval);
   document.getElementById('enable-all-btn').addEventListener('click', enableAll);
   document.getElementById('disable-all-btn').addEventListener('click', disableAll);
+  document.getElementById('collapse-btn').addEventListener('click', function () {
+    setCollapseDead(prefs.collapseDead === false);
+  });
   document.getElementById('autohide-btn').addEventListener('click', function () {
     setAutoHide(!toolbarAutoHide);
-  });
-
-  // Handle browser fullscreen exit (e.g. pressing Esc in native fullscreen)
-  document.addEventListener('fullscreenchange', function () {
-    if (!document.fullscreenElement && focusedId) {
-      // Native fullscreen exited but focus mode still active — keep focus mode
-    }
   });
 
   initKeyboard();
   initActivityDetection();
 }
 
-document.addEventListener('DOMContentLoaded', init);
+if (typeof document !== 'undefined') {
+  document.addEventListener('DOMContentLoaded', init);
+}
