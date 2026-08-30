@@ -10,6 +10,22 @@
 #@   "cam3": {"ip": "192.168.0.203", "label": "Camera 3"},
 #@ }
 
+#! ---------------------------------------------------------------------------
+#! Access control is split between here and the board.
+#!
+#! route.default() emits three IngressRoutes per camera. Only the WAN pair
+#! (web/websecure) carries chain-authelia-auth; the lan and vpn routes are
+#! deliberately unauthenticated, because LAN and VPN are the trusted zone and a
+#! login prompt in front of a camera on your own network excludes no attacker.
+#!
+#! The boards themselves grant read to anyone and publish to nobody — MediaMTX
+#! fills the path from the CSI camera internally, so no client ever needs to
+#! authenticate to it. See the rpiz repo's README, "Access control".
+#!
+#! Port 8889 is WebRTC, the only protocol still enabled on the boards; RTSP,
+#! RTMP, SRT and HLS are off there because nothing here consumes them.
+#! ---------------------------------------------------------------------------
+
 #@ cam_list = []
 #@ for cam_id in sorted(cams.keys()):
 #@   cam_list.append({"id": cam_id, "label": cams[cam_id]["label"]})
@@ -22,6 +38,7 @@ metadata:
   name: #@ name + "-cameras"
 data:
   cameras.json: #@ json.encode({"cameras": cam_list})
+
 
 #@ for cam_id in sorted(cams.keys()):
 #@ cam_name = name + "-" + cam_id
