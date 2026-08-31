@@ -29,6 +29,8 @@ spec:
               mountPath: /data
             - name: cameras-config
               mountPath: /srv/config
+            - name: caddy-config
+              mountPath: /etc/caddy
           ports:
             - containerPort: 8080
               name: http
@@ -46,9 +48,20 @@ spec:
       volumes:
         - name: caddy-data
           emptyDir: {}
+        #! Both come from the same ConfigMap, split by key: the Caddyfile has no
+        #! business being served under /srv/config, and vice versa.
         - name: cameras-config
           configMap:
             name: #@ cameras_cm
+            items:
+              - key: cameras.json
+                path: cameras.json
+        - name: caddy-config
+          configMap:
+            name: #@ cameras_cm
+            items:
+              - key: Caddyfile
+                path: Caddyfile
 
 ---
 apiVersion: v1

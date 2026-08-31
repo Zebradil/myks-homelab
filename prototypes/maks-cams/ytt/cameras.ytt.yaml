@@ -15,6 +15,23 @@
 #@   cam_list.append({"id": cam_id, "label": cams[cam_id]["label"]})
 #@ end
 
+#! Tab indentation is what `caddy fmt` produces.
+#@ def caddyfile():
+#@   lines = [":8080 {"]
+#@   for cam_id in sorted(cams.keys()):
+#@     lines.append("\thandle /probe/" + cam_id + " {")
+#@     lines.append("\t\trewrite * /cam")
+#@     lines.append("\t\treverse_proxy " + name + "-" + cam_id + ":80")
+#@     lines.append("\t}")
+#@   end
+#@   lines.append("\thandle {")
+#@   lines.append("\t\troot * /srv")
+#@   lines.append("\t\tfile_server")
+#@   lines.append("\t}")
+#@   lines.append("}")
+#@   return "\n".join(lines) + "\n"
+#@ end
+
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -22,6 +39,10 @@ metadata:
   name: #@ name + "-cameras"
 data:
   cameras.json: #@ json.encode({"cameras": cam_list})
+  #! The page probes cameras through these routes instead of talking to them
+  #! directly: a cross-origin probe cannot read a status code without CORS
+  #! headers, and neither MediaMTX nor Traefik's 502 sends any.
+  Caddyfile: #@ caddyfile()
 
 #@ for cam_id in sorted(cams.keys()):
 #@ cam_name = name + "-" + cam_id
