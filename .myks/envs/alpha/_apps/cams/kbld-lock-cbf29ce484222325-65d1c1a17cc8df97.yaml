@@ -3,5 +3,5 @@ kind: Config
 minimumRequiredVersion: 0.49.1
 overrides:
 - image: caddy-image-ref
-  newImage: oci.zebradil.dev/zebradil/homelab/maks-cams/caddy@sha256:b71573d0b0beef31dfe5c10f01abb3b13acbed1e54ac04a5020a78889f6e6742
+  newImage: oci.zebradil.dev/zebradil/homelab/maks-cams/caddy@sha256:db5ae127dfa372111d229ebf7353055c2d39f0652e181aab37482f0434faeef8
   preresolved: true

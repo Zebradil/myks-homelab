@@ -14,7 +14,7 @@ spec:
         app.kubernetes.io/name: cams
     spec:
       containers:
-        - image: oci.zebradil.dev/zebradil/homelab/maks-cams/caddy@sha256:b71573d0b0beef31dfe5c10f01abb3b13acbed1e54ac04a5020a78889f6e6742
+        - image: oci.zebradil.dev/zebradil/homelab/maks-cams/caddy@sha256:db5ae127dfa372111d229ebf7353055c2d39f0652e181aab37482f0434faeef8
           name: caddy
           ports:
             - containerPort: 8080
@@ -37,9 +37,20 @@ spec:
               name: caddy-data
             - mountPath: /srv/config
               name: cameras-config
+            - mountPath: /etc/caddy
+              name: caddy-config
       volumes:
         - emptyDir: {}
           name: caddy-data
         - configMap:
+            items:
+              - key: cameras.json
+                path: cameras.json
             name: cams-cameras
           name: cameras-config
+        - configMap:
+            items:
+              - key: Caddyfile
+                path: Caddyfile
+            name: cams-cameras
+          name: caddy-config
