@@ -576,12 +576,13 @@ function pingOnce(camId) {
   if (!card) return;
   if (prefs.enabled[camId] === false) return;
 
-  const url = card.dataset.url;
   const t0 = Date.now();
 
-  // Must be a CORS request, not no-cors: an opaque response resolves on any
-  // reply, so Traefik's 502 for a powered-off camera would read as online.
-  fetch(url, { method: 'HEAD', mode: 'cors', cache: 'no-store' })
+  // Same-origin, proxied to the camera by Caddy. Probing the camera host
+  // directly cannot work: a cross-origin response is unreadable without CORS
+  // headers, and neither MediaMTX nor Traefik's 502 page sends any — so every
+  // camera, live or dead, came back as a rejected fetch.
+  fetch('/probe/' + camId, { cache: 'no-store' })
     .then(function (resp) { finishPing(camId, resp.ok, Date.now() - t0); })
     .catch(function () { finishPing(camId, false, 0); });
 }
