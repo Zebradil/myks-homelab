@@ -2,7 +2,7 @@ annotations:
   artifacthub.io/category: security
   artifacthub.io/changes: |
     - kind: added
-      description: Update to Authelia 4.39.20.
+      description: Support for the privacy policy, the OpenID Connect 1.0 userinfo, introspection and revocation rate limits, custom notification templates, access control rule query matching, the JWT secured authorization lifespan, the experimental passkey options, TOTP reuse policy, and the client option to allow multiple authentication methods.
   artifacthub.io/images: |
     - name: authelia/authelia
       image: ghcr.io/authelia/authelia:4.39.20
@@ -72,4 +72,4 @@ sources:
 - https://github.com/authelia/chartrepo/tree/master/charts/authelia
 - https://www.github.com/authelia/authelia
 type: application
-version: 0.11.6
+version: 0.11.20

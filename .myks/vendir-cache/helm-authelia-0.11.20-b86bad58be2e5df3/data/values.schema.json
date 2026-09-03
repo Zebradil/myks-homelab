@@ -68,6 +68,16 @@
               "title": "default_policy",
               "type": "string"
             },
+            "networks": {
+              "default": "~",
+              "description": "Removed. Use 'configMap.definitions.network' instead, which applies to every supported version. Configuring\nthis value is an error.",
+              "required": [],
+              "title": "networks",
+              "type": [
+                "array",
+                "null"
+              ]
+            },
             "rules": {
               "description": "Access Control Rule list.",
               "items": {
@@ -125,6 +135,16 @@
         "authentication_backend": {
           "additionalProperties": false,
           "properties": {
+            "disable_reset_password": {
+              "default": "~",
+              "description": "Removed. Use 'configMap.authentication_backend.password_reset.disable' instead. Configuring this value is an\nerror.",
+              "required": [],
+              "title": "disable_reset_password",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
             "file": {
               "additionalProperties": false,
               "properties": {
@@ -919,6 +939,16 @@
           "description": "Set the default 2FA method for new users and for when a user has a preferred method configured that has been\ndisabled. This setting must be a method that is enabled.\nOptions are totp, webauthn, mobile_push.",
           "title": "default_2fa_method",
           "type": "string"
+        },
+        "default_redirection_url": {
+          "default": "~",
+          "description": "Removed. Use the 'default_redirection_url' of the relevant 'configMap.session.cookies' entry instead.\nConfiguring this value is an error.",
+          "required": [],
+          "title": "default_redirection_url",
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "definitions": {
           "additionalProperties": false,
@@ -2067,6 +2097,26 @@
                   "title": "hmac_secret",
                   "type": "object"
                 },
+                "issuer_certificate_chain": {
+                  "default": "~",
+                  "description": "Removed. Use 'configMap.identity_providers.oidc.jwks' instead. Configuring this value is an error.",
+                  "required": [],
+                  "title": "issuer_certificate_chain",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "issuer_private_key": {
+                  "default": "~",
+                  "description": "Removed. Use 'configMap.identity_providers.oidc.jwks' instead. Configuring this value is an error.",
+                  "required": [],
+                  "title": "issuer_private_key",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
                 "jwks": {
                   "description": "The JWK's issuer option configures multiple JSON Web Keys. It's required that at least one of the JWK's\nconfigured has the RS256 algorithm. For RSA keys (RS or PS) the minimum is a 2048 bit key.",
                   "items": {
@@ -2402,6 +2452,16 @@
                       "description": "Default lifespan for ID Tokens.",
                       "required": [],
                       "title": "id_token",
+                      "type": [
+                        "string",
+                        "integer"
+                      ]
+                    },
+                    "jwt_secured_authorization": {
+                      "default": "5 minutes",
+                      "description": "Default lifespan for JWT Secured Authorization Response Mode responses.",
+                      "required": [],
+                      "title": "jwt_secured_authorization",
                       "type": [
                         "string",
                         "integer"
@@ -2884,10 +2944,17 @@
               ],
               "title": "smtp",
               "type": "object"
+            },
+            "template_path": {
+              "default": "",
+              "description": "The path to a directory of custom notification templates. The directory must be mounted into the Pod, which\nthe 'pod.extraVolumes' and 'pod.extraVolumeMounts' values can do.",
+              "title": "template_path",
+              "type": "string"
             }
           },
           "required": [
             "disable_startup_check",
+            "template_path",
             "filesystem",
             "smtp"
           ],
@@ -3032,6 +3099,36 @@
             "zxcvbn"
           ],
           "title": "password_policy",
+          "type": "object"
+        },
+        "privacy_policy": {
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "default": false,
+              "description": "Enables the Privacy Policy display including the link in the frontend.",
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "policy_url": {
+              "default": "",
+              "description": "The URL of the Privacy Policy. Required when enabled and must be an absolute https URL.",
+              "title": "policy_url",
+              "type": "string"
+            },
+            "require_user_acceptance": {
+              "default": false,
+              "description": "Requires the user accept the Privacy Policy before they can login.",
+              "title": "require_user_acceptance",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "enabled",
+            "require_user_acceptance",
+            "policy_url"
+          ],
+          "title": "privacy_policy",
           "type": "object"
         },
         "regulation": {
@@ -3209,6 +3306,46 @@
                 "rate_limits": {
                   "additionalProperties": false,
                   "properties": {
+                    "openid_connect_introspection": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "buckets": {
+                          "description": "List of rate limit buckets.",
+                          "items": {
+                            "properties": {
+                              "period": {
+                                "required": [],
+                                "type": [
+                                  "string",
+                                  "integer"
+                                ]
+                              },
+                              "requests": {
+                                "type": "integer"
+                              }
+                            },
+                            "required": [
+                              "period",
+                              "requests"
+                            ],
+                            "type": "object"
+                          },
+                          "title": "buckets",
+                          "type": "array"
+                        },
+                        "enable": {
+                          "default": true,
+                          "description": "Enables this rate limit.",
+                          "title": "enable",
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "enable"
+                      ],
+                      "title": "openid_connect_introspection",
+                      "type": "object"
+                    },
                     "openid_connect_pushed_authorization_request": {
                       "additionalProperties": false,
                       "properties": {
@@ -3216,20 +3353,20 @@
                           "description": "List of rate limit buckets.",
                           "items": {
                             "properties": {
-                              "limit": {
-                                "type": "integer"
-                              },
                               "period": {
                                 "required": [],
                                 "type": [
                                   "string",
                                   "integer"
                                 ]
+                              },
+                              "requests": {
+                                "type": "integer"
                               }
                             },
                             "required": [
                               "period",
-                              "limit"
+                              "requests"
                             ],
                             "type": "object"
                           },
@@ -3249,6 +3386,46 @@
                       "title": "openid_connect_pushed_authorization_request",
                       "type": "object"
                     },
+                    "openid_connect_revocation": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "buckets": {
+                          "description": "List of rate limit buckets.",
+                          "items": {
+                            "properties": {
+                              "period": {
+                                "required": [],
+                                "type": [
+                                  "string",
+                                  "integer"
+                                ]
+                              },
+                              "requests": {
+                                "type": "integer"
+                              }
+                            },
+                            "required": [
+                              "period",
+                              "requests"
+                            ],
+                            "type": "object"
+                          },
+                          "title": "buckets",
+                          "type": "array"
+                        },
+                        "enable": {
+                          "default": true,
+                          "description": "Enables this rate limit.",
+                          "title": "enable",
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "enable"
+                      ],
+                      "title": "openid_connect_revocation",
+                      "type": "object"
+                    },
                     "openid_connect_token": {
                       "additionalProperties": false,
                       "properties": {
@@ -3256,20 +3433,20 @@
                           "description": "List of rate limit buckets.",
                           "items": {
                             "properties": {
-                              "limit": {
-                                "type": "integer"
-                              },
                               "period": {
                                 "required": [],
                                 "type": [
                                   "string",
                                   "integer"
                                 ]
+                              },
+                              "requests": {
+                                "type": "integer"
                               }
                             },
                             "required": [
                               "period",
-                              "limit"
+                              "requests"
                             ],
                             "type": "object"
                           },
@@ -3289,6 +3466,46 @@
                       "title": "openid_connect_token",
                       "type": "object"
                     },
+                    "openid_connect_userinfo": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "buckets": {
+                          "description": "List of rate limit buckets.",
+                          "items": {
+                            "properties": {
+                              "period": {
+                                "required": [],
+                                "type": [
+                                  "string",
+                                  "integer"
+                                ]
+                              },
+                              "requests": {
+                                "type": "integer"
+                              }
+                            },
+                            "required": [
+                              "period",
+                              "requests"
+                            ],
+                            "type": "object"
+                          },
+                          "title": "buckets",
+                          "type": "array"
+                        },
+                        "enable": {
+                          "default": true,
+                          "description": "Enables this rate limit.",
+                          "title": "enable",
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "enable"
+                      ],
+                      "title": "openid_connect_userinfo",
+                      "type": "object"
+                    },
                     "reset_password_finish": {
                       "additionalProperties": false,
                       "properties": {
@@ -3296,20 +3513,20 @@
                           "description": "List of rate limit buckets.",
                           "items": {
                             "properties": {
-                              "limit": {
-                                "type": "integer"
-                              },
                               "period": {
                                 "required": [],
                                 "type": [
                                   "string",
                                   "integer"
                                 ]
+                              },
+                              "requests": {
+                                "type": "integer"
                               }
                             },
                             "required": [
                               "period",
-                              "limit"
+                              "requests"
                             ],
                             "type": "object"
                           },
@@ -3336,20 +3553,20 @@
                           "description": "List of rate limit buckets.",
                           "items": {
                             "properties": {
-                              "limit": {
-                                "type": "integer"
-                              },
                               "period": {
                                 "required": [],
                                 "type": [
                                   "string",
                                   "integer"
                                 ]
+                              },
+                              "requests": {
+                                "type": "integer"
                               }
                             },
                             "required": [
                               "period",
-                              "limit"
+                              "requests"
                             ],
                             "type": "object"
                           },
@@ -3376,20 +3593,20 @@
                           "description": "List of rate limit buckets.",
                           "items": {
                             "properties": {
-                              "limit": {
-                                "type": "integer"
-                              },
                               "period": {
                                 "required": [],
                                 "type": [
                                   "string",
                                   "integer"
                                 ]
+                              },
+                              "requests": {
+                                "type": "integer"
                               }
                             },
                             "required": [
                               "period",
-                              "limit"
+                              "requests"
                             ],
                             "type": "object"
                           },
@@ -3416,20 +3633,20 @@
                           "description": "List of rate limit buckets.",
                           "items": {
                             "properties": {
-                              "limit": {
-                                "type": "integer"
-                              },
                               "period": {
                                 "required": [],
                                 "type": [
                                   "string",
                                   "integer"
                                 ]
+                              },
+                              "requests": {
+                                "type": "integer"
                               }
                             },
                             "required": [
                               "period",
-                              "limit"
+                              "requests"
                             ],
                             "type": "object"
                           },
@@ -3456,20 +3673,20 @@
                           "description": "List of rate limit buckets.",
                           "items": {
                             "properties": {
-                              "limit": {
-                                "type": "integer"
-                              },
                               "period": {
                                 "required": [],
                                 "type": [
                                   "string",
                                   "integer"
                                 ]
+                              },
+                              "requests": {
+                                "type": "integer"
                               }
                             },
                             "required": [
                               "period",
-                              "limit"
+                              "requests"
                             ],
                             "type": "object"
                           },
@@ -3496,20 +3713,20 @@
                           "description": "List of rate limit buckets.",
                           "items": {
                             "properties": {
-                              "limit": {
-                                "type": "integer"
-                              },
                               "period": {
                                 "required": [],
                                 "type": [
                                   "string",
                                   "integer"
                                 ]
+                              },
+                              "requests": {
+                                "type": "integer"
                               }
                             },
                             "required": [
                               "period",
-                              "limit"
+                              "requests"
                             ],
                             "type": "object"
                           },
@@ -3538,7 +3755,10 @@
                     "session_elevation_start",
                     "session_elevation_finish",
                     "openid_connect_token",
-                    "openid_connect_pushed_authorization_request"
+                    "openid_connect_pushed_authorization_request",
+                    "openid_connect_userinfo",
+                    "openid_connect_introspection",
+                    "openid_connect_revocation"
                   ],
                   "title": "rate_limits",
                   "type": "object"
@@ -4580,6 +4800,12 @@
               "title": "disable",
               "type": "boolean"
             },
+            "disable_reuse_security_policy": {
+              "default": false,
+              "description": "Disables the security policy which prevents a one-time password being used more than once.",
+              "title": "disable_reuse_security_policy",
+              "type": "boolean"
+            },
             "issuer": {
               "default": "Authelia",
               "description": "The issuer name displayed in the Authenticator application of your choice.\nDefaults to 'Authelia'.",
@@ -4613,6 +4839,7 @@
             "algorithm",
             "digits",
             "period",
+            "disable_reuse_security_policy",
             "allowed_algorithms",
             "allowed_digits",
             "allowed_periods"
@@ -4647,13 +4874,26 @@
               "title": "enable_passkey_login",
               "type": "boolean"
             },
+            "experimental_enable_passkey_upgrade": {
+              "default": false,
+              "description": "Enables upgrading a WebAuthn credential to a Passkey where the authenticator supports it. Experimental, and\nonly rendered for 4.39.2 and above.",
+              "title": "experimental_enable_passkey_upgrade",
+              "type": "boolean"
+            },
+            "experimental_enable_passkey_uv_two_factors": {
+              "default": false,
+              "description": "Enables treating a Passkey which performed user verification as two factors. Experimental, and only rendered\nfor 4.39.0 and above.",
+              "title": "experimental_enable_passkey_uv_two_factors",
+              "type": "boolean"
+            },
             "filtering": {
               "additionalProperties": false,
               "properties": {
                 "permitted_aaguids": {
                   "description": "A list of Authenticator Attestation GUID’s that are the only ones allowed to be registered. Useful if you have\na company policy that requires certain authenticators. Mutually exclusive with prohibited_aaguids.",
                   "items": {
-                    "required": []
+                    "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+                    "type": "string"
                   },
                   "title": "permitted_aaguids",
                   "type": "array"
@@ -4667,15 +4907,14 @@
                 "prohibited_aaguids": {
                   "description": "A list of Authenticator Attestation GUID’s that users will not be able to register. Useful if company policy\nprevents certain authenticators. Mutually exclusive with permitted_aaguids.",
                   "items": {
-                    "required": []
+                    "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+                    "type": "string"
                   },
                   "title": "prohibited_aaguids",
                   "type": "array"
                 }
               },
               "required": [
-                "permitted_aaguids",
-                "prohibited_aaguids",
                 "prohibit_backup_eligibility"
               ],
               "title": "filtering",
@@ -4792,11 +5031,23 @@
                 "string",
                 "integer"
               ]
+            },
+            "user_verification": {
+              "default": "~",
+              "description": "Removed. Use 'configMap.webauthn.selection_criteria.user_verification' instead, which applies to every\nsupported version. Configuring this value is an error.",
+              "required": [],
+              "title": "user_verification",
+              "type": [
+                "string",
+                "null"
+              ]
             }
           },
           "required": [
             "disable",
             "enable_passkey_login",
+            "experimental_enable_passkey_upgrade",
+            "experimental_enable_passkey_uv_two_factors",
             "display_name",
             "attestation_conveyance_preference",
             "filtering",
@@ -4817,6 +5068,7 @@
         "telemetry",
         "default_2fa_method",
         "theme",
+        "privacy_policy",
         "definitions",
         "identity_validation",
         "totp",
@@ -5203,6 +5455,18 @@
               "title": "responseForwardingFlushInterval",
               "type": "string"
             },
+            "scheme": {
+              "default": "http",
+              "description": "Defines the scheme the IngressRoute uses to reach the Authelia service.",
+              "enum": [
+                "http",
+                "https",
+                "h2c",
+                ""
+              ],
+              "title": "scheme",
+              "type": "string"
+            },
             "sticky": {
               "default": false,
               "description": "Defines the sticky value for the IngressRoute.",
@@ -5261,6 +5525,26 @@
                   },
                   "title": "domainsOverride",
                   "type": "array"
+                },
+                "existingOptions": {
+                  "default": "~",
+                  "description": "(object) An existing TLSOption to reference instead of generating one.",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "namespace": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name"
+                  ],
+                  "title": "existingOptions",
+                  "type": [
+                    "object",
+                    "null"
+                  ]
                 },
                 "options": {
                   "additionalProperties": false,
@@ -5676,6 +5960,335 @@
               "description": "Extra labels for the HorizontalPodAutoscaler manifest.",
               "required": [],
               "title": "labels"
+            },
+            "maxReplicas": {
+              "default": "~",
+              "description": "(int) The maximum number of replicas. Defaults to one above the minimum.",
+              "minimum": 1,
+              "required": [],
+              "title": "maxReplicas",
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "metrics": {
+              "description": "The metrics which determine the scaling. At least one metric must be configured for scaling to occur.",
+              "items": {
+                "properties": {
+                  "containerResource": {
+                    "properties": {
+                      "container": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "target": {
+                        "properties": {
+                          "averageUtilization": {
+                            "type": "integer"
+                          },
+                          "averageValue": {
+                            "required": [],
+                            "type": [
+                              "string",
+                              "integer"
+                            ]
+                          },
+                          "type": {
+                            "enum": [
+                              "Utilization",
+                              "Value",
+                              "AverageValue"
+                            ],
+                            "type": "string"
+                          },
+                          "value": {
+                            "required": [],
+                            "type": [
+                              "string",
+                              "integer"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "type"
+                        ],
+                        "type": "object"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "container",
+                      "target"
+                    ],
+                    "type": "object"
+                  },
+                  "external": {
+                    "properties": {
+                      "metric": {
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "selector": {
+                            "$ref": "https://charts.authelia.com/definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.LabelSelector",
+                            "required": []
+                          }
+                        },
+                        "required": [
+                          "name"
+                        ],
+                        "type": "object"
+                      },
+                      "target": {
+                        "properties": {
+                          "averageUtilization": {
+                            "type": "integer"
+                          },
+                          "averageValue": {
+                            "required": [],
+                            "type": [
+                              "string",
+                              "integer"
+                            ]
+                          },
+                          "type": {
+                            "enum": [
+                              "Utilization",
+                              "Value",
+                              "AverageValue"
+                            ],
+                            "type": "string"
+                          },
+                          "value": {
+                            "required": [],
+                            "type": [
+                              "string",
+                              "integer"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "type"
+                        ],
+                        "type": "object"
+                      }
+                    },
+                    "required": [
+                      "metric",
+                      "target"
+                    ],
+                    "type": "object"
+                  },
+                  "object": {
+                    "properties": {
+                      "describedObject": {
+                        "properties": {
+                          "apiVersion": {
+                            "type": "string"
+                          },
+                          "kind": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "kind",
+                          "name"
+                        ],
+                        "type": "object"
+                      },
+                      "metric": {
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "selector": {
+                            "$ref": "https://charts.authelia.com/definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.LabelSelector",
+                            "required": []
+                          }
+                        },
+                        "required": [
+                          "name"
+                        ],
+                        "type": "object"
+                      },
+                      "target": {
+                        "properties": {
+                          "averageUtilization": {
+                            "type": "integer"
+                          },
+                          "averageValue": {
+                            "required": [],
+                            "type": [
+                              "string",
+                              "integer"
+                            ]
+                          },
+                          "type": {
+                            "enum": [
+                              "Utilization",
+                              "Value",
+                              "AverageValue"
+                            ],
+                            "type": "string"
+                          },
+                          "value": {
+                            "required": [],
+                            "type": [
+                              "string",
+                              "integer"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "type"
+                        ],
+                        "type": "object"
+                      }
+                    },
+                    "required": [
+                      "describedObject",
+                      "metric",
+                      "target"
+                    ],
+                    "type": "object"
+                  },
+                  "pods": {
+                    "properties": {
+                      "metric": {
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "selector": {
+                            "$ref": "https://charts.authelia.com/definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.LabelSelector",
+                            "required": []
+                          }
+                        },
+                        "required": [
+                          "name"
+                        ],
+                        "type": "object"
+                      },
+                      "target": {
+                        "properties": {
+                          "averageUtilization": {
+                            "type": "integer"
+                          },
+                          "averageValue": {
+                            "required": [],
+                            "type": [
+                              "string",
+                              "integer"
+                            ]
+                          },
+                          "type": {
+                            "enum": [
+                              "Utilization",
+                              "Value",
+                              "AverageValue"
+                            ],
+                            "type": "string"
+                          },
+                          "value": {
+                            "required": [],
+                            "type": [
+                              "string",
+                              "integer"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "type"
+                        ],
+                        "type": "object"
+                      }
+                    },
+                    "required": [
+                      "metric",
+                      "target"
+                    ],
+                    "type": "object"
+                  },
+                  "resource": {
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "target": {
+                        "properties": {
+                          "averageUtilization": {
+                            "type": "integer"
+                          },
+                          "averageValue": {
+                            "required": [],
+                            "type": [
+                              "string",
+                              "integer"
+                            ]
+                          },
+                          "type": {
+                            "enum": [
+                              "Utilization",
+                              "Value",
+                              "AverageValue"
+                            ],
+                            "type": "string"
+                          },
+                          "value": {
+                            "required": [],
+                            "type": [
+                              "string",
+                              "integer"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "type"
+                        ],
+                        "type": "object"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "target"
+                    ],
+                    "type": "object"
+                  },
+                  "type": {
+                    "enum": [
+                      "ContainerResource",
+                      "External",
+                      "Object",
+                      "Pods",
+                      "Resource"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type"
+                ],
+                "type": "object"
+              },
+              "title": "metrics",
+              "type": "array"
+            },
+            "minReplicas": {
+              "default": "~",
+              "description": "(int) The minimum number of replicas. Defaults to the 'pod.replicas' value.",
+              "minimum": 1,
+              "required": [],
+              "title": "minReplicas",
+              "type": [
+                "integer",
+                "null"
+              ]
             }
           },
           "required": [
@@ -5696,6 +6309,12 @@
           "default": false,
           "description": "Normally when a change is detected via helm install to something that only indirectly affects the pod, the pod\nwill restart. This setting allows disabling this behavior.",
           "title": "disableRestartOnChanges",
+          "type": "boolean"
+        },
+        "enableServiceLinks": {
+          "default": false,
+          "description": "Injects the Services in the same namespace into the Pod as environment variables.",
+          "title": "enableServiceLinks",
           "type": "boolean"
         },
         "env": {
@@ -5766,6 +6385,23 @@
           "description": "Extra labels for the Pod spec.",
           "required": [],
           "title": "labels"
+        },
+        "managementPolicy": {
+          "default": "Parallel",
+          "description": "The Pod management policy for the StatefulSet kind. Ignored for a configuration which requires a single pod as\nthat always uses Parallel.",
+          "enum": [
+            "OrderedReady",
+            "Parallel",
+            ""
+          ],
+          "title": "managementPolicy",
+          "type": "string"
+        },
+        "minReadySeconds": {
+          "default": 0,
+          "description": "The minimum seconds a new Pod must be ready before it is considered available. Only applies to the Deployment\nand DaemonSet kinds.",
+          "title": "minReadySeconds",
+          "type": "integer"
         },
         "priorityClassName": {
           "default": "",
@@ -6262,6 +6898,12 @@
           "title": "selectors",
           "type": "object"
         },
+        "serviceName": {
+          "default": "",
+          "description": "The governing Service name for the StatefulSet kind. Defaults to the name of this release.",
+          "title": "serviceName",
+          "type": "string"
+        },
         "strategy": {
           "additionalProperties": false,
           "properties": {
@@ -6342,6 +6984,9 @@
         "disableRestartOnChanges",
         "replicas",
         "revisionHistoryLimit",
+        "serviceName",
+        "minReadySeconds",
+        "enableServiceLinks",
         "priorityClassName",
         "autoscaling",
         "strategy",
@@ -6526,6 +7171,14 @@
             "null"
           ]
         },
+        "externalIPs": {
+          "description": "External IPs for the Authelia service manifest.",
+          "items": {
+            "type": "string"
+          },
+          "title": "externalIPs",
+          "type": "array"
+        },
         "externalTrafficPolicy": {
           "default": "~",
           "description": "(string) Use value Local to get external IP addresses.",
@@ -6553,6 +7206,17 @@
           "description": "Port for the Authelia service manifest.",
           "title": "port",
           "type": "integer"
+        },
+        "sessionAffinity": {
+          "default": "None",
+          "description": "Session Affinity for the Authelia service manifest.",
+          "enum": [
+            "None",
+            "ClientIP",
+            ""
+          ],
+          "title": "sessionAffinity",
+          "type": "string"
         },
         "type": {
           "default": "ClusterIP",
