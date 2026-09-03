@@ -17,6 +17,13 @@
 {{ end }}
 
 {{/*
+    Validate the WebAuthn filtering config.
+*/}}
+{{ if and (gt (len .Values.configMap.webauthn.filtering.permitted_aaguids) 0) (gt (len .Values.configMap.webauthn.filtering.prohibited_aaguids) 0) }}
+{{ fail "The values 'configMap.webauthn.filtering.permitted_aaguids' and 'configMap.webauthn.filtering.prohibited_aaguids' are mutually exclusive" }}
+{{ end }}
+
+{{/*
     Validate the Storage config.
 */}}
 {{ if and (not .Values.configMap.storage.postgres) (not .Values.configMap.storage.mysql) (not .Values.configMap.storage.local) }}
@@ -41,7 +48,7 @@
     Validate the deprecated 'default_redirection_url' is not configured
 */}}
 {{ if .Values.configMap.default_redirection_url }}
-{{ fail "The value 'configMap.default_redirection_url' is no longer valid" }}
+{{ fail "The value 'configMap.default_redirection_url' is no longer supported and has been replaced with the 'default_redirection_url' of the relevant 'configMap.session.cookies' entry" }}
 {{ end }}
 
 {{ $authzimpl := (include "authelia.authz.implementations" .) | fromJsonArray }}
@@ -106,14 +113,21 @@
     Validate OpenID Connect 1.0 provider option 'issuer_private_key' which have been removed.
 */}}
 {{ if .Values.configMap.identity_providers.oidc.issuer_private_key }}
-{{ fail "The value 'configMap.identity_providers.oidc.issuer_private_key' is no longer supported and has been replaced with the 'configMap.identity_providers.oidc.issuer_private_keys' multi-value option" }}
+{{ fail "The value 'configMap.identity_providers.oidc.issuer_private_key' is no longer supported and has been replaced with the 'configMap.identity_providers.oidc.jwks' multi-value option" }}
 {{ end }}
 
 {{/*
     Validate OpenID Connect 1.0 provider option 'issuer_certificate_chain' which have been removed.
 */}}
 {{ if .Values.configMap.identity_providers.oidc.issuer_certificate_chain }}
-{{ fail "The value 'configMap.identity_providers.oidc.issuer_certificate_chain' is no longer supported and has been replaced with the 'configMap.identity_providers.oidc.issuer_private_keys' multi-value option" }}
+{{ fail "The value 'configMap.identity_providers.oidc.issuer_certificate_chain' is no longer supported and has been replaced with the 'configMap.identity_providers.oidc.jwks' multi-value option" }}
+{{ end }}
+
+{{/*
+    Validate the removed 'disable_reset_password' is not configured.
+*/}}
+{{ if .Values.configMap.authentication_backend.disable_reset_password }}
+{{ fail "The value 'configMap.authentication_backend.disable_reset_password' is no longer supported and has been replaced with the 'configMap.authentication_backend.password_reset.disable'" }}
 {{ end }}
 
 {{ end }}

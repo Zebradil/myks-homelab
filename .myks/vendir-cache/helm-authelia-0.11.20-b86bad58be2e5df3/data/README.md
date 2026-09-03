@@ -1,6 +1,6 @@
 # authelia
 
-![Version: 0.11.6](https://img.shields.io/badge/Version-0.11.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.39.20](https://img.shields.io/badge/AppVersion-4.39.20-informational?style=flat-square)
+![Version: 0.11.20](https://img.shields.io/badge/Version-0.11.20-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.39.20](https://img.shields.io/badge/AppVersion-4.39.20-informational?style=flat-square)
 
 Authelia is a Single Sign-On Multi-Factor portal for web apps
 
@@ -106,11 +106,13 @@ Kubernetes: `>= 1.30.0-0`
 | certificates.labels | object | `{}` | Extra labels for the Certificates Secret manifest. |
 | certificates.values | list | `[]` | List of secret name value pairs to include in this Secret manifest. |
 | configMap.access_control.default_policy | string | `"deny"` | Default policy can either be 'bypass', 'one_factor', 'two_factor' or 'deny'. It is the policy applied to any resource if there is no policy to be applied to the user. |
+| configMap.access_control.networks | string | `nil` | Removed. Use 'configMap.definitions.network' instead, which applies to every supported version. Configuring this value is an error. |
 | configMap.access_control.rules | list | `[]` | Access Control Rule list. |
 | configMap.access_control.secret.enabled | bool | `false` | Enables the ACL section being generated as a secret. |
 | configMap.access_control.secret.existingSecret | string | `""` | An existingSecret name, if configured this will force the secret to be mounted using the key above. |
 | configMap.access_control.secret.key | string | `"configuration.acl.yaml"` | The key in the secret which contains the file to mount. |
 | configMap.annotations | object | `{}` | Extra annotations for the ConfigMap manifest. |
+| configMap.authentication_backend.disable_reset_password | string | `nil` | Removed. Use 'configMap.authentication_backend.password_reset.disable' instead. Configuring this value is an error. |
 | configMap.authentication_backend.file.enabled | bool | `false` | Enable File Backend (Authentication). |
 | configMap.authentication_backend.file.extra_attributes | object | `{}` | The extra attributes to load from the directory server. These extra attributes can be used in other areas of Authelia such as OpenID Connect 1.0. It’s also recommended to check out the Attributes Reference Guide for more information. |
 | configMap.authentication_backend.file.password.algorithm | string | `"argon2"` | Controls the hashing algorithm used for hashing new passwords. |
@@ -194,6 +196,7 @@ Kubernetes: `>= 1.30.0-0`
 | configMap.authentication_backend.password_reset.disable | bool | `false` | Disable both the HTML element and the API for reset password functionality. |
 | configMap.authentication_backend.refresh_interval | string | `"5 minutes"` | The amount of time to wait before we refresh data from the authentication backend. Uses duration notation. |
 | configMap.default_2fa_method | string | `""` | Set the default 2FA method for new users and for when a user has a preferred method configured that has been disabled. This setting must be a method that is enabled. Options are totp, webauthn, mobile_push. |
+| configMap.default_redirection_url | string | `nil` | Removed. Use the 'default_redirection_url' of the relevant 'configMap.session.cookies' entry instead. Configuring this value is an error. |
 | configMap.definitions.network | object | `{}` | The network section configures named network lists. |
 | configMap.definitions.user_attributes | object | `{}` | The user attributes section allows you to define custom attributes for your users using Common Expression Language (CEL). |
 | configMap.disabled | bool | `false` | Disable the configMap source for the Authelia config. If this is false you need to provide a volumeMount via PV/PVC or other means that mounts to /config. |
@@ -225,12 +228,15 @@ Kubernetes: `>= 1.30.0-0`
 | configMap.identity_providers.oidc.hmac_secret.path | string | `"identity_providers.oidc.hmac.key"` | The path to the secret. If it has a '/' prefix it's assumed to be an absolute path within the pod. Otherwise it uses the format '{mountPath}/{secret_name}/{path}' where '{mountPath}' refers to the 'secret.mountPath' value, '{secret_name}' is the secret_name above, and '{path}' is this value. |
 | configMap.identity_providers.oidc.hmac_secret.secret_name | string | `nil` | The secret name. The ~ name is special as it is the secret we generate either automatically or via the secret_value option below. |
 | configMap.identity_providers.oidc.hmac_secret.value | string | `""` | The value of a generated secret when using the ~ secret_name. |
+| configMap.identity_providers.oidc.issuer_certificate_chain | string | `nil` | Removed. Use 'configMap.identity_providers.oidc.jwks' instead. Configuring this value is an error. |
+| configMap.identity_providers.oidc.issuer_private_key | string | `nil` | Removed. Use 'configMap.identity_providers.oidc.jwks' instead. Configuring this value is an error. |
 | configMap.identity_providers.oidc.jwks | list | `[]` | The JWK's issuer option configures multiple JSON Web Keys. It's required that at least one of the JWK's configured has the RS256 algorithm. For RSA keys (RS or PS) the minimum is a 2048 bit key. |
 | configMap.identity_providers.oidc.lifespans.access_token | string | `"1 hour"` | Default lifespan for Access Tokens. |
 | configMap.identity_providers.oidc.lifespans.authorize_code | string | `"1 minute"` | Default lifespan for Authorize Codes. |
 | configMap.identity_providers.oidc.lifespans.custom | object | `{}` | The custom lifespan configuration allows customizing the lifespans per-client. The custom lifespans must be utilized with the client lifespan option which applies those settings to that client. Custom lifespans can be configured in a very granular way, either solely by the token type, or by the token type for each grant type. |
 | configMap.identity_providers.oidc.lifespans.device_code | string | `"10 minutes"` | Default lifespan for Device Codes. |
 | configMap.identity_providers.oidc.lifespans.id_token | string | `"1 hour"` | Default lifespan for ID Tokens. |
+| configMap.identity_providers.oidc.lifespans.jwt_secured_authorization | string | `"5 minutes"` | Default lifespan for JWT Secured Authorization Response Mode responses. |
 | configMap.identity_providers.oidc.lifespans.refresh_token | string | `"1 hour and 30 minutes"` | Default lifespan for Refresh Tokens. |
 | configMap.identity_providers.oidc.minimum_parameter_entropy | int | `8` | Adjusts the parameter entropy requirements for nonce/state etc. SECURITY NOTICE: It's not recommended changing this option, and highly discouraged to have it less than 8. |
 | configMap.identity_providers.oidc.pushed_authorizations.context_lifespan | string | `"5 minutes"` | Adjusts the lifespan for a Pushed Authorization session / context. |
@@ -275,6 +281,7 @@ Kubernetes: `>= 1.30.0-0`
 | configMap.notifier.smtp.tls.server_name | string | `""` | The server subject name to check the servers certificate against during the validation process. This option is not required if the certificate has a SAN which matches the host option. |
 | configMap.notifier.smtp.tls.skip_verify | bool | `false` | Skip verifying the server certificate entirely. |
 | configMap.notifier.smtp.username | string | `""` | The username sent for authentication with the SMTP server. Paired with the password. |
+| configMap.notifier.template_path | string | `""` | The path to a directory of custom notification templates. The directory must be mounted into the Pod, which the 'pod.extraVolumes' and 'pod.extraVolumeMounts' values can do. |
 | configMap.ntp.address | string | `"udp://time.cloudflare.com:123"` | NTP server address. |
 | configMap.ntp.disable_failure | bool | `false` | The default of false will prevent startup only if we can contact the NTP server and the time is out of sync with the NTP server more than the configured max_desync. If you set this to true, an error will be logged but startup will continue regardless of results. |
 | configMap.ntp.disable_startup_check | bool | `false` | Disables the NTP check on startup entirely. This means Authelia will not contact a remote service at all if you set this to true, and can operate in a truly offline mode. |
@@ -289,6 +296,9 @@ Kubernetes: `>= 1.30.0-0`
 | configMap.password_policy.standard.require_uppercase | bool | `false` | Require uppercase characters. |
 | configMap.password_policy.zxcvbn.enabled | bool | `false` | Enables zxcvbn password policy. |
 | configMap.password_policy.zxcvbn.min_score | int | `0` | Configures the minimum score allowed. |
+| configMap.privacy_policy.enabled | bool | `false` | Enables the Privacy Policy display including the link in the frontend. |
+| configMap.privacy_policy.policy_url | string | `""` | The URL of the Privacy Policy. Required when enabled and must be an absolute https URL. |
+| configMap.privacy_policy.require_user_acceptance | bool | `false` | Requires the user accept the Privacy Policy before they can login. |
 | configMap.regulation.ban_time | string | `"5 minutes"` | The length of time before a banned user can login again. Ban Time accepts duration notation. See: https://www.authelia.com/configuration/prologue/common/#duration-notation-format |
 | configMap.regulation.find_time | string | `"2 minutes"` | The time range during which the user can attempt login before being banned. The user is banned if the authentication failed 'max_retries' times in a 'find_time' window. Find Time accepts duration notation. See: https://www.authelia.com/configuration/prologue/common/#duration-notation-format |
 | configMap.regulation.max_retries | int | `3` | The number of failed login attempts before user is banned. Set it to 0 to disable regulation. |
@@ -300,10 +310,16 @@ Kubernetes: `>= 1.30.0-0`
 | configMap.server.endpoints.automatic_authz_implementations | list | `[]` | A list of automatically configured authz implementations if you don't wish to manually configure each one. Important Note: If you configure the 'authz' section this is completely ignored. |
 | configMap.server.endpoints.enable_expvars | bool | `false` | Enable the developer expvars handlers. |
 | configMap.server.endpoints.enable_pprof | bool | `false` | Enable the developer pprof handlers. |
+| configMap.server.endpoints.rate_limits.openid_connect_introspection.buckets | list | `[]` | List of rate limit buckets. |
+| configMap.server.endpoints.rate_limits.openid_connect_introspection.enable | bool | `true` | Enables this rate limit. |
 | configMap.server.endpoints.rate_limits.openid_connect_pushed_authorization_request.buckets | list | `[]` | List of rate limit buckets. |
 | configMap.server.endpoints.rate_limits.openid_connect_pushed_authorization_request.enable | bool | `true` | Enables this rate limit. |
+| configMap.server.endpoints.rate_limits.openid_connect_revocation.buckets | list | `[]` | List of rate limit buckets. |
+| configMap.server.endpoints.rate_limits.openid_connect_revocation.enable | bool | `true` | Enables this rate limit. |
 | configMap.server.endpoints.rate_limits.openid_connect_token.buckets | list | `[]` | List of rate limit buckets. |
 | configMap.server.endpoints.rate_limits.openid_connect_token.enable | bool | `true` | Enables this rate limit. |
+| configMap.server.endpoints.rate_limits.openid_connect_userinfo.buckets | list | `[]` | List of rate limit buckets. |
+| configMap.server.endpoints.rate_limits.openid_connect_userinfo.enable | bool | `true` | Enables this rate limit. |
 | configMap.server.endpoints.rate_limits.reset_password_finish.buckets | list | `[]` | List of rate limit buckets. |
 | configMap.server.endpoints.rate_limits.reset_password_finish.enable | bool | `true` | Enables this rate limit. |
 | configMap.server.endpoints.rate_limits.reset_password_start.buckets | list | `[]` | List of rate limit buckets. |
@@ -414,6 +430,7 @@ Kubernetes: `>= 1.30.0-0`
 | configMap.totp.allowed_periods | list | `[30]` | Similar to period with the same restrictions except this option allows users to pick from this list. This list will always contain the value configured in the period option. |
 | configMap.totp.digits | int | `6` | The number of digits a user has to input. Must either be 6 or 8. Changing this option only affects newly generated TOTP configurations. It is CRITICAL you read the documentation before changing this option: https://www.authelia.com/configuration/second-factor/time-based-one-time-password/#digits |
 | configMap.totp.disable | bool | `false` | Disable TOTP. |
+| configMap.totp.disable_reuse_security_policy | bool | `false` | Disables the security policy which prevents a one-time password being used more than once. |
 | configMap.totp.issuer | string | `"Authelia"` | The issuer name displayed in the Authenticator application of your choice. Defaults to 'Authelia'. |
 | configMap.totp.period | int | `30` | The period in seconds a one-time password is valid for. Changing this option only affects newly generated TOTP configurations. |
 | configMap.totp.secret_size | int | `32` | The size of the generated shared secrets. Default is 32 and is sufficient in most use cases, minimum is 20. |
@@ -422,9 +439,11 @@ Kubernetes: `>= 1.30.0-0`
 | configMap.webauthn.disable | bool | `false` | Disable Webauthn. |
 | configMap.webauthn.display_name | string | `"Authelia"` | The display name the browser should show the user for when using Webauthn to login/register. |
 | configMap.webauthn.enable_passkey_login | bool | `false` | Enabled Passkey Logins. |
-| configMap.webauthn.filtering.permitted_aaguids | list | `[]` | A list of Authenticator Attestation GUID’s that are the only ones allowed to be registered. Useful if you have a company policy that requires certain authenticators. Mutually exclusive with prohibited_aaguids. |
+| configMap.webauthn.experimental_enable_passkey_upgrade | bool | `false` | Enables upgrading a WebAuthn credential to a Passkey where the authenticator supports it. Experimental, and only rendered for 4.39.2 and above. |
+| configMap.webauthn.experimental_enable_passkey_uv_two_factors | bool | `false` | Enables treating a Passkey which performed user verification as two factors. Experimental, and only rendered for 4.39.0 and above. |
+| configMap.webauthn.filtering.permitted_aaguids | list | `[]` | A list of Authenticator Attestation GUID’s that are the only ones allowed to be registered. Useful if you have @schema type: array items:   type: string   pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$' @schema a company policy that requires certain authenticators. Mutually exclusive with prohibited_aaguids. |
 | configMap.webauthn.filtering.prohibit_backup_eligibility | bool | `false` | Setting this value to true will ensure Authenticators which can export credentials will not be able to register. This will likely prevent synchronized credentials from being registered. |
-| configMap.webauthn.filtering.prohibited_aaguids | list | `[]` | A list of Authenticator Attestation GUID’s that users will not be able to register. Useful if company policy prevents certain authenticators. Mutually exclusive with permitted_aaguids. |
+| configMap.webauthn.filtering.prohibited_aaguids | list | `[]` | A list of Authenticator Attestation GUID’s that users will not be able to register. Useful if company policy @schema type: array items:   type: string   pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$' @schema prevents certain authenticators. Mutually exclusive with permitted_aaguids. |
 | configMap.webauthn.metadata.cache_policy | string | `"strict"` | Allows adjusting the WebAuthn Metadata Cache Policy. |
 | configMap.webauthn.metadata.enabled | bool | `false` | Enables metadata service validation of authenticators and credentials. This requires the download of the metadata service blob which will utilize about 5MB of data in your configured storage backend. |
 | configMap.webauthn.metadata.validate_entry | bool | `true` | Enables validation that an entry exists for the authenticator in the MDS3 blob. It’s recommended that this option is the default value, however this may exclude some authenticators which DO NOT have FIDO compliance certification or have otherwise not registered with the MDS3. The recommendation is based on the fact that the authenticity of a particular authenticator cannot be validated without this. |
@@ -437,6 +456,7 @@ Kubernetes: `>= 1.30.0-0`
 | configMap.webauthn.selection_criteria.discoverability | string | `"preferred"` | Sets the discoverability preference. May affect the creation of Passkeys. |
 | configMap.webauthn.selection_criteria.user_verification | string | `"preferred"` | Sets the user verification preference. |
 | configMap.webauthn.timeout | string | `"60 seconds"` | Adjust the interaction timeout for Webauthn dialogues. |
+| configMap.webauthn.user_verification | string | `nil` | Removed. Use 'configMap.webauthn.selection_criteria.user_verification' instead, which applies to every supported version. Configuring this value is an error. |
 | enabled | bool | `false` | This field can be used as a condition when authelia is a dependency. This definition is only a placeholder and not used directly by this chart. See https://helm.sh/docs/chart_best_practices/dependencies/#conditions-and-tags for more info |
 | extraObjects | list | `[]` | This field can include any extra objects to include in the rendered manifest. The allowed contents can be either string or yaml objects. String objects will be templated with tpl. |
 | image.pullPolicy | string | `"IfNotPresent"` | The pull policy for the standard image. |
@@ -472,12 +492,14 @@ Kubernetes: `>= 1.30.0-0`
 | ingress.traefikCRD.middlewares.chains.ingressRoute.before | list | `[]` | List of Middlewares to apply before the middleware in the IngressRoute chain. |
 | ingress.traefikCRD.priority | int | `500` | Defines the rule priority for the IngressRoute. |
 | ingress.traefikCRD.responseForwardingFlushInterval | string | `"100ms"` | Defines the Response Forwarding Flush Interval for the IngressRoute. |
+| ingress.traefikCRD.scheme | string | `"http"` | Defines the scheme the IngressRoute uses to reach the Authelia service. |
 | ingress.traefikCRD.sticky | bool | `false` | Defines the sticky value for the IngressRoute. |
 | ingress.traefikCRD.stickyCookieNameOverride | string | `""` | Overrides the default sticky cookie name for the IngressRoute. |
 | ingress.traefikCRD.strategy | string | `"RoundRobin"` | Defines the IngressRoute service strategy. |
 | ingress.traefikCRD.tls.certResolver | string | `""` | Name of the Certificate Resolver to use. |
 | ingress.traefikCRD.tls.disableTLSOptions | bool | `false` | Disables inclusion of the IngressRoute TLSOptions. |
 | ingress.traefikCRD.tls.domainsOverride | list | `[]` | Override the domains values for TLS operations. |
+| ingress.traefikCRD.tls.existingOptions | object | `nil` | An existing TLSOption to reference instead of generating one. |
 | ingress.traefikCRD.tls.options.cipherSuites | list | `[]` | Override the default Cipher Suites. |
 | ingress.traefikCRD.tls.options.curvePreferences | list | `[]` | Override the default Curve Preferences. |
 | ingress.traefikCRD.tls.options.maxVersion | string | `"VersionTLS13"` | Maximum TLS Version. |
@@ -527,8 +549,12 @@ Kubernetes: `>= 1.30.0-0`
 | pod.autoscaling.behavior | object | `{}` | Configuration of the autoscaling behavior. |
 | pod.autoscaling.enabled | bool | `false` | Enable the HorizontalPodAutoscaler which requires the in cluster metrics server. |
 | pod.autoscaling.labels | object | `{}` | Extra labels for the HorizontalPodAutoscaler manifest. |
+| pod.autoscaling.maxReplicas | int | `nil` | The maximum number of replicas. Defaults to one above the minimum. |
+| pod.autoscaling.metrics | list | `[]` | The metrics which determine the scaling. At least one metric must be configured for scaling to occur. |
+| pod.autoscaling.minReplicas | int | `nil` | The minimum number of replicas. Defaults to the 'pod.replicas' value. |
 | pod.command | list | `[]` | Modifies the command. Useful for debugging. |
 | pod.disableRestartOnChanges | bool | `false` | Normally when a change is detected via helm install to something that only indirectly affects the pod, the pod will restart. This setting allows disabling this behavior. |
+| pod.enableServiceLinks | bool | `false` | Injects the Services in the same namespace into the Pod as environment variables. |
 | pod.env | list | `[]` | List of additional environment variables for the Pod. |
 | pod.extraContainers | list | `[]` | Extra containers to add to the Pod spec. |
 | pod.extraVolumeMounts | list | `[]` | Extra Volume Mounts. |
@@ -536,6 +562,8 @@ Kubernetes: `>= 1.30.0-0`
 | pod.initContainers | list | `[]` | The list of custom initialization containers. |
 | pod.kind | string | `"DaemonSet"` | The Pod Kind to use. Must be Deployment, DaemonSet, or StatefulSet. |
 | pod.labels | object | `{}` | Extra labels for the Pod spec. |
+| pod.managementPolicy | string | `"Parallel"` | The Pod management policy for the StatefulSet kind. Ignored for a configuration which requires a single pod as that always uses Parallel. |
+| pod.minReadySeconds | int | `0` | The minimum seconds a new Pod must be ready before it is considered available. Only applies to the Deployment and DaemonSet kinds. |
 | pod.priorityClassName | string | `""` | The priority class name for the Pod spec. |
 | pod.probes.liveness.failureThreshold | int | `5` | Liveness Probe failure threshold. |
 | pod.probes.liveness.initialDelaySeconds | int | `0` | Liveness Probe initial delay seconds. |
@@ -566,6 +594,7 @@ Kubernetes: `>= 1.30.0-0`
 | pod.selectors.affinity.podAntiAffinity | object | `{}` | Pod anti-affinity selector. |
 | pod.selectors.nodeName | string | `""` | Specific node name selector. |
 | pod.selectors.nodeSelector | object | `{}` | Node selector. |
+| pod.serviceName | string | `""` | The governing Service name for the StatefulSet kind. Defaults to the name of this release. |
 | pod.strategy.rollingUpdate.maxSurge | string | `"25%"` | RollingUpdate max surge value. |
 | pod.strategy.rollingUpdate.maxUnavailable | string | `"25%"` | RollingUpdate max unavailable value. |
 | pod.strategy.rollingUpdate.partition | int | `0` | RollingUpdate partition value. |
@@ -588,10 +617,12 @@ Kubernetes: `>= 1.30.0-0`
 | secret.mountPath | string | `"/secrets"` | Pod path to mount the values of the Secret manifest. |
 | service.annotations | object | `{}` | Extra annotations for service manifest. |
 | service.clusterIP | string | `nil` | Cluster IP for the Authelia service manifest. |
+| service.externalIPs | list | `[]` | External IPs for the Authelia service manifest. |
 | service.externalTrafficPolicy | string | `nil` | Use value Local to get external IP addresses. |
 | service.labels | object | `{}` | Extra labels for service manifest. |
 | service.nodePort | int | `30091` | Node Port for the Authelia service manifest. |
 | service.port | int | `80` | Port for the Authelia service manifest. |
+| service.sessionAffinity | string | `"None"` | Session Affinity for the Authelia service manifest. |
 | service.type | string | `"ClusterIP"` | The service type to generate for the Authelia pods. |
 | versionOverride | string | `""` | Version Override allows changing some chart characteristics that render only on specific versions. This does NOT affect the image used, please see the below image section instead for this. If this value is not specified, it's assumed the appVersion of the chart is the version. The format of this value  is x.x.x, for example 4.100.0. Minimum value is 4.38.0, and support is not guaranteed. |
 

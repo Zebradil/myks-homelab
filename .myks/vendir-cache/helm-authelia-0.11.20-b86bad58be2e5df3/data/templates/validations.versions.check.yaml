@@ -1,0 +1,18 @@
+{{/*
+    Validate options which have been removed and replaced. These apply to every version as the replacement renders to
+    whichever configuration shape the deployed version expects.
+*/}}
+
+{{/*
+    Validate access_control networks move.
+*/}}
+{{ if .Values.configMap.access_control.networks }}
+{{ fail "The value 'configMap.access_control.networks' is no longer supported and has been replaced with the 'configMap.definitions.network'" }}
+{{ end }}
+
+{{/*
+    Validate webauthn user_verification move.
+*/}}
+{{ if .Values.configMap.webauthn.user_verification }}
+{{ fail "The value 'configMap.webauthn.user_verification' is no longer supported and has been replaced with the 'configMap.webauthn.selection_criteria.user_verification'" }}
+{{ end }}
