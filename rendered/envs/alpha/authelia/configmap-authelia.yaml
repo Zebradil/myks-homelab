@@ -44,6 +44,12 @@ data:
             enable: true
           openid_connect_pushed_authorization_request:
             enable: true
+          openid_connect_userinfo:
+            enable: true
+          openid_connect_introspection:
+            enable: true
+          openid_connect_revocation:
+            enable: true
     log:
       level: 'info'
       format: 'text'
@@ -78,6 +84,7 @@ data:
       algorithm: 'SHA1'
       digits: 6
       period: 30
+      disable_reuse_security_policy: false
       allowed_algorithms:
         - 'SHA1'
       allowed_digits:
@@ -87,6 +94,8 @@ data:
     webauthn:
       disable: false
       enable_passkey_login: false
+      experimental_enable_passkey_uv_two_factors: false
+      experimental_enable_passkey_upgrade: false
       display_name: 'Authelia'
       attestation_conveyance_preference: 'indirect'
       timeout: '60 seconds'
@@ -209,6 +218,7 @@ data:
           id_token: '1h'
           authorize_code: '1 minute'
           device_code: '10 minutes'
+          jwt_secured_authorization: '5 minutes'
         enforce_pkce: 'public_clients_only'
         enable_pkce_plain_challenge: false
         enable_client_debug_messages: false
@@ -250,6 +260,7 @@ data:
             response_types:
               - 'code'
             authorization_policy: 'two_factor'
+            allow_multiple_auth_methods: false
             consent_mode: 'auto'
             pre_configured_consent_duration: '1y'
             require_pushed_authorization_requests: false
@@ -306,6 +317,7 @@ data:
             response_types:
               - 'code'
             authorization_policy: 'two_factor'
+            allow_multiple_auth_methods: false
             consent_mode: 'auto'
             pre_configured_consent_duration: '1y'
             require_pushed_authorization_requests: false
@@ -363,6 +375,7 @@ data:
             response_types:
               - 'code'
             authorization_policy: 'two_factor'
+            allow_multiple_auth_methods: false
             consent_mode: 'auto'
             pre_configured_consent_duration: '1y'
             require_pushed_authorization_requests: false
@@ -432,6 +445,7 @@ data:
               - 'code'
             authorization_policy: 'two_factor'
             requested_audience_mode: 'explicit'
+            allow_multiple_auth_methods: false
             consent_mode: 'auto'
             pre_configured_consent_duration: '1y'
             require_pushed_authorization_requests: false

@@ -514,6 +514,13 @@ Usage:
 {{- end -}}
 
 {{/*
+Returns the port the Authelia daemon listens on.
+*/}}
+{{- define "authelia.server.port" -}}
+    {{- .Values.configMap.server.port | default 9091 -}}
+{{- end -}}
+
+{{/*
 Returns the service port.
 */}}
 {{- define "authelia.service.port" -}}
@@ -547,9 +554,5 @@ Returns the path value.
 Returns the password reset disabled value.
 */}}
 {{- define "authelia.config.password_reset.disable" -}}
-{{- if hasKey .Values.configMap.authentication_backend "disable_reset_password" }}
-{{- .Values.configMap.authentication_backend.disable_reset_password }}
-{{- else }}
 {{- .Values.configMap.authentication_backend.password_reset.disable | default false }}
-{{- end }}
 {{- end -}}

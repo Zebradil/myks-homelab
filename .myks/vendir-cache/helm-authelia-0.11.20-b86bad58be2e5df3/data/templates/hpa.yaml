@@ -1,0 +1,26 @@
+{{- if (include "authelia.pod.autoscaling" .) }}
+{{- $kind := (include "authelia.pod.kind" .) }}
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ template "authelia.name" . }}
+  namespace: {{ template "authelia.namespace" . }}
+  labels: {{ include "authelia.labels" (merge (dict "Labels" .Values.pod.autoscaling.labels) .) | nindent 4 }}
+  {{- with $annotations := include "authelia.annotations" (merge (dict "Annotations" .Values.pod.autoscaling.annotations) .) }}
+  annotations: {{ $annotations | nindent 4 }}
+  {{- end }}
+spec:
+  {{- with $behavior := .Values.pod.autoscaling.behavior }}
+  behavior: {{ toYaml $behavior | nindent 4 }}
+  {{- end }}
+  maxReplicas: {{ .Values.pod.autoscaling.maxReplicas | default (add 1 (include "authelia.pod.autoscaling.minReplicas" .)) }}
+  minReplicas: {{ template "authelia.pod.autoscaling.minReplicas" . }}
+  scaleTargetRef:
+    apiVersion: {{ template "capabilities.apiVersion.kind" (merge (dict "Kind" $kind) .) }}
+    kind: {{ template "authelia.pod.kind" . }}
+    name: {{ template "authelia.name" . }}
+  {{- with $metrics := .Values.pod.autoscaling.metrics }}
+  metrics: {{ toYaml $metrics | nindent 4 }}
+  {{- end }}
+{{- end }}
