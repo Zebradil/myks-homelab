@@ -40,7 +40,6 @@ data:
       "editable": true,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
-      "id": 0,
       "links": [
         {
           "icon": "doc",

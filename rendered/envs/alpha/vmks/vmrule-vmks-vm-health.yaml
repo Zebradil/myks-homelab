@@ -16,6 +16,18 @@ spec:
           expr: changes(process_start_time_seconds{job=~".*(victoriametrics|vmselect|vminsert|vmstorage|vmagent|vmalert|vmsingle|vmalertmanager|vmauth).*"}[15m]) > 2
           labels:
             severity: critical
+        - alert: UncleanShutdown
+          annotations:
+            description: |
+              The previous process run didn't shut down cleanly. Check the logs for OOM, SIGKILL,
+              a host failure, or another unexpected termination. In Kubernetes, a pod may be forcefully
+              killed with SIGKILL if the shutdown takes longer than terminationGracePeriodSeconds.
+              This alert stops firing 10 minutes after startup.
+              See https://github.com/VictoriaMetrics/VictoriaMetrics/issues/8443 for more details.
+            summary: '{{ $labels.job }} on instance {{ $labels.instance }} started after an unclean shutdown'
+          expr: vm_app_prev_shutdown_unclean == 1 and time() - vm_app_start_timestamp < 600
+          labels:
+            severity: warning
         - alert: ServiceDown
           annotations:
             description: '{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 2 minutes.'
