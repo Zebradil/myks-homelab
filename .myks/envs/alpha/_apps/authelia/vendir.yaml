@@ -16,7 +16,7 @@ directories:
     lazy: true
     git:
       url: https://github.com/authelia/authelia
-      ref: v4.39.20
+      ref: v4.39.24
     includePaths:
     - examples/grafana-dashboards/simple.json
     newRootPath: examples

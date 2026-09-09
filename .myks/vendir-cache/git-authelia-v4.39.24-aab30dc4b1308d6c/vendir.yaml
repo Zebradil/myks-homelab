@@ -2,13 +2,13 @@ apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
   - git:
-      ref: v4.39.20
+      ref: v4.39.24
       url: https://github.com/authelia/authelia
     includePaths:
     - examples/grafana-dashboards/simple.json
     lazy: true
     newRootPath: examples
     path: .
-  path: .myks/vendir-cache/git-authelia-v4.39.20-ce3b86a419889750/data
+  path: .myks/vendir-cache/git-authelia-v4.39.24-aab30dc4b1308d6c/data
 kind: Config
 minimumRequiredVersion: ""
