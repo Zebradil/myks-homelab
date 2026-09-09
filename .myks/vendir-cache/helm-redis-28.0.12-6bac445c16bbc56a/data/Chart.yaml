@@ -2,7 +2,7 @@ annotations:
   fips: "true"
   images: |
     - name: kubectl
-      version: 1.36.3
+      version: 1.37.0
       image: registry-1.docker.io/bitnami/kubectl:latest
     - name: os-shell
       version: "5"
@@ -11,7 +11,7 @@ annotations:
       version: 8.10.1
       image: registry-1.docker.io/bitnami/redis:latest
     - name: redis-exporter
-      version: 1.89.0
+      version: 1.90.0
       image: registry-1.docker.io/bitnami/redis-exporter:latest
     - name: redis-sentinel
       version: 8.10.1
@@ -39,4 +39,4 @@ maintainers:
 name: redis
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/redis
-version: 28.0.7
+version: 28.0.12
