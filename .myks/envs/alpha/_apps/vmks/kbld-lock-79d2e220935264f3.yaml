@@ -20,6 +20,6 @@ overrides:
 - image: registry.k8s.io/kubectl:v1.33.1
   newImage: oci.zebradil.dev/registry.k8s.io-cache/kubectl@sha256:b678a2eb762525ff5064ed6064071fc0728bf0f009a6afbe7f49fbad3ac56dbf
   preresolved: true
-- image: victoriametrics/operator:v0.74.0
-  newImage: index.docker.io/victoriametrics/operator@sha256:c4fde419a4f03c7c45d7ee554e7039c12c75af161f7f7e1baef1b343015e3df9
+- image: victoriametrics/operator:v0.74.1
+  newImage: index.docker.io/victoriametrics/operator@sha256:7310c4a80b94f530c5f0b1fcf6d6eaf933f39cc5704e983900d9cfd6b31f9dc1
   preresolved: true
