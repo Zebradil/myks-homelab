@@ -134,6 +134,21 @@ service:
   # -- (string) Use value Local to get external IP addresses.
   externalTrafficPolicy: ~
 
+  # @schema
+  # type: string
+  # enum: ['None','ClientIP','']
+  # @schema
+  # -- Session Affinity for the Authelia service manifest.
+  sessionAffinity: 'None'
+
+  # @schema
+  # type: array
+  # items:
+  #   type: string
+  # @schema
+  # -- External IPs for the Authelia service manifest.
+  externalIPs: []
+
 ingress:
   # -- Enable generating ingress related resources.
   enabled: false
@@ -237,6 +252,13 @@ ingress:
     # -- Defines the Response Forwarding Flush Interval for the IngressRoute.
     responseForwardingFlushInterval: '100ms'
 
+    # @schema
+    # type: string
+    # enum: ['http','https','h2c','']
+    # @schema
+    # -- Defines the scheme the IngressRoute uses to reach the Authelia service.
+    scheme: 'http'
+
     middlewares:
       auth:
         # -- Overrides the ForwardAuth Middleware (auth) name.
@@ -334,9 +356,21 @@ ingress:
     tls:
       # -- Disables inclusion of the IngressRoute TLSOptions.
       disableTLSOptions: false
-      #   existingOptions:
-      #     name: 'default-traefik-options'
-      #     namespace: 'default'
+
+      # @schema
+      # type: [object, null]
+      # properties:
+      #   name:
+      #     type: string
+      #   namespace:
+      #     type: string
+      # required: ['name']
+      # @schema
+      # -- (object) An existing TLSOption to reference instead of generating one.
+      existingOptions: ~
+      # existingOptions:
+      #   name: 'default-traefik-options'
+      #   namespace: 'default'
 
       # -- Name of the Certificate Resolver to use.
       certResolver: ''
@@ -405,6 +439,14 @@ pod:
   # -- The Pod Kind to use. Must be Deployment, DaemonSet, or StatefulSet.
   kind: 'DaemonSet'
 
+  # @schema
+  # type: string
+  # enum: ['OrderedReady','Parallel','']
+  # @schema
+  # -- The Pod management policy for the StatefulSet kind. Ignored for a configuration which requires a single pod as
+  # that always uses Parallel.
+  managementPolicy: 'Parallel'
+
   # -- Normally when a change is detected via helm install to something that only indirectly affects the pod, the pod
   # will restart. This setting allows disabling this behavior.
   disableRestartOnChanges: false
@@ -456,12 +498,109 @@ pod:
   # -- The revision history limit.
   revisionHistoryLimit: 5
 
+  # -- The governing Service name for the StatefulSet kind. Defaults to the name of this release.
+  serviceName: ''
+
+  # -- The minimum seconds a new Pod must be ready before it is considered available. Only applies to the Deployment
+  # and DaemonSet kinds.
+  minReadySeconds: 0
+
+  # -- Injects the Services in the same namespace into the Pod as environment variables.
+  enableServiceLinks: false
+
   # -- The priority class name for the Pod spec.
   priorityClassName: ''
 
   autoscaling:
     # -- Enable the HorizontalPodAutoscaler which requires the in cluster metrics server.
     enabled: false
+
+    # @schema
+    # type: [integer, null]
+    # minimum: 1
+    # @schema
+    # -- (int) The minimum number of replicas. Defaults to the 'pod.replicas' value.
+    minReplicas: ~
+
+    # @schema
+    # type: [integer, null]
+    # minimum: 1
+    # @schema
+    # -- (int) The maximum number of replicas. Defaults to one above the minimum.
+    maxReplicas: ~
+
+    # @schema
+    # type: array
+    # items:
+    #   type: object
+    #   required: ['type']
+    #   properties:
+    #     type:
+    #       type: string
+    #       enum: ['ContainerResource','External','Object','Pods','Resource']
+    #     resource:
+    #       type: object
+    #       required: ['name','target']
+    #       properties:
+    #         name: {type: string}
+    #         target: &autoscalingMetricTarget
+    #           type: object
+    #           required: ['type']
+    #           properties:
+    #             type:
+    #               type: string
+    #               enum: ['Utilization','Value','AverageValue']
+    #             value: {type: [string, integer]}
+    #             averageValue: {type: [string, integer]}
+    #             averageUtilization: {type: integer}
+    #     containerResource:
+    #       type: object
+    #       required: ['name','container','target']
+    #       properties:
+    #         name: {type: string}
+    #         container: {type: string}
+    #         target: *autoscalingMetricTarget
+    #     pods:
+    #       type: object
+    #       required: ['metric','target']
+    #       properties:
+    #         metric: &autoscalingMetricIdentifier
+    #           type: object
+    #           required: ['name']
+    #           properties:
+    #             name: {type: string}
+    #             selector:
+    #               $ref: https://charts.authelia.com/definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.LabelSelector
+    #         target: *autoscalingMetricTarget
+    #     object:
+    #       type: object
+    #       required: ['describedObject','metric','target']
+    #       properties:
+    #         describedObject:
+    #           type: object
+    #           required: ['kind','name']
+    #           properties:
+    #             kind: {type: string}
+    #             name: {type: string}
+    #             apiVersion: {type: string}
+    #         metric: *autoscalingMetricIdentifier
+    #         target: *autoscalingMetricTarget
+    #     external:
+    #       type: object
+    #       required: ['metric','target']
+    #       properties:
+    #         metric: *autoscalingMetricIdentifier
+    #         target: *autoscalingMetricTarget
+    # @schema
+    # -- The metrics which determine the scaling. At least one metric must be configured for scaling to occur.
+    metrics: []
+    # metrics:
+    #   - type: 'Resource'
+    #     resource:
+    #       name: 'cpu'
+    #       target:
+    #         type: 'Utilization'
+    #         averageUtilization: 80
 
     # @schema
     # additionalProperties: true
@@ -1029,11 +1168,11 @@ configMap:
           # type: array
           # items:
           #   type: object
-          #   required: ['period','limit']
+          #   required: ['period', 'requests']
           #   properties:
           #     period:
           #       type: [string, integer]
-          #     limit:
+          #     requests:
           #       type: integer
           # @schema
           # -- List of rate limit buckets.
@@ -1047,11 +1186,11 @@ configMap:
           # type: array
           # items:
           #   type: object
-          #   required: ['period', 'limit']
+          #   required: ['period', 'requests']
           #   properties:
           #     period:
           #       type: [string, integer]
-          #     limit:
+          #     requests:
           #       type: integer
           # @schema
           # -- List of rate limit buckets.
@@ -1065,11 +1204,11 @@ configMap:
           # type: array
           # items:
           #   type: object
-          #   required: ['period', 'limit']
+          #   required: ['period', 'requests']
           #   properties:
           #     period:
           #       type: [string, integer]
-          #     limit:
+          #     requests:
           #       type: integer
           # @schema
           # -- List of rate limit buckets.
@@ -1083,11 +1222,11 @@ configMap:
           # type: array
           # items:
           #   type: object
-          #   required: ['period', 'limit']
+          #   required: ['period', 'requests']
           #   properties:
           #     period:
           #       type: [string, integer]
-          #     limit:
+          #     requests:
           #       type: integer
           # @schema
           # -- List of rate limit buckets.
@@ -1101,11 +1240,11 @@ configMap:
           # type: array
           # items:
           #   type: object
-          #   required: ['period', 'limit']
+          #   required: ['period', 'requests']
           #   properties:
           #     period:
           #       type: [string, integer]
-          #     limit:
+          #     requests:
           #       type: integer
           # @schema
           # -- List of rate limit buckets.
@@ -1119,11 +1258,11 @@ configMap:
           # type: array
           # items:
           #   type: object
-          #   required: ['period', 'limit']
+          #   required: ['period', 'requests']
           #   properties:
           #     period:
           #       type: [string, integer]
-          #     limit:
+          #     requests:
           #       type: integer
           # @schema
           # -- List of rate limit buckets.
@@ -1137,11 +1276,11 @@ configMap:
           # type: array
           # items:
           #   type: object
-          #   required: ['period', 'limit']
+          #   required: ['period', 'requests']
           #   properties:
           #     period:
           #       type: [string, integer]
-          #     limit:
+          #     requests:
           #       type: integer
           # @schema
           # -- List of rate limit buckets.
@@ -1155,11 +1294,65 @@ configMap:
           # type: array
           # items:
           #   type: object
-          #   required: ['period', 'limit']
+          #   required: ['period', 'requests']
           #   properties:
           #     period:
           #       type: [string, integer]
-          #     limit:
+          #     requests:
+          #       type: integer
+          # @schema
+          # -- List of rate limit buckets.
+          buckets: []
+
+        openid_connect_userinfo:
+          # -- Enables this rate limit.
+          enable: true
+
+          # @schema
+          # type: array
+          # items:
+          #   type: object
+          #   required: ['period', 'requests']
+          #   properties:
+          #     period:
+          #       type: [string, integer]
+          #     requests:
+          #       type: integer
+          # @schema
+          # -- List of rate limit buckets.
+          buckets: []
+
+        openid_connect_introspection:
+          # -- Enables this rate limit.
+          enable: true
+
+          # @schema
+          # type: array
+          # items:
+          #   type: object
+          #   required: ['period', 'requests']
+          #   properties:
+          #     period:
+          #       type: [string, integer]
+          #     requests:
+          #       type: integer
+          # @schema
+          # -- List of rate limit buckets.
+          buckets: []
+
+        openid_connect_revocation:
+          # -- Enables this rate limit.
+          enable: true
+
+          # @schema
+          # type: array
+          # items:
+          #   type: object
+          #   required: ['period', 'requests']
+          #   properties:
+          #     period:
+          #       type: [string, integer]
+          #     requests:
           #       type: integer
           # @schema
           # -- List of rate limit buckets.
@@ -1229,6 +1422,23 @@ configMap:
 
   # -- Theme name to use for the frontend.
   theme: 'light'
+
+  privacy_policy:
+    # -- Enables the Privacy Policy display including the link in the frontend.
+    enabled: false
+
+    # -- Requires the user accept the Privacy Policy before they can login.
+    require_user_acceptance: false
+
+    # -- The URL of the Privacy Policy. Required when enabled and must be an absolute https URL.
+    policy_url: ''
+
+  # @schema
+  # type: [string, null]
+  # @schema
+  # -- Removed. Use the 'default_redirection_url' of the relevant 'configMap.session.cookies' entry instead.
+  # Configuring this value is an error.
+  default_redirection_url: ~
 
   definitions:
     # @schema
@@ -1358,6 +1568,9 @@ configMap:
     # Changing this option only affects newly generated TOTP configurations.
     period: 30
 
+    # -- Disables the security policy which prevents a one-time password being used more than once.
+    disable_reuse_security_policy: false
+
     # -- Similar to algorithm with the same restrictions except this option allows users to pick from this list. This list
     # will always contain the value configured in the algorithm option.
     allowed_algorithms:
@@ -1380,6 +1593,14 @@ configMap:
     # -- Enabled Passkey Logins.
     enable_passkey_login: false
 
+    # -- Enables upgrading a WebAuthn credential to a Passkey where the authenticator supports it. Experimental, and
+    # only rendered for 4.39.2 and above.
+    experimental_enable_passkey_upgrade: false
+
+    # -- Enables treating a Passkey which performed user verification as two factors. Experimental, and only rendered
+    # for 4.39.0 and above.
+    experimental_enable_passkey_uv_two_factors: false
+
     # @schema
     # type: [string, integer]
     # @schema
@@ -1393,12 +1614,31 @@ configMap:
     # Options are none, indirect, direct.
     attestation_conveyance_preference: 'indirect'
 
+    # @schema
+    # type: [string, null]
+    # @schema
+    # -- Removed. Use 'configMap.webauthn.selection_criteria.user_verification' instead, which applies to every
+    # supported version. Configuring this value is an error.
+    user_verification: ~
+
     filtering:
       # -- A list of Authenticator Attestation GUID’s that are the only ones allowed to be registered. Useful if you have
+      # @schema
+      # type: array
+      # items:
+      #   type: string
+      #   pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+      # @schema
       # a company policy that requires certain authenticators. Mutually exclusive with prohibited_aaguids.
       permitted_aaguids: []
 
       # -- A list of Authenticator Attestation GUID’s that users will not be able to register. Useful if company policy
+      # @schema
+      # type: array
+      # items:
+      #   type: string
+      #   pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+      # @schema
       # prevents certain authenticators. Mutually exclusive with permitted_aaguids.
       prohibited_aaguids: []
 
@@ -1506,6 +1746,13 @@ configMap:
       path: 'duo.key'
 
   authentication_backend:
+    # @schema
+    # type: [boolean, null]
+    # @schema
+    # -- Removed. Use 'configMap.authentication_backend.password_reset.disable' instead. Configuring this value is an
+    # error.
+    disable_reset_password: ~
+
     password_reset:
       # -- Disable both the HTML element and the API for reset password functionality.
       disable: false
@@ -1876,6 +2123,13 @@ configMap:
 
       # -- An existingSecret name, if configured this will force the secret to be mounted using the key above.
       existingSecret: ''
+
+    # @schema
+    # type: [array, null]
+    # @schema
+    # -- Removed. Use 'configMap.definitions.network' instead, which applies to every supported version. Configuring
+    # this value is an error.
+    networks: ~
 
     # -- Default policy can either be 'bypass', 'one_factor', 'two_factor' or 'deny'. It is the policy applied to any
     # resource if there is no policy to be applied to the user.
@@ -2345,6 +2599,10 @@ configMap:
     # -- You can disable the notifier startup check by setting this to true.
     disable_startup_check: false
 
+    # -- The path to a directory of custom notification templates. The directory must be mounted into the Pod, which
+    # the 'pod.extraVolumes' and 'pod.extraVolumeMounts' values can do.
+    template_path: ''
+
     filesystem:
       # -- Enables the File System Provider (Notifier).
       enabled: false
@@ -2467,6 +2725,12 @@ configMap:
         # @schema
         # -- Default lifespan for Refresh Tokens.
         refresh_token: '1 hour and 30 minutes'
+
+        # @schema
+        # type: [string, integer]
+        # @schema
+        # -- Default lifespan for JWT Secured Authorization Response Mode responses.
+        jwt_secured_authorization: '5 minutes'
 
         # @schema
         # type: [string, integer]
@@ -2726,6 +2990,18 @@ configMap:
       #     rules:
       #       - policy: 'two_factor'
       #         subject: 'user:abc'
+
+      # @schema
+      # type: [string, null]
+      # @schema
+      # -- Removed. Use 'configMap.identity_providers.oidc.jwks' instead. Configuring this value is an error.
+      issuer_private_key: ~
+
+      # @schema
+      # type: [string, null]
+      # @schema
+      # -- Removed. Use 'configMap.identity_providers.oidc.jwks' instead. Configuring this value is an error.
+      issuer_certificate_chain: ~
 
       # @schema
       # type: array
