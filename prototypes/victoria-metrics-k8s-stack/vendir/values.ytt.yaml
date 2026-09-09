@@ -33,7 +33,7 @@ prototype:
       #! Big repo for eight small files, but it is the only place upstream
       #! publishes the VictoriaMetrics alerts and dashboards.
       git:
-        ref: v1.149.0
+        ref: v1.151.0
         url: https://github.com/VictoriaMetrics/VictoriaMetrics
       includePaths:
         - dashboards/operator.json
