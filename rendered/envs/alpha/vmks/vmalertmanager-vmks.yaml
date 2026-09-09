@@ -14,7 +14,7 @@ spec:
   disableNamespaceMatcher: true
   externalURL: https://alertmanager.zebradil.dev
   image:
-    tag: v0.32.1
+    tag: v0.34.0
   port: "9093"
   replicaCount: 1
   routePrefix: /
