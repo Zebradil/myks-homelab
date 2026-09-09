@@ -3,7 +3,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
-    controller-gen.kubebuilder.io/version: v0.17.1
+    controller-gen.kubebuilder.io/version: v0.21.0
   name: apiratelimits.hub.traefik.io
 spec:
   group: hub.traefik.io
