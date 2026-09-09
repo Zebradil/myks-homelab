@@ -73,7 +73,7 @@ spec:
                 secretKeyRef:
                   key: auth
                   name: argocd-redis
-          image: oci.zebradil.dev/ghcr.io-cache/oliver006/redis_exporter@sha256:fed773ffd2bb2eac706e0ed9cc2fff41651193ee4977e2a4f6919658ad2313f4
+          image: oci.zebradil.dev/ghcr.io-cache/oliver006/redis_exporter@sha256:a129504e65b87c54f79bc92f1afc403475e8ff646a3d7512de469904ceddf986
           name: metrics
           ports:
             - containerPort: 9121

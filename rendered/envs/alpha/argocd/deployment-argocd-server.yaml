@@ -20,8 +20,8 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/cm: 07b13340108730a77e3b58d173b0ebbf88f98d5e9a857971ed3df5a63ffecab1
-        checksum/cmd-params: d0477239ed2358dfb649902c178c882c3930650fe01522b7883554aedc8c5166
+        checksum/cm: 958ec6d4e202ce37312bb77fc1330803eff973e5d5398ceaf092f9502e99c83b
+        checksum/cmd-params: 7169a66dffe48e8cacc4d5fee2ffe558d692709d8ddaf19ef44fa89b031b0fe5
       labels:
         app.kubernetes.io/component: server
         app.kubernetes.io/instance: argocd
@@ -352,7 +352,7 @@ spec:
                   key: server.sync.replace.allowed
                   name: argocd-cmd-params-cm
                   optional: true
-          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:0deb1a1c917629b960ead995ae3b6069450a866992676599658687ef9a641ee8
+          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:e2aadfae709d904e87f46ba4aa49601d827b3022db22cd4d03aae816a2e7097b
           livenessProbe:
             failureThreshold: 3
             httpGet:
@@ -421,6 +421,7 @@ spec:
           name: ssh-known-hosts
         - configMap:
             name: argocd-tls-certs-cm
+            optional: true
           name: tls-certs
         - configMap:
             name: argocd-styles-cm
