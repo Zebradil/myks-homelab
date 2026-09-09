@@ -8,7 +8,7 @@ extends:
 gitIgnoredAuthors:
   - renovate[bot]@users.noreply.github.com
   - github-actions[bot]@users.noreply.github.com
-  - zebradil-bot[bot]@users.noreply.github.com
+  - zebradil-bot@users.noreply.github.com
 rebaseWhen: conflicted
 packageRules:
   - matchUpdateTypes:
