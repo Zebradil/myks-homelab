@@ -1,0 +1,7 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.49.1
+overrides:
+- image: ghcr.io/anatol/pacoloco:1.9
+  newImage: oci.zebradil.dev/ghcr.io-cache/anatol/pacoloco@sha256:2bdda30e637b884d0feb4b2bbe08de4e3822dab0a6cfecb220170a853be3628d
+  preresolved: true

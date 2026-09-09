@@ -16,7 +16,7 @@ spec:
         app.kubernetes.io/name: pacoloco
     spec:
       containers:
-        - image: oci.zebradil.dev/ghcr.io-cache/anatol/pacoloco@sha256:c5e7c82e6081e1edfd95f8cac8dd9e5e029b75557a63019c2e5034f35dd6623a
+        - image: oci.zebradil.dev/ghcr.io-cache/anatol/pacoloco@sha256:2bdda30e637b884d0feb4b2bbe08de4e3822dab0a6cfecb220170a853be3628d
           name: pacoloco
           ports:
             - containerPort: 9129
