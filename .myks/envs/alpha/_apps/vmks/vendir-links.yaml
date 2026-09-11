@@ -1,4 +1,4 @@
-charts/prom-crds: helm-prometheus-operator-crds-31.0.1-e4e7042222b74708
+charts/prom-crds: helm-prometheus-operator-crds-32.0.0-6534fec743ae321e
 charts/vmks: helm-victoria-metrics-k8s-stack-0.92.1-f807a66c0fe52ac2
 ytt/dotdc-dashboards: git-grafana-dashboards-kubernetes-v3.0.6-8b721cf821f8a54e
 ytt/kube-prometheus: git-kube-prometheus-v0.18.0-fd796d7254feaa78
