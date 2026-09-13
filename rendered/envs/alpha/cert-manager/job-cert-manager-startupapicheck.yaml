@@ -34,7 +34,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-          image: oci.zebradil.dev/quay.io-cache/jetstack/cert-manager-startupapicheck@sha256:d8ab6416e6e7303a86fa0a8daa82c94a8001f21c9d78eb2e7db20534e5d07ae8
+          image: oci.zebradil.dev/quay.io-cache/jetstack/cert-manager-startupapicheck@sha256:46e75b6866359ffb5d82624f41e3ed1c70b2994982702ced547ce5edb418a8f5
           name: cert-manager-startupapicheck
           securityContext:
             allowPrivilegeEscalation: false
