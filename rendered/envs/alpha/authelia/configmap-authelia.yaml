@@ -50,6 +50,8 @@ data:
             enable: true
           openid_connect_revocation:
             enable: true
+          second_factor_password:
+            enable: true
     log:
       level: 'info'
       format: 'text'

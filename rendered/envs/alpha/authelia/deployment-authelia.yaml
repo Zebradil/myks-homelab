@@ -21,7 +21,7 @@ spec:
   template:
     metadata:
       annotations:
-        authelia.com/checksum-config: 9b27d762b02e5fd46963a3717b72255231d021c9322f434f7982209e3ab0fe07
+        authelia.com/checksum-config: 318216abb3ed3fbcbf15542c3c82c2ace70545eab55bee365d6c65b56bed028d
       labels:
         app.kubernetes.io/instance: authelia
         app.kubernetes.io/name: authelia
@@ -50,7 +50,7 @@ spec:
               value: /configuration.yaml
             - name: X_AUTHELIA_CONFIG_FILTERS
               value: template
-          image: oci.zebradil.dev/ghcr.io-cache/authelia/authelia@sha256:1b363e9279e742397966333f364e0876ae02bf5c876de73e83af6d48c57ff51b
+          image: oci.zebradil.dev/ghcr.io-cache/authelia/authelia@sha256:8f428b06bb07bb978c10477527634f19ef3b049c9c87321fda14e24d8fc4c535
           livenessProbe:
             failureThreshold: 5
             httpGet:

@@ -1,11 +1,11 @@
 annotations:
   artifacthub.io/category: security
   artifacthub.io/changes: |
-    - kind: added
-      description: Support for the privacy policy, the OpenID Connect 1.0 userinfo, introspection and revocation rate limits, custom notification templates, access control rule query matching, the JWT secured authorization lifespan, the experimental passkey options, TOTP reuse policy, and the client option to allow multiple authentication methods.
+    - kind: fixed
+      description: The 'configMap.authentication_backend.ldap.group_search_mode' value could not be configured as it was missing from the values and schema.
   artifacthub.io/images: |
     - name: authelia/authelia
-      image: ghcr.io/authelia/authelia:4.39.20
+      image: ghcr.io/authelia/authelia:4.39.24
       whitelisted: false
       platforms:
         - linux/amd64
@@ -33,7 +33,7 @@ annotations:
     fingerprint: 192085915BD608A458AC58DCE461FA1531286EEA
     url: https://keybase.io/authelia/pgp_keys.asc
 apiVersion: v2
-appVersion: 4.39.20
+appVersion: 4.39.24
 description: Authelia is a Single Sign-On Multi-Factor portal for web apps
 home: https://www.authelia.com
 icon: https://avatars2.githubusercontent.com/u/59122411?s=200&v=4
@@ -72,4 +72,4 @@ sources:
 - https://github.com/authelia/chartrepo/tree/master/charts/authelia
 - https://www.github.com/authelia/authelia
 type: application
-version: 0.11.20
+version: 0.11.22
