@@ -366,7 +366,7 @@ spec:
                 secretKeyRef:
                   key: key
                   name: sops-age-key
-          image: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:756eb8436452d36c8cee968189aece8d8a53d4ec263a7aa1b2055688ae79cfcb
+          image: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:ed721ca811f29fa0fd8a4666aec2fb6771f3defbecc708a973d0b711d6f09293
           name: vals
           securityContext:
             allowPrivilegeEscalation: false
@@ -420,7 +420,7 @@ spec:
           env:
             - name: VALS_VERSION
               value: v0.43.1
-          image: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:756eb8436452d36c8cee968189aece8d8a53d4ec263a7aa1b2055688ae79cfcb
+          image: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:ed721ca811f29fa0fd8a4666aec2fb6771f3defbecc708a973d0b711d6f09293
           name: download-tools
           volumeMounts:
             - mountPath: /custom-tools
