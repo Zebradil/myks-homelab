@@ -1699,11 +1699,15 @@ networkPolicy:
   ##                   - frontend
   ##
   extraEgress: []
+  ## @param networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `networkPolicy.allowExternal` is true.
   ## @param networkPolicy.ingressNSMatchLabels Labels to match to allow traffic from other namespaces
   ## @param networkPolicy.ingressNSPodMatchLabels Pod labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressReleaseMatchLabels [object] Labels to match pods in the same release to allow traffic from. Ignored if `networkPolicy.allowExternal` is true.
   ##
+  addExternalClientAccess: true
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}
+  ingressReleaseMatchLabels: {}
   metrics:
     ## @param networkPolicy.metrics.allowExternal Don't require client label for connections for metrics endpoint
     ## When set to false, only pods with the correct client label will have network access to the metrics port
