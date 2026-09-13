@@ -46,7 +46,7 @@ spec:
           env:
             - name: TITLE
               value: ""
-          image: index.docker.io/jordanroher/starbase-80@sha256:6eb898bfa3ad2d38aca9e1e5597b3b1046112deb35c194887942a421fa822991
+          image: index.docker.io/jordanroher/starbase-80@sha256:249bcbb108afba0f597fa2d0c2a55325376f42c01b757e0fe26848222d4eb969
           name: builder
           volumeMounts:
             - mountPath: /static
