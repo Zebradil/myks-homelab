@@ -1,0 +1,145 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: backup
+spec:
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 3600
+      backoffLimit: 1
+      template:
+        spec:
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchLabels:
+                      app: paperless
+                  topologyKey: kubernetes.io/hostname
+          containers:
+            - args:
+                - forget
+                - --prune
+                - --keep-daily
+                - "7"
+                - --keep-weekly
+                - "4"
+                - --keep-monthly
+                - "12"
+                - --host
+                - paperless
+              command:
+                - restic
+              env:
+                - name: RESTIC_CACHE_DIR
+                  value: /cache
+              envFrom:
+                - secretRef:
+                    name: backup
+              image: index.docker.io/restic/restic@sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510
+              name: forget
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+              volumeMounts:
+                - mountPath: /cache
+                  name: cache
+          initContainers:
+            - args:
+                - /backup
+                - --no-thumbnail
+                - --no-progress-bar
+              command:
+                - python3
+                - manage.py
+                - document_exporter
+              env:
+                - name: PAPERLESS_DBPASS
+                  valueFrom:
+                    secretKeyRef:
+                      key: password
+                      name: postgresql
+                - name: PAPERLESS_DBHOST
+                  value: postgresql
+                - name: PAPERLESS_DBUSER
+                  value: paperless
+                - name: PAPERLESS_REDIS
+                  value: redis://redis-master:6379
+                - name: PAPERLESS_OCR_LANGUAGE
+                  value: deu+eng+rus
+                - name: PAPERLESS_OCR_LANGUAGES
+                  value: deu eng rus
+                - name: PAPERLESS_OCR_OUTPUT_TYPE
+                  value: pdf
+                - name: PAPERLESS_OCR_ROTATE_PAGES_THRESHOLD
+                  value: "4"
+                - name: PAPERLESS_OCR_USER_ARGS
+                  value: '{"invalidate_digital_signatures": true}'
+                - name: PAPERLESS_SECRET_KEY
+                  value: ref+sops://static/0.sops.yaml#/sessionSecretKey+
+                - name: PAPERLESS_TIME_ZONE
+                  value: Europe/Berlin
+              image: oci.zebradil.dev/ghcr.io-cache/paperless-ngx/paperless-ngx@sha256:6c86cad803970ea782683a8e80e7403444c5bf3cf70de63b4d3c8e87500db92f
+              name: dump
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+              volumeMounts:
+                - mountPath: /usr/src/paperless/data
+                  name: data
+                - mountPath: /usr/src/paperless/media
+                  name: media
+                  readOnly: true
+                - mountPath: /backup
+                  name: scratch
+              workingDir: /usr/src/paperless/src
+            - args:
+                - backup
+                - /backup
+                - --host
+                - paperless
+              command:
+                - restic
+              env:
+                - name: RESTIC_CACHE_DIR
+                  value: /cache
+              envFrom:
+                - secretRef:
+                    name: backup
+              image: index.docker.io/restic/restic@sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510
+              name: backup
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+              volumeMounts:
+                - mountPath: /cache
+                  name: cache
+                - mountPath: /backup
+                  name: scratch
+                  readOnly: true
+          restartPolicy: Never
+          securityContext:
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
+          volumes:
+            - emptyDir: {}
+              name: scratch
+            - emptyDir: {}
+              name: cache
+            - name: data
+              persistentVolumeClaim:
+                claimName: data
+            - name: media
+              persistentVolumeClaim:
+                claimName: media
+  schedule: 30 3 * * *
