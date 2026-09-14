@@ -1,0 +1,71 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:library", "library")
+#@ load("@ytt:template", "template")
+#@ load("secrets.star", "sops")
+#@ load("util.star", "util")
+
+#@ ap = data.values.application
+#@ name = data.values.myks.context.app
+#! The paperless user in the image, which owns the data and media volumes.
+#@ paperless_uid = 1000
+
+#! Maps typed `any` in the library schema have no keys to overlay, hence overlay/replace.
+#@ def values():
+host: #@ name
+#@overlay/replace
+secretEnv:
+  RESTIC_REPOSITORY: #@ sops("backup", "restic-repository")
+  RESTIC_PASSWORD: #@ sops("backup", "restic-password")
+  AWS_ACCESS_KEY_ID: #@ sops("backup", "aws-access-key-id")
+  AWS_SECRET_ACCESS_KEY: #@ sops("backup", "aws-secret-access-key")
+#@overlay/replace
+dump:
+  name: dump
+  image: #@ ap.paperless.image
+  #! The image's `document_exporter` wrapper expects to run under s6, so call manage.py directly. The export holds
+  #! documents and the database contents in one restorable directory. Thumbnails are left out: they can be regenerated
+  #! and would only churn the deduplicated repository.
+  workingDir: /usr/src/paperless/src
+  command: [python3, manage.py, document_exporter]
+  args:
+    - /backup
+    - --no-thumbnail
+    - --no-progress-bar
+  env:
+    - name: PAPERLESS_DBPASS
+      valueFrom:
+        secretKeyRef:
+          name: postgresql
+          key: password
+    #@ for/end envvar in util.map_to_envs(ap.paperless.env):
+    -  #@ envvar
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+  volumeMounts:
+    - name: data
+      mountPath: /usr/src/paperless/data
+    - name: media
+      mountPath: /usr/src/paperless/media
+      readOnly: true
+volumes:
+  - name: data
+    persistentVolumeClaim:
+      claimName: data
+  - name: media
+    persistentVolumeClaim:
+      claimName: media
+#@overlay/replace
+affinityPodLabels:
+  app: #@ name
+#! No fsGroup: kubelet would chown the whole media volume on every run.
+#@overlay/replace
+podSecurityContext:
+  runAsUser: #@ paperless_uid
+  runAsGroup: #@ paperless_uid
+  runAsNonRoot: true
+#@ end
+
+--- #@ template.replace(library.get("backup").with_data_values(values()).eval())
