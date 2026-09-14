@@ -1,0 +1,203 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
+#@ load("@ytt:sha256", "sha256")
+#@ load("@ytt:struct", "struct")
+#@ load("@ytt:yaml", "yaml")
+#@ load("/overlay-matchers.star", m="matchers")
+
+#@ a = data.values.application
+#@ name = "blackbox-exporter"
+#@ ns = "synology-csi"
+#@ probe_job = "dsm-tls"
+
+#! ---------------------------------------------------------------------------
+#! Alerts for the two ways synology-csi loses the NAS.
+#!
+#! blackbox_exporter handshakes with DSM using the TLS settings of each entry
+#! in application.clients, so the probe fails exactly when CSI logins would
+#! fail on TLS: DSM regenerated its certificate, the pinned CA expired, or the
+#! name no longer matches. It follows any change to the client settings.
+#!
+#! Controller sidecar metrics cover every other reason volume operations fail,
+#! so a broken CSI surfaces directly instead of as a downstream outage.
+#! ---------------------------------------------------------------------------
+
+#! The controller runs with hostNetwork, so these ports bind on the node.
+#! Port names are capped at 15 characters.
+#@ sidecar_metrics = {
+#@   "csi-provisioner": struct.make(port=9820, port_name="metrics-prov"),
+#@   "csi-attacher": struct.make(port=9821, port_name="metrics-attach"),
+#@ }
+
+#@ def module(client):
+#@   tls = {"insecure_skip_verify": client.insecureSkipVerify}
+#@   if client.tlsCACert:
+#@     tls["ca"] = client.tlsCACert
+#@   end
+#@   if client.tlsServerName:
+#@     tls["server_name"] = client.tlsServerName
+#@   end
+#@   return {"prober": "tcp", "timeout": "10s", "tcp": {"tls": client.https, "tls_config": tls}}
+#@ end
+
+#@ def blackbox_config():
+#@   return {"modules": {"dsm-{}".format(i): module(c) for i, c in enumerate(a.clients)}}
+#@ end
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: #@ name
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: #@ name
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: #@ name
+      annotations:
+        #! Restart on module changes; blackbox_exporter only rereads config on SIGHUP.
+        checksum/config: #@ sha256.sum(yaml.encode(blackbox_config()))
+    spec:
+      containers:
+        - name: #@ name
+          image: #@ a.blackboxExporter.image
+          args:
+            - --config.file=/etc/blackbox/blackbox.yml
+          ports:
+            - containerPort: #@ a.blackboxExporter.port
+              name: http
+          volumeMounts:
+            - name: config
+              mountPath: /etc/blackbox
+              readOnly: true
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+            privileged: false
+      volumes:
+        - name: config
+          configMap:
+            name: #@ name
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #@ name
+spec:
+  ports:
+    - name: http
+      port: #@ a.blackboxExporter.port
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: #@ name
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: #@ name
+data:
+  blackbox.yml: #@ yaml.encode(blackbox_config())
+
+#@ for i, c in enumerate(a.clients):
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMProbe
+metadata:
+  name: #@ "dsm-{}".format(i)
+spec:
+  jobName: #@ probe_job
+  module: #@ "dsm-{}".format(i)
+  vmProberSpec:
+    url: #@ name + "." + ns + ".svc.cluster.local.:" + str(a.blackboxExporter.port)
+  targets:
+    staticConfig:
+      targets:
+        -  #@ "{}:{}".format(c.host, c.port)
+#@ end
+
+#@overlay/match by=m.kind_name("StatefulSet", "synology-csi-controller")
+---
+spec:
+  template:
+    spec:
+      containers:
+        #@ for container, metrics in sidecar_metrics.items():
+        #@overlay/match by="name"
+        - name: #@ container
+          args:
+            #@overlay/append
+            - #@ "--http-endpoint=:{}".format(metrics.port)
+          #@overlay/match missing_ok=True
+          ports:
+            #@overlay/append
+            - name: #@ metrics.port_name
+              containerPort: #@ metrics.port
+#@ end
+
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMPodScrape
+metadata:
+  name: synology-csi-controller
+spec:
+  selector:
+    matchLabels:
+      app: synology-csi-controller
+  podMetricsEndpoints:
+    #@ for metrics in sidecar_metrics.values():
+    - port: #@ metrics.port_name
+    #@ end
+
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: synology-csi
+spec:
+  groups:
+    - name: synology-csi
+      rules:
+        - alert: DsmTlsProbeFailed
+          #! up == 0 keeps a dead exporter from silently disabling the probe.
+          expr: #@ 'probe_success{{job="{0}"}} == 0 or up{{job="{0}"}} == 0'.format(probe_job)
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: synology-csi TLS settings no longer work against DSM
+            description: >-
+              A TLS handshake with {{ $labels.instance }} using the synology-csi client settings fails, so CSI cannot
+              log in and new volume mounts will fail. Check whether DSM regenerated its certificate (refresh
+              tlsCACert) or is unreachable.
+        - alert: DsmCertificateExpiringSoon
+          expr: #@ 'probe_ssl_earliest_cert_expiry{{job="{}"}} - time() < 14 * 86400'.format(probe_job)
+          for: 1h
+          labels:
+            severity: warning
+          annotations:
+            summary: DSM certificate expires within two weeks
+            description: 'The certificate served by {{ $labels.instance }} expires in {{ $value | humanizeDuration }}.'
+        - alert: SynologyCsiOperationsFailing
+          expr: >-
+            sum by (method_name, grpc_status_code) (
+              rate(
+                csi_sidecar_operations_seconds_count{driver_name="csi.san.synology.com", grpc_status_code!="OK"}[10m]
+              )
+            ) > 0
+          #! Isolated errors are normal (e.g. NotFound when unpublishing an already deleted volume); only a sustained
+          #! failure stream means volumes cannot be provisioned or attached.
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: synology-csi {{ $labels.method_name }} calls are failing
+            description: >-
+              The controller keeps getting {{ $labels.grpc_status_code }} from {{ $labels.method_name }}.
+              Pods needing a new volume mount will not start.

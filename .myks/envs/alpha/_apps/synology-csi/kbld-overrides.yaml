@@ -1,6 +1,8 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 overrides:
+    - image: quay.io/prometheus/blackbox-exporter:v0.28.0
+      newImage: oci.zebradil.dev/quay.io-cache/prometheus/blackbox-exporter:v0.28.0
     - image: registry.k8s.io/sig-storage/csi-attacher:v3.3.0
       newImage: oci.zebradil.dev/registry.k8s.io-cache/sig-storage/csi-attacher:v3.3.0
     - image: registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.3.0
