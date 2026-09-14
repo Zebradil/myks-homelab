@@ -11,7 +11,8 @@ application:
       #! The DSM certificate is signed by the built-in Synology CA and carries
       #! only DNS:synology, while the host above is an IP, so both the CA and the
       #! name to verify against have to be supplied. DSM regenerates this
-      #! certificate on some upgrades — refresh tlsCACert if logins start failing.
+      #! certificate on some upgrades; to refresh tlsCACert, see
+      #! prototypes/synology-csi/README.md.
       tlsServerName: synology
       tlsCACert: |
         -----BEGIN CERTIFICATE-----

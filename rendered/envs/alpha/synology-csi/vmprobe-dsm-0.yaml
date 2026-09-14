@@ -1,0 +1,15 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMProbe
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: dsm-0
+spec:
+  jobName: dsm-tls
+  module: dsm-0
+  targets:
+    staticConfig:
+      targets:
+        - ref+sops://static/dsm-1.sops.yaml#/host+:5001
+  vmProberSpec:
+    url: blackbox-exporter.synology-csi.svc.cluster.local.:9115

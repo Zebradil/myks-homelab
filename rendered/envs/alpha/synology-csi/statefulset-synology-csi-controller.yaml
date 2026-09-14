@@ -22,11 +22,15 @@ spec:
             - --csi-address=$(ADDRESS)
             - --v=5
             - --extra-create-metadata
+            - --http-endpoint=:9820
           env:
             - name: ADDRESS
               value: /var/lib/csi/sockets/pluginproxy/csi.sock
           image: oci.zebradil.dev/registry.k8s.io-cache/sig-storage/csi-provisioner@sha256:6477988532358148d2e98f7c747db4e9250bbc7ad2664bf666348abf9ee1f5aa
           name: csi-provisioner
+          ports:
+            - containerPort: 9820
+              name: metrics-prov
           securityContext:
             allowPrivilegeEscalation: true
             capabilities:
@@ -39,11 +43,15 @@ spec:
         - args:
             - --v=5
             - --csi-address=$(ADDRESS)
+            - --http-endpoint=:9821
           env:
             - name: ADDRESS
               value: /var/lib/csi/sockets/pluginproxy/csi.sock
           image: oci.zebradil.dev/registry.k8s.io-cache/sig-storage/csi-attacher@sha256:80dec81b679a733fda448be92a2331150d99095947d04003ecff3dbd7f2a476a
           name: csi-attacher
+          ports:
+            - containerPort: 9821
+              name: metrics-attach
           securityContext:
             allowPrivilegeEscalation: true
             capabilities:

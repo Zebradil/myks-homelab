@@ -1,0 +1,82 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dsm-invalid-ca-blackbox
+data:
+  blackbox.yml: |
+    modules:
+      dsm-invalid-ca:
+        prober: tcp
+        timeout: 10s
+        tcp:
+          tls: true
+          tls_config:
+            ca_file: /etc/ca/invalid-ca.pem
+            server_name: synology
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dsm-invalid-ca
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: dsm-invalid-ca
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: dsm-invalid-ca
+    spec:
+      containers:
+        - name: blackbox-exporter
+          image: oci.zebradil.dev/quay.io-cache/prometheus/blackbox-exporter:v0.28.0
+          args:
+            - --config.file=/etc/blackbox/blackbox.yml
+          ports:
+            - containerPort: 9115
+              name: http
+          volumeMounts:
+            - name: config
+              mountPath: /etc/blackbox
+            - name: ca
+              mountPath: /etc/ca
+      volumes:
+        - name: config
+          configMap:
+            name: dsm-invalid-ca-blackbox
+        - name: ca
+          configMap:
+            name: dsm-invalid-ca
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dsm-invalid-ca
+spec:
+  ports:
+    - name: http
+      port: 9115
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: dsm-invalid-ca
+
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMProbe
+metadata:
+  name: dsm-invalid-ca
+spec:
+  jobName: dsm-tls
+  module: dsm-invalid-ca
+  vmProberSpec:
+    url: dsm-invalid-ca.synology-csi.svc.cluster.local.:9115
+  targets:
+    staticConfig:
+      targets:
+        - 192.168.0.30:5001
+      # Keeps these series apart from the real probe, which shares job and instance.
+      labels:
+        test: invalid-ca

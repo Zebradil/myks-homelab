@@ -1,0 +1,39 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: synology-csi
+spec:
+  groups:
+    - name: synology-csi
+      rules:
+        - alert: DsmTlsProbeFailed
+          annotations:
+            description: A TLS handshake with {{ $labels.instance }} using the synology-csi client settings fails, so CSI cannot log in and new volume mounts will fail. Check whether DSM regenerated its certificate (refresh tlsCACert) or is unreachable.
+            summary: synology-csi TLS settings no longer work against DSM
+          expr: probe_success{job="dsm-tls"} == 0 or up{job="dsm-tls"} == 0
+          for: 5m
+          labels:
+            severity: critical
+        - alert: DsmCertificateExpiringSoon
+          annotations:
+            description: The certificate served by {{ $labels.instance }} expires in {{ $value | humanizeDuration }}.
+            summary: DSM certificate expires within two weeks
+          expr: probe_ssl_earliest_cert_expiry{job="dsm-tls"} - time() < 14 * 86400
+          for: 1h
+          labels:
+            severity: warning
+        - alert: SynologyCsiOperationsFailing
+          annotations:
+            description: The controller keeps getting {{ $labels.grpc_status_code }} from {{ $labels.method_name }}. Pods needing a new volume mount will not start.
+            summary: synology-csi {{ $labels.method_name }} calls are failing
+          expr: |-
+            sum by (method_name, grpc_status_code) (
+              rate(
+                csi_sidecar_operations_seconds_count{driver_name="csi.san.synology.com", grpc_status_code!="OK"}[10m]
+              )
+            ) > 0
+          for: 15m
+          labels:
+            severity: critical
