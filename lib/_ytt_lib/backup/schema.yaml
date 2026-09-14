@@ -1,0 +1,33 @@
+#@data/values-schema
+---
+#! renovate: datasource=docker
+image: restic/restic:0.19.1
+schedule: "30 3 * * *"
+#! Passed as `restic --host`, which scopes `forget` to this app's snapshots.
+#@schema/validation min_len=1
+host: ""
+retention:
+  daily: 7
+  weekly: 4
+  monthly: 12
+#! RESTIC_REPOSITORY, RESTIC_PASSWORD and the S3 credentials, usually sops refs.
+#@schema/type any=True
+#@schema/validation min_len=1
+secretEnv: {}
+#! Container that writes a consistent dump into /backup (mounted automatically).
+#@schema/type any=True
+#@schema/validation min_len=1
+dump: {}
+#! Paths backed up alongside /backup, for files that are safe to copy live.
+paths: [""]
+excludes: [""]
+#@schema/type any=True
+volumes: []
+#! Mounts for the restic backup container, in addition to /backup.
+#@schema/type any=True
+mounts: []
+#! Labels of the pod that holds the RWO volumes: the job has to run on the same node.
+#@schema/type any=True
+affinityPodLabels: null
+#@schema/type any=True
+podSecurityContext: {}
