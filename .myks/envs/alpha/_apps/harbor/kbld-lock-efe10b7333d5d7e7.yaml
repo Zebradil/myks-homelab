@@ -59,6 +59,9 @@ overrides:
 - image: registry.access.redhat.com/ubi8/ubi:8.9
   newImage: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8/ubi@sha256:83068ea81dd02717b8e39b55cdeb2c1b2c9a3db260f01381b991755d44b15073
   preresolved: true
+- image: restic/restic:0.19.1
+  newImage: index.docker.io/restic/restic@sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510
+  preresolved: true
 searchRules:
 - keyMatcher:
     path:
