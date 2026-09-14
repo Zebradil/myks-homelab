@@ -88,9 +88,7 @@ spec:
           resources:
             requests:
               cpu: 300m
-              memory: 1100Mi
-            limits:
-              memory: 1100Mi
+              memory: 1300Mi
           volumeMounts:
             #! PVC at /kasha (= KASHA_DATA): the flat binary-cache store.
             - name: #@ name

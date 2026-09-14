@@ -33,7 +33,7 @@ spec:
           envFrom:
             - secretRef:
                 name: kasha
-          image: oci.zebradil.dev/ghcr.io-cache/zebradil/kasha-box@sha256:73532aa22fcdfe275528cc05086435d8c809431a9921275563e9f116be151e4d
+          image: oci.zebradil.dev/ghcr.io-cache/zebradil/kasha-box@sha256:4c480decfcfa0d08cf5e80c46d2beeb2436e742678936072d1cbb8c5a8bb0e0e
           livenessProbe:
             failureThreshold: 10
             httpGet:
@@ -54,11 +54,9 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 5
           resources:
-            limits:
-              memory: 1100Mi
             requests:
               cpu: 300m
-              memory: 1100Mi
+              memory: 1300Mi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
