@@ -1,0 +1,105 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: backup
+spec:
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 3600
+      backoffLimit: 1
+      template:
+        spec:
+          containers:
+            - args:
+                - forget
+                - --prune
+                - --keep-daily
+                - "7"
+                - --keep-weekly
+                - "4"
+                - --keep-monthly
+                - "12"
+                - --host
+                - harbor
+              command:
+                - restic
+              env:
+                - name: RESTIC_CACHE_DIR
+                  value: /cache
+              envFrom:
+                - secretRef:
+                    name: backup
+              image: index.docker.io/restic/restic@sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510
+              name: forget
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+              volumeMounts:
+                - mountPath: /cache
+                  name: cache
+          initContainers:
+            - args:
+                - --host=harbor-database
+                - --username=postgres
+                - --dbname=registry
+                - --file=/backup/registry.sql
+              command:
+                - pg_dump
+              env:
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: POSTGRES_PASSWORD
+                      name: harbor-database
+              image: index.docker.io/goharbor/harbor-db@sha256:5ebfb345b33d673fa8483ffc997013113b7d14ea56abfa65cfcb621b4acf3039
+              name: dump
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+              volumeMounts:
+                - mountPath: /backup
+                  name: scratch
+            - args:
+                - backup
+                - /backup
+                - --host
+                - harbor
+              command:
+                - restic
+              env:
+                - name: RESTIC_CACHE_DIR
+                  value: /cache
+              envFrom:
+                - secretRef:
+                    name: backup
+              image: index.docker.io/restic/restic@sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510
+              name: backup
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+              volumeMounts:
+                - mountPath: /cache
+                  name: cache
+                - mountPath: /backup
+                  name: scratch
+                  readOnly: true
+          restartPolicy: Never
+          securityContext:
+            runAsGroup: 999
+            runAsNonRoot: true
+            runAsUser: 999
+          volumes:
+            - emptyDir: {}
+              name: scratch
+            - emptyDir: {}
+              name: cache
+  schedule: 30 3 * * *

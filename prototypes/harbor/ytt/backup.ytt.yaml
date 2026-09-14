@@ -1,0 +1,49 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:library", "library")
+#@ load("@ytt:template", "template")
+#@ load("secrets.star", "sops")
+
+#@ name = data.values.myks.context.app
+#! The postgres user of goharbor/harbor-db.
+#@ postgres_uid = 999
+
+#! Maps typed `any` in the library schema have no keys to overlay, hence overlay/replace.
+#@ def values():
+host: #@ name
+#@overlay/replace
+secretEnv:
+  RESTIC_REPOSITORY: #@ sops("backup", "restic-repository")
+  RESTIC_PASSWORD: #@ sops("backup", "restic-password")
+  AWS_ACCESS_KEY_ID: #@ sops("backup", "aws-access-key-id")
+  AWS_SECRET_ACCESS_KEY: #@ sops("backup", "aws-secret-access-key")
+#@overlay/replace
+dump:
+  name: dump
+  #! The database's own image, so pg_dump matches the server's major version. Plain SQL rather than a compressed
+  #! custom-format dump, so restic can deduplicate it between runs.
+  image: #@ "goharbor/harbor-db:" + data.values.application.version
+  command: [pg_dump]
+  args:
+    - --host=harbor-database
+    - --username=postgres
+    - --dbname=registry
+    - --file=/backup/registry.sql
+  env:
+    - name: PGPASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: harbor-database
+          key: POSTGRES_PASSWORD
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+#@overlay/replace
+podSecurityContext:
+  runAsUser: #@ postgres_uid
+  runAsGroup: #@ postgres_uid
+  runAsNonRoot: true
+#@ end
+
+--- #@ template.replace(library.get("backup").with_data_values(values()).eval())
