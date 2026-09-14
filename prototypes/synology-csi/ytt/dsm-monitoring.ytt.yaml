@@ -10,17 +10,7 @@
 #@ ns = "synology-csi"
 #@ probe_job = "dsm-tls"
 
-#! ---------------------------------------------------------------------------
-#! Alerts for the two ways synology-csi loses the NAS.
-#!
-#! blackbox_exporter handshakes with DSM using the TLS settings of each entry
-#! in application.clients, so the probe fails exactly when CSI logins would
-#! fail on TLS: DSM regenerated its certificate, the pinned CA expired, or the
-#! name no longer matches. It follows any change to the client settings.
-#!
-#! Controller sidecar metrics cover every other reason volume operations fail,
-#! so a broken CSI surfaces directly instead of as a downstream outage.
-#! ---------------------------------------------------------------------------
+#! Monitoring design and alert testing: see ../README.md.
 
 #! The controller runs with hostNetwork, so these ports bind on the node.
 #! Port names are capped at 15 characters.
