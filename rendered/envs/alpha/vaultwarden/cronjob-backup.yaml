@@ -1,0 +1,122 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: backup
+spec:
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 3600
+      backoffLimit: 1
+      template:
+        spec:
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchLabels:
+                      app.kubernetes.io/name: vaultwarden
+                  topologyKey: kubernetes.io/hostname
+          containers:
+            - args:
+                - forget
+                - --prune
+                - --keep-daily
+                - "7"
+                - --keep-weekly
+                - "4"
+                - --keep-monthly
+                - "12"
+                - --host
+                - vaultwarden
+              command:
+                - restic
+              env:
+                - name: RESTIC_CACHE_DIR
+                  value: /cache
+              envFrom:
+                - secretRef:
+                    name: backup
+              image: index.docker.io/restic/restic@sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510
+              name: forget
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+              volumeMounts:
+                - mountPath: /cache
+                  name: cache
+          initContainers:
+            - args:
+                - |
+                  set -eu
+                  f=$(/vaultwarden backup | sed -n "s/^Backup to '\(.*\)' was successful$/\1/p")
+                  test -n "$f"
+                  mv "/$f" /backup/db.sqlite3
+              command:
+                - /bin/sh
+                - -c
+              image: oci.zebradil.dev/ghcr.io-cache/dani-garcia/vaultwarden@sha256:1587c45feaa479f1f5e8af3b00eded36bff77bcf1880cf8dbf0541706dd470e0
+              name: dump
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+              volumeMounts:
+                - mountPath: /data
+                  name: data
+                - mountPath: /backup
+                  name: scratch
+            - args:
+                - backup
+                - /backup
+                - /data
+                - --exclude
+                - /data/db.sqlite3*
+                - --exclude
+                - /data/icon_cache
+                - --host
+                - vaultwarden
+              command:
+                - restic
+              env:
+                - name: RESTIC_CACHE_DIR
+                  value: /cache
+              envFrom:
+                - secretRef:
+                    name: backup
+              image: index.docker.io/restic/restic@sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510
+              name: backup
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+              volumeMounts:
+                - mountPath: /cache
+                  name: cache
+                - mountPath: /backup
+                  name: scratch
+                  readOnly: true
+                - mountPath: /data
+                  name: data
+                  readOnly: true
+          restartPolicy: Never
+          securityContext:
+            fsGroup: 1000
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
+          volumes:
+            - emptyDir: {}
+              name: scratch
+            - emptyDir: {}
+              name: cache
+            - name: data
+              persistentVolumeClaim:
+                claimName: data
+  schedule: 30 3 * * *

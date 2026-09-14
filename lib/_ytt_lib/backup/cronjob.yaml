@@ -1,0 +1,81 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:struct", "struct")
+
+#@ v = data.values
+
+#! The staleness alert in victoria-metrics-k8s-stack matches on this name.
+#@ name = "backup"
+#@ backup_dir = "/backup"
+#@ cache_dir = "/cache"
+
+#@ dump = struct.decode(v.dump)
+#@ dump["volumeMounts"] = dump.get("volumeMounts", []) + [{"name": "scratch", "mountPath": backup_dir}]
+
+#@ backup_mounts = [{"name": "scratch", "mountPath": backup_dir, "readOnly": True}] + struct.decode(v.mounts)
+#@ volumes = [{"name": "scratch", "emptyDir": {}}, {"name": "cache", "emptyDir": {}}] + struct.decode(v.volumes)
+
+#@ excludes = [arg for e in v.excludes for arg in ["--exclude", e]]
+#@ backup_args = ["backup", backup_dir] + list(v.paths) + excludes
+#@ forget_args = [
+#@   "forget", "--prune",
+#@   "--keep-daily", str(v.retention.daily),
+#@   "--keep-weekly", str(v.retention.weekly),
+#@   "--keep-monthly", str(v.retention.monthly),
+#@ ]
+
+#@ def restic_container(container_name, args, mounts):
+name: #@ container_name
+image: #@ v.image
+command: [restic]
+args: #@ args + ["--host", v.host]
+env:
+  - name: RESTIC_CACHE_DIR
+    value: #@ cache_dir
+envFrom:
+  - secretRef:
+      name: #@ name
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+volumeMounts: #@ [{"name": "cache", "mountPath": cache_dir}] + mounts
+#@ end
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: #@ name
+stringData: #@ struct.decode(v.secretEnv)
+
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: #@ name
+spec:
+  schedule: #@ v.schedule
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      #! Fails the job, and so KubeJobFailed fires, when the pod can't be scheduled, e.g. the app is scaled down.
+      activeDeadlineSeconds: 3600
+      template:
+        spec:
+          restartPolicy: Never
+          #@ if/end v.affinityPodLabels:
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchLabels: #@ struct.decode(v.affinityPodLabels)
+                  topologyKey: kubernetes.io/hostname
+          securityContext: #@ struct.decode(v.podSecurityContext)
+          initContainers:
+            -  #@ dump
+            -  #@ restic_container("backup", backup_args, backup_mounts)
+          containers:
+            -  #@ restic_container("forget", forget_args, [])
+          volumes: #@ volumes

@@ -1,0 +1,25 @@
+#! Alerts for backups made with lib/_ytt_lib/backup, which names every CronJob `backup`.
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: vmks-backup
+spec:
+  groups:
+    - name: backup
+      rules:
+        #! KubeJobFailed only sees runs that happened. This also catches a CronJob that stopped producing runs, e.g.
+        #! suspended. A CronJob that never succeeded is measured from its creation.
+        - alert: BackupStale
+          expr: |
+            time() - (
+              kube_cronjob_status_last_successful_time{cronjob="backup"}
+                or on(namespace, cronjob)
+              kube_cronjob_created{cronjob="backup"}
+            ) > 36 * 3600
+          labels:
+            severity: warning
+          annotations:
+            summary: Backup has not succeeded in over 36 hours.
+            description: >-
+              CronJob {{ $labels.namespace }}/backup has had no successful run for {{ $value | humanizeDuration }}.
