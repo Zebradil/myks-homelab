@@ -14,3 +14,6 @@ overrides:
 - image: registry-1.docker.io/bitnamilegacy/redis:8.2.1-debian-12-r0
   newImage: registry-1.docker.io/bitnamilegacy/redis@sha256:25bf63f3caf75af4628c0dfcf39859ad1ac8abe135be85e99699f9637b16dc28
   preresolved: true
+- image: restic/restic:0.19.1
+  newImage: index.docker.io/restic/restic@sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510
+  preresolved: true
