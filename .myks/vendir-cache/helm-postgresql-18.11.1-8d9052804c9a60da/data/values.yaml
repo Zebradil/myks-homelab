@@ -332,6 +332,9 @@ primary:
   ## @param primary.name Name of the primary database (eg primary, master, leader, ...)
   ##
   name: primary
+  ## @param primary.replicaCount Number of PostgreSQL Primary replicas to deploy. Only 0 or 1 is supported, since a PostgreSQL Primary cannot be horizontally scaled the way readReplicas can
+  ##
+  replicaCount: 1
   ## @param primary.configuration PostgreSQL Primary main configuration to be injected as ConfigMap
   ## ref: https://www.postgresql.org/docs/current/static/runtime-config.html
   ##
@@ -528,6 +531,7 @@ primary:
   ## @param primary.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param primary.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param primary.podSecurityContext.fsGroup Group ID for the pod
+  ## @param primary.podSecurityContext.seccompProfile.type Set PostgreSQL primary pod's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
@@ -535,6 +539,8 @@ primary:
     sysctls: []
     supplementalGroups: []
     fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param primary.containerSecurityContext.enabled Enabled containers' Security Context
@@ -741,11 +747,15 @@ primary:
     ##                   - frontend
     ##
     extraEgress: []
+    ## @param primary.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `primary.networkPolicy.allowExternal` is true.
     ## @param primary.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
     ## @param primary.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ## @param primary.networkPolicy.ingressReleaseMatchLabels [object] Labels to match pods in the same release to allow traffic from. Ignored if `primary.networkPolicy.allowExternal` is true.
     ##
+    addExternalClientAccess: true
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
+    ingressReleaseMatchLabels: {}
   ## PostgreSQL Primary service configuration
   ##
   service:
@@ -996,6 +1006,7 @@ readReplicas:
   ## @param readReplicas.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param readReplicas.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param readReplicas.podSecurityContext.fsGroup Group ID for the pod
+  ## @param readReplicas.podSecurityContext.seccompProfile.type Set PostgreSQL read replica pod's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
@@ -1003,6 +1014,8 @@ readReplicas:
     sysctls: []
     supplementalGroups: []
     fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param readReplicas.containerSecurityContext.enabled Enabled containers' Security Context
@@ -1209,11 +1222,15 @@ readReplicas:
     ##                   - frontend
     ##
     extraEgress: []
+    ## @param readReplicas.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `readReplicas.networkPolicy.allowExternal` is true.
     ## @param readReplicas.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
     ## @param readReplicas.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ## @param readReplicas.networkPolicy.ingressReleaseMatchLabels [object] Labels to match pods in the same release to allow traffic from. Ignored if `readReplicas.networkPolicy.allowExternal` is true.
     ##
+    addExternalClientAccess: true
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
+    ingressReleaseMatchLabels: {}
   ## PostgreSQL read only service configuration
   ##
   service:
@@ -1375,12 +1392,15 @@ backup:
     ## @param backup.cronjob.podSecurityContext.sysctls Set kernel settings using the sysctl interface
     ## @param backup.cronjob.podSecurityContext.supplementalGroups Set filesystem extra groups
     ## @param backup.cronjob.podSecurityContext.fsGroup Group ID for the CronJob
+    ## @param backup.cronjob.podSecurityContext.seccompProfile.type Set backup CronJob pod's Security Context seccomp profile
     podSecurityContext:
       enabled: true
       fsGroupChangePolicy: Always
       sysctls: []
       supplementalGroups: []
       fsGroup: 1001
+      seccompProfile:
+        type: "RuntimeDefault"
     ## backup container's Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param backup.cronjob.containerSecurityContext.enabled Enabled containers' Security Context
@@ -1557,6 +1577,7 @@ passwordUpdateJob:
   ## @param passwordUpdateJob.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param passwordUpdateJob.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param passwordUpdateJob.podSecurityContext.fsGroup Set credential init job pod's Security Context fsGroup
+  ## @param passwordUpdateJob.podSecurityContext.seccompProfile.type Set credential init job pod's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
@@ -1564,6 +1585,8 @@ passwordUpdateJob:
     sysctls: []
     supplementalGroups: []
     fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param passwordUpdateJob.extraEnvVars Array containing extra env vars to configure the credential init job
   ## For example:
   ## extraEnvVars:
@@ -1702,7 +1725,7 @@ volumePermissions:
     runAsGroup: 0
     runAsNonRoot: false
     seccompProfile:
-      type: RuntimeDefault
+      type: "RuntimeDefault"
 ## @section Other Parameters
 ##
 

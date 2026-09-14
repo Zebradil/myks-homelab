@@ -141,6 +141,8 @@ spec:
       securityContext:
         fsGroup: 1001
         fsGroupChangePolicy: Always
+        seccompProfile:
+          type: RuntimeDefault
         supplementalGroups: []
         sysctls: []
       serviceAccountName: postgresql
