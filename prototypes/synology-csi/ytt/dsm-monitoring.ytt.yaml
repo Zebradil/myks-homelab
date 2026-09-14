@@ -30,9 +30,7 @@
 #@   return {"prober": "tcp", "timeout": "10s", "tcp": {"tls": client.https, "tls_config": tls}}
 #@ end
 
-#@ def blackbox_config():
-#@   return {"modules": {"dsm-{}".format(i): module(c) for i, c in enumerate(a.clients)}}
-#@ end
+#@ blackbox_config = {"modules": {"dsm-{}".format(i): module(c) for i, c in enumerate(a.clients)}}
 
 ---
 apiVersion: apps/v1
@@ -49,7 +47,7 @@ spec:
         app.kubernetes.io/name: #@ name
       annotations:
         #! Restart on module changes; blackbox_exporter only rereads config on SIGHUP.
-        checksum/config: #@ sha256.sum(yaml.encode(blackbox_config()))
+        checksum/config: #@ sha256.sum(yaml.encode(blackbox_config))
     spec:
       containers:
         - name: #@ name
@@ -93,9 +91,10 @@ kind: ConfigMap
 metadata:
   name: #@ name
 data:
-  blackbox.yml: #@ yaml.encode(blackbox_config())
+  blackbox.yml: #@ yaml.encode(blackbox_config)
 
-#@ for i, c in enumerate(a.clients):
+
+#@ for/end i, c in enumerate(a.clients):
 ---
 apiVersion: operator.victoriametrics.com/v1beta1
 kind: VMProbe
@@ -110,7 +109,8 @@ spec:
     staticConfig:
       targets:
         -  #@ "{}:{}".format(c.host, c.port)
-#@ end
+
+
 
 #@overlay/match by=m.kind_name("StatefulSet", "synology-csi-controller")
 ---
@@ -118,19 +118,15 @@ spec:
   template:
     spec:
       containers:
-        #@ for container, metrics in sidecar_metrics.items():
+        #@ for/end container, metrics in sidecar_metrics.items():
         #@overlay/match by="name"
         - name: #@ container
           args:
-            #@overlay/append
-            - #@ "--http-endpoint=:{}".format(metrics.port)
+            -  #@ "--http-endpoint=:{}".format(metrics.port)
           #@overlay/match missing_ok=True
           ports:
-            #@overlay/append
             - name: #@ metrics.port_name
               containerPort: #@ metrics.port
-#@ end
-
 ---
 apiVersion: operator.victoriametrics.com/v1beta1
 kind: VMPodScrape
@@ -141,9 +137,8 @@ spec:
     matchLabels:
       app: synology-csi-controller
   podMetricsEndpoints:
-    #@ for metrics in sidecar_metrics.values():
+    #@ for/end metrics in sidecar_metrics.values():
     - port: #@ metrics.port_name
-    #@ end
 
 ---
 apiVersion: operator.victoriametrics.com/v1beta1
