@@ -12,22 +12,29 @@
 #@ dump["volumeMounts"] = dump.get("volumeMounts", []) + [{"name": "scratch", "mountPath": backup_dir}]
 
 #@ backup_mounts = [{"name": "scratch", "mountPath": backup_dir, "readOnly": True}] + struct.decode(v.mounts)
-#@ volumes = [{"name": "scratch", "emptyDir": {}}, {"name": "cache", "emptyDir": {}}] + struct.decode(v.volumes)
+#@ scratch = {"name": "scratch", "emptyDir": {"sizeLimit": v.scratchSizeLimit}}
+#! The cache is thrown away with the pod, so every run starts cold and re-reads the index from S3.
+#! Backing it with a volume would need an RWO PVC per app, which the pod affinity already fights.
+#@ volumes = [scratch, {"name": "cache", "emptyDir": {}}] + struct.decode(v.volumes)
 
 #@ excludes = [arg for e in v.excludes for arg in ["--exclude", e]]
-#@ backup_args = ["backup", backup_dir] + list(v.paths) + excludes
+#@ host = ["--host", v.host]
+#@ backup_args = ["backup", backup_dir] + list(v.paths) + excludes + host
 #@ forget_args = [
 #@   "forget", "--prune",
+#@   "--max-repack-size", v.maxRepackSize,
 #@   "--keep-daily", str(v.retention.daily),
 #@   "--keep-weekly", str(v.retention.weekly),
 #@   "--keep-monthly", str(v.retention.monthly),
-#@ ]
+#@ ] + host
+#! `check` takes no --host; it verifies the whole repository, which holds only this app's snapshots.
+#@ check_args = ["check", "--read-data-subset", v.checkReadDataSubset]
 
 #@ def restic_container(container_name, args, mounts):
 name: #@ container_name
 image: #@ v.image
 command: [restic]
-args: #@ args + ["--host", v.host]
+args: #@ args
 env:
   - name: RESTIC_CACHE_DIR
     value: #@ cache_dir
@@ -60,8 +67,9 @@ spec:
   jobTemplate:
     spec:
       backoffLimit: 1
-      #! Fails the job, and so KubeJobFailed fires, when the pod can't be scheduled, e.g. the app is scaled down.
-      activeDeadlineSeconds: 3600
+      #! Bounds the run as a whole, and so also fails the job, and fires KubeJobFailed, when the pod
+      #! can never be scheduled, e.g. the app is scaled down and its RWO volume is on no node.
+      activeDeadlineSeconds: #@ v.timeoutSeconds
       template:
         spec:
           restartPolicy: Never
@@ -73,9 +81,13 @@ spec:
                     matchLabels: #@ struct.decode(v.affinityPodLabels)
                   topologyKey: kubernetes.io/hostname
           securityContext: #@ struct.decode(v.podSecurityContext)
+          #! Every step is a hard failure, `forget` and `check` included: a run that stored a snapshot
+          #! but could not prune or verify it is not a run to be quiet about, so it must not count as
+          #! the successful run BackupStale looks for.
           initContainers:
             -  #@ dump
             -  #@ restic_container("backup", backup_args, backup_mounts)
-          containers:
             -  #@ restic_container("forget", forget_args, [])
+          containers:
+            -  #@ restic_container("check", check_args, [])
           volumes: #@ volumes

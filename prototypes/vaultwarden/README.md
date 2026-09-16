@@ -7,7 +7,8 @@
 - `/backup/db.sqlite3` — consistent copy of the database made by `vaultwarden backup`
 - `/data/...` — RSA keys, `config.json`, attachments and sends; the live `db.sqlite3*` and `icon_cache` are excluded
 
-Credentials and the restic password live in `static/backup.sops.yaml`.
+Credentials and the restic password live in `static/backup.sops.yaml`. The password is also kept wherever the age
+private key is: a copy inside Vaultwarden would be unreadable in exactly the situation that needs it.
 
 ### Checking a backup
 
@@ -52,7 +53,7 @@ sqlite3 db.sqlite3 'PRAGMA integrity_check; SELECT count(*) FROM ciphers;'
                  restic restore latest --host vaultwarden --target /tmp/restore
                  cp -a /tmp/restore/data/. /data/
                  cp /tmp/restore/backup/db.sqlite3 /data/db.sqlite3
-                 rm -f /data/db.sqlite3-wal /data/db.sqlite3-shm
+                 rm -f /data/db.sqlite3-wal /data/db.sqlite3-shm /data/db.sqlite3-journal
              env: [{name: RESTIC_CACHE_DIR, value: /tmp/cache}]
              envFrom: [{secretRef: {name: backup}}]
              volumeMounts:
