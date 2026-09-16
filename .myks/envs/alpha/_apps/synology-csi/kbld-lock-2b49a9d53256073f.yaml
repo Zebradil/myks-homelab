@@ -2,6 +2,9 @@ apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 minimumRequiredVersion: 0.49.1
 overrides:
+- image: quay.io/prometheus/blackbox-exporter:v0.28.0
+  newImage: oci.zebradil.dev/quay.io-cache/prometheus/blackbox-exporter@sha256:e753ff9f3fc458d02cca5eddab5a77e1c175eee484a8925ac7d524f04366c2fc
+  preresolved: true
 - image: registry.k8s.io/sig-storage/csi-attacher:v3.3.0
   newImage: oci.zebradil.dev/registry.k8s.io-cache/sig-storage/csi-attacher@sha256:80dec81b679a733fda448be92a2331150d99095947d04003ecff3dbd7f2a476a
   preresolved: true
