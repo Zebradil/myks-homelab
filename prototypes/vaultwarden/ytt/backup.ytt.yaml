@@ -1,0 +1,77 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:library", "library")
+#@ load("@ytt:template", "template")
+#@ load("secrets.star", "sops")
+
+#@ a = data.values.application
+#@ name = a.name or data.values.myks.context.app
+
+#! Maps typed `any` in the library schema have no keys to overlay, hence overlay/replace.
+#@ def values():
+host: #@ name
+#@overlay/replace
+secretEnv:
+  RESTIC_REPOSITORY: #@ sops("backup", "restic-repository")
+  RESTIC_PASSWORD: #@ sops("backup", "restic-password")
+  AWS_ACCESS_KEY_ID: #@ sops("backup", "aws-access-key-id")
+  AWS_SECRET_ACCESS_KEY: #@ sops("backup", "aws-secret-access-key")
+#@overlay/replace
+dump:
+  name: dump
+  image: #@ a.image
+  #! `vaultwarden backup` runs VACUUM INTO next to the live database and prints the file name, relative to the working
+  #! directory. It reads DATABASE_URL from the default config, not from the app's /.env, which holds SMTP settings
+  #! only; pointing the app at another database or data folder would break the dump loudly, not silently, because the
+  #! read-only connection cannot create a missing file.
+  #!
+  #! The copy is moved off the PVC so copies don't pile up there. The name is parsed rather than globbed, to leave
+  #! alone backups made from the admin panel; if the message format changes, the job fails instead of backing up
+  #! nothing. /bin/sh is dash and has no pipefail, so a failing `vaultwarden backup` is caught by the empty `$f`
+  #! rather than by `set -e`: keep the test.
+  #!
+  #! The sweep collects what a run that died between VACUUM and mv left behind, which is indistinguishable from an
+  #! admin-panel backup. Anything it removes is already in the snapshots, which keep /data for a year.
+  command: [/bin/sh, -c]
+  args:
+    - |
+      set -eu
+      find /data -maxdepth 1 -name 'db_*.sqlite3' -mtime +7 -delete
+      f=$(/vaultwarden backup | sed -n "s/^Backup to '\(.*\)' was successful$/\1/p")
+      test -n "$f"
+      mv "/$f" /backup/db.sqlite3
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+  volumeMounts:
+    - name: data
+      mountPath: /data
+paths:
+  - /data
+excludes:
+  - /data/db.sqlite3*
+  - /data/icon_cache
+volumes:
+  - name: data
+    persistentVolumeClaim:
+      claimName: data
+mounts:
+  - name: data
+    mountPath: /data
+    readOnly: true
+#@overlay/replace
+affinityPodLabels:
+  app.kubernetes.io/name: #@ name
+#@overlay/replace
+podSecurityContext:
+  runAsUser: 1000
+  runAsGroup: 1000
+  runAsNonRoot: true
+  fsGroup: 1000
+  #! The app already owns the volume; without this the kubelet walks and chowns all of /data, icon_cache included,
+  #! on every nightly mount of a live iSCSI volume.
+  fsGroupChangePolicy: OnRootMismatch
+#@ end
+
+--- #@ template.replace(library.get("backup").with_data_values(values()).eval())

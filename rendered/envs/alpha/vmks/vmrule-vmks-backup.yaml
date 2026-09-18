@@ -1,0 +1,31 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: vmks-backup
+spec:
+  groups:
+    - name: backup
+      rules:
+        - alert: BackupStale
+          annotations:
+            description: CronJob {{ $labels.namespace }}/{{ $labels.cronjob }} has had no successful run for {{ $value | humanizeDuration }}.
+            summary: Backup has not succeeded in over 36 hours.
+          expr: |
+            time() - (
+              kube_cronjob_status_last_successful_time{cronjob="backup"}
+                or on(namespace, cronjob)
+              kube_cronjob_created{cronjob="backup"}
+            ) > 36 * 3600
+          for: 15m
+          labels:
+            severity: critical
+        - alert: BackupMissing
+          annotations:
+            description: No `backup` CronJob exists in namespace {{ $labels.namespace }}, so nothing is backing the app up and BackupStale cannot fire for it.
+            summary: Backup CronJob is missing.
+          expr: absent(kube_cronjob_created{namespace="vaultwarden", cronjob="backup"})
+          for: 15m
+          labels:
+            severity: critical

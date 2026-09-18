@@ -1,0 +1,46 @@
+#! Alerts for backups made with lib/_ytt_lib/backup, which names every CronJob `backup`.
+
+#! Namespaces expected to hold one. BackupStale is driven by metrics the CronJob itself produces, so
+#! it falls silent exactly when the CronJob is deleted or stops being rendered; this list is what
+#! notices. Extend it whenever an app starts using the library.
+#@ backed_up = ["vaultwarden"]
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: vmks-backup
+spec:
+  groups:
+    - name: backup
+      rules:
+        #! KubeJobFailed only sees runs that happened. This also catches a CronJob that stopped producing runs, e.g.
+        #! suspended. A CronJob that never succeeded is measured from its creation.
+        - alert: BackupStale
+          expr: |
+            time() - (
+              kube_cronjob_status_last_successful_time{cronjob="backup"}
+                or on(namespace, cronjob)
+              kube_cronjob_created{cronjob="backup"}
+            ) > 36 * 3600
+          #! Long enough to ride out a kube-state-metrics restart around the threshold.
+          for: 15m
+          #! Critical, not warning: warning goes to the low-priority Telegram topic, and an app whose
+          #! only off-cluster copy is a day and a half old is not something to find out about later.
+          labels:
+            severity: critical
+          annotations:
+            summary: Backup has not succeeded in over 36 hours.
+            description: >-
+              CronJob {{ $labels.namespace }}/{{ $labels.cronjob }} has had no successful run for
+              {{ $value | humanizeDuration }}.
+        #@ for/end ns in backed_up:
+        - alert: BackupMissing
+          expr: #@ 'absent(kube_cronjob_created{namespace="' + ns + '", cronjob="backup"})'
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: Backup CronJob is missing.
+            description: >-
+              No `backup` CronJob exists in namespace {{ $labels.namespace }}, so nothing is backing the app up and
+              BackupStale cannot fire for it.
