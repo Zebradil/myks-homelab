@@ -36,9 +36,11 @@ its own backups.
 2. Initialise the repository once from a workstation; the job does not create it:
 
    ```bash
-   eval "$(sops decrypt static/backup.sops.yaml | yq -r '
-     "export RESTIC_REPOSITORY=\(."restic-repository" | @sh) RESTIC_PASSWORD=\(."restic-password" | @sh)
-       AWS_ACCESS_KEY_ID=\(."aws-access-key-id" | @sh) AWS_SECRET_ACCESS_KEY=\(."aws-secret-access-key" | @sh)"')"
+   secrets=$(sops decrypt static/backup.sops.yaml)
+   export RESTIC_REPOSITORY=$(yq '.["restic-repository"]' <<<"$secrets")
+   export RESTIC_PASSWORD=$(yq '.["restic-password"]' <<<"$secrets")
+   export AWS_ACCESS_KEY_ID=$(yq '.["aws-access-key-id"]' <<<"$secrets")
+   export AWS_SECRET_ACCESS_KEY=$(yq '.["aws-secret-access-key"]' <<<"$secrets")
    restic init
    ```
 
