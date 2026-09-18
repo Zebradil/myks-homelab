@@ -20,8 +20,14 @@
       devShells = forAllSystems (system: {
         default = (pkgsFor system).mkShell {
           packages = with (pkgsFor system); [
+            argocd
+            backblaze-b2
             jq
+            kubeconform
             mise
+            restic
+            sops
+            go-task
           ];
           shellHook = ''
             git config core.hooksPath hooks
