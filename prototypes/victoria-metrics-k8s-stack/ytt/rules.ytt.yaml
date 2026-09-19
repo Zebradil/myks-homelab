@@ -61,6 +61,21 @@ spec:
 --- #@ vmrule(name, spec_groups(file))
 #@ end
 
+#! These recordings produce no samples in the healthy state: count:up0 when every
+#! target is up, the scheduler quantiles when no pods got scheduled in 5m.
+#@ no_data_expr = "sum(vmalert_recording_rules_last_evaluation_samples) without(id) < 1"
+#@ def bare_groups(file):
+#@   text = data.read(file)
+#@   if file.endswith("alerts-vmalert.yml"):
+#@     if no_data_expr not in text:
+#@       fail("RecordingRulesNoData expression changed upstream in " + file)
+#@     end
+#@     selector = '{recording!~"count:up0|cluster_quantile:scheduler_.+"}'
+#@     text = text.replace(no_data_expr, no_data_expr.replace("_samples)", "_samples" + selector + ")"))
+#@   end
+#@   return yaml.decode(text)["groups"]
+#@ end
+
 #@ for file, name in bare_sources.items():
---- #@ vmrule(name, yaml.decode(data.read(file))["groups"])
+--- #@ vmrule(name, bare_groups(file))
 #@ end

@@ -6,6 +6,11 @@ metadata:
   name: kube-scheduler
 spec:
   bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+  metricRelabelConfigs:
+    - action: drop
+      regex: (apiserver|etcd|apiextensions|aggregator)_.+
+      sourceLabels:
+        - __name__
   path: /metrics
   port: "10259"
   relabelConfigs:
