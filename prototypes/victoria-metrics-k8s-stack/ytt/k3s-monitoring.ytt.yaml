@@ -1,9 +1,20 @@
+#@ load("@ytt:overlay", "overlay")
 #@ load("/overlay-matchers.star", m="matchers")
 
 #@ node_scrapes = [
 #@   ("kube-controller-manager", "10257"),
 #@   ("kube-scheduler", "10259"),
 #@ ]
+
+#! k3s runs every control-plane component in one binary, so the server node serves
+#! the full apiserver metric set on each component port and on the kubelet port.
+#! Keep those families only under job="apiserver"; the copies quadruple the
+#! series count and make the apiserver SLI recording rules slow.
+#@ def drop_apiserver_families():
+action: drop
+sourceLabels: [__name__]
+regex: (apiserver|etcd|apiextensions|aggregator)_.+
+#@ end
 
 #@ for name, port in node_scrapes:
 ---
@@ -24,9 +35,18 @@ spec:
   relabelConfigs:
     - targetLabel: job
       replacement: #@ name
+  metricRelabelConfigs:
+    - #@ drop_apiserver_families()
 
 
 #@overlay/match by=m.kind_name("VMServiceScrape", "vmks-" + name)
 #@overlay/remove
 ---
 #@ end
+
+#@overlay/match by=m.kind_name("VMNodeScrape", "vmks-kubelet")
+---
+spec:
+  metricRelabelConfigs:
+    #@overlay/append
+    - #@ drop_apiserver_families()
