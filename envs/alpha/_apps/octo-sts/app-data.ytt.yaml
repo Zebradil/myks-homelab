@@ -1,0 +1,9 @@
+#@data/values
+---
+application:
+  octosts:
+    domain: sts.zebradil.dev
+    org: Zebradil
+    apps:
+      - app_id: 5044112
+        name: zebradil-pr-autopilot

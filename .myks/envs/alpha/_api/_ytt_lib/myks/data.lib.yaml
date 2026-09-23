@@ -86,6 +86,8 @@ environment:
     name: ""
   - proto: kb-mcp
     name: ""
+  - proto: octo-sts
+    name: ""
   - proto: librespeed
     name: ""
   - proto: outdoor-weather

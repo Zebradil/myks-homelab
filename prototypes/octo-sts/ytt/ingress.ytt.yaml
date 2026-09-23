@@ -1,0 +1,27 @@
+#@ load("@ytt:data", "data")
+
+#@ name = data.values.myks.context.app
+#@ domain = data.values.application.octosts.domain
+
+#! Unauthenticated: GitHub runners can't pass Authelia, and octo-sts checks the
+#! OIDC token itself. Only the banner and the exchange endpoint are exposed;
+#! anything else falls through to authelia-catch-all.
+#! LAN entrypoints are included because split-horizon DNS resolves the host to
+#! the LAN IPv4, where the public (IPv6-bound) entrypoints don't listen.
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: #@ name
+spec:
+  entryPoints:
+    - web
+    - websecure
+    - lan-web
+    - lan-websecure
+  routes:
+    - kind: Rule
+      match: #@ "Host(`{}`) && (Path(`/`) || Path(`/sts/exchange`))".format(domain)
+      services:
+        - name: #@ name
+          port: http

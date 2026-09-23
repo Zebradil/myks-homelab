@@ -1,0 +1,22 @@
+#@data/values-schema
+---
+#@overlay/match-child-defaults missing_ok=True
+application:
+  octosts:
+    #! renovate: datasource=docker
+    image: ghcr.io/zebradil/octo-sts:0.10.0-zebradil.1
+    #! Public host; octo-sts also uses it as the expected OIDC audience.
+    #@schema/validation min_len=1
+    domain: ''
+    #! GitHub owner the apps below serve. There is no "*" pool, so requests for
+    #! any other owner fail closed.
+    #@schema/validation min_len=1
+    org: ''
+    #! Each app's PEM is read from the sops key <NAME>_PEM (name upper-cased,
+    #! dashes as underscores) and exposed to the pod under the same env name.
+    #@schema/validation min_len=1
+    apps:
+      - app_id: 0
+        #! Application name slug from its URL
+        #@schema/validation min_len=1
+        name: ''

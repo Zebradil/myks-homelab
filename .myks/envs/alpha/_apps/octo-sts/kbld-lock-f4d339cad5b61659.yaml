@@ -1,0 +1,7 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.49.1
+overrides:
+- image: ghcr.io/zebradil/octo-sts:0.10.0-zebradil.1
+  newImage: oci.zebradil.dev/ghcr.io-cache/zebradil/octo-sts@sha256:de80fb0486dd0448d1f1af28895b39b2a7f2ca4e440906e5de66dea2f80a078d
+  preresolved: true

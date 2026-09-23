@@ -1,0 +1,14 @@
+apiVersion: v1
+data:
+  apps.yaml: |
+    orgs:
+    - name: Zebradil
+      apps:
+      - app_id: 5044112
+        app_name: zebradil-pr-autopilot
+        private_key: ${ZEBRADIL_PR_AUTOPILOT_PEM}
+kind: ConfigMap
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: octo-sts

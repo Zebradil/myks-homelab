@@ -1,0 +1,160 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:yaml", "yaml")
+
+#@ load("pem.star", "pem_env")
+
+#@ a = data.values.application.octosts
+#@ name = data.values.myks.context.app
+#@ pod_labels = {"app.kubernetes.io/name": name}
+
+#! ${VAR} is expanded by octo-sts from its own environment, so the PEMs stay
+#! in the Secret and never land in the ConfigMap.
+#@ app_config = {
+#@   "orgs": [{
+#@     "name": a.org,
+#@     "apps": [
+#@       {"app_id": app.app_id, "app_name": app.name, "private_key": "${" + pem_env(app) + "}"}
+#@       for app in a.apps
+#@     ],
+#@   }],
+#@ }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: #@ name
+data:
+  apps.yaml: #@ yaml.encode(app_config)
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: #@ name
+spec:
+  replicas: 1
+  selector:
+    matchLabels: #@ pod_labels
+  template:
+    metadata:
+      labels: #@ pod_labels
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsUser: 65532
+        runAsGroup: 65532
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: #@ name
+          image: #@ a.image
+          env:
+            - name: PORT
+              value: '8080'
+            - name: STS_DOMAIN
+              value: #@ a.domain
+            - name: APP_CONFIG_FILE
+              value: /etc/octo-sts/apps.yaml
+            #! No OpenTelemetry collector in the cluster.
+            - name: METRICS
+              value: 'false'
+            - name: OCTOSTS_ALLOWED_ISSUERS
+              value: https://token.actions.githubusercontent.com
+          envFrom:
+            - secretRef:
+                name: #@ name
+          ports:
+            - containerPort: 8080
+              name: http
+          #! gRPC health shares the port, but GET / (JSON banner) is simpler to probe.
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            periodSeconds: 10
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - all
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 128Mi
+          volumeMounts:
+            - name: config
+              mountPath: /etc/octo-sts
+              readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: #@ name
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #@ name
+spec:
+  selector: #@ pod_labels
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+---
+#! octo-sts runs OIDC discovery against the `iss` of any incoming token before
+#! checking policy, so egress is limited to public IPv4 on 443. No IPv6 rule:
+#! the home IPv6 prefix is dynamic and routable, so it can't be excluded, and
+#! GitHub's OIDC and API endpoints are reachable over IPv4.
+#! Ingress is only port-restricted: Traefik runs on the host network, so it
+#! can't be selected by pod labels, and the route is public anyway.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: #@ name
+spec:
+  podSelector:
+    matchLabels: #@ pod_labels
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - ports:
+        - port: http
+          protocol: TCP
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            #! RFC 1918 also covers k3s's default pod (10.42/16) and service
+            #! (10.43/16) CIDRs; 100.64/10 covers CGNAT and Tailscale.
+            except:
+              - 0.0.0.0/8
+              - 10.0.0.0/8
+              - 100.64.0.0/10
+              - 127.0.0.0/8
+              - 169.254.0.0/16
+              - 172.16.0.0/12
+              - 192.168.0.0/16
+      ports:
+        - port: 443
+          protocol: TCP

@@ -1,0 +1,5 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+overrides:
+    - image: ghcr.io/zebradil/octo-sts:0.10.0-zebradil.1
+      newImage: oci.zebradil.dev/ghcr.io-cache/zebradil/octo-sts:0.10.0-zebradil.1

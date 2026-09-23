@@ -51,6 +51,7 @@ environment:
     - proto: karma
     - proto: kasha
     - proto: kb-mcp
+    - proto: octo-sts
     - proto: librespeed
     - proto: outdoor-weather
     - proto: pacoloco
