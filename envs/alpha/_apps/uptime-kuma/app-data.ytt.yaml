@@ -8,3 +8,9 @@ application:
   env:
     - name: UPTIME_KUMA_DISABLE_IPV6
       value: '1'
+  resources:
+    requests:
+      cpu: 30m
+      memory: 192Mi
+    limits:
+      memory: 512Mi

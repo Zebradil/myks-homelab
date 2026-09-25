@@ -34,6 +34,12 @@ spec:
                 secretKeyRef:
                   name: #@ name
                   key: password
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64Mi
+            limits:
+              memory: 256Mi
           ports:
             - containerPort: 80
               name: http

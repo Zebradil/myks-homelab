@@ -24,6 +24,12 @@ spec:
           ports:
             - containerPort: 3001
               name: http
+          resources:
+            limits:
+              memory: 512Mi
+            requests:
+              cpu: 30m
+              memory: 192Mi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:

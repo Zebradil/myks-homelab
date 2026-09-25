@@ -41,6 +41,13 @@ env:
 envFrom:
   - secretRef:
       name: #@ name
+#! restic holds the repository index in memory, so usage grows with the repository, not the run.
+resources:
+  requests:
+    cpu: 10m
+    memory: 64Mi
+  limits:
+    memory: 512Mi
 securityContext:
   allowPrivilegeEscalation: false
   capabilities:

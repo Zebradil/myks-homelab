@@ -54,6 +54,12 @@ spec:
             #@ for/end k in a.builder.env:
             - name: #@ k
               value: #@ a.builder.env[k]
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 1Gi
           volumeMounts:
             - name: static
               mountPath: /static
@@ -64,6 +70,12 @@ spec:
       containers:
         - image: #@ a.server.image
           name: server
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              memory: 64Mi
           ports:
             - containerPort: #@ a.server.containerPort
               name: http

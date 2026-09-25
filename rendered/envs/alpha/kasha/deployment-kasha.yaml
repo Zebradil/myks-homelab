@@ -54,6 +54,8 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 5
           resources:
+            limits:
+              memory: 3Gi
             requests:
               cpu: 300m
               memory: 1300Mi

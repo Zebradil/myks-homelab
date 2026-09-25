@@ -54,6 +54,12 @@ spec:
       containers:
         - image: #@ a.image
           name: #@ name
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              memory: 128Mi
           ports:
             - containerPort: #@ a.containerPort
               name: http

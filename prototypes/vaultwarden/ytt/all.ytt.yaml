@@ -59,6 +59,12 @@ spec:
               value: #@ str(ev.value)
             - name: DOMAIN
               value: #@ "https://" + name + "." + e.hosts[0]
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 128Mi
           ports:
             - containerPort: #@ a.containerPort
               name: http

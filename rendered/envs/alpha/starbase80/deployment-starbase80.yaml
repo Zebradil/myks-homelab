@@ -21,6 +21,12 @@ spec:
           ports:
             - containerPort: 80
               name: http
+          resources:
+            limits:
+              memory: 64Mi
+            requests:
+              cpu: 10m
+              memory: 16Mi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -48,6 +54,12 @@ spec:
               value: ""
           image: index.docker.io/jordanroher/starbase-80@sha256:249bcbb108afba0f597fa2d0c2a55325376f42c01b757e0fe26848222d4eb969
           name: builder
+          resources:
+            limits:
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 256Mi
           volumeMounts:
             - mountPath: /static
               name: static

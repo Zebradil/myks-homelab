@@ -30,6 +30,12 @@ spec:
                   fieldPath: spec.nodeName
           image: oci.zebradil.dev/registry.k8s.io-cache/sig-storage/csi-node-driver-registrar@sha256:f9bcee63734b7b01555ee8fc8fb01ac2922478b2c8934bf8d468dd2916edc405
           name: csi-driver-registrar
+          resources:
+            limits:
+              memory: 64Mi
+            requests:
+              cpu: 10m
+              memory: 16Mi
           securityContext:
             privileged: true
           volumeMounts:
@@ -53,6 +59,12 @@ spec:
                   fieldPath: spec.nodeName
           image: index.docker.io/synology/synology-csi@sha256:8aa84848187648a65c899f54e96061d3f22cdba0ad8926d770b431d4b274406f
           name: csi-plugin
+          resources:
+            limits:
+              memory: 256Mi
+            requests:
+              cpu: 30m
+              memory: 96Mi
           securityContext:
             privileged: true
           volumeMounts:

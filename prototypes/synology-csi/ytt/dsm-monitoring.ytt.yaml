@@ -54,6 +54,12 @@ spec:
           image: #@ a.blackboxExporter.image
           args:
             - --config.file=/etc/blackbox/blackbox.yml
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 64Mi
           ports:
             - containerPort: #@ a.blackboxExporter.port
               name: http

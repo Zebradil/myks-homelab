@@ -34,6 +34,12 @@ spec:
                     name: backup
               image: index.docker.io/restic/restic@sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510
               name: check
+              resources:
+                limits:
+                  memory: 512Mi
+                requests:
+                  cpu: 10m
+                  memory: 64Mi
               securityContext:
                 allowPrivilegeEscalation: false
                 capabilities:
@@ -55,6 +61,12 @@ spec:
                 - -c
               image: oci.zebradil.dev/ghcr.io-cache/dani-garcia/vaultwarden@sha256:1587c45feaa479f1f5e8af3b00eded36bff77bcf1880cf8dbf0541706dd470e0
               name: dump
+              resources:
+                limits:
+                  memory: 128Mi
+                requests:
+                  cpu: 10m
+                  memory: 32Mi
               securityContext:
                 allowPrivilegeEscalation: false
                 capabilities:
@@ -85,6 +97,12 @@ spec:
                     name: backup
               image: index.docker.io/restic/restic@sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510
               name: backup
+              resources:
+                limits:
+                  memory: 512Mi
+                requests:
+                  cpu: 10m
+                  memory: 64Mi
               securityContext:
                 allowPrivilegeEscalation: false
                 capabilities:
@@ -122,6 +140,12 @@ spec:
                     name: backup
               image: index.docker.io/restic/restic@sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510
               name: forget
+              resources:
+                limits:
+                  memory: 512Mi
+                requests:
+                  cpu: 10m
+                  memory: 64Mi
               securityContext:
                 allowPrivilegeEscalation: false
                 capabilities:
