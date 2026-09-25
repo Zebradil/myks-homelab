@@ -1,6 +1,8 @@
 #@ load("secrets.star", "sops")
+#@ load("util.star", res="resources")
 ---
 grafana:
+  resources: #@ res("20m", "384Mi", "1Gi")
   persistence:
     enabled: true
     size: 2Gi
@@ -15,6 +17,7 @@ grafana:
       feedback_links_enabled: false
       reporting_enabled: false
   sidecar:
+    resources: #@ res("10m", "96Mi", "192Mi")
     dashboards:
       searchNamespace: ALL
       skipReload: true
@@ -26,3 +29,4 @@ grafana:
       - grafana.lan.zebradil.dev
   initChownData:
     enabled: true
+    resources: #@ res("10m", "16Mi", "64Mi")

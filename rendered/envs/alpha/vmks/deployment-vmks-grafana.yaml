@@ -45,6 +45,12 @@ spec:
               value: ALL
           image: oci.zebradil.dev/quay.io-cache/kiwigrid/k8s-sidecar@sha256:abb55b2165c60e8f97e473862c7a3123df6f67d44f592949577c29b8fb2df9d6
           name: grafana-sc-dashboard
+          resources:
+            limits:
+              memory: 192Mi
+            requests:
+              cpu: 10m
+              memory: 96Mi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -82,6 +88,12 @@ spec:
               value: POST
           image: oci.zebradil.dev/quay.io-cache/kiwigrid/k8s-sidecar@sha256:abb55b2165c60e8f97e473862c7a3123df6f67d44f592949577c29b8fb2df9d6
           name: grafana-sc-datasources
+          resources:
+            limits:
+              memory: 192Mi
+            requests:
+              cpu: 10m
+              memory: 96Mi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -122,6 +134,11 @@ spec:
               value: /etc/grafana/provisioning
             - name: GF_UNIFIED_STORAGE_INDEX_PATH
               value: /var/lib/grafana-search/bleve
+            - name: GOMEMLIMIT
+              valueFrom:
+                resourceFieldRef:
+                  divisor: "1"
+                  resource: limits.memory
           image: index.docker.io/grafana/grafana@sha256:7cb8c64c4d57a57e734073f3cc94620adb24a0acb929bd80ba9f14017e3a975b
           livenessProbe:
             failureThreshold: 10
@@ -148,6 +165,12 @@ spec:
             httpGet:
               path: /api/health
               port: grafana
+          resources:
+            limits:
+              memory: 1Gi
+            requests:
+              cpu: 20m
+              memory: 384Mi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -180,6 +203,12 @@ spec:
             - /var/lib/grafana
           image: index.docker.io/library/busybox@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
           name: init-chown-data
+          resources:
+            limits:
+              memory: 64Mi
+            requests:
+              cpu: 10m
+              memory: 16Mi
           securityContext:
             capabilities:
               add:

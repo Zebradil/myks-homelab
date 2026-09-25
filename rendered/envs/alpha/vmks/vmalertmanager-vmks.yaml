@@ -17,6 +17,12 @@ spec:
     tag: v0.34.0
   port: "9093"
   replicaCount: 1
+  resources:
+    limits:
+      memory: 128Mi
+    requests:
+      cpu: 10m
+      memory: 32Mi
   routePrefix: /
   selectAllByDefault: true
   templates:
