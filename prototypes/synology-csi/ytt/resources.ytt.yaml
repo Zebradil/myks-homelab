@@ -1,13 +1,6 @@
 #@ load("@ytt:overlay", "overlay")
 #@ load("/overlay-matchers.star", m="matchers")
-
-#@ def res(cpu, memory, limit):
-requests:
-  cpu: #@ cpu
-  memory: #@ memory
-limits:
-  memory: #@ limit
-#@ end
+#@ load("/util.star", res="resources")
 
 #@ workloads = {
 #@   ("DaemonSet", "synology-csi-node"): {

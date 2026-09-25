@@ -1,4 +1,5 @@
 #@ load("@ytt:data", "data")
+#@ load("util.star", res="resources")
 
 #@ dv = data.values
 #@ a = dv.application
@@ -8,3 +9,9 @@ controllerServiceAccount:
   #! This value must match the name of the Service rendered by the arc chart
   name: arc-gha-rs-controller
 githubConfigUrl: #@ a.githubConfigUrl
+listenerTemplate:
+  spec:
+    containers:
+      #! The chart merges a container named "listener" into its own listener container.
+      - name: listener
+        resources: #@ res("10m", "32Mi", "128Mi")

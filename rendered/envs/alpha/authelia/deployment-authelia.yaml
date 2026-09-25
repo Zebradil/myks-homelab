@@ -80,8 +80,11 @@ spec:
             successThreshold: 1
             timeoutSeconds: 5
           resources:
-            limits: {}
-            requests: {}
+            limits:
+              memory: 512Mi
+            requests:
+              cpu: 10m
+              memory: 64Mi
           startupProbe:
             failureThreshold: 6
             httpGet:

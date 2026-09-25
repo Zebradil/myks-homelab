@@ -51,6 +51,12 @@ spec:
                   fieldPath: metadata.namespace
           image: oci.zebradil.dev/ghcr.io-cache/actions/gha-runner-scale-set-controller@sha256:1b4c7f62e971ab259a4b8798e48e2adaad4af747f45990f474ea5feefa03531d
           name: manager
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 10m
+              memory: 32Mi
           volumeMounts:
             - mountPath: /tmp
               name: tmp

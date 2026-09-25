@@ -1,4 +1,5 @@
 #@ load("@ytt:data", "data")
+#@ load("util.star", res="resources")
 
 #@ ap = data.values.application
 
@@ -12,6 +13,13 @@ crds:
 prometheus:
   servicemonitor:
     enabled: true
+resources: #@ res("10m", "64Mi", "256Mi")
+webhook:
+  resources: #@ res("10m", "32Mi", "128Mi")
+cainjector:
+  resources: #@ res("10m", "96Mi", "256Mi")
+startupapicheck:
+  resources: #@ res("10m", "32Mi", "128Mi")
 
 #! Node DNS points at Tailscale MagicDNS, which resolves *.zebradil.dev via the
 #! internal split-horizon resolver. That resolver answers every name under the
