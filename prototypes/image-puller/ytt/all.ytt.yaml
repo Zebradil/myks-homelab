@@ -53,6 +53,12 @@ spec:
               value: #@ socket_path
             - name: CRICTL_VERSION
               value: #@ app.crictl_version
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 128Mi
           securityContext:
             #! Required to access the host's container runtime socket.
             privileged: true

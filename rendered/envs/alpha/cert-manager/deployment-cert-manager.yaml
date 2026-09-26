@@ -60,6 +60,12 @@ spec:
             - containerPort: 9403
               name: http-healthz
               protocol: TCP
+          resources:
+            limits:
+              memory: 256Mi
+            requests:
+              cpu: 10m
+              memory: 64Mi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:

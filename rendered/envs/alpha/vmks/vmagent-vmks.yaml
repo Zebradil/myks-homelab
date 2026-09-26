@@ -26,8 +26,10 @@ spec:
       url: http://vminsert-vmks-long.vmks.svc.cluster.local.:8480/insert/0/prometheus/api/v1/write
     - url: http://vminsert-vmks.vmks.svc.cluster.local.:8480/insert/0/prometheus/api/v1/write
   resources:
+    limits:
+      memory: 768Mi
     requests:
-      cpu: 100m
-      memory: 200Mi
+      cpu: 150m
+      memory: 384Mi
   scrapeInterval: 20s
   selectAllByDefault: true

@@ -61,6 +61,12 @@ spec:
           args:
             - --config.file=/etc/snmp/modules/snmp.yml
             - --config.file=/etc/snmp/auths/snmp.yml
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              memory: 64Mi
           ports:
             - containerPort: #@ a.port
               name: http

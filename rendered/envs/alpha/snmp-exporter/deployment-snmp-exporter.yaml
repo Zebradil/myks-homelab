@@ -22,6 +22,12 @@ spec:
           ports:
             - containerPort: 9116
               name: http
+          resources:
+            limits:
+              memory: 64Mi
+            requests:
+              cpu: 10m
+              memory: 16Mi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:

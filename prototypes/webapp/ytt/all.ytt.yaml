@@ -29,6 +29,7 @@ spec:
           ports:
             - containerPort: #@ a.containerPort
               name: http
+          resources: #@ a.resources
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:

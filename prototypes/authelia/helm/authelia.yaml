@@ -1,5 +1,6 @@
 #@ load("@ytt:data", "data")
 #@ load("secrets.star", "sops")
+#@ load("util.star", res="resources")
 
 #@ d = data.values
 #@ host = d.environment.hosts[0]
@@ -17,6 +18,8 @@ ingress:
 pod:
   kind: Deployment
   replicas: 1
+  #! Password hashing (argon2) allocates per login, so memory bursts well above the idle ~40Mi.
+  resources: #@ res("10m", "64Mi", "512Mi")
   strategy:
     type: Recreate
 

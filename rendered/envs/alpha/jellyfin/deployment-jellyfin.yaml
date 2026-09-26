@@ -31,6 +31,12 @@ spec:
             httpGet:
               path: /health
               port: http
+          resources:
+            limits:
+              memory: 2Gi
+            requests:
+              cpu: 50m
+              memory: 256Mi
           securityContext:
             privileged: true
           startupProbe:
@@ -66,6 +72,12 @@ spec:
             httpGet:
               path: /health
               port: http-fb
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 10m
+              memory: 16Mi
           startupProbe:
             failureThreshold: 30
             httpGet:
@@ -85,6 +97,12 @@ spec:
           ports:
             - containerPort: 8080
               name: http-tr
+          resources:
+            limits:
+              memory: 512Mi
+            requests:
+              cpu: 10m
+              memory: 32Mi
           volumeMounts:
             - mountPath: /data
               name: media
@@ -103,6 +121,12 @@ spec:
                   name: jellyfin-wireguard-config
           image: index.docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
           name: wireguard-config
+          resources:
+            limits:
+              memory: 64Mi
+            requests:
+              cpu: 10m
+              memory: 16Mi
           volumeMounts:
             - mountPath: /config
               name: wireguard-config
@@ -115,6 +139,12 @@ spec:
               value: Etc/UTC
           image: oci.zebradil.dev/ghcr.io-cache/linuxserver/wireguard@sha256:c417568c79a051a8a73ffc2ad28ef58f58ba76bdb4c420389819c001aa55a03e
           name: wireguard
+          resources:
+            limits:
+              memory: 64Mi
+            requests:
+              cpu: 10m
+              memory: 16Mi
           restartPolicy: Always
           securityContext:
             capabilities:

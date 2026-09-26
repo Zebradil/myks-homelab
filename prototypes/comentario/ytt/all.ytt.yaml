@@ -76,6 +76,12 @@ spec:
               value: #@ secrets_path
             - name: BASE_URL
               value: #@ "https://" + name + "." + e.hosts[0]
+          resources:
+            requests:
+              cpu: 10m
+              memory: 48Mi
+            limits:
+              memory: 128Mi
           ports:
             - containerPort: #@ a.containerPort
               name: http

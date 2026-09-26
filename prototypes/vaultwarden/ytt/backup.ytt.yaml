@@ -39,6 +39,12 @@ dump:
       f=$(/vaultwarden backup | sed -n "s/^Backup to '\(.*\)' was successful$/\1/p")
       test -n "$f"
       mv "/$f" /backup/db.sqlite3
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      memory: 128Mi
   securityContext:
     allowPrivilegeEscalation: false
     capabilities:

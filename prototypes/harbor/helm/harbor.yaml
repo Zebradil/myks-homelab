@@ -1,5 +1,6 @@
 #@ load("@ytt:data", "data")
 #@ load("secrets.star", "sops")
+#@ load("util.star", res="resources")
 #@ host = "oci.zebradil.dev"
 #@ registry_user = "zebradil"
 ---
@@ -120,3 +121,38 @@ registry:
 trivy:
   image:
     tag: #@ data.values.application.version
+
+---
+core:
+  resources: #@ res("10m", "128Mi", "256Mi")
+database:
+  internal:
+    resources: #@ res("20m", "256Mi", "512Mi")
+    initContainer:
+      permissions:
+        resources: #@ res("10m", "16Mi", "64Mi")
+exporter:
+  resources: #@ res("10m", "32Mi", "128Mi")
+jobservice:
+  resources: #@ res("10m", "32Mi", "256Mi")
+portal:
+  resources: #@ res("10m", "16Mi", "64Mi")
+redis:
+  internal:
+    resources: #@ res("10m", "32Mi", "128Mi")
+registry:
+  registry:
+    #! Pushes and pulls of large layers are buffered in memory.
+    resources: #@ res("10m", "96Mi", "512Mi")
+  controller:
+    resources: #@ res("10m", "32Mi", "128Mi")
+trivy:
+  #! Scanning a large image loads its whole vulnerability report at once.
+  resources:
+    requests:
+      cpu: 10m
+      memory: 128Mi
+    limits:
+      #! Drops the chart's default CPU limit.
+      cpu: null
+      memory: 1Gi

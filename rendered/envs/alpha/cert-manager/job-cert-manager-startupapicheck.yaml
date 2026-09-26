@@ -36,6 +36,12 @@ spec:
                   fieldPath: metadata.namespace
           image: oci.zebradil.dev/quay.io-cache/jetstack/cert-manager-startupapicheck@sha256:46e75b6866359ffb5d82624f41e3ed1c70b2994982702ced547ce5edb418a8f5
           name: cert-manager-startupapicheck
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 10m
+              memory: 32Mi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:

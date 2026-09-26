@@ -6,7 +6,7 @@ metadata:
     actions.github.com/cleanup-manager-role-binding: scale-set-gha-rs-manager
     actions.github.com/cleanup-manager-role-name: scale-set-gha-rs-manager
     actions.github.com/cleanup-no-permission-service-account-name: scale-set-gha-rs-no-permission
-    actions.github.com/values-hash: 1176a73f8137289f7d567ce680b118c344abf87549be93bb60475cdbd962728
+    actions.github.com/values-hash: 23aa8b85ac7868effb508165f1311ad1724c3d256c5cc7c45270209d7aa73d8
   labels:
     actions.github.com/scale-set-name: scale-set
     actions.github.com/scale-set-namespace: arc-runners
@@ -22,6 +22,16 @@ metadata:
 spec:
   githubConfigSecret: arc-app-credentials
   githubConfigUrl: https://github.com/zebradilo
+  listenerTemplate:
+    spec:
+      containers:
+        - name: listener
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 10m
+              memory: 32Mi
   template:
     spec:
       containers:

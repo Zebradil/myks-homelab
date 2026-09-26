@@ -1,0 +1,31 @@
+#@ load("@ytt:overlay", "overlay")
+#@ load("/overlay-matchers.star", m="matchers")
+#@ load("/util.star", res="resources")
+
+#@ workloads = {
+#@   ("DaemonSet", "synology-csi-node"): {
+#@     "csi-driver-registrar": res("10m", "16Mi", "64Mi"),
+#@     "csi-plugin": res("30m", "96Mi", "256Mi"),
+#@   },
+#@   ("StatefulSet", "synology-csi-controller"): {
+#@     "csi-provisioner": res("10m", "32Mi", "128Mi"),
+#@     "csi-attacher": res("10m", "32Mi", "128Mi"),
+#@     "csi-resizer": res("10m", "32Mi", "128Mi"),
+#@     "csi-plugin": res("10m", "32Mi", "128Mi"),
+#@   },
+#@ }
+
+#@ for kind_name, containers in workloads.items():
+#@overlay/match by=m.kind_name(*kind_name)
+---
+spec:
+  template:
+    spec:
+      containers:
+        #@ for/end container, resources in containers.items():
+        #@overlay/match by="name"
+        - name: #@ container
+          #@overlay/match missing_ok=True
+          #@overlay/replace or_add=True
+          resources: #@ resources
+#@ end

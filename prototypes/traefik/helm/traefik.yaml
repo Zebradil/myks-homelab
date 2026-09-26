@@ -1,4 +1,5 @@
 #@ load("@ytt:data", "data")
+#@ load("util.star", res="resources")
 ---
 image:
   tag: #@ data.values.application.version
@@ -63,6 +64,9 @@ log:
   level: DEBUG
 accessLog:
   enabled: true
+
+#! Every ingress goes through it, so the memory limit leaves room well above the observed ~450Mi peak.
+resources: #@ res("50m", "128Mi", "1Gi")
 
 global:
   checkNewVersion: false

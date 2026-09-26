@@ -4,6 +4,7 @@
 
 #@ load("@ytt:overlay", "overlay")
 #@ load("@ytt:yaml", "yaml")
+#@ load("/util.star", res="resources")
 
 #@ def clone_yf(yamlfragment):
 #@   return yaml.decode(yaml.encode(yamlfragment))
@@ -34,6 +35,7 @@ spec:
   #@overlay/match missing_ok=True
   vmselect:
     replicaCount: 1
+    resources: #@ res("100m", "384Mi", "1Gi")
     extraArgs:
       storageNode: 'vmstorage-vmks-0.vmstorage-vmks.vmks.svc.cluster.local.:8401,vmstorage-vmks-long-0.vmstorage-vmks-long.vmks.svc.cluster.local.:8401'
       search.maxConcurrentRequests: '8'
@@ -44,9 +46,15 @@ spec:
             requests:
               storage: 2Gi
   vmstorage:
+    #! Holds only the few long-term series, far less than the main cluster.
+    #@overlay/replace
+    resources: #@ res("20m", "256Mi", "512Mi")
     storage:
       volumeClaimTemplate:
         spec:
           resources:
             requests:
               storage: 10Gi
+  vminsert:
+    #@overlay/replace
+    resources: #@ res("10m", "32Mi", "128Mi")

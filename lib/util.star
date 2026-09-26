@@ -17,6 +17,15 @@ def map_to_envs(m):
   return envs
 end
 
+# resources builds a container resources spec. CPU is never limited: throttling hurts latency, and requests already
+# share CPU fairly under contention. Memory is limited so a leak is contained to its own pod.
+def resources(cpu, memory, memory_limit):
+  return {
+    "requests": {"cpu": cpu, "memory": memory},
+    "limits": {"memory": memory_limit},
+  }
+end
+
 # Calculate the sha256 of a structure.
 def checksum(s):
   return sha256.sum(json.encode(s))
@@ -136,6 +145,7 @@ util = struct.make(
   deep_get=deep_get,
   deep_set=deep_set,
   map_to_envs=map_to_envs,
+  resources=resources,
   yamlfragment_to_dict=yamlfragment_to_dict,
   yf_to_star=yf_to_star,
 )

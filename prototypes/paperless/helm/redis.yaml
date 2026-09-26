@@ -1,4 +1,5 @@
 #@ load("@ytt:data", "data")
+#@ load("util.star", res="resources")
 ---
 architecture: standalone
 auth:
@@ -9,5 +10,4 @@ image:
 master:
   persistence:
     enabled: false
-  #! TODO(@zebradil): Perform rightsizing.
-  resourcesPreset: 'none'
+  resources: #@ res("30m", "16Mi", "128Mi")

@@ -40,6 +40,12 @@ spec:
             - containerPort: 9402
               name: http-metrics
               protocol: TCP
+          resources:
+            limits:
+              memory: 256Mi
+            requests:
+              cpu: 10m
+              memory: 96Mi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:

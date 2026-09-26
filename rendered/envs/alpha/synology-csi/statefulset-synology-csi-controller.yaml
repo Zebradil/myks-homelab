@@ -31,6 +31,12 @@ spec:
           ports:
             - containerPort: 9820
               name: metrics-prov
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 10m
+              memory: 32Mi
           securityContext:
             allowPrivilegeEscalation: true
             capabilities:
@@ -52,6 +58,12 @@ spec:
           ports:
             - containerPort: 9821
               name: metrics-attach
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 10m
+              memory: 32Mi
           securityContext:
             allowPrivilegeEscalation: true
             capabilities:
@@ -69,6 +81,12 @@ spec:
               value: /var/lib/csi/sockets/pluginproxy/csi.sock
           image: oci.zebradil.dev/registry.k8s.io-cache/sig-storage/csi-resizer@sha256:6e0546563b18872b0aa0cad7255a26bb9a87cb879b7fc3e2383c867ef4f706fb
           name: csi-resizer
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 10m
+              memory: 32Mi
           securityContext:
             allowPrivilegeEscalation: true
             capabilities:
@@ -89,6 +107,12 @@ spec:
               value: unix:///var/lib/csi/sockets/pluginproxy/csi.sock
           image: index.docker.io/synology/synology-csi@sha256:8aa84848187648a65c899f54e96061d3f22cdba0ad8926d770b431d4b274406f
           name: csi-plugin
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 10m
+              memory: 32Mi
           securityContext:
             allowPrivilegeEscalation: true
             capabilities:
