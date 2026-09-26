@@ -21,6 +21,6 @@ application:
       TITLE: Starbase 80
   server:
     #! renovate: datasource=docker
-    image: nginx:1.31.5
+    image: nginx:1.31.6
     containerPort: 80
   name: ""
