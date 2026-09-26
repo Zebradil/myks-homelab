@@ -5,6 +5,6 @@ overrides:
 - image: jordanroher/starbase-80:1.6.7
   newImage: index.docker.io/jordanroher/starbase-80@sha256:249bcbb108afba0f597fa2d0c2a55325376f42c01b757e0fe26848222d4eb969
   preresolved: true
-- image: nginx:1.31.5
-  newImage: index.docker.io/library/nginx@sha256:05b8cb60c354a44ab824ea6e7dc69b46d50762cdbe728a347a5b656e6fb3d7c4
+- image: nginx:1.31.6
+  newImage: index.docker.io/library/nginx@sha256:908dc23e643a1447dbfb2e189ed268bfde6a51a5bf9a34d3dd3440a24f58ccf7
   preresolved: true
