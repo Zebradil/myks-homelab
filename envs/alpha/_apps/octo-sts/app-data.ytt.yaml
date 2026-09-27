@@ -7,3 +7,5 @@ application:
     apps:
       - app_id: 5044112
         name: zebradil-pr-autopilot
+      - app_id: 2539165
+        name: zebradil
