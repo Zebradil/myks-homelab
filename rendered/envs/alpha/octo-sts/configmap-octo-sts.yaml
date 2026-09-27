@@ -7,6 +7,9 @@ data:
       - app_id: 5044112
         app_name: zebradil-pr-autopilot
         private_key: ${ZEBRADIL_PR_AUTOPILOT_PEM}
+      - app_id: 2539165
+        app_name: zebradil
+        private_key: ${ZEBRADIL_PEM}
 kind: ConfigMap
 metadata:
   annotations:
