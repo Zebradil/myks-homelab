@@ -1,0 +1,16 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: kb-share
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - kind: Rule
+      match: (Host(`kb.zebradil.dev`) || Host(`kb.junior.zebradil.dev`)) && PathPrefix(`/s/`)
+      services:
+        - name: kb-mcp
+          port: http

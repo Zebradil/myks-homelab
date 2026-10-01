@@ -8,6 +8,7 @@
 
 #@ host = name + "." + e.hosts[0]
 #@ audience = "https://" + host + "/mcp"
+#@ web_url = "https://kb." + e.hosts[0]
 
 #@ pod_labels = {"app.kubernetes.io/name": name}
 
@@ -39,6 +40,8 @@
 #@   "KBMCP_OAUTH__ISSUER": a.oauth.issuer,
 #@   "KBMCP_OAUTH__AUDIENCE": audience,
 #@   "KBMCP_OAUTH__JWKS_URI": a.oauth.jwksUri,
+#@   "KBMCP_WEB__ENABLED": "true",
+#@   "KBMCP_WEB__PUBLIC_BASE_URL": web_url,
 #@ } | common_envs
 
 #@ build_envs = lambda x: [{"name": k, "value": v} for k, v in x.items()]

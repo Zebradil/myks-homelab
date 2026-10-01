@@ -1,0 +1,16 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: kb-lan
+spec:
+  entryPoints:
+    - lan-web
+    - lan-websecure
+  routes:
+    - kind: Rule
+      match: Host(`kb.lan.zebradil.dev`) || Host(`kb.junior.lan.zebradil.dev`) || Host(`kb.zebradil.dev`) || Host(`kb.junior.zebradil.dev`)
+      services:
+        - name: kb-mcp
+          port: http

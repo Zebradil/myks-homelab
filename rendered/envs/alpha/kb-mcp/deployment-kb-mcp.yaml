@@ -41,6 +41,10 @@ spec:
               value: https://kb-mcp.zebradil.dev/mcp
             - name: KBMCP_OAUTH__JWKS_URI
               value: https://auth.zebradil.dev/jwks.json
+            - name: KBMCP_WEB__ENABLED
+              value: "true"
+            - name: KBMCP_WEB__PUBLIC_BASE_URL
+              value: https://kb.zebradil.dev
             - name: HOME
               value: /data/state
             - name: GIT_SSH_COMMAND
@@ -53,7 +57,7 @@ spec:
               value: /data/state/auth.sqlite
             - name: KBMCP_INDEX_DB_PATH
               value: /data/state/index.sqlite
-          image: oci.zebradil.dev/zebradil/know-mcp@sha256:9b82b1fe911ba2abeac1bb122a6a6cf7aa9e912cba50178dc12219c80deb64cb
+          image: oci.zebradil.dev/zebradil/know-mcp@sha256:a8cd22601c0c5f68ce8e16e2370e4fd16dcd7f8d25d0c66a6bed247fbaa0034b
           livenessProbe:
             httpGet:
               path: /healthz
@@ -127,7 +131,7 @@ spec:
               value: /data/state/auth.sqlite
             - name: KBMCP_INDEX_DB_PATH
               value: /data/state/index.sqlite
-          image: oci.zebradil.dev/zebradil/know-mcp@sha256:9b82b1fe911ba2abeac1bb122a6a6cf7aa9e912cba50178dc12219c80deb64cb
+          image: oci.zebradil.dev/zebradil/know-mcp@sha256:a8cd22601c0c5f68ce8e16e2370e4fd16dcd7f8d25d0c66a6bed247fbaa0034b
           name: init
           resources:
             limits:
