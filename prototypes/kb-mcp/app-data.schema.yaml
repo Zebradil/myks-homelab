@@ -3,8 +3,8 @@
 #@overlay/match-child-defaults missing_ok=True
 application:
   kbmcp:
-    #! TODO: configure renovate
-    image: oci.zebradil.dev/zebradil/know-mcp:latest
+    #! renovate: datasource=docker
+    image: oci.zebradil.dev/zebradil/know-mcp:0.1.1
     #! SSH remote of the knowledge-base repo to clone on first boot and push to.
     #! Must be set in envs/_apps/kb-mcp/app-data.ytt.yaml. The deploy key's
     #! public half (printed at provisioning) must be added to this repo with
