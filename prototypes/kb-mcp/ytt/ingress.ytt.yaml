@@ -1,13 +1,15 @@
 #@ load("@ytt:data", "data")
+#@ load("traefik.lib.yaml", "route")
 
 #@ d = data.values
 #@ name = d.myks.context.app
 #@ t = d.environment.traefik
+#@ web_name = "kb"
 
-#@ def host_matches(hosts):
+#@ def host_matches(hosts, prefix=name):
 #@   ms = []
 #@   for h in hosts:
-#@     ms.append("Host(`{}.{}`)".format(name, h))
+#@     ms.append("Host(`{}.{}`)".format(prefix, h))
 #@   end
 #@   return "(" + " || ".join(ms) + ")"
 #@ end
@@ -56,6 +58,31 @@ spec:
   routes:
     - kind: Rule
       match: #@ host_matches(t.hosts.lan + t.hosts.web) + " && " + path_match
+      services:
+        - name: #@ name
+          port: http
+
+#! Read-only web UI on its own `kb.*` hosts. kb-mcp does no authentication for
+#! the owner pages, so the WAN route sits behind chain-authelia-auth while LAN
+#! and VPN are trusted by network position (route.default).
+#@ for/end route_doc in route.default(web_name, name):
+--- #@ route_doc
+---
+#! Share links must open for recipients without an Authelia account. kb-mcp
+#! answers every failure under /s/ with the same 404, and the page carries its
+#! stylesheet inline, so nothing else needs to be public. The longer rule beats
+#! the host-only protected route on Traefik's default priority.
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: #@ web_name + "-share"
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - kind: Rule
+      match: #@ host_matches(t.hosts.web, web_name) + " && PathPrefix(`/s/`)"
       services:
         - name: #@ name
           port: http
