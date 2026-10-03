@@ -651,6 +651,9 @@ primary:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: ""
+  ## @param primary.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ##
+  enableServiceLinks: true
   ## @param primary.updateStrategy.type PostgreSQL Primary statefulset strategy type
   ## @param primary.updateStrategy.rollingUpdate PostgreSQL Primary statefulset rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
@@ -1126,6 +1129,9 @@ readReplicas:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: ""
+  ## @param readReplicas.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ##
+  enableServiceLinks: true
   ## @param readReplicas.updateStrategy.type PostgreSQL read only statefulset strategy type
   ## @param readReplicas.updateStrategy.rollingUpdate PostgreSQL read only statefulset rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies

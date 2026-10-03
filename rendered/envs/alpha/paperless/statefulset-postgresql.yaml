@@ -142,6 +142,7 @@ spec:
               name: dshm
             - mountPath: /bitnami/postgresql
               name: data
+      enableServiceLinks: true
       hostIPC: false
       hostNetwork: false
       securityContext:
