@@ -1,0 +1,13 @@
+#@data/values
+---
+prototype:
+  sources:
+    dashboard:
+      git:
+        #! TODO: switch to the release tag that ships deploy/grafana/kasha.json.
+        ref: b2514cc76c579bbf955454ff1b189f78456522af
+        url: https://github.com/zebradil/kasha
+      includePaths:
+        - deploy/grafana/kasha.json
+      plugin: ytt
+      newRootPath: deploy/grafana

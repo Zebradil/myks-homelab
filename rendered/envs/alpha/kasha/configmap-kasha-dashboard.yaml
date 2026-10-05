@@ -1,0 +1,675 @@
+apiVersion: v1
+data:
+  kasha-dashboard.json: |-
+    {
+      "description": "Box state and traffic from kasha's /metrics endpoint.",
+      "editable": true,
+      "graphTooltip": 1,
+      "panels": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "description": "Narinfos in the box's index.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "text",
+                "mode": "fixed"
+              },
+              "unit": "short"
+            }
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 4,
+            "x": 0,
+            "y": 0
+          },
+          "id": 1,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "none",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ]
+            }
+          },
+          "targets": [
+            {
+              "expr": "kasha_objects{job=\"$job\"}",
+              "instant": true,
+              "refId": "A"
+            }
+          ],
+          "title": "Objects",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "description": "Local-origin generations not yet mirrored to the remote cache. Brief nonzero values are normal after a push; one that stays above zero means mirror-up is stuck.",
+          "fieldConfig": {
+            "defaults": {
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 1
+                  }
+                ]
+              },
+              "unit": "short"
+            }
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 4,
+            "x": 4,
+            "y": 0
+          },
+          "id": 2,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "none",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ]
+            }
+          },
+          "targets": [
+            {
+              "expr": "kasha_pending_mirror_up{job=\"$job\"}",
+              "instant": true,
+              "refId": "A"
+            }
+          ],
+          "title": "Pending mirror-up",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "description": "Age of the stalest flake's last mirror-down. Healthy is under KASHA_SYNC_INTERVAL plus the cycle's run time; red past 1h matches the KashaSyncStale alert.",
+          "fieldConfig": {
+            "defaults": {
+              "noValue": "no sync yet",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 3600
+                  }
+                ]
+              },
+              "unit": "s"
+            }
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 4,
+            "x": 8,
+            "y": 0
+          },
+          "id": 3,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "none",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ]
+            }
+          },
+          "targets": [
+            {
+              "expr": "time() - min(kasha_flake_last_sync_timestamp_seconds{job=\"$job\"})",
+              "instant": true,
+              "refId": "A"
+            }
+          ],
+          "title": "Oldest flake sync",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "description": "Closure paths across all flakes' manifests that no source could supply. Usually expected, never an error.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "text",
+                "mode": "fixed"
+              },
+              "unit": "short"
+            }
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 4,
+            "x": 12,
+            "y": 0
+          },
+          "id": 4,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "none",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ]
+            }
+          },
+          "targets": [
+            {
+              "expr": "sum(kasha_flake_gaps{job=\"$job\"})",
+              "instant": true,
+              "refId": "A"
+            }
+          ],
+          "title": "Gaps",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "description": "Share of narinfo lookups the box answered itself over the selected time range.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "text",
+                "mode": "fixed"
+              },
+              "decimals": 1,
+              "noValue": "no requests",
+              "unit": "percentunit"
+            }
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 4,
+            "x": 16,
+            "y": 0
+          },
+          "id": 5,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "none",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ]
+            }
+          },
+          "targets": [
+            {
+              "expr": "sum(increase(kasha_narinfo_requests_total{job=\"$job\", result=\"hit\"}[$__range])) / sum(increase(kasha_narinfo_requests_total{job=\"$job\"}[$__range]))",
+              "instant": true,
+              "refId": "A"
+            }
+          ],
+          "title": "Narinfo hit ratio",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "description": "Age of the last box GC sweep attempt. Red past 2 days matches the KashaSweepStale alert.",
+          "fieldConfig": {
+            "defaults": {
+              "noValue": "never",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 172800
+                  }
+                ]
+              },
+              "unit": "s"
+            }
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 4,
+            "x": 20,
+            "y": 0
+          },
+          "id": 6,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "none",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ]
+            }
+          },
+          "targets": [
+            {
+              "expr": "time() - kasha_last_sweep_timestamp_seconds{job=\"$job\"}",
+              "instant": true,
+              "refId": "A"
+            }
+          ],
+          "title": "Last box GC sweep",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "min": 0,
+              "unit": "reqps"
+            }
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 4
+          },
+          "id": 7,
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi"
+            }
+          },
+          "targets": [
+            {
+              "expr": "sum by (result) (rate(kasha_narinfo_requests_total{job=\"$job\"}[$__rate_interval]))",
+              "legendFormat": "{{result}}",
+              "refId": "A"
+            }
+          ],
+          "title": "Narinfo requests",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "max": 1,
+              "min": 0,
+              "unit": "percentunit"
+            }
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 4
+          },
+          "id": 8,
+          "options": {
+            "legend": {
+              "showLegend": false
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "expr": "sum(rate(kasha_narinfo_requests_total{job=\"$job\", result=\"hit\"}[$__rate_interval])) / sum(rate(kasha_narinfo_requests_total{job=\"$job\"}[$__rate_interval]))",
+              "legendFormat": "hit ratio",
+              "refId": "A"
+            }
+          ],
+          "title": "Narinfo hit ratio",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "description": "Dashed line at 1h: the KashaSyncStale threshold.",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "thresholdsStyle": {
+                  "mode": "dashed"
+                }
+              },
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "transparent",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 3600
+                  }
+                ]
+              },
+              "unit": "s"
+            }
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 12
+          },
+          "id": 9,
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi"
+            }
+          },
+          "targets": [
+            {
+              "expr": "time() - kasha_flake_last_sync_timestamp_seconds{job=\"$job\", flake=~\"$flake\"}",
+              "legendFormat": "{{flake}}",
+              "refId": "A"
+            }
+          ],
+          "title": "Time since last sync, per flake",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "decimals": 0,
+              "min": 0,
+              "unit": "short"
+            }
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 12
+          },
+          "id": 10,
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi"
+            }
+          },
+          "targets": [
+            {
+              "expr": "kasha_flake_gaps{job=\"$job\", flake=~\"$flake\"}",
+              "legendFormat": "{{flake}}",
+              "refId": "A"
+            }
+          ],
+          "title": "Gaps, per flake",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "description": "Pushes by result: accepted, rejected (bad content or signature) or unauthorized.",
+          "fieldConfig": {
+            "defaults": {
+              "min": 0,
+              "unit": "reqps"
+            }
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 20
+          },
+          "id": 11,
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi"
+            }
+          },
+          "targets": [
+            {
+              "expr": "sum by (result) (rate(kasha_ingest_requests_total{job=\"$job\"}[$__rate_interval]))",
+              "legendFormat": "{{result}}",
+              "refId": "A"
+            }
+          ],
+          "title": "Ingest requests",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "decimals": 0,
+              "min": 0,
+              "unit": "short"
+            }
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 20
+          },
+          "id": 12,
+          "options": {
+            "legend": {
+              "showLegend": false
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "expr": "kasha_pending_mirror_up{job=\"$job\"}",
+              "legendFormat": "pending",
+              "refId": "A"
+            }
+          ],
+          "title": "Pending mirror-up",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "description": "Narinfos in the box's index.",
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short"
+            }
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 28
+          },
+          "id": 13,
+          "options": {
+            "legend": {
+              "showLegend": false
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "expr": "kasha_objects{job=\"$job\"}",
+              "legendFormat": "objects",
+              "refId": "A"
+            }
+          ],
+          "title": "Objects",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "description": "Narinfos and NARs deleted by box GC sweeps.",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "drawStyle": "bars",
+                "fillOpacity": 80
+              },
+              "decimals": 0,
+              "min": 0,
+              "unit": "short"
+            }
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 28
+          },
+          "id": 14,
+          "options": {
+            "legend": {
+              "showLegend": false
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "expr": "sum(increase(kasha_sweep_deleted_objects_total{job=\"$job\"}[$__interval]))",
+              "interval": "5m",
+              "legendFormat": "deleted",
+              "refId": "A"
+            }
+          ],
+          "title": "Box GC deletions",
+          "type": "timeseries"
+        }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 39,
+      "tags": [
+        "kasha",
+        "nix"
+      ],
+      "templating": {
+        "list": [
+          {
+            "label": "Data source",
+            "name": "datasource",
+            "query": "prometheus",
+            "type": "datasource"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "label": "Job",
+            "name": "job",
+            "query": {
+              "query": "label_values(kasha_objects, job)",
+              "refId": "job"
+            },
+            "refresh": 2,
+            "sort": 1,
+            "type": "query"
+          },
+          {
+            "allValue": ".*",
+            "current": {
+              "text": "All",
+              "value": "$__all"
+            },
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "includeAll": true,
+            "label": "Flake",
+            "multi": true,
+            "name": "flake",
+            "query": {
+              "query": "label_values(kasha_flake_gaps{job=\"$job\"}, flake)",
+              "refId": "flake"
+            },
+            "refresh": 2,
+            "sort": 1,
+            "type": "query"
+          }
+        ]
+      },
+      "time": {
+        "from": "now-24h",
+        "to": "now"
+      },
+      "title": "kasha",
+      "uid": "kasha"
+    }
+kind: ConfigMap
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    grafana_dashboard: "1"
+  name: kasha-dashboard

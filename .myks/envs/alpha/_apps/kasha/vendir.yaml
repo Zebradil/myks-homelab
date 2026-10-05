@@ -1,0 +1,13 @@
+apiVersion: vendir.k14s.io/v1alpha1
+kind: Config
+directories:
+- path: ytt/dashboard
+  contents:
+  - path: .
+    lazy: true
+    git:
+      url: https://github.com/zebradil/kasha
+      ref: b2514cc76c579bbf955454ff1b189f78456522af
+    includePaths:
+    - deploy/grafana/kasha.json
+    newRootPath: deploy/grafana

@@ -104,9 +104,25 @@ apiVersion: v1
 kind: Service
 metadata:
   name: #@ name
+  labels: #@ pod_labels
 spec:
   selector: #@ pod_labels
   ports:
     - name: http
       port: 80
       targetPort: http
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: #@ name
+  labels: #@ pod_labels
+spec:
+  endpoints:
+    - port: http
+      path: /metrics
+  namespaceSelector:
+    matchNames:
+      - #@ name
+  selector:
+    matchLabels: #@ pod_labels
