@@ -11,4 +11,8 @@ spec:
   issuerRef:
     kind: ClusterIssuer
     name: cloudflare-zerossl
+  privateKey:
+    algorithm: ECDSA
+    rotationPolicy: Always
+    size: 256
   secretName: wildcard-lan.zebradil.dev-tls

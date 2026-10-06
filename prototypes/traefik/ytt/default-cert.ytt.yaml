@@ -18,6 +18,10 @@ spec:
   issuerRef:
     name: #@ data.values.application.tls.issuer
     kind: ClusterIssuer
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+    rotationPolicy: Always
 #@ end
 ---
 apiVersion: traefik.io/v1alpha1
