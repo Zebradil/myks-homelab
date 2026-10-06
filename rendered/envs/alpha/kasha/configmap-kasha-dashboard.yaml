@@ -604,6 +604,376 @@ data:
           ],
           "title": "Box GC deletions",
           "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "description": "Age of the newest manifest's timestamp: when CI or a local push last produced something for the branch. Unlike last sync, this only resets when there is new data.",
+          "fieldConfig": {
+            "defaults": {
+              "min": 0,
+              "unit": "s"
+            }
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 36
+          },
+          "id": 15,
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi"
+            }
+          },
+          "targets": [
+            {
+              "expr": "time() - kasha_generation_published_timestamp_seconds{job=\"$job\", flake=~\"$flake\"}",
+              "legendFormat": "{{flake}}/{{branch}}",
+              "refId": "A"
+            }
+          ],
+          "title": "Time since newest generation was published, per branch",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "description": "Age of the newest manifest file on the box: when mirror-down (or a push) last brought a new generation. Survives restarts.",
+          "fieldConfig": {
+            "defaults": {
+              "min": 0,
+              "unit": "s"
+            }
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 36
+          },
+          "id": 16,
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi"
+            }
+          },
+          "targets": [
+            {
+              "expr": "time() - kasha_generation_arrived_timestamp_seconds{job=\"$job\", flake=~\"$flake\"}",
+              "legendFormat": "{{flake}}/{{branch}}",
+              "refId": "A"
+            }
+          ],
+          "title": "Time since the box received a new generation, per branch",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "description": "Published: manifest timestamp. Arrived: when the box stored it. Lag: arrival minus publish, i.e. how long replication took (negative when the box's clock is behind the producer's).",
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s"
+            }
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 44
+          },
+          "id": 17,
+          "options": {
+            "showHeader": true,
+            "sortBy": [
+              {
+                "desc": false,
+                "displayName": "Since published"
+              }
+            ]
+          },
+          "targets": [
+            {
+              "expr": "time() - kasha_generation_published_timestamp_seconds{job=\"$job\", flake=~\"$flake\"}",
+              "format": "table",
+              "instant": true,
+              "refId": "A"
+            },
+            {
+              "expr": "time() - kasha_generation_arrived_timestamp_seconds{job=\"$job\", flake=~\"$flake\"}",
+              "format": "table",
+              "instant": true,
+              "refId": "B"
+            },
+            {
+              "expr": "kasha_generation_arrived_timestamp_seconds{job=\"$job\", flake=~\"$flake\"} - kasha_generation_published_timestamp_seconds{job=\"$job\", flake=~\"$flake\"}",
+              "format": "table",
+              "instant": true,
+              "refId": "C"
+            }
+          ],
+          "title": "Newest generation per branch",
+          "transformations": [
+            {
+              "id": "merge",
+              "options": {}
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true,
+                  "__name__": true,
+                  "instance": true,
+                  "job": true
+                },
+                "indexByName": {
+                  "Value #A": 2,
+                  "Value #B": 3,
+                  "Value #C": 4,
+                  "branch": 1,
+                  "flake": 0
+                },
+                "renameByName": {
+                  "Value #A": "Since published",
+                  "Value #B": "Since arrived",
+                  "Value #C": "Replication lag"
+                }
+              }
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "description": "NAR bytes per second. down: fetched by mirror-down, by source. up: mirrored to the remote cache. served: sent to clients. ingest: pushed into the box. Counted when a transfer completes, so one large NAR shows as a spike.",
+          "fieldConfig": {
+            "defaults": {
+              "min": 0,
+              "unit": "Bps"
+            }
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 52
+          },
+          "id": 18,
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi"
+            }
+          },
+          "targets": [
+            {
+              "expr": "sum by (direction, source) (rate(kasha_nar_bytes_total{job=\"$job\"}[$__rate_interval]))",
+              "legendFormat": "{{direction}} {{source}}",
+              "refId": "A"
+            }
+          ],
+          "title": "NAR throughput",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "description": "Total NAR bytes per direction over the dashboard's time range.",
+          "fieldConfig": {
+            "defaults": {
+              "unit": "bytes"
+            }
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 52
+          },
+          "id": 19,
+          "options": {
+            "displayMode": "gradient",
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            }
+          },
+          "targets": [
+            {
+              "expr": "sum by (direction, source) (increase(kasha_nar_bytes_total{job=\"$job\"}[$__range]))",
+              "instant": true,
+              "legendFormat": "{{direction}} {{source}}",
+              "refId": "A"
+            }
+          ],
+          "title": "NAR bytes moved in range",
+          "type": "bargauge"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "description": "NAR count per age bucket (time since the box stored the file; bucket labels are upper bounds). Refreshed at most every 5 minutes.",
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short"
+            }
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 60
+          },
+          "id": 20,
+          "options": {
+            "displayMode": "basic",
+            "orientation": "vertical",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showUnfilled": false
+          },
+          "targets": [
+            {
+              "expr": "kasha_nar_age_objects{job=\"$job\"}",
+              "format": "heatmap",
+              "instant": true,
+              "legendFormat": "{{le}}",
+              "refId": "A"
+            }
+          ],
+          "title": "NARs by age",
+          "type": "bargauge"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "description": "Disk used per age bucket (time since the box stored the file; bucket labels are upper bounds).",
+          "fieldConfig": {
+            "defaults": {
+              "unit": "bytes"
+            }
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 60
+          },
+          "id": 21,
+          "options": {
+            "displayMode": "basic",
+            "orientation": "vertical",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showUnfilled": false
+          },
+          "targets": [
+            {
+              "expr": "kasha_nar_age_bytes{job=\"$job\"}",
+              "format": "heatmap",
+              "instant": true,
+              "legendFormat": "{{le}}",
+              "refId": "A"
+            }
+          ],
+          "title": "NAR bytes by age",
+          "type": "bargauge"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "description": "Oldest and newest NAR on disk, plus median and 90th percentile age estimated from the buckets (coarse: interpolated within a bucket).",
+          "fieldConfig": {
+            "defaults": {
+              "min": 0,
+              "unit": "s"
+            }
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 68
+          },
+          "id": 22,
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi"
+            }
+          },
+          "targets": [
+            {
+              "expr": "time() - kasha_nar_oldest_timestamp_seconds{job=\"$job\"}",
+              "legendFormat": "oldest",
+              "refId": "A"
+            },
+            {
+              "expr": "histogram_quantile(0.9, kasha_nar_age_objects{job=\"$job\"})",
+              "legendFormat": "p90",
+              "refId": "B"
+            },
+            {
+              "expr": "histogram_quantile(0.5, kasha_nar_age_objects{job=\"$job\"})",
+              "legendFormat": "p50",
+              "refId": "C"
+            },
+            {
+              "expr": "time() - kasha_nar_newest_timestamp_seconds{job=\"$job\"}",
+              "legendFormat": "newest",
+              "refId": "D"
+            }
+          ],
+          "title": "NAR age",
+          "type": "timeseries"
         }
       ],
       "refresh": "1m",
