@@ -1,0 +1,12 @@
+#@data/values
+---
+prototype:
+  sources:
+    dashboard:
+      git:
+        ref: v0.7.0
+        url: https://github.com/zebradil/kasha
+      includePaths:
+        - deploy/grafana/kasha.json
+      plugin: ytt
+      newRootPath: deploy/grafana

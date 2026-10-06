@@ -1,0 +1,2 @@
+#@ load("grafana.lib.yaml", "gen_dashboard")
+--- #@ gen_dashboard("kasha.json", name="kasha-dashboard")
