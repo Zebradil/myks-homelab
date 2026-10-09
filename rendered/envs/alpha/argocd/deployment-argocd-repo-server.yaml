@@ -377,7 +377,7 @@ spec:
                 secretKeyRef:
                   key: key
                   name: sops-age-key
-          image: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:8827ae684e58fbdb93c8893e48731bae36d5cdd302a6efebee8e01707145c85e
+          image: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:b76f9ead999002af783d7b7036b7b57ceee6033712ad07577240ee06489a3a40
           name: vals
           resources:
             limits:
@@ -442,7 +442,7 @@ spec:
           env:
             - name: VALS_VERSION
               value: v0.43.1
-          image: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:8827ae684e58fbdb93c8893e48731bae36d5cdd302a6efebee8e01707145c85e
+          image: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:b76f9ead999002af783d7b7036b7b57ceee6033712ad07577240ee06489a3a40
           name: download-tools
           resources:
             limits:

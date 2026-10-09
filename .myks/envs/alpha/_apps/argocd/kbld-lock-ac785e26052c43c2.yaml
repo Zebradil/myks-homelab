@@ -8,12 +8,12 @@ overrides:
 - image: ghcr.io/dexidp/dex:v2.45.1
   newImage: oci.zebradil.dev/ghcr.io-cache/dexidp/dex@sha256:8499afd690c437f52301efd2b05b2455da5bd2dfc20332cd697dc9937f808462
   preresolved: true
-- image: ghcr.io/oliver006/redis_exporter:v1.92.1
-  newImage: oci.zebradil.dev/ghcr.io-cache/oliver006/redis_exporter@sha256:7fbc93d30f0f91eed1b2fe6968a956259cc5d260a984dd9071f1d1e9c2692ecd
+- image: ghcr.io/oliver006/redis_exporter:v1.93.0
+  newImage: oci.zebradil.dev/ghcr.io-cache/oliver006/redis_exporter@sha256:6ca518a72f30f7f576ef92963de1b91d3c3f5fd3aeac949f878bfda183587820
   preresolved: true
 - image: quay.io/argoproj/argocd:v3.5.3
   newImage: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:dd3f47d5a5e4da563a7a398506e892481b358a7cec50abdf320c71aa55904bfa
   preresolved: true
 - image: registry.access.redhat.com/ubi8
-  newImage: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:8827ae684e58fbdb93c8893e48731bae36d5cdd302a6efebee8e01707145c85e
+  newImage: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:b76f9ead999002af783d7b7036b7b57ceee6033712ad07577240ee06489a3a40
   preresolved: true
