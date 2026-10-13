@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 caddy:2.11.6-alpine@sha256:d44355d3c2149dc580ce2cac735955d1c08d3d00882c30489c241aa51a5c10d9
+FROM --platform=linux/amd64 caddy:2.11.7-alpine@sha256:d8542f48d34a9cf4e4c11a478865229840e87e4c96ea3f439101f31a5d35f75f
 
 # The Caddyfile is not baked in: it carries a reverse_proxy route per camera and
 # comes from the ConfigMap generated in ytt/cameras.ytt.yaml.
