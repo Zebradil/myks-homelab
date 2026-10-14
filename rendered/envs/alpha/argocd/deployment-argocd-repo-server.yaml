@@ -310,7 +310,7 @@ spec:
               value: /helm-working-dir
             - name: HELM_DATA_HOME
               value: /helm-working-dir
-          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:dd3f47d5a5e4da563a7a398506e892481b358a7cec50abdf320c71aa55904bfa
+          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:49dff79439bb38b1b942b19a113fe1fec7e6b6c671ddf9fe6a4a7c46bde0b77b
           livenessProbe:
             failureThreshold: 3
             httpGet:
@@ -377,7 +377,7 @@ spec:
                 secretKeyRef:
                   key: key
                   name: sops-age-key
-          image: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:b76f9ead999002af783d7b7036b7b57ceee6033712ad07577240ee06489a3a40
+          image: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:bdf2d0f0bb4ff156b2281a2e59484c4f20ba57881b62bf3cd7bbf953ac3b9eb0
           name: vals
           resources:
             limits:
@@ -410,7 +410,7 @@ spec:
           command:
             - sh
             - -c
-          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:dd3f47d5a5e4da563a7a398506e892481b358a7cec50abdf320c71aa55904bfa
+          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:49dff79439bb38b1b942b19a113fe1fec7e6b6c671ddf9fe6a4a7c46bde0b77b
           name: copyutil
           resources:
             limits:
@@ -442,7 +442,7 @@ spec:
           env:
             - name: VALS_VERSION
               value: v0.43.1
-          image: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:b76f9ead999002af783d7b7036b7b57ceee6033712ad07577240ee06489a3a40
+          image: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8@sha256:bdf2d0f0bb4ff156b2281a2e59484c4f20ba57881b62bf3cd7bbf953ac3b9eb0
           name: download-tools
           resources:
             limits:
