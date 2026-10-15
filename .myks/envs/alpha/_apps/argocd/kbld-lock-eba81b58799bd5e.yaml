@@ -5,8 +5,8 @@ overrides:
 - image: ecr-public.aws.com/docker/library/redis:8.6.4-alpine
   newImage: ecr-public.aws.com/docker/library/redis@sha256:2cc044fc5a07c9b701f8f1255a309ae9ad7856e694ac03513bf3648c01e40763
   preresolved: true
-- image: ghcr.io/dexidp/dex:v2.45.1
-  newImage: oci.zebradil.dev/ghcr.io-cache/dexidp/dex@sha256:8499afd690c437f52301efd2b05b2455da5bd2dfc20332cd697dc9937f808462
+- image: ghcr.io/dexidp/dex:v2.46.0
+  newImage: oci.zebradil.dev/ghcr.io-cache/dexidp/dex@sha256:933fcd3f523338c847b88ef84a7145fb2fcb7b9917f08418612afeaaa2001777
   preresolved: true
 - image: ghcr.io/oliver006/redis_exporter:v1.93.0
   newImage: oci.zebradil.dev/ghcr.io-cache/oliver006/redis_exporter@sha256:6ca518a72f30f7f576ef92963de1b91d3c3f5fd3aeac949f878bfda183587820

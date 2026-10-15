@@ -1,0 +1,10 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - configDigest: 32ab38e8d96f2a63763cf8f1a83e4b28865c2ba11cb79933f899cb2d29b4cdd2
+    helmChart:
+      appVersion: v3.5.4
+      version: 10.10.1
+    path: .
+  path: .myks/vendir-cache/helm-argo-cd-10.10.1-2d19663f57f694a1/data
+kind: LockConfig
