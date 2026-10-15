@@ -5,9 +5,9 @@ directories:
       name: argo-cd
       repository:
         url: https://argoproj.github.io/argo-helm
-      version: 10.10.0
+      version: 10.10.1
     lazy: true
     path: .
-  path: .myks/vendir-cache/helm-argo-cd-10.10.0-c4b90bd69c737766/data
+  path: .myks/vendir-cache/helm-argo-cd-10.10.1-2d19663f57f694a1/data
 kind: Config
 minimumRequiredVersion: ""

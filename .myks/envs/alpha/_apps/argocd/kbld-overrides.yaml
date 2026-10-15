@@ -1,8 +1,8 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 overrides:
-    - image: ghcr.io/dexidp/dex:v2.45.1
-      newImage: oci.zebradil.dev/ghcr.io-cache/dexidp/dex:v2.45.1
+    - image: ghcr.io/dexidp/dex:v2.46.0
+      newImage: oci.zebradil.dev/ghcr.io-cache/dexidp/dex:v2.46.0
     - image: ghcr.io/oliver006/redis_exporter:v1.93.0
       newImage: oci.zebradil.dev/ghcr.io-cache/oliver006/redis_exporter:v1.93.0
     - image: quay.io/argoproj/argocd:v3.5.4
