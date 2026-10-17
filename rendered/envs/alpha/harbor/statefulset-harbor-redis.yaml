@@ -36,7 +36,7 @@ spec:
     spec:
       automountServiceAccountToken: false
       containers:
-        - image: index.docker.io/goharbor/valkey-photon@sha256:3a9b396bb1aa7a517a09b6e29d72f4f3fcd82dbb4ed09474f28062b63a79bc71
+        - image: index.docker.io/goharbor/valkey-photon@sha256:bb022e8f236f56f53cee7bb1f609595e497da67d829048e0af2284f97e6eb54f
           livenessProbe:
             failureThreshold: 3
             initialDelaySeconds: 300
