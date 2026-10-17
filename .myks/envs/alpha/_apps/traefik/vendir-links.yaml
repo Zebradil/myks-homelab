@@ -1,2 +1,2 @@
-charts/traefik: helm-traefik-41.7.1-f0cc8ee22de95513
+charts/traefik: helm-traefik-42.0.0-115cf179d10c2dd4
 ytt/dashboard: git-traefik-v3.7.13-4561e15a12d6a067
