@@ -1,10 +1,8 @@
 annotations:
   artifacthub.io/changes: |
     - kind: added
-      description: "feat(gateway): support scoping the provider to specific Gateways"
-    - kind: added
-      description: "feat(deps): update traefik to v3.7.14 and traefik-hub to v3.21.1"
-  traefik.io/hub-max-version: v3.21.1
+      description: "feat(hub): support traefik hub v3.20.15 and v3.21.2"
+  traefik.io/hub-max-version: v3.21.2
   traefik.io/hub-min-version: v3.19.3
   traefik.io/proxy-max-version: v3.7.14
   traefik.io/proxy-min-version: v3.6.0
@@ -29,4 +27,4 @@ sources:
 - https://github.com/traefik/traefik-helm-chart
 - https://github.com/traefik/traefik
 type: application
-version: 41.7.0
+version: 41.7.1
