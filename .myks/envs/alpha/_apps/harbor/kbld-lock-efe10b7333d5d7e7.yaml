@@ -2,59 +2,59 @@ apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 minimumRequiredVersion: 0.49.1
 overrides:
-- image: docker.io/goharbor/harbor-core:v2.15.3
-  newImage: index.docker.io/goharbor/harbor-core@sha256:2c9c9dd098258b768ecc8089482bbc7dacda80d75e6a5cfc07a06270c12ca90d
+- image: docker.io/goharbor/harbor-core:v2.15.4
+  newImage: index.docker.io/goharbor/harbor-core@sha256:7d2ba5304a729887cdec7cb222a82b500278423de230ae5150c386a6c332b112
   preresolved: true
-- image: docker.io/goharbor/harbor-db:v2.15.3
-  newImage: index.docker.io/goharbor/harbor-db@sha256:95d69f16f00b2b1947d6764b85370d7882734f6d5cf0594e2f2368f1a9d787d9
+- image: docker.io/goharbor/harbor-db:v2.15.4
+  newImage: index.docker.io/goharbor/harbor-db@sha256:a32d51e636d76303e086a7c5251a2c8415c6f165b2f87bafa914efd866c5403f
   preresolved: true
-- image: docker.io/goharbor/harbor-exporter:v2.15.3
-  newImage: index.docker.io/goharbor/harbor-exporter@sha256:4f2ce6dcf0d2db6413d970c8de59965febcaf88f42227952bcf59b0f37dc421d
+- image: docker.io/goharbor/harbor-exporter:v2.15.4
+  newImage: index.docker.io/goharbor/harbor-exporter@sha256:9ffede33dc519b4be035596a72f00f354754a22a3769077731f81ee7d6852f4f
   preresolved: true
-- image: docker.io/goharbor/harbor-jobservice:v2.15.3
-  newImage: index.docker.io/goharbor/harbor-jobservice@sha256:32a09e77b2b0b20a24f6d2daefb66ad30b6efdf19b686127287e20a9c95fb8d1
+- image: docker.io/goharbor/harbor-jobservice:v2.15.4
+  newImage: index.docker.io/goharbor/harbor-jobservice@sha256:f143578ef30e2be5c48873298257ed0fca31545025958c534e536a06765d2b82
   preresolved: true
-- image: docker.io/goharbor/harbor-portal:v2.15.3
-  newImage: index.docker.io/goharbor/harbor-portal@sha256:30278a07321521a409946bfcbdec63f8c43d69892a2155a5e8d1ab7f10d206a1
+- image: docker.io/goharbor/harbor-portal:v2.15.4
+  newImage: index.docker.io/goharbor/harbor-portal@sha256:01edf478505b21dba23a83c095f6ecac0c1e705690093edbab41e9a4d6754a75
   preresolved: true
-- image: docker.io/goharbor/harbor-registryctl:v2.15.3
-  newImage: index.docker.io/goharbor/harbor-registryctl@sha256:59067e35534790a600ac625c8c9b96a52db27a08431c5ca822c46a1ea1ca8556
+- image: docker.io/goharbor/harbor-registryctl:v2.15.4
+  newImage: index.docker.io/goharbor/harbor-registryctl@sha256:30bd1ace4e3bb390d75b84673f98ddb4a69fcc6d116932ea764391df01943fb7
   preresolved: true
-- image: docker.io/goharbor/registry-photon:v2.15.3
-  newImage: index.docker.io/goharbor/registry-photon@sha256:6633841aea3a268f8c43c4083291023e3ffe481eb23aee7ee5b4162de0d034f0
+- image: docker.io/goharbor/registry-photon:v2.15.4
+  newImage: index.docker.io/goharbor/registry-photon@sha256:dc0cb388a6445c69c8a0c406679290d2991c9698833d9e6e86a23bdfaf2f83c3
   preresolved: true
-- image: docker.io/goharbor/trivy-adapter-photon:v2.15.3
-  newImage: index.docker.io/goharbor/trivy-adapter-photon@sha256:12352dc823281ccb3e9ee3af4039f7b6c4eb7a575a0cd5ceae7f1e18af88d53f
+- image: docker.io/goharbor/trivy-adapter-photon:v2.15.4
+  newImage: index.docker.io/goharbor/trivy-adapter-photon@sha256:813ca81b4a4ea0f44f5fa81cca2645eeb58d4b1f6c66b428df9d506174bb71d9
   preresolved: true
-- image: docker.io/goharbor/valkey-photon:v2.15.3
-  newImage: index.docker.io/goharbor/valkey-photon@sha256:3a9b396bb1aa7a517a09b6e29d72f4f3fcd82dbb4ed09474f28062b63a79bc71
+- image: docker.io/goharbor/valkey-photon:v2.15.4
+  newImage: index.docker.io/goharbor/valkey-photon@sha256:bb022e8f236f56f53cee7bb1f609595e497da67d829048e0af2284f97e6eb54f
   preresolved: true
-- image: goharbor/harbor-core:v2.15.3
-  newImage: index.docker.io/goharbor/harbor-core@sha256:2c9c9dd098258b768ecc8089482bbc7dacda80d75e6a5cfc07a06270c12ca90d
+- image: goharbor/harbor-core:v2.15.4
+  newImage: index.docker.io/goharbor/harbor-core@sha256:7d2ba5304a729887cdec7cb222a82b500278423de230ae5150c386a6c332b112
   preresolved: true
-- image: goharbor/harbor-db:v2.15.3
-  newImage: index.docker.io/goharbor/harbor-db@sha256:95d69f16f00b2b1947d6764b85370d7882734f6d5cf0594e2f2368f1a9d787d9
+- image: goharbor/harbor-db:v2.15.4
+  newImage: index.docker.io/goharbor/harbor-db@sha256:a32d51e636d76303e086a7c5251a2c8415c6f165b2f87bafa914efd866c5403f
   preresolved: true
-- image: goharbor/harbor-exporter:v2.15.3
-  newImage: index.docker.io/goharbor/harbor-exporter@sha256:4f2ce6dcf0d2db6413d970c8de59965febcaf88f42227952bcf59b0f37dc421d
+- image: goharbor/harbor-exporter:v2.15.4
+  newImage: index.docker.io/goharbor/harbor-exporter@sha256:9ffede33dc519b4be035596a72f00f354754a22a3769077731f81ee7d6852f4f
   preresolved: true
-- image: goharbor/harbor-jobservice:v2.15.3
-  newImage: index.docker.io/goharbor/harbor-jobservice@sha256:32a09e77b2b0b20a24f6d2daefb66ad30b6efdf19b686127287e20a9c95fb8d1
+- image: goharbor/harbor-jobservice:v2.15.4
+  newImage: index.docker.io/goharbor/harbor-jobservice@sha256:f143578ef30e2be5c48873298257ed0fca31545025958c534e536a06765d2b82
   preresolved: true
-- image: goharbor/harbor-portal:v2.15.3
-  newImage: index.docker.io/goharbor/harbor-portal@sha256:30278a07321521a409946bfcbdec63f8c43d69892a2155a5e8d1ab7f10d206a1
+- image: goharbor/harbor-portal:v2.15.4
+  newImage: index.docker.io/goharbor/harbor-portal@sha256:01edf478505b21dba23a83c095f6ecac0c1e705690093edbab41e9a4d6754a75
   preresolved: true
-- image: goharbor/harbor-registryctl:v2.15.3
-  newImage: index.docker.io/goharbor/harbor-registryctl@sha256:59067e35534790a600ac625c8c9b96a52db27a08431c5ca822c46a1ea1ca8556
+- image: goharbor/harbor-registryctl:v2.15.4
+  newImage: index.docker.io/goharbor/harbor-registryctl@sha256:30bd1ace4e3bb390d75b84673f98ddb4a69fcc6d116932ea764391df01943fb7
   preresolved: true
-- image: goharbor/registry-photon:v2.15.3
-  newImage: index.docker.io/goharbor/registry-photon@sha256:6633841aea3a268f8c43c4083291023e3ffe481eb23aee7ee5b4162de0d034f0
+- image: goharbor/registry-photon:v2.15.4
+  newImage: index.docker.io/goharbor/registry-photon@sha256:dc0cb388a6445c69c8a0c406679290d2991c9698833d9e6e86a23bdfaf2f83c3
   preresolved: true
-- image: goharbor/trivy-adapter-photon:v2.15.3
-  newImage: index.docker.io/goharbor/trivy-adapter-photon@sha256:12352dc823281ccb3e9ee3af4039f7b6c4eb7a575a0cd5ceae7f1e18af88d53f
+- image: goharbor/trivy-adapter-photon:v2.15.4
+  newImage: index.docker.io/goharbor/trivy-adapter-photon@sha256:813ca81b4a4ea0f44f5fa81cca2645eeb58d4b1f6c66b428df9d506174bb71d9
   preresolved: true
-- image: goharbor/valkey-photon:v2.15.3
-  newImage: index.docker.io/goharbor/valkey-photon@sha256:3a9b396bb1aa7a517a09b6e29d72f4f3fcd82dbb4ed09474f28062b63a79bc71
+- image: goharbor/valkey-photon:v2.15.4
+  newImage: index.docker.io/goharbor/valkey-photon@sha256:bb022e8f236f56f53cee7bb1f609595e497da67d829048e0af2284f97e6eb54f
   preresolved: true
 - image: registry.access.redhat.com/ubi8/ubi:8.9
   newImage: oci.zebradil.dev/registry.access.redhat.com-cache/ubi8/ubi@sha256:83068ea81dd02717b8e39b55cdeb2c1b2c9a3db260f01381b991755d44b15073

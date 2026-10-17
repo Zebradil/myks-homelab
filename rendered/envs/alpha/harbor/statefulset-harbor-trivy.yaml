@@ -97,7 +97,7 @@ spec:
                 secretKeyRef:
                   key: redisURL
                   name: harbor-trivy
-          image: index.docker.io/goharbor/trivy-adapter-photon@sha256:12352dc823281ccb3e9ee3af4039f7b6c4eb7a575a0cd5ceae7f1e18af88d53f
+          image: index.docker.io/goharbor/trivy-adapter-photon@sha256:813ca81b4a4ea0f44f5fa81cca2645eeb58d4b1f6c66b428df9d506174bb71d9
           livenessProbe:
             failureThreshold: 10
             httpGet:

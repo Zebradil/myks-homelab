@@ -55,7 +55,7 @@ spec:
                 name: harbor-jobservice-env
             - secretRef:
                 name: harbor-jobservice
-          image: index.docker.io/goharbor/harbor-jobservice@sha256:32a09e77b2b0b20a24f6d2daefb66ad30b6efdf19b686127287e20a9c95fb8d1
+          image: index.docker.io/goharbor/harbor-jobservice@sha256:f143578ef30e2be5c48873298257ed0fca31545025958c534e536a06765d2b82
           livenessProbe:
             failureThreshold: 3
             httpGet:
