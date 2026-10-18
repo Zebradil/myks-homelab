@@ -9,8 +9,7 @@ metadata:
   name: redis
   namespace: paperless
 spec:
-  egress:
-    - {}
+  egress: null
   ingress:
     - ports:
         - port: 6379

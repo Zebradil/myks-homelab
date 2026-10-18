@@ -7,6 +7,8 @@ auth:
 image:
   repository: bitnamilegacy/redis
   tag: 8.2.1-debian-12-r0
+networkPolicy:
+  allowExternalEgress: false
 master:
   persistence:
     enabled: false

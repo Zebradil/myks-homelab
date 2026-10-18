@@ -11,7 +11,19 @@ metadata:
   namespace: paperless
 spec:
   egress:
-    - {}
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    - ports:
+        - port: 5432
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/component: read
+              app.kubernetes.io/instance: postgresql
+              app.kubernetes.io/name: postgresql
   ingress:
     - ports:
         - port: 5432
