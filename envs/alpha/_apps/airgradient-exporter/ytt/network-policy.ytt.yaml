@@ -1,0 +1,22 @@
+#@ load("@ytt:data", "data")
+
+#@ name = data.values.myks.context.app
+#@ monitors = [e.value for e in data.values.application.env if e.name == "AIRGRADIENT_MONITORS"][0]
+
+---
+#! The exporter polls the monitors on the LAN; restrict-egress blocks it.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: #@ name
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: #@ name
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        #@ for/end ip in monitors.split(","):
+        - ipBlock:
+            cidr: #@ ip.strip() + "/32"

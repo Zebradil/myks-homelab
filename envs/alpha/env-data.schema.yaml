@@ -19,3 +19,10 @@ environment:
 helm:
   #! Remove most of the helm-specific labels and annotations
   removeLabels: true
+
+#@overlay/match-child-defaults missing_ok=True
+application:
+  #! Limits egress of every pod in the app namespace to DNS and pods of the same
+  #! namespace (see _env/ytt/restrict-egress.ytt.yaml). Apps add narrower allow
+  #! policies next to the addresses they need, or set false to skip it.
+  restrictEgress: true

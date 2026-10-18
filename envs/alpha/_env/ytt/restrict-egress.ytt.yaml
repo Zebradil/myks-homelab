@@ -1,0 +1,30 @@
+#@ load("@ytt:data", "data")
+
+#@ if data.values.application.restrictEgress:
+---
+#! NetworkPolicies are additive: any other policy selecting a pod can widen its
+#! egress, but nothing narrows this one. hostNetwork pods are never affected.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: restrict-egress
+spec:
+  podSelector: {}
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    - to:
+        - podSelector: {}
+#@ end

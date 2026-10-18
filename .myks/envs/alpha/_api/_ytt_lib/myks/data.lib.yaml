@@ -1,6 +1,7 @@
 
 #@ def _env_data():
-application: {}
+application:
+  restrictEgress: true
 argocd:
   enabled: true
   namespace: argocd

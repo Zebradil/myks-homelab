@@ -1,0 +1,5 @@
+#@data/values
+---
+application:
+  #! Scrapes targets in every namespace and on the nodes, and sends alert notifications.
+  restrictEgress: false

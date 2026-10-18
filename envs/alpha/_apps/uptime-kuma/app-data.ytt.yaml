@@ -1,6 +1,8 @@
 #@data/values
 ---
 application:
+  #! Monitors arbitrary internal and external targets.
+  restrictEgress: false
   #! renovate: datasource=docker
   image: louislam/uptime-kuma:2.5.6
   ingress: false

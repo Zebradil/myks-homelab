@@ -218,3 +218,22 @@ spec:
           annotations:
             summary: Synology SNMP target down
             description: 'snmp_exporter cannot reach {{ $labels.instance }} — no NAS metrics.'
+---
+#! The exporter walks the NAS over SNMP; restrict-egress blocks the LAN.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: #@ name
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: #@ name
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - ipBlock:
+            cidr: #@ a.nasAddress + "/32"
+      ports:
+        - port: 161
+          protocol: UDP

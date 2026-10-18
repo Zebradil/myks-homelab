@@ -1,5 +1,7 @@
 #@data/values
 ---
 application:
+  #! Pushes to GitHub and fetches JWKS from the public Authelia URL.
+  restrictEgress: false
   kbmcp:
     kbRepo: git@github.com:zebradil/know.git
