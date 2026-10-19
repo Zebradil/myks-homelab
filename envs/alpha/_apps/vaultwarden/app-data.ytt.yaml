@@ -1,0 +1,5 @@
+#@data/values
+---
+application:
+  #! Sends mail, fetches site icons and uploads backups.
+  restrictEgress: false

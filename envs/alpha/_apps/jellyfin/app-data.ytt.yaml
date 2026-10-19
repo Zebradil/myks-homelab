@@ -3,6 +3,8 @@
 #@data/values
 ---
 application:
+  #! qBittorrent and WireGuard need the internet; Jellyfin fetches metadata.
+  restrictEgress: false
   nodeName: junior
   supplementalGroups: [105]
   storage:

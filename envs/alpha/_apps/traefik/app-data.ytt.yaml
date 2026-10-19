@@ -3,6 +3,8 @@
 #@data/values
 ---
 application:
+  #! Routes to backends in every namespace.
+  restrictEgress: false
   tls:
     baseDomains: #@ env_data.environment.hosts
     issuer: cloudflare-zerossl

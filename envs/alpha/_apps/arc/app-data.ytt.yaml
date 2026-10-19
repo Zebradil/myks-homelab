@@ -1,0 +1,5 @@
+#@data/values
+---
+application:
+  #! GitHub API and runner jobs reach the internet.
+  restrictEgress: false

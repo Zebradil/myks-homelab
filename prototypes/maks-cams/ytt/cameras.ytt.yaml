@@ -87,3 +87,22 @@ subsets:
       - port: 8889
         name: http
 #@ end
+
+---
+#! Caddy proxies the probes to the boards; restrict-egress blocks the LAN.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: #@ name + "-cameras"
+spec:
+  podSelector: {}
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        #@ for/end cam_id in sorted(cams.keys()):
+        - ipBlock:
+            cidr: #@ cams[cam_id]["ip"] + "/32"
+      ports:
+        - port: 8889
+          protocol: TCP

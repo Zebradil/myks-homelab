@@ -1,6 +1,8 @@
 #@data/values
 ---
 application:
+  #! Proxies upstream Arch Linux mirrors.
+  restrictEgress: false
   config:
     repos:
       archlinux:

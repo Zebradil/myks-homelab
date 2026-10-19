@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: cams-cameras
+spec:
+  egress:
+    - ports:
+        - port: 8889
+          protocol: TCP
+      to:
+        - ipBlock:
+            cidr: 192.168.0.201/32
+        - ipBlock:
+            cidr: 192.168.0.202/32
+        - ipBlock:
+            cidr: 192.168.0.203/32
+  podSelector: {}
+  policyTypes:
+    - Egress

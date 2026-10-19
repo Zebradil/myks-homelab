@@ -12,6 +12,8 @@ image:
   repository: bitnamilegacy/postgresql
   tag: 14.18.0-debian-12-r0
 primary:
+  networkPolicy:
+    allowExternalEgress: false
   resources: #@ res("20m", "64Mi", "256Mi")
   persistence:
     size: 1Gi

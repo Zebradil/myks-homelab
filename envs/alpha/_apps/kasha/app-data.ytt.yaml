@@ -1,0 +1,5 @@
+#@data/values
+---
+application:
+  #! Syncs with a remote S3 cache.
+  restrictEgress: false

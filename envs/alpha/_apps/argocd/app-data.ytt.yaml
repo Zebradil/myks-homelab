@@ -1,0 +1,5 @@
+#@data/values
+---
+application:
+  #! Pulls Git repositories and Helm charts from the internet.
+  restrictEgress: false

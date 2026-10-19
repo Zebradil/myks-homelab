@@ -1,6 +1,8 @@
 #@data/values
 ---
 application:
+  #! Downloads crictl from GitHub.
+  restrictEgress: false
   #! Add images to explicitly pull them, separately from their respective apps.
   #! This can be useful for fixing image-pull-related issues.
   images: []

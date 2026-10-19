@@ -99,3 +99,24 @@ spec:
   selector:
     matchLabels: #@ labels
 
+---
+#! Karma polls Alertmanager in another namespace; restrict-egress allows only
+#! its own namespace.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: #@ name
+  namespace: #@ name
+spec:
+  podSelector:
+    matchLabels: #@ labels
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: vmks
+      ports:
+        - port: 9093
+          protocol: TCP
