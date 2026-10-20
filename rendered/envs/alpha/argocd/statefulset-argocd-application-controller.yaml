@@ -332,7 +332,7 @@ spec:
                   optional: true
             - name: KUBECACHEDIR
               value: /tmp/kubecache
-          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:49dff79439bb38b1b942b19a113fe1fec7e6b6c671ddf9fe6a4a7c46bde0b77b
+          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:13db7b10db23283b1b36f855046602e18539a8a8204c9f6f039e8896c8897518
           name: application-controller
           ports:
             - containerPort: 8082
