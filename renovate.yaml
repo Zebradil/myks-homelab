@@ -54,10 +54,13 @@ packageRules:
       - docker
     matchCurrentValue: /^latest$/
     rangeStrategy: pin
-# Ignore all generated files
 ignorePaths:
+  # Generated files
   - rendered/**
   - .myks/**
+  # The custom regex managers below match every file, including the examples and patterns in this config
+  - renovate.json
+  - renovate.yaml
 customManagers:
   - customType: regex
     managerFilePatterns:
