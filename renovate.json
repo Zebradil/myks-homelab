@@ -5,9 +5,7 @@
     "schedule:nonOfficeHours"
   ],
   "gitIgnoredAuthors": [
-    "renovate[bot]@users.noreply.github.com",
-    "github-actions[bot]@users.noreply.github.com",
-    "zebradil-bot@users.noreply.github.com"
+    "german.lashevich+github-zebradil-bot@gmail.com"
   ],
   "rebaseWhen": "conflicted",
   "hostRules": [
