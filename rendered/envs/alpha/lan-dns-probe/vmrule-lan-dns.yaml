@@ -1,0 +1,18 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: lan-dns
+spec:
+  groups:
+    - name: lan-dns
+      rules:
+        - alert: LanResolverUnreachable
+          annotations:
+            description: A DNS query for the split-horizon name from another LAN host gets no NOERROR answer from {{ $labels.instance }}. LAN clients cannot resolve names. If AdGuard is healthy on its host, suspect L2 reachability of the service address (ARP); see ADR 0006 in Zebradil/znix.
+            summary: LAN resolver {{ $labels.instance }} does not answer
+          expr: probe_success{job="lan-dns"} == 0 or up{job="lan-dns"} == 0
+          for: 2m
+          labels:
+            severity: critical
