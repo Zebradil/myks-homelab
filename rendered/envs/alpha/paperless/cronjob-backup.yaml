@@ -21,16 +21,9 @@ spec:
                   topologyKey: kubernetes.io/hostname
           containers:
             - args:
-                - forget
-                - --prune
-                - --keep-daily
-                - "7"
-                - --keep-weekly
-                - "4"
-                - --keep-monthly
-                - "12"
-                - --host
-                - paperless
+                - check
+                - --read-data-subset
+                - 5%
               command:
                 - restic
               env:
@@ -40,7 +33,13 @@ spec:
                 - secretRef:
                     name: backup
               image: index.docker.io/restic/restic@sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510
-              name: forget
+              name: check
+              resources:
+                limits:
+                  memory: 512Mi
+                requests:
+                  cpu: 10m
+                  memory: 64Mi
               securityContext:
                 allowPrivilegeEscalation: false
                 capabilities:
@@ -115,6 +114,12 @@ spec:
                     name: backup
               image: index.docker.io/restic/restic@sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510
               name: backup
+              resources:
+                limits:
+                  memory: 512Mi
+                requests:
+                  cpu: 10m
+                  memory: 64Mi
               securityContext:
                 allowPrivilegeEscalation: false
                 capabilities:
@@ -126,13 +131,51 @@ spec:
                 - mountPath: /backup
                   name: scratch
                   readOnly: true
+            - args:
+                - forget
+                - --prune
+                - --max-repack-size
+                - 1G
+                - --keep-daily
+                - "7"
+                - --keep-weekly
+                - "4"
+                - --keep-monthly
+                - "12"
+                - --host
+                - paperless
+              command:
+                - restic
+              env:
+                - name: RESTIC_CACHE_DIR
+                  value: /cache
+              envFrom:
+                - secretRef:
+                    name: backup
+              image: index.docker.io/restic/restic@sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510
+              name: forget
+              resources:
+                limits:
+                  memory: 512Mi
+                requests:
+                  cpu: 10m
+                  memory: 64Mi
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+              volumeMounts:
+                - mountPath: /cache
+                  name: cache
           restartPolicy: Never
           securityContext:
             runAsGroup: 1000
             runAsNonRoot: true
             runAsUser: 1000
           volumes:
-            - emptyDir: {}
+            - emptyDir:
+                sizeLimit: 6Gi
               name: scratch
             - emptyDir: {}
               name: cache
