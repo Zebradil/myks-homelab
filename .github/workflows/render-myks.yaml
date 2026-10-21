@@ -74,10 +74,9 @@ jobs:
           commit_user_name: Zebradil Bot
           commit_user_email: german.lashevich+github-zebradil-bot@gmail.com
       - name: Set commit status
-        uses: myrotvorets/set-commit-status-action@3730c0a348a2ace3c110851bed53331bc6406e9f # v2.0.1
-        with:
-          context: myks
-          description:
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DESCRIPTION:
             ${{ steps.commit.outputs.changes_detected == 'true' && 'New changes have been committed' || 'Rendered files
             are up to date' }}
           # When running on a PR, set the commit status on the latest commit in
@@ -85,8 +84,13 @@ jobs:
           # indefinitely. This, in particular, blocks Renovate from merging PRs
           # automatically.
           # If running on a push, set the commit status on the current commit.
-          sha: ${{ steps.commit.outputs.commit_hash || github.event.pull_request.head.sha || github.sha }}
-          status: success
+          SHA: ${{ steps.commit.outputs.commit_hash || github.event.pull_request.head.sha || github.sha }}
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/statuses/$SHA" \
+            -f state=success \
+            -f context=myks \
+            -f description="$DESCRIPTION" \
+            -f target_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
   auto-approve:
     needs: render
     if: ${{ github.event_name == 'pull_request' }}
