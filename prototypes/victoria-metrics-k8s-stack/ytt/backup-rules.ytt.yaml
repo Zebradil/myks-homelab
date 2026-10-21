@@ -3,7 +3,7 @@
 #! Namespaces expected to hold one. BackupStale is driven by metrics the CronJob itself produces, so
 #! it falls silent exactly when the CronJob is deleted or stops being rendered; this list is what
 #! notices. Extend it whenever an app starts using the library.
-#@ backed_up = ["harbor", "vaultwarden"]
+#@ backed_up = ["harbor", "paperless", "vaultwarden"]
 ---
 apiVersion: operator.victoriametrics.com/v1beta1
 kind: VMRule

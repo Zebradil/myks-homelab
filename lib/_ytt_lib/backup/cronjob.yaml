@@ -78,6 +78,9 @@ spec:
       #! can never be scheduled, e.g. the app is scaled down and its RWO volume is on no node.
       activeDeadlineSeconds: #@ v.timeoutSeconds
       template:
+        metadata:
+          labels:
+            app.kubernetes.io/component: #@ name
         spec:
           restartPolicy: Never
           #@ if/end v.affinityPodLabels:
@@ -98,3 +101,22 @@ spec:
           containers:
             -  #@ restic_container("check", check_args, [])
           volumes: #@ volumes
+
+#@ if v.restrictEgress:
+---
+#! Adds to the namespace's restrict-egress policy, which already allows DNS and in-namespace traffic.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: #@ name + "-egress"
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/component: #@ name
+  policyTypes:
+    - Egress
+  egress:
+    - ports:
+        - port: 443
+          protocol: TCP
+#@ end

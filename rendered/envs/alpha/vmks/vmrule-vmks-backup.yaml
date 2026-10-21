@@ -33,6 +33,14 @@ spec:
           annotations:
             description: No `backup` CronJob exists in namespace {{ $labels.namespace }}, so nothing is backing the app up and BackupStale cannot fire for it.
             summary: Backup CronJob is missing.
+          expr: absent(kube_cronjob_created{namespace="paperless", cronjob="backup"})
+          for: 15m
+          labels:
+            severity: critical
+        - alert: BackupMissing
+          annotations:
+            description: No `backup` CronJob exists in namespace {{ $labels.namespace }}, so nothing is backing the app up and BackupStale cannot fire for it.
+            summary: Backup CronJob is missing.
           expr: absent(kube_cronjob_created{namespace="vaultwarden", cronjob="backup"})
           for: 15m
           labels:
