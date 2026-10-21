@@ -35,6 +35,9 @@ dump:
     - /backup
     - --no-thumbnail
     - --no-progress-bar
+    #! System checks fail outside the image's entrypoint, which is what installs the extra OCR languages; an export
+    #! does not need them.
+    - --skip-checks
   env:
     - name: PAPERLESS_DBPASS
       valueFrom:
@@ -51,9 +54,9 @@ dump:
   volumeMounts:
     - name: data
       mountPath: /usr/src/paperless/data
+    #! Writable: the exporter takes media.lock, the same lock the consumer holds while it adds documents.
     - name: media
       mountPath: /usr/src/paperless/media
-      readOnly: true
 volumes:
   - name: data
     persistentVolumeClaim:
