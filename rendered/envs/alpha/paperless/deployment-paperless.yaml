@@ -31,12 +31,16 @@ spec:
               value: https://paperless.zebradil.dev,https://paperless.junior.zebradil.dev,https://paperless.ts.zebradil.dev,https://paperless.junior.ts.zebradil.dev,https://paperless.lan.zebradil.dev,https://paperless.junior.lan.zebradil.dev
             - name: PAPERLESS_CORS_ALLOWED_HOSTS
               value: https://paperless.zebradil.dev,https://paperless.junior.zebradil.dev,https://paperless.ts.zebradil.dev,https://paperless.junior.ts.zebradil.dev,https://paperless.lan.zebradil.dev,https://paperless.junior.lan.zebradil.dev
+            - name: PAPERLESS_DBENGINE
+              value: postgresql
             - name: PAPERLESS_DBHOST
               value: postgresql
             - name: PAPERLESS_DBUSER
               value: paperless
             - name: PAPERLESS_REDIS
               value: redis://redis-master:6379
+            - name: PAPERLESS_CONSUMER_DELETE_DUPLICATES
+              value: "true"
             - name: PAPERLESS_OCR_LANGUAGE
               value: deu+eng+rus
             - name: PAPERLESS_OCR_OUTPUT_TYPE
@@ -49,7 +53,7 @@ spec:
               value: ref+sops://static/0.sops.yaml#/sessionSecretKey+
             - name: PAPERLESS_TIME_ZONE
               value: Europe/Berlin
-          image: oci.zebradil.dev/ghcr.io-cache/paperless-ngx/paperless-ngx@sha256:6c86cad803970ea782683a8e80e7403444c5bf3cf70de63b4d3c8e87500db92f
+          image: oci.zebradil.dev/ghcr.io-cache/paperless-ngx/paperless-ngx@sha256:dba0242c1df1843643df4eb50ce5639f3a7900f414879088fd5bed8eaf2d456d
           name: paperless
           ports:
             - containerPort: 8000
@@ -157,7 +161,7 @@ spec:
             name: paperless-sftp-scripts
           name: sftp-init-cm
         - image:
-            reference: oci.zebradil.dev/zebradil/homelab/paperless/tessdata@sha256:dcb0da325e996d313721323aafc9d614cdbb196fb4c12edd00989327f8e7bd25
+            reference: oci.zebradil.dev/zebradil/homelab/paperless/tessdata@sha256:6de254d1c0cea9d8d08ef2dae4f78be7aba48816257c96bf43d820f9885abbf1
           name: tessdata-image
         - emptyDir: {}
           name: tessdata

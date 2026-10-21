@@ -7,16 +7,20 @@
 application:
   paperless:
     #! renovate: datasource=docker
-    image: ghcr.io/paperless-ngx/paperless-ngx:2.20.15
+    image: ghcr.io/paperless-ngx/paperless-ngx:3.3.3
     storage:
       consume: 1Gi
       data: 2Gi
       media: 5Gi
     env:
+      PAPERLESS_DBENGINE: postgresql
       PAPERLESS_DBHOST: postgresql
       PAPERLESS_DBUSER: #@ databaseUser
 
       PAPERLESS_REDIS: redis://redis-master:6379
+
+      #! Since v3 duplicates are consumed by default; keep rejecting them.
+      PAPERLESS_CONSUMER_DELETE_DUPLICATES: 'true'
 
       PAPERLESS_OCR_LANGUAGE: deu+eng+rus
       #! The default is "pdfa", which may cause removing a form text
