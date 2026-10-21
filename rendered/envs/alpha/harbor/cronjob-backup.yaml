@@ -14,16 +14,9 @@ spec:
         spec:
           containers:
             - args:
-                - forget
-                - --prune
-                - --keep-daily
-                - "7"
-                - --keep-weekly
-                - "4"
-                - --keep-monthly
-                - "12"
-                - --host
-                - harbor
+                - check
+                - --read-data-subset
+                - 5%
               command:
                 - restic
               env:
@@ -33,7 +26,13 @@ spec:
                 - secretRef:
                     name: backup
               image: index.docker.io/restic/restic@sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510
-              name: forget
+              name: check
+              resources:
+                limits:
+                  memory: 512Mi
+                requests:
+                  cpu: 10m
+                  memory: 64Mi
               securityContext:
                 allowPrivilegeEscalation: false
                 capabilities:
@@ -56,7 +55,7 @@ spec:
                     secretKeyRef:
                       key: POSTGRES_PASSWORD
                       name: harbor-database
-              image: index.docker.io/goharbor/harbor-db@sha256:5ebfb345b33d673fa8483ffc997013113b7d14ea56abfa65cfcb621b4acf3039
+              image: index.docker.io/goharbor/harbor-db@sha256:a32d51e636d76303e086a7c5251a2c8415c6f165b2f87bafa914efd866c5403f
               name: dump
               securityContext:
                 allowPrivilegeEscalation: false
@@ -81,6 +80,12 @@ spec:
                     name: backup
               image: index.docker.io/restic/restic@sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510
               name: backup
+              resources:
+                limits:
+                  memory: 512Mi
+                requests:
+                  cpu: 10m
+                  memory: 64Mi
               securityContext:
                 allowPrivilegeEscalation: false
                 capabilities:
@@ -92,13 +97,51 @@ spec:
                 - mountPath: /backup
                   name: scratch
                   readOnly: true
+            - args:
+                - forget
+                - --prune
+                - --max-repack-size
+                - 1G
+                - --keep-daily
+                - "7"
+                - --keep-weekly
+                - "4"
+                - --keep-monthly
+                - "12"
+                - --host
+                - harbor
+              command:
+                - restic
+              env:
+                - name: RESTIC_CACHE_DIR
+                  value: /cache
+              envFrom:
+                - secretRef:
+                    name: backup
+              image: index.docker.io/restic/restic@sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510
+              name: forget
+              resources:
+                limits:
+                  memory: 512Mi
+                requests:
+                  cpu: 10m
+                  memory: 64Mi
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+              volumeMounts:
+                - mountPath: /cache
+                  name: cache
           restartPolicy: Never
           securityContext:
             runAsGroup: 999
             runAsNonRoot: true
             runAsUser: 999
           volumes:
-            - emptyDir: {}
+            - emptyDir:
+                sizeLimit: 2Gi
               name: scratch
             - emptyDir: {}
               name: cache
