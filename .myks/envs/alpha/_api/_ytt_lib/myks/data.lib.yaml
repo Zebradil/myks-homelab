@@ -87,6 +87,8 @@ environment:
     name: ""
   - proto: kb-mcp
     name: ""
+  - proto: lan-dns-probe
+    name: ""
   - proto: octo-sts
     name: ""
   - proto: librespeed

@@ -1,0 +1,19 @@
+#@data/values-schema
+---
+#@overlay/match-child-defaults missing_ok=True
+application:
+  #! renovate: datasource=docker
+  image: quay.io/prometheus/blackbox-exporter:v0.28.0
+  port: 9115
+  #! Must not be the resolver's host: the probe has to cross the LAN to catch
+  #! the 2026-09-07 failure class (resolver healthy, L2 path to it broken).
+  #! junior is wired, static, and always on.
+  node: junior
+  #! Each serviceAddress of modules/nixos/adguard.nix in znix. A second
+  #! resolver gets its own entry: clients pick either, so each must answer.
+  #@schema/default ["192.168.0.53"]
+  resolvers:
+    - ''
+  #! Rewritten by the split-horizon rule, so it exercises AdGuard's own
+  #! filtering path as well as its upstream.
+  queryName: lan.zebradil.dev

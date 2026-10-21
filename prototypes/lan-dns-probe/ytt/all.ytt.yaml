@@ -1,0 +1,153 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:sha256", "sha256")
+#@ load("@ytt:yaml", "yaml")
+
+#@ a = data.values.application
+#@ name = "blackbox-exporter"
+#@ ns = "lan-dns-probe"
+#@ probe_job = "lan-dns"
+#@ module = "dns-a"
+
+#! Detects the LAN resolver not answering from another host, which no
+#! process- or port-level check on the resolver's own host can see.
+#! Context: Zebradil/znix#141, docs/adr/0006-lan-dns-service-address.md there.
+
+#@ blackbox_config = {
+#@   "modules": {
+#@     module: {
+#@       "prober": "dns",
+#@       "timeout": "5s",
+#@       "dns": {
+#@         "query_name": a.queryName,
+#@         "query_type": "A",
+#@         "transport_protocol": "udp",
+#@         "valid_rcodes": ["NOERROR"],
+#@       },
+#@     },
+#@   },
+#@ }
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: #@ name
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: #@ name
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: #@ name
+      annotations:
+        #! Restart on module changes; blackbox_exporter only rereads config on SIGHUP.
+        checksum/config: #@ sha256.sum(yaml.encode(blackbox_config))
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: #@ a.node
+      containers:
+        - name: #@ name
+          image: #@ a.image
+          args:
+            - --config.file=/etc/blackbox/blackbox.yml
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 64Mi
+          ports:
+            - containerPort: #@ a.port
+              name: http
+          volumeMounts:
+            - name: config
+              mountPath: /etc/blackbox
+              readOnly: true
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+            privileged: false
+      volumes:
+        - name: config
+          configMap:
+            name: #@ name
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #@ name
+spec:
+  ports:
+    - name: http
+      port: #@ a.port
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: #@ name
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: #@ name
+data:
+  blackbox.yml: #@ yaml.encode(blackbox_config)
+
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMProbe
+metadata:
+  name: #@ probe_job
+spec:
+  jobName: #@ probe_job
+  module: #@ module
+  vmProberSpec:
+    url: #@ name + "." + ns + ".svc.cluster.local.:" + str(a.port)
+  targets:
+    staticConfig:
+      targets: #@ ["{}:53".format(r) for r in a.resolvers]
+
+---
+#! The probe queries the resolvers directly; restrict-egress only allows cluster DNS.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: #@ name
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: #@ name
+  policyTypes:
+    - Egress
+  egress:
+    - to: #@ [{"ipBlock": {"cidr": r + "/32"}} for r in a.resolvers]
+      ports:
+        - port: 53
+          protocol: UDP
+
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: lan-dns
+spec:
+  groups:
+    - name: lan-dns
+      rules:
+        - alert: LanResolverUnreachable
+          #! up == 0 keeps a dead exporter from silently disabling the probe.
+          expr: #@ 'probe_success{{job="{0}"}} == 0 or up{{job="{0}"}} == 0'.format(probe_job)
+          #! Several consecutive failures, not one: the resolver host has WiFi
+          #! fallback and brief blips are expected.
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: LAN resolver {{ $labels.instance }} does not answer
+            description: >-
+              A DNS query for the split-horizon name from another LAN host gets no NOERROR answer from
+              {{ $labels.instance }}. LAN clients cannot resolve names. If AdGuard is healthy on its host, suspect
+              L2 reachability of the service address (ARP); see ADR 0006 in Zebradil/znix.

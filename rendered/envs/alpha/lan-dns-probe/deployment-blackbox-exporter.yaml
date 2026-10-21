@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: blackbox-exporter
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: blackbox-exporter
+  template:
+    metadata:
+      annotations:
+        checksum/config: ae5f454eab2e2c158e2c437d8c42f58bcfba1c36751534d1dcf1d953ff1e142d
+      labels:
+        app.kubernetes.io/name: blackbox-exporter
+    spec:
+      containers:
+        - args:
+            - --config.file=/etc/blackbox/blackbox.yml
+          image: oci.zebradil.dev/quay.io-cache/prometheus/blackbox-exporter@sha256:e753ff9f3fc458d02cca5eddab5a77e1c175eee484a8925ac7d524f04366c2fc
+          name: blackbox-exporter
+          ports:
+            - containerPort: 9115
+              name: http
+          resources:
+            limits:
+              memory: 64Mi
+            requests:
+              cpu: 10m
+              memory: 32Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+            privileged: false
+          volumeMounts:
+            - mountPath: /etc/blackbox
+              name: config
+              readOnly: true
+      nodeSelector:
+        kubernetes.io/hostname: junior
+      volumes:
+        - configMap:
+            name: blackbox-exporter
+          name: config
