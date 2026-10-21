@@ -63,6 +63,24 @@ spec:
               mountPath: /mnt/scripts
             - name: sftp-init-cm
               mountPath: /mnt/configmap
+        #! Image volumes only support directory subPaths, so the file is copied to an emptyDir that the paperless
+        #! container mounts with a file subPath, keeping the image's own tessdata visible.
+        - name: copy-tessdata
+          image: #@ sftp.image
+          command: ["/bin/sh", "-c"]
+          args:
+            - cp /mnt/image/* /mnt/tessdata/
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              memory: 64Mi
+          volumeMounts:
+            - name: tessdata-image
+              mountPath: /mnt/image
+            - name: tessdata
+              mountPath: /mnt/tessdata
       containers:
         - name: #@ name
           image: #@ ap.paperless.image
@@ -150,9 +168,11 @@ spec:
             name: #@ sftp_scripts_cm_name
         #! OCR languages the image doesn't ship, built from docker/Dockerfile. Listing them in PAPERLESS_OCR_LANGUAGES
         #! instead would apt-install them on every start, which needs internet egress.
-        - name: tessdata
+        - name: tessdata-image
           image:
             reference: paperless-tessdata-ref
+        - name: tessdata
+          emptyDir: {}
 
 ---
 apiVersion: v1
