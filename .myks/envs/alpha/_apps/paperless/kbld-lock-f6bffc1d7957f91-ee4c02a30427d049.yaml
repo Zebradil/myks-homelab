@@ -2,14 +2,14 @@ apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 minimumRequiredVersion: 0.49.1
 overrides:
-- image: ghcr.io/paperless-ngx/paperless-ngx:2.20.15
-  newImage: oci.zebradil.dev/ghcr.io-cache/paperless-ngx/paperless-ngx@sha256:6c86cad803970ea782683a8e80e7403444c5bf3cf70de63b4d3c8e87500db92f
+- image: ghcr.io/paperless-ngx/paperless-ngx:3.3.3
+  newImage: oci.zebradil.dev/ghcr.io-cache/paperless-ngx/paperless-ngx@sha256:dba0242c1df1843643df4eb50ce5639f3a7900f414879088fd5bed8eaf2d456d
   preresolved: true
 - image: linuxserver/openssh-server:9.3_p2-r1-ls143
   newImage: index.docker.io/linuxserver/openssh-server@sha256:d55ff78303834a03ef4bf21733fccce12365949ed1715bdbe7e42d1b66db620a
   preresolved: true
 - image: paperless-tessdata-ref
-  newImage: oci.zebradil.dev/zebradil/homelab/paperless/tessdata@sha256:dcb0da325e996d313721323aafc9d614cdbb196fb4c12edd00989327f8e7bd25
+  newImage: oci.zebradil.dev/zebradil/homelab/paperless/tessdata@sha256:6de254d1c0cea9d8d08ef2dae4f78be7aba48816257c96bf43d820f9885abbf1
   preresolved: true
 - image: registry-1.docker.io/bitnamilegacy/postgresql:14.18.0-debian-12-r0
   newImage: registry-1.docker.io/bitnamilegacy/postgresql@sha256:1487d8c274877c8b241c46edfc7d17abaa32a16ec7a4305b45dbf9104a6bb45f

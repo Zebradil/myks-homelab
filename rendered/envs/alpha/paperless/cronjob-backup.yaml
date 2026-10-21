@@ -67,12 +67,16 @@ spec:
                     secretKeyRef:
                       key: password
                       name: postgresql
+                - name: PAPERLESS_DBENGINE
+                  value: postgresql
                 - name: PAPERLESS_DBHOST
                   value: postgresql
                 - name: PAPERLESS_DBUSER
                   value: paperless
                 - name: PAPERLESS_REDIS
                   value: redis://redis-master:6379
+                - name: PAPERLESS_CONSUMER_DELETE_DUPLICATES
+                  value: "true"
                 - name: PAPERLESS_OCR_LANGUAGE
                   value: deu+eng+rus
                 - name: PAPERLESS_OCR_OUTPUT_TYPE
@@ -85,7 +89,7 @@ spec:
                   value: ref+sops://static/0.sops.yaml#/sessionSecretKey+
                 - name: PAPERLESS_TIME_ZONE
                   value: Europe/Berlin
-              image: oci.zebradil.dev/ghcr.io-cache/paperless-ngx/paperless-ngx@sha256:6c86cad803970ea782683a8e80e7403444c5bf3cf70de63b4d3c8e87500db92f
+              image: oci.zebradil.dev/ghcr.io-cache/paperless-ngx/paperless-ngx@sha256:dba0242c1df1843643df4eb50ce5639f3a7900f414879088fd5bed8eaf2d456d
               name: dump
               securityContext:
                 allowPrivilegeEscalation: false
