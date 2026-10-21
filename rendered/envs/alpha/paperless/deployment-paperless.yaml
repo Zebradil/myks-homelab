@@ -39,8 +39,6 @@ spec:
               value: redis://redis-master:6379
             - name: PAPERLESS_OCR_LANGUAGE
               value: deu+eng+rus
-            - name: PAPERLESS_OCR_LANGUAGES
-              value: deu eng rus
             - name: PAPERLESS_OCR_OUTPUT_TYPE
               value: pdf
             - name: PAPERLESS_OCR_ROTATE_PAGES_THRESHOLD
@@ -75,6 +73,9 @@ spec:
               name: media
             - mountPath: /usr/src/paperless/consume
               name: consume
+            - mountPath: /usr/share/tesseract-ocr/5/tessdata/rus.traineddata
+              name: tessdata
+              subPath: rus.traineddata
         - env:
             - name: PUID
               value: "1000"
@@ -137,3 +138,6 @@ spec:
         - configMap:
             name: paperless-sftp-scripts
           name: sftp-init-cm
+        - image:
+            reference: oci.zebradil.dev/zebradil/homelab/paperless/tessdata@sha256:dcb0da325e996d313721323aafc9d614cdbb196fb4c12edd00989327f8e7bd25
+          name: tessdata

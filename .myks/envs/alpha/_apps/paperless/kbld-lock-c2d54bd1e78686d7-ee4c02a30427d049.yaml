@@ -8,6 +8,9 @@ overrides:
 - image: linuxserver/openssh-server:9.3_p2-r1-ls143
   newImage: index.docker.io/linuxserver/openssh-server@sha256:d55ff78303834a03ef4bf21733fccce12365949ed1715bdbe7e42d1b66db620a
   preresolved: true
+- image: paperless-tessdata-ref
+  newImage: oci.zebradil.dev/zebradil/homelab/paperless/tessdata@sha256:dcb0da325e996d313721323aafc9d614cdbb196fb4c12edd00989327f8e7bd25
+  preresolved: true
 - image: registry-1.docker.io/bitnamilegacy/postgresql:14.18.0-debian-12-r0
   newImage: registry-1.docker.io/bitnamilegacy/postgresql@sha256:1487d8c274877c8b241c46edfc7d17abaa32a16ec7a4305b45dbf9104a6bb45f
   preresolved: true
@@ -17,3 +20,13 @@ overrides:
 - image: restic/restic:0.19.1
   newImage: index.docker.io/restic/restic@sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510
   preresolved: true
+searchRules:
+- keyMatcher:
+    path:
+    - spec
+    - template
+    - spec
+    - volumes
+    - allIndexes: true
+    - image
+    - reference
