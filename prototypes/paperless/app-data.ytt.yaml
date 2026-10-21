@@ -19,7 +19,6 @@ application:
       PAPERLESS_REDIS: redis://redis-master:6379
 
       PAPERLESS_OCR_LANGUAGE: deu+eng+rus
-      PAPERLESS_OCR_LANGUAGES: deu eng rus
       #! The default is "pdfa", which may cause removing a form text
       PAPERLESS_OCR_OUTPUT_TYPE: pdf
       PAPERLESS_OCR_ROTATE_PAGES_THRESHOLD: '4'

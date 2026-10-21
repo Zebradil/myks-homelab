@@ -35,7 +35,7 @@ dump:
     - /backup
     - --no-thumbnail
     - --no-progress-bar
-    #! System checks fail outside the image's entrypoint, which is what installs the extra OCR languages; an export
+    #! System checks fail here because the extra OCR languages are mounted only into the main container; an export
     #! does not need them.
     - --skip-checks
   env:

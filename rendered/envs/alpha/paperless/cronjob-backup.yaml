@@ -75,8 +75,6 @@ spec:
                   value: redis://redis-master:6379
                 - name: PAPERLESS_OCR_LANGUAGE
                   value: deu+eng+rus
-                - name: PAPERLESS_OCR_LANGUAGES
-                  value: deu eng rus
                 - name: PAPERLESS_OCR_OUTPUT_TYPE
                   value: pdf
                 - name: PAPERLESS_OCR_ROTATE_PAGES_THRESHOLD
