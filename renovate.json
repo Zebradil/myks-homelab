@@ -64,6 +64,14 @@
       "groupSlug": "harbor"
     },
     {
+      "description": "The custom managers capture no currentDigest, so Renovate cannot write a pinned digest and fails the whole pin-dependencies branch with \"Digest is not updated\".",
+      "matchManagers": [
+        "custom.regex",
+        "custom.jsonata"
+      ],
+      "pinDigests": false
+    },
+    {
       "description": "Pin latest container image tags",
       "matchDatasources": [
         "docker"
