@@ -47,6 +47,8 @@ its own backups.
 3. Call the library from the app's ytt, see `prototypes/vaultwarden/ytt/backup.ytt.yaml`. Keys the schema types as
    `any` (`secretEnv`, `dump`, `affinityPodLabels`, `podSecurityContext`) need `#@overlay/replace`. A
    `podSecurityContext` that sets `runAsUser` has to set `fsGroup` too, or restic cannot write its cache emptyDir.
+   Pass `restrictEgress: #@ data.values.application.restrictEgress`, so the job can still reach S3 when the namespace
+   restricts egress.
 4. Add the namespace to `backed_up` in `prototypes/victoria-metrics-k8s-stack/ytt/backup-rules.ytt.yaml`.
 5. Trigger a first run with `kubectl -n <app> create job --from=cronjob/backup backup-manual` and check
    `restic snapshots`.

@@ -40,6 +40,9 @@ mounts: []
 #! Labels of the pod that holds the RWO volumes: the job has to run on the same node.
 #@schema/type any=True
 affinityPodLabels: null
+#! Pass the app's `restrictEgress`. When true, a NetworkPolicy lets the job reach S3 on 443. It must stay false
+#! otherwise: any egress policy selecting the pod isolates it, cutting the dump off from the app's database.
+restrictEgress: false
 #! Needs an fsGroup whenever it sets runAsUser, or restic cannot write its cache emptyDir.
 #@schema/type any=True
 podSecurityContext: {}

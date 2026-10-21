@@ -62,3 +62,42 @@ Here are the steps:
    ```shell
    kubectl scale --replicas=1 --namespace paperless deployment/paperless
    ```
+
+## Backup
+
+`ytt/backup.ytt.yaml` runs `document_exporter` nightly with `lib/_ytt_lib/backup`. A snapshot holds the export under
+`/backup`: originals, archive versions and `manifest.json` with the database contents. Thumbnails are not exported, and
+the `data` volume (search index, classifier) is not backed up — both can be rebuilt. Credentials and the restic password
+live in `envs/alpha/_apps/paperless/static/backup.sops.yaml`.
+
+The export is written to an emptyDir, so the node needs free ephemeral storage about the size of `media`.
+
+### Checking a backup
+
+With the restic environment exported (see `lib/_ytt_lib/backup/README.md`):
+
+```shell
+restic snapshots --host paperless
+restic ls latest --host paperless /backup | rg -c '\.pdf$'
+```
+
+### Restoring
+
+`document_importer` expects an empty paperless instance, e.g. fresh `data`/`media` volumes and database.
+
+1. Copy the export into the paperless pod:
+
+   ```shell
+   restic restore latest --host paperless --target ./restore
+   kubectl cp ./restore/backup paperless/<paperless-pod>:/usr/src/paperless/export
+   ```
+
+2. Import it, then rebuild what the backup left out:
+
+   ```shell
+   kubectl exec -it --namespace paperless deployment/paperless -- bash -c '
+     document_importer ../export &&
+     document_thumbnails &&
+     document_index reindex &&
+     document_create_classifier'
+   ```
