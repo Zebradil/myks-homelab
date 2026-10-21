@@ -10,6 +10,14 @@
     "zebradil-bot@users.noreply.github.com"
   ],
   "rebaseWhen": "conflicted",
+  "hostRules": [
+    {
+      "matchHost": "oci.zebradil.dev",
+      "hostType": "docker",
+      "username": "{{ secrets.HARBOR_RENOVATE_USERNAME }}",
+      "password": "{{ secrets.HARBOR_RENOVATE_PASSWORD }}"
+    }
+  ],
   "packageRules": [
     {
       "matchUpdateTypes": [
