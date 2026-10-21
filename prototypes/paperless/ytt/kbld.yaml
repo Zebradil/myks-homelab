@@ -1,0 +1,17 @@
+---
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+sources:
+  - image: paperless-tessdata-ref
+    path: prototypes/paperless/docker
+    docker:
+      build:
+        pull: true
+        buildkit: true
+        rawOptions: ["--platform=linux/amd64"]
+destinations:
+  - image: paperless-tessdata-ref
+    newImage: oci.zebradil.dev/zebradil/homelab/paperless/tessdata
+searchRules:
+  - keyMatcher:
+      path: [spec, template, spec, volumes, {allIndexes: true}, image, reference]

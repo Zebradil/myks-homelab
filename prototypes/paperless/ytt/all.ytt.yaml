@@ -102,6 +102,9 @@ spec:
               mountPath: /usr/src/paperless/media
             - name: consume
               mountPath: /usr/src/paperless/consume
+            - name: tessdata
+              mountPath: /usr/share/tesseract-ocr/5/tessdata/rus.traineddata
+              subPath: rus.traineddata
         - name: sftp
           image: #@ sftp.image
           env:
@@ -145,6 +148,11 @@ spec:
         - name: sftp-init-cm
           configMap:
             name: #@ sftp_scripts_cm_name
+        #! OCR languages the image doesn't ship, built from docker/Dockerfile. Listing them in PAPERLESS_OCR_LANGUAGES
+        #! instead would apt-install them on every start, which needs internet egress.
+        - name: tessdata
+          image:
+            reference: paperless-tessdata-ref
 
 ---
 apiVersion: v1
