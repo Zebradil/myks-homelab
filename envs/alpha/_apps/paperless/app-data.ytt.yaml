@@ -3,6 +3,9 @@
 #@data/values
 ---
 application:
+  #! The container apt-installs extra OCR languages on every start and refuses
+  #! to boot without them.
+  restrictEgress: false
   paperless:
     env:
       PAPERLESS_SECRET_KEY: #@ sops("0", "sessionSecretKey")
