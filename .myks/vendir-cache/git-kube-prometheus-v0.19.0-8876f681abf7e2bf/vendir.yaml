@@ -2,7 +2,7 @@ apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
   - git:
-      ref: v0.18.0
+      ref: v0.19.0
       url: https://github.com/prometheus-operator/kube-prometheus
     includePaths:
     - manifests/alertmanager-prometheusRule.yaml
@@ -14,6 +14,6 @@ directories:
     lazy: true
     newRootPath: manifests
     path: .
-  path: .myks/vendir-cache/git-kube-prometheus-v0.18.0-fd796d7254feaa78/data
+  path: .myks/vendir-cache/git-kube-prometheus-v0.19.0-8876f681abf7e2bf/data
 kind: Config
 minimumRequiredVersion: ""
