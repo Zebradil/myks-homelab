@@ -50,7 +50,7 @@ data:
               "mode": "multi"
             }
           },
-          "pluginVersion": "v11.4.0",
+          "pluginVersion": "v13.0.0",
           "targets": [
             {
               "datasource": {
@@ -98,7 +98,7 @@ data:
               "mode": "multi"
             }
           },
-          "pluginVersion": "v11.4.0",
+          "pluginVersion": "v13.0.0",
           "targets": [
             {
               "datasource": {
@@ -168,7 +168,7 @@ data:
               "mode": "multi"
             }
           },
-          "pluginVersion": "v11.4.0",
+          "pluginVersion": "v13.0.0",
           "repeat": "integration",
           "targets": [
             {
@@ -226,7 +226,7 @@ data:
               "mode": "multi"
             }
           },
-          "pluginVersion": "v11.4.0",
+          "pluginVersion": "v13.0.0",
           "repeat": "integration",
           "targets": [
             {
