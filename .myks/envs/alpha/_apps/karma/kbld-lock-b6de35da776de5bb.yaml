@@ -1,0 +1,7 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.49.1
+overrides:
+- image: ghcr.io/prymitive/karma:v0.134
+  newImage: oci.zebradil.dev/ghcr.io-cache/prymitive/karma@sha256:479c7bfad3c176b9c35c5a48c2ad8fa72d748f204314daff748fb51488f043da
+  preresolved: true
