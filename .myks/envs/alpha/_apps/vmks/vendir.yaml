@@ -66,7 +66,7 @@ directories:
     lazy: true
     git:
       url: https://github.com/dotdc/grafana-dashboards-kubernetes
-      ref: v3.0.6
+      ref: v3.0.8
     includePaths:
     - dashboards/k8s-system-api-server.json
     - dashboards/k8s-system-coredns.json
