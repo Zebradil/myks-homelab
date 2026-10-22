@@ -3,7 +3,7 @@
 #@overlay/match-child-defaults missing_ok=True
 application:
   #! renovate: datasource=docker
-  image: quay.io/prometheus/blackbox-exporter:v0.28.0
+  image: quay.io/prometheus/blackbox-exporter:v0.29.1
   port: 9115
   #! Must not be the resolver's host: the probe has to cross the LAN to catch
   #! the 2026-09-07 failure class (resolver healthy, L2 path to it broken).
