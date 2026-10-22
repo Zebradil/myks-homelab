@@ -1,0 +1,12 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - configDigest: 7e47493fcfb732c2dd4f15c2a274a195acfc99c2068fc3656adcbf3a3986656b
+    git:
+      commitTitle: 'release: v4.39.28 (#13195)...'
+      sha: 8da42b2348b0351c6284a2940a9c5eec3d4cd3fd
+      tags:
+      - v4.39.28
+    path: .
+  path: .myks/vendir-cache/git-authelia-v4.39.28-457be22e88449fa8/data
+kind: LockConfig
