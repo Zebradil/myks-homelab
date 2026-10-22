@@ -4,11 +4,10 @@ $schema: https://docs.renovatebot.com/renovate-schema.json
 extends:
   - config:best-practices
   - schedule:nonOfficeHours
-# Rebase PRs if needed even if there are commits from other bots
+# Renovate treats a branch as edited, and stops rebasing it, when any commit's author or committer is unknown.
+# The render workflow (.github/workflows/render-myks.yaml) commits to Renovate branches as this identity.
 gitIgnoredAuthors:
-  - renovate[bot]@users.noreply.github.com
-  - github-actions[bot]@users.noreply.github.com
-  - zebradil-bot@users.noreply.github.com
+  - german.lashevich+github-zebradil-bot@gmail.com
 rebaseWhen: conflicted
 # Images in the private Harbor projects (e.g. zebradil/know-mcp) need a pull-only robot account.
 # The secrets live in the Mend developer portal, not in this repository.
