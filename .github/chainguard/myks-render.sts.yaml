@@ -1,0 +1,16 @@
+# Repository policy for the render and auto-approve workflows, served by the self-hosted octo-sts at
+# sts.zebradil.dev. Request with scope "Zebradil/myks-homelab".
+# octo-sts reads this file from the default branch, so changes take effect only after merging.
+issuer: https://token.actions.githubusercontent.com
+# Both subject forms: GitHub issues the ID-bearing one only to repositories opted into immutable subjects.
+subject_pattern: 'repo:Zebradil(@1475583)?/myks-homelab(@[0-9]+)?:.*'
+claim_pattern:
+  # Any ref: both workflows run on pull_request, where the ref is refs/pull/<n>/merge. auto-approve also runs as a
+  # reusable workflow, which keeps the caller's workflow_ref.
+  workflow_ref: "Zebradil/myks-homelab/\\.github/workflows/(render-myks|auto-approve)\\.yaml@.*"
+# Matches app_name in the octo-sts config; without it octo-sts balances across every App in the pool.
+app: zebradil
+# Push render commits (contents), approve and dismiss approvals (pull_requests).
+permissions:
+  contents: write
+  pull_requests: write
