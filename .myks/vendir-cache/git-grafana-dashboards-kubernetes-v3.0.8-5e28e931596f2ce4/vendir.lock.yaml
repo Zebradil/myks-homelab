@@ -1,0 +1,13 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - configDigest: c8f09b857fd1a41e017088a1cd5aacce33bbb72d295c2a4d4c5863dc544fd305
+    git:
+      commitTitle: 'fix(k8s-views-pods): use exact pod match in Information section
+        stat panels (#178)...'
+      sha: e4faf59e017a18e1b06fa64f11623bef15ce7507
+      tags:
+      - v3.0.8
+    path: .
+  path: .myks/vendir-cache/git-grafana-dashboards-kubernetes-v3.0.8-5e28e931596f2ce4/data
+kind: LockConfig
