@@ -25,7 +25,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/configmap: 73569a3421a43a548fe583644952943508f44cbd79b84ccb52821a54deff86d1
+        checksum/configmap: 3ad12b5d4f6a80f50e2fdd9664685882e164179aa58026286635cd71744d52f0
       labels:
         app: harbor
         app.kubernetes.io/component: portal
