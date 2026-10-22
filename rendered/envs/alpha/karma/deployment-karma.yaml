@@ -21,7 +21,7 @@ spec:
         - env:
             - name: CONFIG_FILE
               value: /etc/karma/karma.yaml
-          image: oci.zebradil.dev/ghcr.io-cache/prymitive/karma@sha256:98d9ed60911811f936a143177fc34642e30cf9579e073c28b6416a28dff17724
+          image: oci.zebradil.dev/ghcr.io-cache/prymitive/karma@sha256:479c7bfad3c176b9c35c5a48c2ad8fa72d748f204314daff748fb51488f043da
           livenessProbe:
             httpGet:
               path: /health
