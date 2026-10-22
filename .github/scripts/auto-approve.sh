@@ -10,6 +10,7 @@ VALIDATION_MSG="Environment variable must be set"
 : "${PR_NUMBER:?$VALIDATION_MSG}"
 : "${PR_STATE:?$VALIDATION_MSG}"
 : "${PR_DRAFT:?$VALIDATION_MSG}"
+: "${APPROVER_LOGIN:?$VALIDATION_MSG}"
 # This is boolean, but also can be null, do not error on empty value
 : "${PR_MERGEABLE?$VALIDATION_MSG}"
 
@@ -20,10 +21,10 @@ function gh_api() {
     "$@"
 }
 
+# An App installation token cannot call `gh api user`, so the approver is matched by login.
 function get_approval_id() {
-  user_id=$(gh api user --jq '.id')
   gh_api "/repos/{owner}/{repo}/pulls/$PR_NUMBER/reviews" \
-    --jq ".[] | select(.user.id == $user_id and .state == \"APPROVED\") | .id"
+    --jq ".[] | select(.user.login == \"$APPROVER_LOGIN\" and .state == \"APPROVED\") | .id"
 }
 
 function decide() {

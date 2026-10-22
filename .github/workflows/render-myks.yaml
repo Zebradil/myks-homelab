@@ -18,14 +18,25 @@ jobs:
       contents: write
       pull-requests: write
       statuses: write
+      id-token: write
     steps:
+      # Before checkout, so actions/checkout stores the App token as the push credential: unlike GITHUB_TOKEN, it makes
+      # the render commit start new workflow runs. octo-sts runs in this cluster; when it is down, the GITHUB_TOKEN
+      # fallback still pushes the render commit, but no checks run on it, so merging needs an admin bypass.
+      - name: Exchange OIDC token for GitHub token
+        id: sts
+        continue-on-error: true
+        uses: octo-sts/action@f603d3be9d8dd9871a265776e625a27b00effe05 # v1.1.1
+        with:
+          domain: sts.zebradil.dev
+          scope: ${{ github.repository }}
+          identity: myks-render
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref || github.ref_name }}
-          # use more powerful token to trigger subsequent workflows
-          token: ${{ secrets.ZEBRADIL_BOT_GITHUB_TOKEN }}
+          token: ${{ steps.sts.outputs.token || github.token }}
       - name: Login to Harbor registry
         uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         with:
@@ -58,21 +69,15 @@ jobs:
             git diff rendered/
             exit 1
           fi
-      - name: Import GPG key
-        if: ${{ github.event_name == 'pull_request' }}
-        uses: crazy-max/ghaction-import-gpg@2dc316deee8e90f13e1a351ab510b4d5bc0c82cd # v7.0.0
-        with:
-          gpg_private_key: ${{ secrets.ZEBRADIL_BOT_GPG_PRIVATE_KEY }}
-          git_user_signingkey: true
-          git_commit_gpgsign: true
       - name: Commit changes
         id: commit
         if: ${{ github.event_name == 'pull_request' }}
         uses: stefanzweifel/git-auto-commit-action@4a55954c782fc1ea30b9056cd3e7a2b40ca8887d # v7.2.0
         with:
           commit_message: 'chore: render with myks'
-          commit_user_name: Zebradil Bot
-          commit_user_email: german.lashevich+github-zebradil-bot@gmail.com
+          commit_user_name: zebradil[bot]
+          commit_user_email: 251525544+zebradil[bot]@users.noreply.github.com
+          commit_author: zebradil[bot] <251525544+zebradil[bot]@users.noreply.github.com>
       - name: Set commit status
         env:
           GH_TOKEN: ${{ github.token }}
@@ -95,4 +100,6 @@ jobs:
     needs: render
     if: ${{ github.event_name == 'pull_request' }}
     uses: ./.github/workflows/auto-approve.yaml
-    secrets: inherit
+    permissions:
+      contents: read
+      id-token: write

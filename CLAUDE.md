@@ -83,7 +83,7 @@ authoring secrets, use `sops` to encrypt files before committing.
 
 1. Detects changed apps using git diff (Nx Smart Mode for base/head commit detection)
 2. Runs `myks render` only for affected apps
-3. Auto-commits rendered output back to the branch (signed commit)
+3. Auto-commits rendered output back to the branch as the `zebradil` GitHub App (token from octo-sts)
 4. Sets a commit status for the PR check
 
 **`.github/workflows/auto-approve.yaml`** — Auto-approves PRs that only contain insignificant changes (e.g., version

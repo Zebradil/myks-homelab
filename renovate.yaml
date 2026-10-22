@@ -5,8 +5,10 @@ extends:
   - config:best-practices
   - schedule:nonOfficeHours
 # Renovate treats a branch as edited, and stops rebasing it, when any commit's author or committer is unknown.
-# The render workflow (.github/workflows/render-myks.yaml) commits to Renovate branches as this identity.
+# The render workflow (.github/workflows/render-myks.yaml) commits to Renovate branches as the zebradil GitHub App.
 gitIgnoredAuthors:
+  - 251525544+zebradil[bot]@users.noreply.github.com
+  # shortcut: the bot user's render commits on Renovate branches opened before the App switch; drop once none are open.
   - german.lashevich+github-zebradil-bot@gmail.com
 rebaseWhen: conflicted
 # Images in the private Harbor projects (e.g. zebradil/know-mcp) need a pull-only robot account.
