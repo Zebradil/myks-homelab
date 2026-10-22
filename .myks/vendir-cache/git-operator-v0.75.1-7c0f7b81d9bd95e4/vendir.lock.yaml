@@ -1,0 +1,12 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - configDigest: e1cb209cdbca80e5b20226f34a4dc09c8e8314cfad3b8119cb43621db17cdc42
+    git:
+      commitTitle: prepare release v0.75.1 (#2750)
+      sha: 444a18fcaa03e8ac9c8f706bd1f0b53629f1fb19
+      tags:
+      - api/v0.75.1
+    path: .
+  path: .myks/vendir-cache/git-operator-v0.75.1-7c0f7b81d9bd95e4/data
+kind: LockConfig
