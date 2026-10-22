@@ -6,7 +6,7 @@ metadata:
     actions.github.com/cleanup-manager-role-binding: scale-set-gha-rs-manager
     actions.github.com/cleanup-manager-role-name: scale-set-gha-rs-manager
     actions.github.com/cleanup-no-permission-service-account-name: scale-set-gha-rs-no-permission
-    actions.github.com/values-hash: 23aa8b85ac7868effb508165f1311ad1724c3d256c5cc7c45270209d7aa73d8
+    actions.github.com/values-hash: 19be5214c6ce3d9582ba6e40ce702d0c7d5d5168ff7423e0ff34303de7a72c6
   labels:
     actions.github.com/scale-set-name: scale-set
     actions.github.com/scale-set-namespace: arc-runners
@@ -15,13 +15,17 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: scale-set
     app.kubernetes.io/part-of: gha-rs
-    app.kubernetes.io/version: 0.14.2
-    helm.sh/chart: gha-rs-0.14.2
+    app.kubernetes.io/version: 0.15.0
+    helm.sh/chart: gha-rs-0.15.0
   name: scale-set
   namespace: arc-runners
 spec:
   githubConfigSecret: arc-app-credentials
   githubConfigUrl: https://github.com/zebradilo
+  listenerConfig:
+    scaler:
+      burst: 100
+      qps: 50
   listenerTemplate:
     spec:
       containers:
@@ -37,7 +41,7 @@ spec:
       containers:
         - command:
             - /home/runner/run.sh
-          image: oci.zebradil.dev/ghcr.io-cache/actions/actions-runner@sha256:08c30b0a7105f64bddfc485d2487a22aa03932a791402393352fdf674bda2c29
+          image: oci.zebradil.dev/ghcr.io-cache/actions/actions-runner@sha256:e275409999c37162649aa050ca573f03eab2eabcb3a1e7fcc47548de6b4f9690
           name: runner
       restartPolicy: Never
       serviceAccountName: scale-set-gha-rs-no-permission

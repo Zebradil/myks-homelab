@@ -1,0 +1,13 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - helmChart:
+      name: gha-runner-scale-set-controller
+      repository:
+        url: oci://ghcr.io/actions/actions-runner-controller-charts
+      version: 0.15.0
+    lazy: true
+    path: .
+  path: .myks/vendir-cache/helm-gha-runner-scale-set-controller-0.15.0-c2de1487d5d4bd3d/data
+kind: Config
+minimumRequiredVersion: ""

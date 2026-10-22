@@ -7,7 +7,7 @@ directories:
     lazy: true
     helmChart:
       name: gha-runner-scale-set-controller
-      version: 0.14.2
+      version: 0.15.0
       repository:
         url: oci://ghcr.io/actions/actions-runner-controller-charts
 - path: charts/scale-set
@@ -16,6 +16,6 @@ directories:
     lazy: true
     helmChart:
       name: gha-runner-scale-set
-      version: 0.14.2
+      version: 0.15.0
       repository:
         url: oci://ghcr.io/actions/actions-runner-controller-charts
