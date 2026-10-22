@@ -20,9 +20,17 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}'
       cancel-in-progress: true
-    env:
-      GH_TOKEN: ${{ secrets.ZEBRADIL_BOT_GITHUB_TOKEN }}
+    permissions:
+      contents: read
+      id-token: write
     steps:
+      - name: Exchange OIDC token for GitHub token
+        id: sts
+        uses: octo-sts/action@f603d3be9d8dd9871a265776e625a27b00effe05 # v1.1.1
+        with:
+          domain: sts.zebradil.dev
+          scope: ${{ github.repository }}
+          identity: myks-render
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
@@ -32,6 +40,9 @@ jobs:
           fetch-depth: 0
       - name: Approve or dismiss approval
         id: decision
+        env:
+          GH_TOKEN: ${{ steps.sts.outputs.token }}
+          APPROVER_LOGIN: zebradil[bot]
         run: |
           export PR_NUMBER=${{ github.event.pull_request.number }}
           export PR_STATE=${{ github.event.pull_request.state }}
