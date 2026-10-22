@@ -13,5 +13,5 @@ application:
       password: ""
   blackboxExporter:
     #! renovate: datasource=docker
-    image: quay.io/prometheus/blackbox-exporter:v0.28.0
+    image: quay.io/prometheus/blackbox-exporter:v0.29.1
     port: 9115
