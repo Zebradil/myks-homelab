@@ -3,7 +3,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
-    controller-gen.kubebuilder.io/version: v0.21.0
+    controller-gen.kubebuilder.io/version: v0.22.0
   name: vmsingles.operator.victoriametrics.com
 spec:
   group: operator.victoriametrics.com
@@ -273,30 +273,8 @@ spec:
                 disableSelfServiceScrape:
                   type: boolean
                 dnsConfig:
-                  items:
-                    x-kubernetes-preserve-unknown-fields: true
-                  properties:
-                    nameservers:
-                      items:
-                        type: string
-                      type: array
-                      x-kubernetes-list-type: atomic
-                    options:
-                      items:
-                        properties:
-                          name:
-                            type: string
-                          value:
-                            type: string
-                        type: object
-                      type: array
-                      x-kubernetes-list-type: atomic
-                    searches:
-                      items:
-                        type: string
-                      type: array
-                      x-kubernetes-list-type: atomic
                   type: object
+                  x-kubernetes-preserve-unknown-fields: true
                 dnsPolicy:
                   type: string
                 downsampling:
@@ -1684,8 +1662,6 @@ spec:
                   type: object
                   x-kubernetes-map-type: atomic
                 serviceScrapeSpec:
-                  required:
-                    - endpoints
                   type: object
                   x-kubernetes-preserve-unknown-fields: true
                 serviceSpec:
@@ -2313,6 +2289,11 @@ spec:
                     volumeMounts:
                       items:
                         properties:
+                          bindMountOptions:
+                            items:
+                              type: string
+                            type: array
+                            x-kubernetes-list-type: set
                           mountPath:
                             type: string
                           mountPropagation:
@@ -2336,6 +2317,11 @@ spec:
                 volumeMounts:
                   items:
                     properties:
+                      bindMountOptions:
+                        items:
+                          type: string
+                        type: array
+                        x-kubernetes-list-type: set
                       mountPath:
                         type: string
                       mountPropagation:

@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 8640c49fe4417b91597036c44ca1fe06944de8583c540275a9571c9783ee5f0e
+        checksum/config: 71cded109b9ec19361e37ad020c1d7d0fb54e72b5b0f46fefa80f25ef70555e3
         checksum/sc-dashboard-provider-config: 89ec8c9c059a6a61286174130a15d183be69b7a486acc8437afbaf5d790a0ddd
         checksum/secret: b7114fe0b16942f53bb118c0b1f6c9558595442b5767442c9d0f04081f43c34d
         kubectl.kubernetes.io/default-container: grafana
@@ -43,7 +43,7 @@ spec:
               value: both
             - name: NAMESPACE
               value: ALL
-          image: oci.zebradil.dev/quay.io-cache/kiwigrid/k8s-sidecar@sha256:abb55b2165c60e8f97e473862c7a3123df6f67d44f592949577c29b8fb2df9d6
+          image: oci.zebradil.dev/quay.io-cache/kiwigrid/k8s-sidecar@sha256:2912be006f62f9ea080194cf6d3afcd90daead8d101d0ba686a137a849f6a4f6
           name: grafana-sc-dashboard
           resources:
             limits:
@@ -56,6 +56,7 @@ spec:
             capabilities:
               drop:
                 - ALL
+            readOnlyRootFilesystem: true
             seccompProfile:
               type: RuntimeDefault
           volumeMounts:
@@ -86,7 +87,7 @@ spec:
               value: http://localhost:3000/api/admin/provisioning/datasources/reload
             - name: REQ_METHOD
               value: POST
-          image: oci.zebradil.dev/quay.io-cache/kiwigrid/k8s-sidecar@sha256:abb55b2165c60e8f97e473862c7a3123df6f67d44f592949577c29b8fb2df9d6
+          image: oci.zebradil.dev/quay.io-cache/kiwigrid/k8s-sidecar@sha256:2912be006f62f9ea080194cf6d3afcd90daead8d101d0ba686a137a849f6a4f6
           name: grafana-sc-datasources
           resources:
             limits:
@@ -99,6 +100,7 @@ spec:
             capabilities:
               drop:
                 - ALL
+            readOnlyRootFilesystem: true
             seccompProfile:
               type: RuntimeDefault
           volumeMounts:
@@ -135,11 +137,8 @@ spec:
             - name: GF_UNIFIED_STORAGE_INDEX_PATH
               value: /var/lib/grafana-search/bleve
             - name: GOMEMLIMIT
-              valueFrom:
-                resourceFieldRef:
-                  divisor: "1"
-                  resource: limits.memory
-          image: index.docker.io/grafana/grafana@sha256:7cb8c64c4d57a57e734073f3cc94620adb24a0acb929bd80ba9f14017e3a975b
+              value: 921MiB
+          image: index.docker.io/grafana/grafana@sha256:202e5d5b3f8499e70ccac7991eea6d7da72d2790eb2e0597e7987acf724e7180
           livenessProbe:
             failureThreshold: 10
             httpGet:
@@ -177,9 +176,12 @@ spec:
               drop:
                 - ALL
             privileged: false
+            readOnlyRootFilesystem: true
             seccompProfile:
               type: RuntimeDefault
           volumeMounts:
+            - mountPath: /tmp
+              name: tmp
             - mountPath: /etc/grafana/grafana.ini
               name: config
               subPath: grafana.ini
@@ -201,7 +203,7 @@ spec:
             - -R
             - 472:472
             - /var/lib/grafana
-          image: index.docker.io/library/busybox@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
+          image: index.docker.io/library/busybox@sha256:fd7dc98638c8e305f4dc34e979f1c0fdfdcaeb0fbf8fcff77ae834b6da3d7e6e
           name: init-chown-data
           resources:
             limits:
@@ -232,6 +234,8 @@ spec:
       serviceAccountName: vmks-grafana
       shareProcessNamespace: false
       volumes:
+        - emptyDir: {}
+          name: tmp
         - configMap:
             name: vmks-grafana
           name: config

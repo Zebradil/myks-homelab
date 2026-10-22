@@ -3,7 +3,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
-    controller-gen.kubebuilder.io/version: v0.21.0
+    controller-gen.kubebuilder.io/version: v0.22.0
   name: vmrules.operator.victoriametrics.com
 spec:
   group: operator.victoriametrics.com
@@ -75,7 +75,6 @@ spec:
                         items:
                           properties:
                             alert:
-                              default: ""
                               type: string
                             annotations:
                               additionalProperties:
@@ -94,7 +93,6 @@ spec:
                                 type: string
                               type: object
                             record:
-                              default: ""
                               type: string
                             update_entries_limit:
                               type: integer

@@ -36,9 +36,9 @@ spec:
             - name: VM_ANOMALY_VERSION
               value: v1.30.4
             - name: VM_LOGS_VERSION
-              value: v1.52.0
+              value: v1.53.0
             - name: VM_METRICS_VERSION
-              value: v1.151.0
+              value: v1.154.0
             - name: VM_TRACES_VERSION
               value: v0.10.0
             - name: VM_VMALERTMANAGER_ALERTMANAGERVERSION
@@ -51,7 +51,7 @@ spec:
               value: victoria-metrics-operator
             - name: VM_ENABLEDPROMETHEUSCONVERTEROWNERREFERENCES
               value: "false"
-          image: index.docker.io/victoriametrics/operator@sha256:7310c4a80b94f530c5f0b1fcf6d6eaf933f39cc5704e983900d9cfd6b31f9dc1
+          image: index.docker.io/victoriametrics/operator@sha256:78da26b41a819093707be2ab6a65a5dc19f43d58ec52f30b49a545c2c6b7bd55
           livenessProbe:
             failureThreshold: 3
             initialDelaySeconds: 5
