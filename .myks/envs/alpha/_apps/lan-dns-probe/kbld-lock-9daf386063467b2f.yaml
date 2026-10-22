@@ -1,0 +1,7 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.49.1
+overrides:
+- image: quay.io/prometheus/blackbox-exporter:v0.29.1
+  newImage: oci.zebradil.dev/quay.io-cache/prometheus/blackbox-exporter@sha256:ea1c7aa3ef3f307cd03e85f34abb604478ccb90b567fc690da0cd9776da76b13
+  preresolved: true
