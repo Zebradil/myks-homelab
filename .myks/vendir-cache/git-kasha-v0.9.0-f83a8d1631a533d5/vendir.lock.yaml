@@ -1,0 +1,12 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - configDigest: a0f178e3921e8972bdd4949007519870ed1a6f56c1a9a723afc58306446ea8ab
+    git:
+      commitTitle: 'chore(main): release 0.9.0 (#87)'
+      sha: b807e42bb5006ab5fa45a1a27496d1d07cbe230d
+      tags:
+      - v0.9.0
+    path: .
+  path: .myks/vendir-cache/git-kasha-v0.9.0-f83a8d1631a533d5/data
+kind: LockConfig

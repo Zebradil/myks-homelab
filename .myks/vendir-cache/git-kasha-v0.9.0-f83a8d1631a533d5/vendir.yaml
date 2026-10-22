@@ -2,13 +2,13 @@ apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
   - git:
-      ref: v0.8.0
+      ref: v0.9.0
       url: https://github.com/zebradil/kasha
     includePaths:
     - deploy/grafana/kasha.json
     lazy: true
     newRootPath: deploy/grafana
     path: .
-  path: .myks/vendir-cache/git-kasha-v0.8.0-65e0657c30249852/data
+  path: .myks/vendir-cache/git-kasha-v0.9.0-f83a8d1631a533d5/data
 kind: Config
 minimumRequiredVersion: ""
