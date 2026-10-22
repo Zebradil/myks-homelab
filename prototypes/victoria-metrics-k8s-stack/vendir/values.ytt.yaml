@@ -55,7 +55,7 @@ prototype:
       plugin: ytt
     dotdc-dashboards:
       git:
-        ref: v3.0.6
+        ref: v3.0.8
         url: https://github.com/dotdc/grafana-dashboards-kubernetes
       includePaths:
         - dashboards/k8s-system-api-server.json
