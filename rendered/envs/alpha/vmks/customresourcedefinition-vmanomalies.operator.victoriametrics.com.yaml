@@ -3,7 +3,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
-    controller-gen.kubebuilder.io/version: v0.21.0
+    controller-gen.kubebuilder.io/version: v0.22.0
   name: vmanomalies.operator.victoriametrics.com
 spec:
   group: operator.victoriametrics.com
@@ -194,6 +194,34 @@ spec:
                             x-kubernetes-list-type: map
                           currentVolumeAttributesClassName:
                             type: string
+                          healthStatus:
+                            properties:
+                              healthConditions:
+                                items:
+                                  properties:
+                                    message:
+                                      type: string
+                                    reason:
+                                      type: string
+                                    status:
+                                      enum:
+                                        - DataLoss
+                                        - Degraded
+                                        - Inaccessible
+                                      type: string
+                                  required:
+                                    - reason
+                                    - status
+                                  type: object
+                                type: array
+                                x-kubernetes-list-map-keys:
+                                  - status
+                                  - reason
+                                x-kubernetes-list-type: map
+                              lastTransitionTime:
+                                format: date-time
+                                type: string
+                            type: object
                           modifyVolumeStatus:
                             properties:
                               status:
@@ -293,30 +321,8 @@ spec:
                 disableSelfServiceScrape:
                   type: boolean
                 dnsConfig:
-                  items:
-                    x-kubernetes-preserve-unknown-fields: true
-                  properties:
-                    nameservers:
-                      items:
-                        type: string
-                      type: array
-                      x-kubernetes-list-type: atomic
-                    options:
-                      items:
-                        properties:
-                          name:
-                            type: string
-                          value:
-                            type: string
-                        type: object
-                      type: array
-                      x-kubernetes-list-type: atomic
-                    searches:
-                      items:
-                        type: string
-                      type: array
-                      x-kubernetes-list-type: atomic
                   type: object
+                  x-kubernetes-preserve-unknown-fields: true
                 dnsPolicy:
                   type: string
                 enableServiceLinks:
@@ -1040,6 +1046,9 @@ spec:
                       type: object
                     tz:
                       type: string
+                    workers:
+                      minimum: 0
+                      type: integer
                   required:
                     - datasourceURL
                     - samplingPeriod
@@ -1129,11 +1138,10 @@ spec:
                 serviceAccountName:
                   type: string
                 serviceScrapeSpec:
-                  required:
-                    - endpoints
                   type: object
                   x-kubernetes-preserve-unknown-fields: true
                 shardCount:
+                  default: 0
                   format: int32
                   type: integer
                 startupProbe:
@@ -1145,6 +1153,9 @@ spec:
                       properties:
                         medium:
                           type: string
+                        mode:
+                          format: int32
+                          type: integer
                         sizeLimit:
                           anyOf:
                             - type: integer
@@ -1314,6 +1325,34 @@ spec:
                               x-kubernetes-list-type: map
                             currentVolumeAttributesClassName:
                               type: string
+                            healthStatus:
+                              properties:
+                                healthConditions:
+                                  items:
+                                    properties:
+                                      message:
+                                        type: string
+                                      reason:
+                                        type: string
+                                      status:
+                                        enum:
+                                          - DataLoss
+                                          - Degraded
+                                          - Inaccessible
+                                        type: string
+                                    required:
+                                      - reason
+                                      - status
+                                    type: object
+                                  type: array
+                                  x-kubernetes-list-map-keys:
+                                    - status
+                                    - reason
+                                  x-kubernetes-list-type: map
+                                lastTransitionTime:
+                                  format: date-time
+                                  type: string
+                              type: object
                             modifyVolumeStatus:
                               properties:
                                 status:
@@ -1365,6 +1404,11 @@ spec:
                 volumeMounts:
                   items:
                     properties:
+                      bindMountOptions:
+                        items:
+                          type: string
+                        type: array
+                        x-kubernetes-list-type: set
                       mountPath:
                         type: string
                       mountPropagation:
@@ -1562,6 +1606,12 @@ spec:
                           type: object
                           x-kubernetes-map-type: atomic
                       type: object
+                    batchMaxBytes:
+                      minimum: 1
+                      type: integer
+                    batchMaxSeries:
+                      minimum: 1
+                      type: integer
                     bearer:
                       properties:
                         bearerTokenFile:
@@ -1601,6 +1651,9 @@ spec:
                         - __name__
                         - for
                       type: object
+                    metricPrefixCacheMaxEntries:
+                      minimum: 0
+                      type: integer
                     tenantID:
                       type: string
                     timeout:
@@ -1744,6 +1797,8 @@ spec:
                   format: int64
                   type: integer
                 reason:
+                  type: string
+                selector:
                   type: string
                 shards:
                   format: int32
