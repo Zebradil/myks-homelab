@@ -54,7 +54,7 @@ spec:
         spec:
           resources:
             requests:
-              storage: 10Gi
+              storage: 20Gi
   vminsert:
     #@overlay/replace
     resources: #@ res("10m", "32Mi", "128Mi")
