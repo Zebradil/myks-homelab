@@ -14,7 +14,7 @@ spec:
         app.kubernetes.io/name: echo
     spec:
       containers:
-        - image: oci.zebradil.dev/ghcr.io-cache/mendhak/http-https-echo@sha256:a265f55c86cb3baead76fdf379dc8e9e6440ed121874e101e60b833e05bce8d4
+        - image: oci.zebradil.dev/ghcr.io-cache/mendhak/http-https-echo@sha256:c4a81744e620ad3cfbffa97374c9c0e545bb3d132b07ebc7745cce6ddee745a1
           name: echo
           ports:
             - containerPort: 8080
