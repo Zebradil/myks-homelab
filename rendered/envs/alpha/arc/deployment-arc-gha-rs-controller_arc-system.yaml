@@ -35,8 +35,10 @@ spec:
             - --auto-scaling-runner-set-only
             - --log-level=debug
             - --log-format=text
-            - --runner-max-concurrent-reconciles=2
-            - --update-strategy=immediate
+            - --autoscaling-runner-set-max-concurrent-reconciles=2
+            - --autoscaling-listener-max-concurrent-reconciles=2
+            - --ephemeral-runner-set-max-concurrent-reconciles=2
+            - --ephemeral-runner-max-concurrent-reconciles=4
             - --listener-metrics-addr=0
             - --listener-metrics-endpoint=
             - --metrics-addr=0
@@ -44,12 +46,12 @@ spec:
             - /manager
           env:
             - name: CONTROLLER_MANAGER_CONTAINER_IMAGE
-              value: ghcr.io/actions/gha-runner-scale-set-controller:0.14.2
+              value: ghcr.io/actions/gha-runner-scale-set-controller:0.15.0
             - name: CONTROLLER_MANAGER_POD_NAMESPACE
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-          image: oci.zebradil.dev/ghcr.io-cache/actions/gha-runner-scale-set-controller@sha256:1b4c7f62e971ab259a4b8798e48e2adaad4af747f45990f474ea5feefa03531d
+          image: oci.zebradil.dev/ghcr.io-cache/actions/gha-runner-scale-set-controller@sha256:162dfb5bfbda9e7e49fbed67d428994c9ced55b41a37a18b75b46dab0aa98d37
           name: manager
           resources:
             limits:
@@ -61,7 +63,7 @@ spec:
             - mountPath: /tmp
               name: tmp
       serviceAccountName: arc-gha-rs-controller
-      terminationGracePeriodSeconds: 10
+      terminationGracePeriodSeconds: 35
       volumes:
         - emptyDir: {}
           name: tmp
