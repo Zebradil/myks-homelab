@@ -74,12 +74,35 @@ spec:
           for: 15m
           labels:
             severity: critical
+        - alert: TooManyErrorLogs
+          annotations:
+            description: |
+              The job "{{ $labels.job }}" ({{ $labels.instance }}) generated too many {{ $labels.level }} logs at {{ $labels.location }} for the last 5 minutes.
+
+
+              Actions:
+              - Check {{ $labels.level }} logs produced by {{ $labels.job }} ({{ $labels.instance }}) component.
+              - Use `source_code_url` annotation to check the source code that produced the log message.
+
+              NOTE: The metric `vm_log_messages_total` tracks all log messages including those suppressed by `-loggerLevel`. Check the `is_printed` label to see whether the log was actually printed.
+            source_code_url: '{{ with printf "last_over_time(vm_log_messages_total{job=%q,instance=%q,location=%q}[6m])" $labels.job $labels.instance $labels.location | query }}{{ with index . 0 }}https://l2s.victoriametrics.com/?app_version={{ .Labels.app_version }}&location={{ $labels.location | urlquery }}{{ end }}{{ end }}'
+            summary: '"{{ $labels.job }}" ({{ $labels.instance }}) generates too many {{ $labels.level }} logs at {{ $labels.location }}'
+          expr: sum(increase(vm_log_messages_total{level=~"error|fatal|panic"}[1m])) without (app_version, is_printed) > 0
+          for: 5m
+          labels:
+            severity: warning
         - alert: TooManyLogs
           annotations:
             description: |
-              The job \"{{ $labels.job }}\" ({{ $labels.instance }}) generated {{ $value }} log messages with the level higher than info for the last 5 minutes. Check the logs for the given target. Check also the \"location\" label at the vm_log_messages_total metric if -loggerLevel command-line flag is set to value other than INFO. This label contains code locations responsible for generating log messages suppressed by -loggerLevel.
-            summary: Too many logs are generated for job "{{ $labels.job }}" ({{ $labels.instance }})
-          expr: sum(increase(vm_log_messages_total{level!="info"}[5m])) without (app_version, location, is_printed) > 0
+              The job "{{ $labels.job }}" ({{ $labels.instance }}) generated warn logs for the last 15 minutes.
+
+              Actions:
+              - Check {{ $labels.level }} logs produced by {{ $labels.job }} ({{ $labels.instance }}) component.
+              - Query `rate(vm_log_messages_total{job="{{ $labels.job }}",instance="{{ $labels.instance }}",level="warn"}[5m])` to find the source code locations generating the warnings.
+
+              NOTE: The metric `vm_log_messages_total` tracks all log messages including those suppressed by `-loggerLevel`. Check the `is_printed` label to see whether the log was actually printed.
+            summary: '"{{ $labels.job }}" ({{ $labels.instance }}) generates too many warn logs'
+          expr: sum(increase(vm_log_messages_total{level="warn"}[5m])) without (app_version, location, is_printed) > 0
           for: 15m
           labels:
             severity: warning
