@@ -2,7 +2,7 @@ apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
   - git:
-      ref: v3.0.6
+      ref: v3.0.8
       url: https://github.com/dotdc/grafana-dashboards-kubernetes
     includePaths:
     - dashboards/k8s-system-api-server.json
@@ -14,6 +14,6 @@ directories:
     lazy: true
     newRootPath: dashboards
     path: .
-  path: .myks/vendir-cache/git-grafana-dashboards-kubernetes-v3.0.6-8b721cf821f8a54e/data
+  path: .myks/vendir-cache/git-grafana-dashboards-kubernetes-v3.0.8-5e28e931596f2ce4/data
 kind: Config
 minimumRequiredVersion: ""
