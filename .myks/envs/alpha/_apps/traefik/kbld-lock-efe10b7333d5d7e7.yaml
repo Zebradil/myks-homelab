@@ -1,6 +1,6 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
-minimumRequiredVersion: 0.49.1
+minimumRequiredVersion: 0.49.2
 overrides:
 - image: docker.io/traefik:v3.7.16
   newImage: index.docker.io/library/traefik@sha256:1336e85aaed293bd63d005086e0dd013b04078b26aaeb1c18b26a2f928af7e65

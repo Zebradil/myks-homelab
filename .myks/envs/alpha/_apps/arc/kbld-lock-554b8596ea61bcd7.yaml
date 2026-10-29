@@ -1,6 +1,6 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
-minimumRequiredVersion: 0.49.1
+minimumRequiredVersion: 0.49.2
 overrides:
 - image: ghcr.io/actions/actions-runner:latest
   newImage: oci.zebradil.dev/ghcr.io-cache/actions/actions-runner@sha256:e275409999c37162649aa050ca573f03eab2eabcb3a1e7fcc47548de6b4f9690
