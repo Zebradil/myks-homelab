@@ -1,6 +1,6 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
-minimumRequiredVersion: 0.49.1
+minimumRequiredVersion: 0.49.2
 overrides:
 - image: docker.io/goharbor/harbor-core:v2.15.4
   newImage: index.docker.io/goharbor/harbor-core@sha256:7d2ba5304a729887cdec7cb222a82b500278423de230ae5150c386a6c332b112
