@@ -4,7 +4,7 @@ application:
   #! Monitors arbitrary internal and external targets.
   restrictEgress: false
   #! renovate: datasource=docker
-  image: louislam/uptime-kuma:2.5.6
+  image: louislam/uptime-kuma:2.5.7
   ingress: false
   containerPort: 3001
   env:
