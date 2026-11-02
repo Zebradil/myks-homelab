@@ -8,6 +8,7 @@ metadata:
   name: karma
   namespace: karma
 spec:
+  revisionHistoryLimit: 3
   selector:
     matchLabels:
       app.kubernetes.io/name: karma
