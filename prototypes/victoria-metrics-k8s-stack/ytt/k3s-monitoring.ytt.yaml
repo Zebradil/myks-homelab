@@ -68,4 +68,12 @@ spec:
           regex: (apiserver|apiextensions|aggregator|process|go|rest_client)_.+|workqueue_depth
         - action: drop
           sourceLabels: [__name__]
-          regex: apiserver_(request_duration_seconds|request_body_size_bytes|watch_list_duration_seconds|response_sizes|watch_cache_read_wait_seconds|watch_events_sizes)_bucket
+          #@ unread_histograms = [
+          #@   "request_duration_seconds",
+          #@   "request_body_size_bytes",
+          #@   "watch_list_duration_seconds",
+          #@   "response_sizes",
+          #@   "watch_cache_read_wait_seconds",
+          #@   "watch_events_sizes",
+          #@ ]
+          regex: #@ "apiserver_({})_bucket".format("|".join(unread_histograms))
