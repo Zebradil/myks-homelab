@@ -23,7 +23,7 @@ spec:
       source_labels:
         - __name__
     - action: drop
-      regex: (apiserver|etcd|apiextensions|aggregator)_.+
+      regex: (apiserver|etcd|apiextensions|aggregator|scheduler)_.+
       sourceLabels:
         - __name__
   relabelConfigs:

@@ -11,6 +11,15 @@ metadata:
 spec:
   endpoints:
     - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+      metricRelabelConfigs:
+        - action: keep
+          regex: (apiserver|apiextensions|aggregator|process|go|rest_client)_.+|workqueue_depth
+          sourceLabels:
+            - __name__
+        - action: drop
+          regex: apiserver_(request_duration_seconds|request_body_size_bytes|watch_list_duration_seconds|response_sizes|watch_cache_read_wait_seconds|watch_events_sizes)_bucket
+          sourceLabels:
+            - __name__
       port: https
       scheme: https
       tlsConfig:
