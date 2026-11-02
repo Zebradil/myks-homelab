@@ -3,7 +3,7 @@
 application:
   octosts:
     domain: sts.zebradil.dev
-    org: Zebradil
+    org: '*'
     apps:
       - app_id: 5044112
         name: zebradil-pr-autopilot

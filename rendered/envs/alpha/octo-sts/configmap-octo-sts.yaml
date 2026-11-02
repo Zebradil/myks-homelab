@@ -2,7 +2,7 @@ apiVersion: v1
 data:
   apps.yaml: |
     orgs:
-    - name: Zebradil
+    - name: '*'
       apps:
       - app_id: 5044112
         app_name: zebradil-pr-autopilot
