@@ -1,22 +1,19 @@
 #@ load("@ytt:overlay", "overlay")
 #@ load("/overlay-matchers.star", m="matchers")
 
+#! k3s runs every control-plane component in one binary with one shared metrics
+#! registry, so the server node serves the same full metric set on the apiserver,
+#! scheduler, controller-manager and kubelet ports. Each job keeps only the
+#! families that belong to its component (plus process/go/rest_client, which the
+#! per-job dashboards read); unfiltered, the copies quadruple the series count and
+#! make the apiserver SLI recording rules slow.
+
 #@ node_scrapes = [
-#@   ("kube-controller-manager", "10257"),
-#@   ("kube-scheduler", "10259"),
+#@   ("kube-controller-manager", "10257", "(workqueue|rest_client|process|go)_.+"),
+#@   ("kube-scheduler", "10259", "(scheduler|rest_client|process|go)_.+"),
 #@ ]
 
-#! k3s runs every control-plane component in one binary, so the server node serves
-#! the full apiserver metric set on each component port and on the kubelet port.
-#! Keep those families only under job="apiserver"; the copies quadruple the
-#! series count and make the apiserver SLI recording rules slow.
-#@ def drop_apiserver_families():
-action: drop
-sourceLabels: [__name__]
-regex: (apiserver|etcd|apiextensions|aggregator)_.+
-#@ end
-
-#@ for name, port in node_scrapes:
+#@ for name, port, families in node_scrapes:
 ---
 apiVersion: operator.victoriametrics.com/v1beta1
 kind: VMNodeScrape
@@ -36,7 +33,9 @@ spec:
     - targetLabel: job
       replacement: #@ name
   metricRelabelConfigs:
-    - #@ drop_apiserver_families()
+    - action: keep
+      sourceLabels: [__name__]
+      regex: #@ families
 
 
 #@overlay/match by=m.kind_name("VMServiceScrape", "vmks-" + name)
@@ -49,4 +48,32 @@ spec:
 spec:
   metricRelabelConfigs:
     #@overlay/append
-    - #@ drop_apiserver_families()
+    - action: drop
+      sourceLabels: [__name__]
+      regex: (apiserver|etcd|apiextensions|aggregator|scheduler)_.+
+
+#! etcd_* describes the kine client (k3s uses SQLite) and nothing reads it. The
+#! dropped histograms are the largest apiserver families no rule or dashboard
+#! reads; their _sum/_count series stay.
+#@overlay/match by=m.kind_name("VMServiceScrape", "vmks-kube-api-server")
+---
+spec:
+  endpoints:
+    #@overlay/match by=overlay.index(0)
+    -
+      #@overlay/match missing_ok=True
+      metricRelabelConfigs:
+        - action: keep
+          sourceLabels: [__name__]
+          regex: (apiserver|apiextensions|aggregator|process|go|rest_client)_.+|workqueue_depth
+        - action: drop
+          sourceLabels: [__name__]
+          #@ unread_histograms = [
+          #@   "request_duration_seconds",
+          #@   "request_body_size_bytes",
+          #@   "watch_list_duration_seconds",
+          #@   "response_sizes",
+          #@   "watch_cache_read_wait_seconds",
+          #@   "watch_events_sizes",
+          #@ ]
+          regex: #@ "apiserver_({})_bucket".format("|".join(unread_histograms))

@@ -70,6 +70,13 @@ external:
     read:
       url: 'http://vmselect-vmks-long.vmks.svc.cluster.local.:8481/select/0/prometheus'
 
+#! /metrics/resource repeats cadvisor's container CPU/memory without the image
+#! label, so unfiltered queries double-count; nothing reads its pod_*/node_* series.
+kubelet:
+  vmScrapes:
+    resources:
+      enabled: false
+
 kubeControllerManager:
   service:
     enabled: false

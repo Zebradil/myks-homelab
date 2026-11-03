@@ -7,8 +7,8 @@ metadata:
 spec:
   bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
   metricRelabelConfigs:
-    - action: drop
-      regex: (apiserver|etcd|apiextensions|aggregator)_.+
+    - action: keep
+      regex: (workqueue|rest_client|process|go)_.+
       sourceLabels:
         - __name__
   path: /metrics
