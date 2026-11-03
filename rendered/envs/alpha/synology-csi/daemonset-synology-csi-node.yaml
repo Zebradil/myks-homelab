@@ -6,6 +6,7 @@ metadata:
   name: synology-csi-node
   namespace: synology-csi
 spec:
+  revisionHistoryLimit: 3
   selector:
     matchLabels:
       app: synology-csi-node

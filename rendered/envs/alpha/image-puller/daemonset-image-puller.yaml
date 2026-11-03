@@ -6,6 +6,7 @@ metadata:
   name: image-puller
   namespace: image-puller
 spec:
+  revisionHistoryLimit: 3
   selector:
     matchLabels:
       app: image-puller

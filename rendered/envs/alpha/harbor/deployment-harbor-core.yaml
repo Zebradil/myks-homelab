@@ -16,7 +16,7 @@ metadata:
   namespace: harbor
 spec:
   replicas: 1
-  revisionHistoryLimit: 10
+  revisionHistoryLimit: 3
   selector:
     matchLabels:
       app: harbor

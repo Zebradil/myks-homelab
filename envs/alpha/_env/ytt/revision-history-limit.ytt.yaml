@@ -1,0 +1,9 @@
+#@ load("@ytt:overlay", "overlay")
+
+#! Rollbacks go through git and ArgoCD, so old ReplicaSets and ControllerRevisions
+#! only clutter the datastore and ArgoCD's resource tree; the default keeps 10.
+#@overlay/match by=lambda idx, left, right: left["kind"] in ["Deployment", "DaemonSet", "StatefulSet"], when="1+"
+---
+spec:
+  #@overlay/match missing_ok=True
+  revisionHistoryLimit: 3
