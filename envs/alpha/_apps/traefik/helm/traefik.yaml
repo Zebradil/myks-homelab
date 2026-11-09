@@ -32,6 +32,12 @@ ports:
     hostIP: '[$NODE_IPV6]'
     forwardedHeaders:
       trustedIPs: #@ get_ipsv6()
+    #! Traefik's 60s default readTimeout covers the whole request body, so a
+    #! slow client uploading a large blob (e.g. a CI `docker push` of an image
+    #! layer through Cloudflare) gets cut off with a 504 mid-upload.
+    transport:
+      respondingTimeouts:
+        readTimeout: 600s
   #! Dedicated ports for connection from the LAN network.
   lan-web:
     port: 80
