@@ -1,0 +1,10 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.49.2
+overrides:
+- image: ghcr.io/umami-software/umami:3.4.1
+  newImage: oci.zebradil.dev/ghcr.io-cache/umami-software/umami@sha256:e69d1a7932e9dab0fc523edc7be1f3a53f3c261f57856fc2167ae74a8fc022e8
+  preresolved: true
+- image: postgres:18.4-alpine
+  newImage: index.docker.io/library/postgres@sha256:9a8afca54e7861fd90fab5fdf4c42477a6b1cb7d293595148e674e0a3181de15
+  preresolved: true

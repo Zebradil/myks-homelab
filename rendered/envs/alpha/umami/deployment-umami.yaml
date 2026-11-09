@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: umami
+spec:
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: umami
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: umami
+    spec:
+      containers:
+        - env:
+            - name: APP_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: app-secret
+                  name: umami
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  key: database-url
+                  name: umami
+            - name: TRACKER_SCRIPT_NAME
+              value: app.js
+            - name: COLLECT_API_ENDPOINT
+              value: /e
+            - name: DISABLE_TELEMETRY
+              value: "1"
+          image: oci.zebradil.dev/ghcr.io-cache/umami-software/umami@sha256:e69d1a7932e9dab0fc523edc7be1f3a53f3c261f57856fc2167ae74a8fc022e8
+          name: umami
+          ports:
+            - containerPort: 3000
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /api/heartbeat
+              port: http
+          resources:
+            limits:
+              memory: 512Mi
+            requests:
+              cpu: 20m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            runAsGroup: 1001
+            runAsNonRoot: true
+            runAsUser: 1001

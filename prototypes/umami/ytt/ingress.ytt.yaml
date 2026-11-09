@@ -1,0 +1,33 @@
+#@ load("@ytt:data", "data")
+#@ load("traefik.lib.yaml", "route")
+
+#@ a = data.values.application
+#@ name = data.values.myks.context.app
+#@ web_hosts = data.values.environment.traefik.hosts.web
+
+#! Visitors of tracked sites have no Authelia session, so the tracker script and
+#! the collect endpoint are public. Umami's default /script.js and /api/send stay
+#! off the public edge. The longer rule beats the host-only protected route on
+#! Traefik's default priority.
+#@ host_match = " || ".join(["Host(`{}.{}`)".format(a.host, h) for h in web_hosts])
+#@ path_match = "Path(`/{}`) || Path(`{}`)".format(a.umami.trackerScriptName, a.umami.collectEndpoint)
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: #@ a.host + "-tracker"
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - kind: Rule
+      match: #@ "({}) && ({})".format(host_match, path_match)
+      services:
+        - name: #@ name
+          port: http
+
+#! Dashboard: behind Authelia on WAN, open on LAN and VPN by network position.
+#! Umami's own login applies on top.
+#@ for/end route_doc in route.default(a.host, name):
+--- #@ route_doc

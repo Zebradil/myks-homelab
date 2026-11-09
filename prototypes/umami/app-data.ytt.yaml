@@ -1,0 +1,22 @@
+#@data/values-schema
+---
+#@overlay/match-child-defaults missing_ok=True
+application:
+  #! Subdomain the dashboard and the tracker are served at, on every environment host.
+  host: stats
+  umami:
+    #! renovate: datasource=docker
+    image: ghcr.io/umami-software/umami:3.4.1
+    #! Neutral names for the tracker script and the collect endpoint: blocklists
+    #! match Umami's defaults (/script.js, /api/send). Only these two paths are
+    #! public; everything else on the host sits behind Authelia.
+    trackerScriptName: app.js
+    collectEndpoint: /e
+    #@schema/validation min_len=1
+    appSecret: ''
+  postgresql:
+    #! renovate: datasource=docker
+    image: postgres:18.4-alpine
+    storageSize: 2Gi
+    #@schema/validation min_len=1
+    password: ''
