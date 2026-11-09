@@ -3,7 +3,7 @@ apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 sources:
   - image: caddy-image-ref
-    path: prototypes/maks-cams/docker
+    path: prototypes/maks-cams/ytt/docker
     docker:
       build:
         pull: true
