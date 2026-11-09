@@ -28,6 +28,8 @@ spec:
               value: "false"
             - name: OCTOSTS_ALLOWED_ISSUERS
               value: https://token.actions.githubusercontent.com
+            - name: OCTOSTS_OIDC_BLOCK_PRIVATE_IPS
+              value: "true"
           envFrom:
             - secretRef:
                 name: octo-sts

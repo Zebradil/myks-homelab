@@ -60,6 +60,10 @@ spec:
               value: 'false'
             - name: OCTOSTS_ALLOWED_ISSUERS
               value: https://token.actions.githubusercontent.com
+            #! Backs up the NetworkPolicy below inside the process: octo-sts
+            #! refuses RFC 1918 and 100.64/10 addresses for OIDC discovery.
+            - name: OCTOSTS_OIDC_BLOCK_PRIVATE_IPS
+              value: 'true'
           envFrom:
             - secretRef:
                 name: #@ name
