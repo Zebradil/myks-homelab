@@ -1,0 +1,16 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: stats-lan
+spec:
+  entryPoints:
+    - lan-web
+    - lan-websecure
+  routes:
+    - kind: Rule
+      match: Host(`stats.lan.zebradil.dev`) || Host(`stats.junior.lan.zebradil.dev`) || Host(`stats.zebradil.dev`) || Host(`stats.junior.zebradil.dev`)
+      services:
+        - name: umami
+          port: http

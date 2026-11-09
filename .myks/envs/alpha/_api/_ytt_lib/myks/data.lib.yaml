@@ -107,6 +107,8 @@ environment:
     name: ""
   - proto: traefik
     name: ""
+  - proto: umami
+    name: ""
   - proto: webapp
     name: uptime-kuma
   - proto: vaultwarden

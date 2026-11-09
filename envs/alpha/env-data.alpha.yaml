@@ -61,6 +61,7 @@ environment:
     - proto: starbase80
     - proto: synology-csi
     - proto: traefik
+    - proto: umami
     - proto: webapp
       name: uptime-kuma
     - proto: vaultwarden

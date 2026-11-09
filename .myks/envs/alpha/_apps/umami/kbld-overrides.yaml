@@ -1,0 +1,5 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+overrides:
+    - image: ghcr.io/umami-software/umami:3.4.1
+      newImage: oci.zebradil.dev/ghcr.io-cache/umami-software/umami:3.4.1

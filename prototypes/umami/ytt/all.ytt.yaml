@@ -1,0 +1,149 @@
+#@ load("@ytt:data", "data")
+#@ load("util.star", res="resources")
+
+#@ a = data.values.application
+#@ name = data.values.myks.context.app
+#@ pg = a.postgresql
+
+#@ db_name = "umami"
+#@ db_user = "umami"
+#@ db_host = "postgresql"
+#@ secret_name = "umami"
+
+#@ umami_labels = { "app.kubernetes.io/name": name }
+#@ pg_labels = { "app.kubernetes.io/name": db_host }
+
+#@ container_security = {
+#@   "allowPrivilegeEscalation": False,
+#@   "capabilities": { "drop": ["ALL"] },
+#@   "privileged": False,
+#@ }
+
+#@ def secret_env(var, key):
+name: #@ var
+valueFrom:
+  secretKeyRef:
+    name: #@ secret_name
+    key: #@ key
+#@ end
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: #@ secret_name
+stringData:
+  app-secret: #@ a.umami.appSecret
+  database-url: #@ "postgresql://{}:{}@{}:5432/{}".format(db_user, pg.password, db_host, db_name)
+  postgres-password: #@ pg.password
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: #@ name
+spec:
+  selector:
+    matchLabels: #@ umami_labels
+  template:
+    metadata:
+      labels: #@ umami_labels
+    spec:
+      containers:
+        - name: #@ name
+          image: #@ a.umami.image
+          env:
+            - #@ secret_env("APP_SECRET", "app-secret")
+            - #@ secret_env("DATABASE_URL", "database-url")
+            - name: TRACKER_SCRIPT_NAME
+              value: #@ a.umami.trackerScriptName
+            - name: COLLECT_API_ENDPOINT
+              value: #@ a.umami.collectEndpoint
+            - name: DISABLE_TELEMETRY
+              value: '1'
+          ports:
+            - containerPort: 3000
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /api/heartbeat
+              port: http
+          resources: #@ res("20m", "256Mi", "512Mi")
+          #! The image's USER is the name "nextjs"; runAsNonRoot needs its numeric id.
+          #! The root filesystem stays writable: on start, Umami rewrites the
+          #! collect endpoint into public/script.js.
+          securityContext: #@ dict(container_security, runAsNonRoot=True, runAsUser=1001, runAsGroup=1001)
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #@ name
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+  selector: #@ umami_labels
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: #@ db_host
+spec:
+  serviceName: #@ db_host
+  selector:
+    matchLabels: #@ pg_labels
+  template:
+    metadata:
+      labels: #@ pg_labels
+    spec:
+      containers:
+        - name: postgresql
+          image: #@ pg.image
+          env:
+            - name: POSTGRES_DB
+              value: #@ db_name
+            - name: POSTGRES_USER
+              value: #@ db_user
+            - #@ secret_env("POSTGRES_PASSWORD", "postgres-password")
+          ports:
+            - containerPort: 5432
+              name: postgresql
+          readinessProbe:
+            exec:
+              command: #@ ["pg_isready", "-U", db_user, "-d", db_name]
+          resources: #@ res("20m", "64Mi", "256Mi")
+          securityContext: #@ container_security
+          volumeMounts:
+            #! Postgres 18+ images keep PGDATA in a versioned subdirectory of this path.
+            - name: data
+              mountPath: /var/lib/postgresql
+      #! uid/gid 70 is the postgres user of the Alpine image.
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 70
+        runAsGroup: 70
+        fsGroup: 70
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: #@ pg.storageSize
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #@ db_host
+spec:
+  ports:
+    - name: postgresql
+      port: 5432
+      targetPort: postgresql
+  selector: #@ pg_labels

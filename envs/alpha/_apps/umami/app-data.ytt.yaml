@@ -1,0 +1,9 @@
+#@ load("secrets.star", "sops")
+
+#@data/values
+---
+application:
+  umami:
+    appSecret: #@ sops("0", "appSecret")
+  postgresql:
+    password: #@ sops("0", "databasePassword")
