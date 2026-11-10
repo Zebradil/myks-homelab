@@ -4,7 +4,7 @@
 application:
   octosts:
     #! renovate: datasource=docker
-    image: ghcr.io/zebradil/octo-sts:0.10.0-zebradil.1
+    image: ghcr.io/zebradil/octo-sts:0.14.3-zebradil.1
     #! Public host; octo-sts also uses it as the expected OIDC audience.
     #@schema/validation min_len=1
     domain: ''

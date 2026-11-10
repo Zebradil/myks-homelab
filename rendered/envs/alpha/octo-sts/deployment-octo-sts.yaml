@@ -33,7 +33,7 @@ spec:
           envFrom:
             - secretRef:
                 name: octo-sts
-          image: oci.zebradil.dev/ghcr.io-cache/zebradil/octo-sts@sha256:de80fb0486dd0448d1f1af28895b39b2a7f2ca4e440906e5de66dea2f80a078d
+          image: oci.zebradil.dev/ghcr.io-cache/zebradil/octo-sts@sha256:3acd479926817fe8ed12d15eee45e2947660ec7af29891cf9ce451d4f55198a8
           livenessProbe:
             httpGet:
               path: /
