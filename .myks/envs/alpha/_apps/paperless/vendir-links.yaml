@@ -1,2 +1,2 @@
-charts/postgresql: helm-postgresql-18.12.17-709c7bbb1005ca8
+charts/postgresql: helm-postgresql-18.12.18-7966a814bf51a25d
 charts/redis: helm-redis-28.3.12-aae190ee6ad2cd1
