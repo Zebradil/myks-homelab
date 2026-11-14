@@ -1,0 +1,13 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - helmChart:
+      name: kured
+      repository:
+        url: https://kubereboot.github.io/charts
+      version: 6.1.0
+    lazy: true
+    path: .
+  path: .myks/vendir-cache/helm-kured-6.1.0-3ff44addf95de46a/data
+kind: Config
+minimumRequiredVersion: ""

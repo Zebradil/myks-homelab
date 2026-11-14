@@ -1,0 +1,25 @@
+#@ load("@ytt:data", "data")
+#@ load("util.star", res="resources")
+
+#@ ap = data.values.application
+
+---
+configuration:
+  period: 10m
+  timeZone: #@ ap.timeZone
+  startTime: #@ ap.startTime
+  endTime: #@ ap.endTime
+  #! The nodes are NixOS: no /var/run/reboot-required and no /bin/systemctl.
+  #! kured runs both commands in the host mount namespace (nsenter), so they
+  #! use the system profile. k3s-reboot-required comes from znix's k3s-node
+  #! module and exits 0 when the next-boot generation needs a reboot (new
+  #! kernel, systemd or k3s; switches never restart k3s). See
+  #! https://github.com/Zebradil/znix/blob/main/docs/adr/0008-k3s-restart-only-when-drained.md
+  useRebootSentinelHostPath: false
+  rebootSentinelCommand: /run/current-system/sw/bin/k3s-reboot-required
+  #! Through logind, so kubelet's graceful node shutdown still runs.
+  rebootCommand: /run/current-system/sw/bin/systemctl reboot
+  drainTimeout: 15m
+  #! Keeps pods evicted from one node off nodes still waiting for their reboot.
+  preferNoScheduleTaint: weave.works/kured-node-reboot
+resources: #@ res("10m", "32Mi", "64Mi")

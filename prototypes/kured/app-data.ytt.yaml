@@ -1,0 +1,8 @@
+#@data/values-schema
+---
+#@overlay/match-child-defaults missing_ok=True
+application:
+  #! Reboots start only inside this window (kured's local time).
+  timeZone: Europe/Berlin
+  startTime: '01:00'
+  endTime: '06:00'

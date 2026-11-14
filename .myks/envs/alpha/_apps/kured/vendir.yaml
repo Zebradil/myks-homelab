@@ -1,0 +1,12 @@
+apiVersion: vendir.k14s.io/v1alpha1
+kind: Config
+directories:
+- path: charts/kured
+  contents:
+  - path: .
+    lazy: true
+    helmChart:
+      name: kured
+      version: 6.1.0
+      repository:
+        url: https://kubereboot.github.io/charts
