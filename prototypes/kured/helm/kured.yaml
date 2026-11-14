@@ -12,9 +12,9 @@ configuration:
   #! The nodes are NixOS: no /var/run/reboot-required and no /bin/systemctl.
   #! kured runs both commands in the host mount namespace (nsenter), so they
   #! use the system profile. k3s-reboot-required comes from znix's k3s-node
-  #! module and exits 0 when the next-boot generation needs a reboot (new
-  #! kernel, systemd or k3s; switches never restart k3s). See
-  #! https://github.com/Zebradil/znix/blob/main/docs/adr/0008-k3s-restart-only-when-drained.md
+  #! module and exits 0 when the next-boot generation has a new kernel, initrd,
+  #! kernel modules or systemd. See
+  #! https://github.com/Zebradil/znix/blob/main/docs/adr/0008-k3s-rolling-reboots.md
   useRebootSentinelHostPath: false
   rebootSentinelCommand: /run/current-system/sw/bin/k3s-reboot-required
   #! Through logind, so kubelet's graceful node shutdown still runs.
