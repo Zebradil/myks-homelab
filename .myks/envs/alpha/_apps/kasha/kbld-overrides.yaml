@@ -1,5 +1,5 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 overrides:
-    - image: ghcr.io/zebradil/kasha-box:sha-d2ef41b5a881
-      newImage: oci.zebradil.dev/ghcr.io-cache/zebradil/kasha-box:sha-d2ef41b5a881
+    - image: ghcr.io/zebradil/kasha-box:v0.14.0
+      newImage: oci.zebradil.dev/ghcr.io-cache/zebradil/kasha-box:v0.14.0
