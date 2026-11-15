@@ -552,6 +552,18 @@ For full list of changes please check ArtifactHub [changelog].
 
 Highlighted versions provide information about additional steps that should be performed by user when upgrading to newer version.
 
+### 10.17.0
+
+Pod templates no longer carry the `helm.sh/chart` label. It changed on every chart
+release, and because it sat inside the pod template every component was recreated on
+`helm upgrade` even when neither the image nor the configuration had changed. The label
+remains on the objects themselves, so `kubectl get deploy -L helm.sh/chart` is unaffected.
+
+**Upgrading rolls every Argo CD pod once**, as the pod templates change for the last
+time. After that a chart release on its own no longer restarts anything. If you select
+pods on `helm.sh/chart` (a `kube_pod_labels` join, a NetworkPolicy, a policy engine),
+move to the object-level label or add your own through `global.podLabels`.
+
 ### 10.13.0
 
 The chart now creates a headless Service for the application controller, named like the controller StatefulSet. If you created that Service yourself, Helm cannot adopt it and the upgrade fails. Delete it before upgrading:
@@ -1069,7 +1081,7 @@ NAME: my-release
 | global.priorityClassName | string | `""` | Default priority class for all components |
 | global.revisionHistoryLimit | int | `3` | Number of old deployment ReplicaSets to retain. The rest will be garbage collected. |
 | global.runtimeClassName | string | `""` | Runtime class name for all components |
-| global.securityContext | object | `{}` (See [values.yaml]) | Toggle and define pod-level security context. |
+| global.securityContext | object | See [values.yaml] | Toggle and define pod-level security context. |
 | global.statefulsetAnnotations | object | `{}` | Annotations for the all deployed Statefulsets |
 | global.statefulsetLabels | object | `{}` | Labels for the all deployed Statefulsets |
 | global.tolerations | list | `[]` | Default tolerations for all components |
@@ -1913,7 +1925,7 @@ If you use an External Redis (See Option 3 above), this Job is not deployed.
 | redisSecretInit.priorityClassName | string | `""` (defaults to global.priorityClassName) | Priority class for Redis secret-init Job |
 | redisSecretInit.resources | object | `{}` | Resource limits and requests for Redis secret-init Job |
 | redisSecretInit.runtimeClassName | string | `""` (defaults to global.runtimeClassName) | Runtime class name for the Redis secret-init Job |
-| redisSecretInit.securityContext | object | `{}` | Redis secret-init Job pod-level security context |
+| redisSecretInit.securityContext | object | See [values.yaml] | Redis secret-init Job pod-level security context |
 | redisSecretInit.serviceAccount.annotations | object | `{}` | Annotations applied to created service account |
 | redisSecretInit.serviceAccount.automountServiceAccountToken | bool | `true` | Automount API credentials for the Service Account |
 | redisSecretInit.serviceAccount.create | bool | `true` | Create a service account for the redis pod |
