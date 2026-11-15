@@ -31,6 +31,8 @@ spec:
               value: ref+sops://static/0.sops.yaml#/cache-s3-url+
             - name: KASHA_SYNC_INTERVAL
               value: "300"
+            - name: KASHA_REENCODE
+              value: "true"
           envFrom:
             - secretRef:
                 name: kasha

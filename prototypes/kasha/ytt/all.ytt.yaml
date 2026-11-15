@@ -17,6 +17,7 @@
 #@   "KASHA_TRUSTED_KEYS": a.trustedKeys,
 #@   "KASHA_REMOTE": sops("0", "cache-s3-url"),
 #@   "KASHA_SYNC_INTERVAL": str(a.syncInterval),
+#@   "KASHA_REENCODE": "true",
 #@ }
 #@ build_envs = lambda x: [{"name": k, "value": v} for k, v in x.items()]
 
@@ -123,6 +124,6 @@ spec:
       path: /metrics
   namespaceSelector:
     matchNames:
-      - #@ name
+      -  #@ name
   selector:
     matchLabels: #@ pod_labels
