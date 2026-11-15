@@ -24,6 +24,8 @@ spec:
               value: /kasha
             - name: KASHA_LISTEN
               value: 0.0.0.0:5000
+            - name: KASHA_PROBE_LISTEN
+              value: 0.0.0.0:5001
             - name: KASHA_TRUSTED_KEYS
               value: |
                 cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= kasha-ci-1:KNW/sz+Zz800U/IFZ38vH5rvlHtM3Fb0Q/wmDJquG+U= znix.zebradil.dev:nvr0OQFRddbHGopQbyLbLXQnntFBDKp23tqQq+msppw= cache.flakehub.com-3:hJuILl5sVK4iKm86JzgdXW12Y2Hwd5G07qKtHTOcDCM= cache.flakehub.com-4:Asi8qIv291s0aYLyH6IOnr5Kf6+OF14WVjkE6t3xMio= cache.flakehub.com-5:zB96CRlL7tiPtzA9/WKyPkp3A2vqxqgdgyTVNGShPDU= cache.flakehub.com-6:W4EGFwAGgBj3he7c5fNh9NkOXw0PUVaxygCVKeuvaqU= cache.flakehub.com-7:mvxJ2DZVHn/kRxlIaxYNMuDG1OvMckZu32um1TadOR8= cache.flakehub.com-8:moO+OVS0mnTjBTcOUh2kYLQEd59ExzyoW1QgQ8XAARQ= cache.flakehub.com-9:wChaSeTI6TeCuV/Sg2513ZIM9i0qJaYsF+lZCXg0J6o= cache.flakehub.com-10:2GqeNlIp6AKp4EF2MVbE1kBOp9iBSyo0UPR9KoR0o1Y=
@@ -38,22 +40,22 @@ spec:
                 name: kasha
           image: oci.zebradil.dev/ghcr.io-cache/zebradil/kasha-box@sha256:1f3ed0053907529014e9836b85059bd20a96e68f7517526bfe43503f9fe50b84
           livenessProbe:
-            failureThreshold: 10
+            failureThreshold: 8
             httpGet:
-              path: /nix-cache-info
-              port: http
-            initialDelaySeconds: 15
+              path: /livez
+              port: probe
             periodSeconds: 30
             timeoutSeconds: 5
           name: kasha
           ports:
             - containerPort: 5000
               name: http
+            - containerPort: 5001
+              name: probe
           readinessProbe:
             httpGet:
-              path: /nix-cache-info
-              port: http
-            initialDelaySeconds: 5
+              path: /readyz
+              port: probe
             periodSeconds: 10
             timeoutSeconds: 5
           resources:
@@ -67,13 +69,6 @@ spec:
             capabilities:
               drop:
                 - all
-          startupProbe:
-            failureThreshold: 90
-            httpGet:
-              path: /nix-cache-info
-              port: http
-            periodSeconds: 10
-            timeoutSeconds: 5
           volumeMounts:
             - mountPath: /kasha
               name: kasha

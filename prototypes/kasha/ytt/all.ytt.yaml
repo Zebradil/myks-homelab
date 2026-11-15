@@ -14,6 +14,7 @@
 #@ envs = {
 #@   "KASHA_DATA": data_root,
 #@   "KASHA_LISTEN": "0.0.0.0:" + str(a.port),
+#@   "KASHA_PROBE_LISTEN": "0.0.0.0:" + str(a.probePort),
 #@   "KASHA_TRUSTED_KEYS": a.trustedKeys,
 #@   "KASHA_REMOTE": sops("0", "cache-s3-url"),
 #@   "KASHA_SYNC_INTERVAL": str(a.syncInterval),
@@ -59,38 +60,28 @@ spec:
           ports:
             - containerPort: #@ a.port
               name: http
-          #! Probes share the request path with NAR downloads, so they answer
-          #! slowly under load. The 1s default timeout turned a busy box into a
-          #! NotReady one, which made Traefik 503 the very build that was
-          #! loading it.
+            - containerPort: #@ a.probePort
+              name: probe
+          #! Probes have their own listener, bound before the boot scan and
+          #! outside the request cap, so a booting or busy box still answers.
+          #! /readyz stays 200 when every slot is busy: with one replica,
+          #! NotReady makes Traefik 503 the very build loading the box.
           readinessProbe:
             httpGet:
-              path: /nix-cache-info
-              port: http
-            initialDelaySeconds: 5
+              path: /readyz
+              port: probe
             periodSeconds: 10
             timeoutSeconds: 5
-          #! Boot indexes every narinfo before the port opens, and that grows
-          #! with the store (~100 s for 70k objects on a cold iSCSI volume).
-          #! Liveness waits for this probe, so a slow boot is never killed.
-          startupProbe:
-            httpGet:
-              path: /nix-cache-info
-              port: http
-            periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 90
-          #! Tolerant on purpose: a restart drops every in-flight download, so
-          #! it must only fire for a genuinely wedged process (5 min silent),
-          #! never for a slow one.
+          #! /livez fails once no request slot has freed for 60 s. Tolerant on
+          #! purpose: a restart drops every in-flight download, so it must only
+          #! fire for a wedged process (~5 min with no slot freed).
           livenessProbe:
             httpGet:
-              path: /nix-cache-info
-              port: http
-            initialDelaySeconds: 15
+              path: /livez
+              port: probe
             periodSeconds: 30
             timeoutSeconds: 5
-            failureThreshold: 10
+            failureThreshold: 8
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
