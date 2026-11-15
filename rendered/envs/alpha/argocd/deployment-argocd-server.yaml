@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/cm: 958ec6d4e202ce37312bb77fc1330803eff973e5d5398ceaf092f9502e99c83b
+        checksum/cm: f7e6cae40747bc85fc01894da20834c19e3506cd70fe6d53f1480268940b06a1
         checksum/cmd-params: 7169a66dffe48e8cacc4d5fee2ffe558d692709d8ddaf19ef44fa89b031b0fe5
       labels:
         app.kubernetes.io/component: server
@@ -100,6 +100,12 @@ spec:
                   key: server.disable.auth
                   name: argocd-cmd-params-cm
                   optional: true
+            - name: ARGOCD_SERVER_DISABLE_SWAGGER_UI
+              valueFrom:
+                configMapKeyRef:
+                  key: server.disable.swagger.ui
+                  name: argocd-cmd-params-cm
+                  optional: true
             - name: ARGOCD_SERVER_ENABLE_GZIP
               valueFrom:
                 configMapKeyRef:
@@ -166,6 +172,12 @@ spec:
                   key: server.tls.ciphers
                   name: argocd-cmd-params-cm
                   optional: true
+            - name: ARGOCD_TLS_CURVE_PREFERENCES
+              valueFrom:
+                configMapKeyRef:
+                  key: server.tls.curvepreferences
+                  name: argocd-cmd-params-cm
+                  optional: true
             - name: ARGOCD_SERVER_CONNECTION_STATUS_CACHE_EXPIRATION
               valueFrom:
                 configMapKeyRef:
@@ -196,6 +208,18 @@ spec:
                   key: redis.server
                   name: argocd-cmd-params-cm
                   optional: true
+            - name: REDIS_SENTINEL_HOSTS
+              valueFrom:
+                configMapKeyRef:
+                  key: redis.sentinel.hosts
+                  name: argocd-cmd-params-cm
+                  optional: true
+            - name: REDIS_SENTINEL_MASTER
+              valueFrom:
+                configMapKeyRef:
+                  key: redis.sentinel.master
+                  name: argocd-cmd-params-cm
+                  optional: true
             - name: REDIS_COMPRESSION
               valueFrom:
                 configMapKeyRef:
@@ -206,6 +230,12 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: redis.db
+                  name: argocd-cmd-params-cm
+                  optional: true
+            - name: ARGOCD_REDIS_KEY_PREFIX
+              valueFrom:
+                configMapKeyRef:
+                  key: redis.key.prefix
                   name: argocd-cmd-params-cm
                   optional: true
             - name: REDIS_USERNAME
@@ -278,6 +308,12 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: otlp.attrs
+                  name: argocd-cmd-params-cm
+                  optional: true
+            - name: ARGOCD_SERVER_OTLP_SAMPLE_RATIO
+              valueFrom:
+                configMapKeyRef:
+                  key: otlp.sample.ratio
                   name: argocd-cmd-params-cm
                   optional: true
             - name: ARGOCD_APPLICATION_NAMESPACES
@@ -358,7 +394,7 @@ spec:
                   key: server.sync.replace.allowed
                   name: argocd-cmd-params-cm
                   optional: true
-          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:16df57da6f223808d204cd94c67c929b931fa01670b91b0b3a2298c4647de0db
+          image: oci.zebradil.dev/quay.io-cache/argoproj/argocd@sha256:296e3d74f449b2ce45265613fcb68c18ed7366488360c8ea32f5f2a93d2e5c54
           livenessProbe:
             failureThreshold: 3
             httpGet:
