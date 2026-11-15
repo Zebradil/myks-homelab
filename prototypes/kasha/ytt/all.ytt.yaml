@@ -19,6 +19,7 @@
 #@   "KASHA_REMOTE": sops("0", "cache-s3-url"),
 #@   "KASHA_SYNC_INTERVAL": str(a.syncInterval),
 #@   "KASHA_REENCODE": "true",
+#@   "KASHA_UPSTREAMS": a.upstreams,
 #@   "KASHA_PULL_THROUGH": "true",
 #@ }
 #@ build_envs = lambda x: [{"name": k, "value": v} for k, v in x.items()]

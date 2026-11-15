@@ -21,5 +21,10 @@ application:
     cache.flakehub.com-8:moO+OVS0mnTjBTcOUh2kYLQEd59ExzyoW1QgQ8XAARQ=
     cache.flakehub.com-9:wChaSeTI6TeCuV/Sg2513ZIM9i0qJaYsF+lZCXg0J6o=
     cache.flakehub.com-10:2GqeNlIp6AKp4EF2MVbE1kBOp9iBSyo0UPR9KoR0o1Y=
+  #! Caches mirror-down and pull-through try after the remote, comma separated.
+  #! FlakeHub caches are left out: they need a token kasha cannot send.
+  upstreams: >-
+    https://cache.nixos.org,
+    https://install.determinate.systems,
   #! Seconds between mirror sweeps.
   syncInterval: 300

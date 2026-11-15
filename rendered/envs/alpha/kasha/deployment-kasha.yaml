@@ -35,6 +35,8 @@ spec:
               value: "300"
             - name: KASHA_REENCODE
               value: "true"
+            - name: KASHA_UPSTREAMS
+              value: https://cache.nixos.org, https://install.determinate.systems,
             - name: KASHA_PULL_THROUGH
               value: "true"
           envFrom:
