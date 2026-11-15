@@ -35,6 +35,8 @@ spec:
               value: "300"
             - name: KASHA_REENCODE
               value: "true"
+            - name: KASHA_PULL_THROUGH
+              value: "true"
           envFrom:
             - secretRef:
                 name: kasha
