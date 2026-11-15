@@ -1,0 +1,5 @@
+#@data/values
+---
+application:
+  #! Talks to the Kubernetes API, which is outside the pod network.
+  restrictEgress: false

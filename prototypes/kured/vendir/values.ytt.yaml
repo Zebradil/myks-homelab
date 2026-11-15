@@ -1,0 +1,8 @@
+#@data/values
+---
+prototype:
+  sources:
+    kured:
+      helmChart:
+        url: https://kubereboot.github.io/charts
+        version: 6.1.0

@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    app.kubernetes.io/instance: kured
+    app.kubernetes.io/name: kured
+  name: kured
+  namespace: kured
+spec:
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: kured
+      app.kubernetes.io/name: kured
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: kured
+        app.kubernetes.io/name: kured
+    spec:
+      containers:
+        - args:
+            - --ds-name=kured
+            - --ds-namespace=kured
+            - --metrics-port=8080
+            - --end-time=06:00
+            - --period=10m
+            - --drain-timeout=15m
+            - --reboot-sentinel=/var/run/reboot-required
+            - --reboot-sentinel-command=/run/current-system/sw/bin/k3s-reboot-required
+            - --reboot-command=/run/current-system/sw/bin/systemctl reboot
+            - --start-time=01:00
+            - --time-zone=Europe/Berlin
+            - --prefer-no-schedule-taint=weave.works/kured-node-reboot
+            - --log-format=text
+            - --concurrency=1
+          command:
+            - /usr/bin/kured
+          env:
+            - name: KURED_NODE_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          image: oci.zebradil.dev/ghcr.io-cache/kubereboot/kured@sha256:8dfd3c2e889337595731d801afc5c031b545876a29427897b3f711d2983f30c4
+          livenessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /metrics
+              port: metrics
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: kured
+          ports:
+            - containerPort: 8080
+              name: metrics
+          readinessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /metrics
+              port: metrics
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            limits:
+              memory: 64Mi
+            requests:
+              cpu: 10m
+              memory: 32Mi
+          securityContext:
+            privileged: true
+            readOnlyRootFilesystem: true
+      hostNetwork: false
+      hostPID: true
+      nodeSelector:
+        kubernetes.io/os: linux
+      restartPolicy: Always
+      serviceAccountName: kured
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/control-plane
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/master
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate

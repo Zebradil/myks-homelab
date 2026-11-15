@@ -1,0 +1,7 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.49.2
+overrides:
+- image: ghcr.io/kubereboot/kured:1.23.0
+  newImage: oci.zebradil.dev/ghcr.io-cache/kubereboot/kured@sha256:8dfd3c2e889337595731d801afc5c031b545876a29427897b3f711d2983f30c4
+  preresolved: true
