@@ -67,6 +67,13 @@ spec:
             capabilities:
               drop:
                 - all
+          startupProbe:
+            failureThreshold: 90
+            httpGet:
+              path: /nix-cache-info
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 5
           volumeMounts:
             - mountPath: /kasha
               name: kasha

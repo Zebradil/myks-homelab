@@ -70,6 +70,16 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
+          #! Boot indexes every narinfo before the port opens, and that grows
+          #! with the store (~100 s for 70k objects on a cold iSCSI volume).
+          #! Liveness waits for this probe, so a slow boot is never killed.
+          startupProbe:
+            httpGet:
+              path: /nix-cache-info
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 90
           #! Tolerant on purpose: a restart drops every in-flight download, so
           #! it must only fire for a genuinely wedged process (5 min silent),
           #! never for a slow one.
