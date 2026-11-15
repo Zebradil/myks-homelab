@@ -1,8 +1,8 @@
-{{- if not .Values.controller.dynamicClusterDistribution | default false }}
+{{- if .Values.controller.dynamicClusterDistribution }}
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
-  {{- with (mergeOverwrite (deepCopy .Values.global.statefulsetAnnotations) .Values.controller.statefulsetAnnotations) }}
+  {{- with (mergeOverwrite (deepCopy .Values.global.deploymentAnnotations) .Values.controller.deploymentAnnotations) }}
   annotations:
     {{- range $key, $value := . }}
     {{ $key }}: {{ $value | quote }}
@@ -12,13 +12,12 @@ metadata:
   namespace: {{ include  "argo-cd.namespace" . }}
   labels:
     {{- include "argo-cd.labels" (dict "context" . "component" .Values.controller.name "name" .Values.controller.name) | nindent 4 }}
-    {{- with (mergeOverwrite (deepCopy .Values.global.statefulsetLabels) .Values.controller.statefulsetLabels) }}
+    {{- with (mergeOverwrite (deepCopy .Values.global.deploymentLabels) .Values.controller.deploymentLabels) }}
       {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
   replicas: {{ .Values.controller.replicas }}
   revisionHistoryLimit: {{ .Values.controller.revisionHistoryLimit | default .Values.global.revisionHistoryLimit }}
-  serviceName: {{ include "argo-cd.controller.fullname" . }}
   selector:
     matchLabels:
       {{- include "argo-cd.selectorLabels" (dict "context" . "name" .Values.controller.name) | nindent 6 }}
@@ -35,7 +34,7 @@ spec:
         {{- end }}
         {{- end }}
       labels:
-        {{- include "argo-cd.labels" (dict "context" . "component" .Values.controller.name "name" .Values.controller.name) | nindent 8 }}
+        {{- include "argo-cd.podLabels" (dict "context" . "component" .Values.controller.name "name" .Values.controller.name) | nindent 8 }}
         {{- with (mergeOverwrite (deepCopy .Values.global.podLabels) .Values.controller.podLabels) }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -83,14 +82,19 @@ spec:
         imagePullPolicy: {{ default .Values.global.image.imagePullPolicy .Values.controller.image.imagePullPolicy }}
         name: {{ .Values.controller.name }}
         env:
+          {{- with (concat .Values.global.env .Values.controller.env) }}
+            {{- tpl (toYaml .) $ | nindent 10 }}
+          {{- end }}
           - name: GRPC_ENABLE_TXT_SERVICE_CONFIG
             valueFrom:
               configMapKeyRef:
                 name: argocd-cmd-params-cm
                 key: controller.grpc.enable.txt.service.config
                 optional: true
-          - name: ARGOCD_CONTROLLER_REPLICAS
-            value: {{ .Values.controller.replicas | quote }}
+          - name: ARGOCD_ENABLE_DYNAMIC_CLUSTER_DISTRIBUTION
+            value: "true"
+          - name: ARGOCD_CONTROLLER_HEARTBEAT_TIME
+            value: {{ .Values.controller.heartbeatTime | quote }}
           - name: ARGOCD_APPLICATION_CONTROLLER_NAME
             value: {{ template "argo-cd.controller.fullname" . }}
           - name: ARGOCD_RECONCILIATION_TIMEOUT
@@ -164,24 +168,6 @@ spec:
               configMapKeyRef:
                 name: argocd-cmd-params-cm
                 key: controller.metrics.cache.expiration
-                optional: true
-          - name: ARGOCD_APPLICATION_CONTROLLER_METRICS_APPLICATION_LABELS
-            valueFrom:
-              configMapKeyRef:
-                name: argocd-cmd-params-cm
-                key: controller.metrics.application.labels
-                optional: true
-          - name: ARGOCD_APPLICATION_CONTROLLER_METRICS_APPLICATION_CONDITIONS
-            valueFrom:
-              configMapKeyRef:
-                name: argocd-cmd-params-cm
-                key: controller.metrics.application.conditions
-                optional: true
-          - name: ARGOCD_APPLICATION_CONTROLLER_METRICS_CLUSTER_LABELS
-            valueFrom:
-              configMapKeyRef:
-                name: argocd-cmd-params-cm
-                key: controller.metrics.cluster.labels
                 optional: true
           - name: ARGOCD_APPLICATION_CONTROLLER_SELF_HEAL_TIMEOUT_SECONDS
             valueFrom:
@@ -407,11 +393,6 @@ spec:
                 name: argocd-cmd-params-cm
                 key: commit.server
                 optional: true
-          - name: KUBECACHEDIR
-            value: /tmp/kubecache
-          {{- with (concat .Values.global.env .Values.controller.env) }}
-            {{- tpl (toYaml .) $ | nindent 10 }}
-          {{- end }}
         {{- with .Values.controller.envFrom }}
         envFrom:
           {{- toYaml . | nindent 10 }}
@@ -422,7 +403,7 @@ spec:
           protocol: TCP
         readinessProbe:
           httpGet:
-            path: {{ .Values.controller.readinessProbe.httpPath }}
+            path: /healthz
             port: metrics
           initialDelaySeconds: {{ .Values.controller.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.controller.readinessProbe.periodSeconds }}
@@ -439,17 +420,6 @@ spec:
           timeoutSeconds: {{ .Values.controller.livenessProbe.timeoutSeconds }}
           successThreshold: {{ .Values.controller.livenessProbe.successThreshold }}
           failureThreshold: {{ .Values.controller.livenessProbe.failureThreshold }}
-        {{- end }}
-        {{- if .Values.controller.startupProbe.enabled }}
-        startupProbe:
-          httpGet:
-            path: {{ .Values.controller.startupProbe.httpPath }}
-            port: metrics
-          initialDelaySeconds: {{ .Values.controller.startupProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.controller.startupProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.controller.startupProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.controller.startupProbe.successThreshold }}
-          failureThreshold: {{ .Values.controller.startupProbe.failureThreshold }}
         {{- end }}
         resources:
           {{- toYaml .Values.controller.resources | nindent 10 }}
@@ -471,8 +441,6 @@ spec:
           name: argocd-home
         - name: argocd-cmd-params-cm
           mountPath: /home/argocd/params
-        - name: argocd-application-controller-tmp
-          mountPath: /tmp
         # CA for the OTLP collector, looked up by --otlp-address host.
         - name: tls-certs
           mountPath: /app/config/tls
@@ -520,13 +488,7 @@ spec:
         {{- else }}
         emptyDir: {}
         {{- end }}
-      - name: argocd-application-controller-tmp
-        {{- if .Values.controller.emptyDir.sizeLimit }}
-        emptyDir:
-          sizeLimit: {{ .Values.controller.emptyDir.sizeLimit }}
-        {{- else }}
-        emptyDir: {}
-        {{- end }}
+
       - name: argocd-repo-server-tls
         secret:
           secretName: argocd-repo-server-tls
