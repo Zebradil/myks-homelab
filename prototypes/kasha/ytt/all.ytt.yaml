@@ -115,6 +115,9 @@ spec:
       port: 80
       targetPort: http
 ---
+#! Argo CD excludes EndpointSlices (argocd-cm resource.exclusions), so it never
+#! applies this one; apply it by hand after changing it:
+#!   kubectl -n kasha apply -f rendered/envs/alpha/kasha/endpointslice-kasha-box.yaml
 apiVersion: discovery.k8s.io/v1
 kind: EndpointSlice
 metadata:
