@@ -1,0 +1,32 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: vmks-nvme-health
+spec:
+  groups:
+    - name: nvme-health
+      rules:
+        - alert: NVMeLifetimeLow
+          annotations:
+            description: '{{ $labels.device }} on {{ $labels.instance }} has used {{ $value }}% of its rated endurance.'
+            summary: NVMe drive is close to its rated write endurance.
+          expr: smartctl_device_percentage_used{job="smartctl-exporter"} > 80
+          for: 1h
+          labels:
+            severity: warning
+        - alert: NVMeMediaErrors
+          annotations:
+            description: '{{ $labels.device }} on {{ $labels.instance }} reports {{ $value }} media and data integrity errors.'
+            summary: NVMe drive reports media errors.
+          expr: smartctl_device_media_errors{job="smartctl-exporter"} > 0
+          labels:
+            severity: warning
+        - alert: NVMeCriticalWarning
+          annotations:
+            description: '{{ $labels.device }} on {{ $labels.instance }} has critical warning bits {{ $value }} set.'
+            summary: NVMe drive raised a critical warning.
+          expr: smartctl_device_critical_warning{job="smartctl-exporter"} > 0
+          labels:
+            severity: critical

@@ -1,0 +1,14 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMStaticScrape
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: k3s-nodes-smartctl-exporter
+spec:
+  jobName: smartctl-exporter
+  targetEndpoints:
+    - targets:
+        - 192.168.0.100:9633
+        - 192.168.0.111:9633
+        - 192.168.0.112:9633
+        - 192.168.0.113:9633
