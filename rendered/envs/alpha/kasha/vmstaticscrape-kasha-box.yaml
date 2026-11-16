@@ -1,0 +1,11 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMStaticScrape
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: kasha-box
+spec:
+  jobName: kasha
+  targetEndpoints:
+    - targets:
+        - 192.168.0.101:5000
