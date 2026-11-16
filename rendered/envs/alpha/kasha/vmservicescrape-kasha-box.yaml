@@ -1,12 +1,13 @@
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMServiceScrape
 metadata:
   annotations:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   labels:
     app.kubernetes.io/name: kasha
-  name: kasha
+  name: kasha-box
 spec:
+  discoveryRole: endpointslices
   endpoints:
     - path: /metrics
       port: http

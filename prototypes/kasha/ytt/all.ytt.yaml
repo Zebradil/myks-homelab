@@ -41,7 +41,7 @@ kind: Deployment
 metadata:
   name: #@ name
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels: #@ pod_labels
   strategy:
@@ -110,18 +110,39 @@ metadata:
   name: #@ name
   labels: #@ pod_labels
 spec:
-  selector: #@ pod_labels
   ports:
     - name: http
       port: 80
       targetPort: http
 ---
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
 metadata:
-  name: #@ name
+  name: #@ name + "-box"
+  labels:
+    kubernetes.io/service-name: #@ name
+addressType: IPv4
+ports:
+  - name: http
+    protocol: TCP
+    port: #@ a.port
+endpoints:
+  - addresses:
+      - #@ a.boxAddress
+    conditions:
+      ready: true
+      serving: true
+      terminating: false
+---
+#! A hand-written EndpointSlice has no Endpoints object behind it, which the
+#! default `endpoints` discovery role reads, so discover by EndpointSlice.
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMServiceScrape
+metadata:
+  name: #@ name + "-box"
   labels: #@ pod_labels
 spec:
+  discoveryRole: endpointslices
   endpoints:
     - port: http
       path: /metrics

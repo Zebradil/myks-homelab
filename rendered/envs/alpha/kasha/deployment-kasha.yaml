@@ -5,7 +5,7 @@ metadata:
     a8r.io/repository: https://github.com/Zebradil/myks-homelab
   name: kasha
 spec:
-  replicas: 1
+  replicas: 0
   revisionHistoryLimit: 3
   selector:
     matchLabels:
