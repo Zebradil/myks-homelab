@@ -1,112 +1,13 @@
 #@ load("@ytt:data", "data")
-#@ load("secrets.star", "sops")
 
 #@ a = data.values.application
-#@ m = data.values.myks
-#@ name = m.context.app
-
-#@ pod_labels = {"app.kubernetes.io/name": name}
-
-#@ data_root = "/kasha"
-
-#! Non-secret env. AWS_* R2 creds and the write token come from the Secret
-#! (see secret.ytt.yaml).
-#@ envs = {
-#@   "KASHA_DATA": data_root,
-#@   "KASHA_LISTEN": "0.0.0.0:" + str(a.port),
-#@   "KASHA_PROBE_LISTEN": "0.0.0.0:" + str(a.probePort),
-#@   "KASHA_TRUSTED_KEYS": a.trustedKeys,
-#@   "KASHA_REMOTE": sops("0", "cache-s3-url"),
-#@   "KASHA_SYNC_INTERVAL": str(a.syncInterval),
-#@   "KASHA_REENCODE": "true",
-#@   "KASHA_UPSTREAMS": a.upstreams,
-#@   "KASHA_PULL_THROUGH": "true",
-#@ }
-#@ build_envs = lambda x: [{"name": k, "value": v} for k, v in x.items()]
+#@ name = data.values.myks.context.app
 
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: #@ name
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: #@ a.storageSize
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: #@ name
-spec:
-  replicas: 0
-  selector:
-    matchLabels: #@ pod_labels
-  strategy:
-    #! RWO PVC can't be mounted by old and new pods at once during a rollout.
-    type: Recreate
-    rollingUpdate: null
-  template:
-    metadata:
-      labels: #@ pod_labels
-    spec:
-      containers:
-        - name: #@ name
-          image: #@ a.image
-          env: #@ build_envs(envs)
-          envFrom:
-            - secretRef:
-                name: #@ name
-          ports:
-            - containerPort: #@ a.port
-              name: http
-            - containerPort: #@ a.probePort
-              name: probe
-          #! Probes have their own listener, bound before the boot scan and
-          #! outside the request cap, so a booting or busy box still answers.
-          #! /readyz stays 200 when every slot is busy: with one replica,
-          #! NotReady makes Traefik 503 the very build loading the box.
-          readinessProbe:
-            httpGet:
-              path: /readyz
-              port: probe
-            periodSeconds: 10
-            timeoutSeconds: 5
-          #! /livez fails once no request slot has freed for 60 s. Tolerant on
-          #! purpose: a restart drops every in-flight download, so it must only
-          #! fire for a wedged process (~5 min with no slot freed).
-          livenessProbe:
-            httpGet:
-              path: /livez
-              port: probe
-            periodSeconds: 30
-            timeoutSeconds: 5
-            failureThreshold: 8
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-                - all
-          resources:
-            requests:
-              cpu: 300m
-              memory: 1300Mi
-            limits:
-              memory: 3Gi
-          volumeMounts:
-            #! PVC at /kasha (= KASHA_DATA): the flat binary-cache store.
-            - name: #@ name
-              mountPath: #@ data_root
-      volumes:
-        - name: #@ name
-          persistentVolumeClaim:
-            claimName: #@ name
----
-#! daddy serves kasha.lan.zebradil.dev itself (caddy, znix modules/hosts/daddy);
-#! the box's plain-HTTP port admits only the k3s nodes, so vmagent scrapes it
-#! by IP and kasha metrics do not depend on DNS or caddy.
+#! The box runs natively on daddy (znix modules/hosts/daddy), which serves
+#! kasha.lan.zebradil.dev itself. Its plain-HTTP port admits only the k3s
+#! nodes, so vmagent scrapes it by IP and kasha metrics do not depend on DNS or
+#! caddy.
 apiVersion: operator.victoriametrics.com/v1beta1
 kind: VMStaticScrape
 metadata:
