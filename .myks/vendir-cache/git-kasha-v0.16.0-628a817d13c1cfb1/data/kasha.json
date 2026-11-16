@@ -315,6 +315,38 @@
           "includeAll": false,
           "allowCustomValue": false
         }
+      },
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "name": "has_encoding",
+          "label": "has_encoding",
+          "hide": "hideVariable",
+          "skipUrlSync": true,
+          "current": {
+            "text": "",
+            "value": ""
+          },
+          "options": [],
+          "query": {
+            "kind": "DataQuery",
+            "group": "prometheus",
+            "version": "v0",
+            "datasource": {
+              "name": "${datasource}"
+            },
+            "spec": {
+              "query": "label_values(kasha_nar_compression_bytes{job=\"$job\", instance=~\"$instance\"}, job)",
+              "refId": "has_encoding"
+            }
+          },
+          "refresh": "onTimeRangeChanged",
+          "regex": "",
+          "sort": "disabled",
+          "multi": false,
+          "includeAll": false,
+          "allowCustomValue": false
+        }
       }
     ],
     "elements": {
@@ -5363,6 +5395,1269 @@
             }
           }
         }
+      },
+      "panel-49": {
+        "kind": "Panel",
+        "spec": {
+          "id": 49,
+          "title": "Version",
+          "description": "kasha version the selected boxes run, with how many run it. Several values mean a rollout is under way or stuck. Absent before 0.16.0, which added kasha_build_info.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${datasource}"
+                      },
+                      "spec": {
+                        "expr": "count by (version) (kasha_build_info{job=\"$job\", instance=~\"$instance\"})",
+                        "legendFormat": "{{version}}",
+                        "instant": true,
+                        "range": false
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "",
+            "spec": {
+              "options": {
+                "graphMode": "none",
+                "colorMode": "value",
+                "textMode": "value_and_name",
+                "justifyMode": "center",
+                "wideLayout": true,
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "none",
+                  "color": {
+                    "mode": "fixed",
+                    "fixedColor": "text"
+                  },
+                  "noValue": "before 0.16"
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-50": {
+        "kind": "Panel",
+        "spec": {
+          "id": 50,
+          "title": "NAR disk",
+          "description": "Disk used by NAR files, summed over the selected boxes: the total of NAR bytes by age. Narinfos and manifests are left out; /status has the whole store as store_bytes. Refreshed at most every 5 minutes.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${datasource}"
+                      },
+                      "spec": {
+                        "expr": "sum(max by (instance) (kasha_nar_age_bytes{job=\"$job\", instance=~\"$instance\", le=\"+Inf\"}))",
+                        "legendFormat": "",
+                        "instant": true,
+                        "range": false
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "",
+            "spec": {
+              "options": {
+                "graphMode": "none",
+                "colorMode": "value",
+                "textMode": "value",
+                "justifyMode": "center",
+                "wideLayout": true,
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "bytes",
+                  "color": {
+                    "mode": "fixed",
+                    "fixedColor": "text"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-51": {
+        "kind": "Panel",
+        "spec": {
+          "id": 51,
+          "title": "Disk free",
+          "description": "Share of the store's filesystem the box can still write, worst box. Red below 10 % matches the KashaStoreFilesystemLow alert: raise the filesystem or lower KASHA_UNLISTED_MAX_BYTES.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${datasource}"
+                      },
+                      "spec": {
+                        "expr": "min(max by (instance) (kasha_store_filesystem_avail_bytes{job=\"$job\", instance=~\"$instance\"}) / max by (instance) (kasha_store_filesystem_size_bytes{job=\"$job\", instance=~\"$instance\"}))",
+                        "legendFormat": "",
+                        "instant": true,
+                        "range": false
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "",
+            "spec": {
+              "options": {
+                "graphMode": "none",
+                "colorMode": "value",
+                "textMode": "value",
+                "justifyMode": "center",
+                "wideLayout": true,
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "percentunit",
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "decimals": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "red",
+                        "value": null
+                      },
+                      {
+                        "color": "yellow",
+                        "value": 0.1
+                      },
+                      {
+                        "color": "green",
+                        "value": 0.2
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-52": {
+        "kind": "Panel",
+        "spec": {
+          "id": 52,
+          "title": "Slots used",
+          "description": "Peak share of the KASHA_MAX_INFLIGHT request slots in use at any scrape over the time range, worst box. Near 100 % new requests wait for a slot; pull-through turns some away (busy) well before.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${datasource}"
+                      },
+                      "spec": {
+                        "expr": "max(max by (instance) (max_over_time(kasha_http_inflight_requests{job=\"$job\", instance=~\"$instance\"}[$__range])) / max by (instance) (kasha_http_max_inflight_requests{job=\"$job\", instance=~\"$instance\"}))",
+                        "legendFormat": "",
+                        "instant": true,
+                        "range": false
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "",
+            "spec": {
+              "options": {
+                "graphMode": "none",
+                "colorMode": "value",
+                "textMode": "value",
+                "justifyMode": "center",
+                "wideLayout": true,
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "percentunit",
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "decimals": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "yellow",
+                        "value": 0.5
+                      },
+                      {
+                        "color": "red",
+                        "value": 0.9
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-53": {
+        "kind": "Panel",
+        "spec": {
+          "id": 53,
+          "title": "Narinfo p90",
+          "description": "90th percentile time to answer a narinfo GET over the time range, all selected boxes. From the index it is milliseconds; a pull-through lookup adds the sources' answer time (Pull-through tab).",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${datasource}"
+                      },
+                      "spec": {
+                        "expr": "histogram_quantile(0.9, sum by (le) (increase(kasha_http_request_duration_seconds_bucket{job=\"$job\", instance=~\"$instance\", method=\"GET\", route=\"narinfo\"}[$__range])))",
+                        "legendFormat": "",
+                        "instant": true,
+                        "range": false
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "",
+            "spec": {
+              "options": {
+                "graphMode": "none",
+                "colorMode": "value",
+                "textMode": "value",
+                "justifyMode": "center",
+                "wideLayout": true,
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "s",
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "noValue": "no requests",
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "yellow",
+                        "value": 1
+                      },
+                      {
+                        "color": "red",
+                        "value": 5
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-54": {
+        "kind": "Panel",
+        "spec": {
+          "id": 54,
+          "title": "Server errors",
+          "description": "5xx responses over the time range, summed over the selected boxes: a store file the box could not open (open failed in the logs).",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${datasource}"
+                      },
+                      "spec": {
+                        "expr": "sum(increase(kasha_http_responses_total{job=\"$job\", instance=~\"$instance\", code=~\"5..\"}[$__range])) or 0 * sum(increase(kasha_http_responses_total{job=\"$job\", instance=~\"$instance\"}[$__range]))",
+                        "legendFormat": "",
+                        "instant": true,
+                        "range": false
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "",
+            "spec": {
+              "options": {
+                "graphMode": "none",
+                "colorMode": "value",
+                "textMode": "value",
+                "justifyMode": "center",
+                "wideLayout": true,
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "short",
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "decimals": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "red",
+                        "value": 1
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-55": {
+        "kind": "Panel",
+        "spec": {
+          "id": 55,
+          "title": "Responses by route and code",
+          "description": "Responses per interval by route and status code, summed over the selected boxes; /metrics and /status are left out. narinfo 404: a miss, the client falls back to its next substituter. nar 404: a NAR the box lacks, or one pull-through turned away (busy). 401 and 400: refused pushes. 5xx: the logs say why.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${datasource}"
+                      },
+                      "spec": {
+                        "expr": "sum by (route, code) (increase(kasha_http_responses_total{job=\"$job\", instance=~\"$instance\", route!~\"metrics|status\"}[$__interval])) > 0",
+                        "legendFormat": "{{route}} {{code}}"
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {
+                "interval": "5m"
+              }
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "",
+            "spec": {
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true,
+                  "calcs": []
+                },
+                "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "short",
+                  "custom": {
+                    "lineWidth": 0,
+                    "fillOpacity": 70,
+                    "showPoints": "never",
+                    "spanNulls": false,
+                    "axisSoftMin": 0,
+                    "stacking": {
+                      "mode": "normal",
+                      "group": "A"
+                    },
+                    "drawStyle": "bars",
+                    "barAlignment": -1
+                  },
+                  "min": 0
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byRegexp",
+                      "options": ".* 2..$"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "mode": "fixed",
+                          "fixedColor": "green"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byRegexp",
+                      "options": ".* 404$"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "mode": "fixed",
+                          "fixedColor": "blue"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byRegexp",
+                      "options": ".* 4(0[0-35-9]|[1-9].)$"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "mode": "fixed",
+                          "fixedColor": "orange"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byRegexp",
+                      "options": ".* 5..$"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "mode": "fixed",
+                          "fixedColor": "red"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-56": {
+        "kind": "Panel",
+        "spec": {
+          "id": 56,
+          "title": "NAR requests",
+          "description": "NAR requests per interval by method and status code, summed over the selected boxes. Next to Narinfo requests: a client that finds a narinfo then asks for its NAR, so a NAR 404 after a narinfo hit means the box answered for a NAR it cannot serve.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${datasource}"
+                      },
+                      "spec": {
+                        "expr": "sum by (method, code) (increase(kasha_http_responses_total{job=\"$job\", instance=~\"$instance\", route=\"nar\"}[$__interval])) > 0",
+                        "legendFormat": "{{method}} {{code}}"
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {
+                "interval": "5m"
+              }
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "",
+            "spec": {
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true,
+                  "calcs": []
+                },
+                "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "short",
+                  "custom": {
+                    "lineWidth": 0,
+                    "fillOpacity": 70,
+                    "showPoints": "never",
+                    "spanNulls": false,
+                    "axisSoftMin": 0,
+                    "stacking": {
+                      "mode": "normal",
+                      "group": "A"
+                    },
+                    "drawStyle": "bars",
+                    "barAlignment": -1
+                  },
+                  "min": 0
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byRegexp",
+                      "options": ".* 2..$"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "mode": "fixed",
+                          "fixedColor": "green"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byRegexp",
+                      "options": ".* 404$"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "mode": "fixed",
+                          "fixedColor": "blue"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byRegexp",
+                      "options": ".* 4(0[0-35-9]|[1-9].)$"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "mode": "fixed",
+                          "fixedColor": "orange"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byRegexp",
+                      "options": ".* 5..$"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "mode": "fixed",
+                          "fixedColor": "red"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-57": {
+        "kind": "Panel",
+        "spec": {
+          "id": 57,
+          "title": "Request duration",
+          "description": "Median and 90th percentile time from taking a GET on to its response written, all selected boxes. narinfo: index lookups plus pull-through waits. nar: mostly the transfer, so it grows with NAR size and the client's bandwidth. Waiting for a request slot is not included (Request slots).",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${datasource}"
+                      },
+                      "spec": {
+                        "expr": "histogram_quantile(0.5, sum by (le) (rate(kasha_http_request_duration_seconds_bucket{job=\"$job\", instance=~\"$instance\", method=\"GET\", route=\"narinfo\"}[$__rate_interval])))",
+                        "legendFormat": "narinfo p50"
+                      }
+                    }
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "B",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${datasource}"
+                      },
+                      "spec": {
+                        "expr": "histogram_quantile(0.9, sum by (le) (rate(kasha_http_request_duration_seconds_bucket{job=\"$job\", instance=~\"$instance\", method=\"GET\", route=\"narinfo\"}[$__rate_interval])))",
+                        "legendFormat": "narinfo p90"
+                      }
+                    }
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "C",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${datasource}"
+                      },
+                      "spec": {
+                        "expr": "histogram_quantile(0.5, sum by (le) (rate(kasha_http_request_duration_seconds_bucket{job=\"$job\", instance=~\"$instance\", method=\"GET\", route=\"nar\"}[$__rate_interval])))",
+                        "legendFormat": "nar p50"
+                      }
+                    }
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "D",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${datasource}"
+                      },
+                      "spec": {
+                        "expr": "histogram_quantile(0.9, sum by (le) (rate(kasha_http_request_duration_seconds_bucket{job=\"$job\", instance=~\"$instance\", method=\"GET\", route=\"nar\"}[$__rate_interval])))",
+                        "legendFormat": "nar p90"
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "",
+            "spec": {
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true,
+                  "calcs": []
+                },
+                "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "s",
+                  "custom": {
+                    "lineWidth": 1,
+                    "fillOpacity": 0,
+                    "showPoints": "never",
+                    "spanNulls": false,
+                    "axisSoftMin": 0,
+                    "scaleDistribution": {
+                      "type": "log",
+                      "log": 10
+                    }
+                  },
+                  "min": 0.001
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-58": {
+        "kind": "Panel",
+        "spec": {
+          "id": 58,
+          "title": "Request slots",
+          "description": "Requests holding one of the KASHA_MAX_INFLIGHT slots per box at each scrape, and the cap. A request holds its slot for the whole transfer, so slow clients fill slots too. At the cap new requests wait; pull-through turns narinfo and NAR waiters away at a quarter of it.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${datasource}"
+                      },
+                      "spec": {
+                        "expr": "max by (instance) (kasha_http_inflight_requests{job=\"$job\", instance=~\"$instance\"})",
+                        "legendFormat": "{{instance}}"
+                      }
+                    }
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "B",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${datasource}"
+                      },
+                      "spec": {
+                        "expr": "max by (instance) (kasha_http_max_inflight_requests{job=\"$job\", instance=~\"$instance\"})",
+                        "legendFormat": "{{instance}} cap"
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "",
+            "spec": {
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true,
+                  "calcs": []
+                },
+                "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "short",
+                  "custom": {
+                    "lineWidth": 1,
+                    "fillOpacity": 0,
+                    "showPoints": "never",
+                    "spanNulls": false,
+                    "axisSoftMin": 0
+                  },
+                  "min": 0
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byRegexp",
+                      "options": ".* cap$"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "mode": "fixed",
+                          "fixedColor": "red"
+                        }
+                      },
+                      {
+                        "id": "custom.lineStyle",
+                        "value": {
+                          "fill": "dash",
+                          "dash": [
+                            10,
+                            10
+                          ]
+                        }
+                      },
+                      {
+                        "id": "custom.fillOpacity",
+                        "value": 0
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-59": {
+        "kind": "Panel",
+        "spec": {
+          "id": 59,
+          "title": "Source lookup duration",
+          "description": "Median and 90th percentile time a source took to answer a narinfo lookup, found or not, by source (remote: the remote cache, else the upstream's host). Sources are asked in order, so a client's narinfo waits for the sum of the sources asked before one has the path. Timeouts count at KASHA_PULL_THROUGH_LOOKUP_TIMEOUT.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${datasource}"
+                      },
+                      "spec": {
+                        "expr": "histogram_quantile(0.5, sum by (source, le) (rate(kasha_pull_through_lookup_duration_seconds_bucket{job=\"$job\", instance=~\"$instance\"}[$__rate_interval])))",
+                        "legendFormat": "{{source}} p50"
+                      }
+                    }
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "B",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${datasource}"
+                      },
+                      "spec": {
+                        "expr": "histogram_quantile(0.9, sum by (source, le) (rate(kasha_pull_through_lookup_duration_seconds_bucket{job=\"$job\", instance=~\"$instance\"}[$__rate_interval])))",
+                        "legendFormat": "{{source}} p90"
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "",
+            "spec": {
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true,
+                  "calcs": []
+                },
+                "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "s",
+                  "custom": {
+                    "lineWidth": 1,
+                    "fillOpacity": 0,
+                    "showPoints": "never",
+                    "spanNulls": false,
+                    "axisSoftMin": 0,
+                    "scaleDistribution": {
+                      "type": "log",
+                      "log": 10
+                    }
+                  },
+                  "min": 0.001
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-60": {
+        "kind": "Panel",
+        "spec": {
+          "id": 60,
+          "title": "Store filesystem free",
+          "description": "Share of the filesystem holding the store root the box can still write, per box. Other data on the same filesystem counts too. Dashed line at 10 %: the KashaStoreFilesystemLow threshold.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${datasource}"
+                      },
+                      "spec": {
+                        "expr": "max by (instance) (kasha_store_filesystem_avail_bytes{job=\"$job\", instance=~\"$instance\"}) / max by (instance) (kasha_store_filesystem_size_bytes{job=\"$job\", instance=~\"$instance\"})",
+                        "legendFormat": "{{instance}}"
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "",
+            "spec": {
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true,
+                  "calcs": []
+                },
+                "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "percentunit",
+                  "custom": {
+                    "lineWidth": 1,
+                    "fillOpacity": 0,
+                    "showPoints": "never",
+                    "spanNulls": false,
+                    "axisSoftMin": 0,
+                    "thresholdsStyle": {
+                      "mode": "dashed"
+                    }
+                  },
+                  "min": 0,
+                  "max": 1,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "transparent",
+                        "value": null
+                      },
+                      {
+                        "color": "red",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-61": {
+        "kind": "Panel",
+        "spec": {
+          "id": 61,
+          "title": "NAR bytes per box",
+          "description": "Disk used by NAR files on each box, from the age scan (refreshed at most every 5 minutes). Old files no narinfo names count until orphan removal takes them.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "${datasource}"
+                      },
+                      "spec": {
+                        "expr": "max by (instance) (kasha_nar_age_bytes{job=\"$job\", instance=~\"$instance\", le=\"+Inf\"})",
+                        "legendFormat": "{{instance}}"
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "",
+            "spec": {
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true,
+                  "calcs": []
+                },
+                "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "bytes",
+                  "custom": {
+                    "lineWidth": 1,
+                    "fillOpacity": 0,
+                    "showPoints": "never",
+                    "spanNulls": false,
+                    "axisSoftMin": 0
+                  },
+                  "min": 0
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
       }
     },
     "layout": {
@@ -5534,6 +6829,84 @@
                           "name": "panel-12"
                         }
                       }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 6,
+                        "width": 4,
+                        "height": 3,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-49"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 4,
+                        "y": 6,
+                        "width": 4,
+                        "height": 3,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-50"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 8,
+                        "y": 6,
+                        "width": 4,
+                        "height": 3,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-51"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 12,
+                        "y": 6,
+                        "width": 4,
+                        "height": 3,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-52"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 16,
+                        "y": 6,
+                        "width": 4,
+                        "height": 3,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-53"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 20,
+                        "y": 6,
+                        "width": 4,
+                        "height": 3,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-54"
+                        }
+                      }
                     }
                   ]
                 }
@@ -5635,6 +7008,58 @@
                                     "name": "panel-17"
                                   }
                                 }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 0,
+                                  "y": 24,
+                                  "width": 12,
+                                  "height": 8,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-55"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 12,
+                                  "y": 24,
+                                  "width": 12,
+                                  "height": 8,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-56"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 0,
+                                  "y": 32,
+                                  "width": 12,
+                                  "height": 8,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-57"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 12,
+                                  "y": 32,
+                                  "width": 12,
+                                  "height": 8,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-58"
+                                  }
+                                }
                               }
                             ]
                           }
@@ -5724,6 +7149,19 @@
                                   "element": {
                                     "kind": "ElementReference",
                                     "name": "panel-24"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 0,
+                                  "y": 24,
+                                  "width": 12,
+                                  "height": 8,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-59"
                                   }
                                 }
                               }
@@ -5939,6 +7377,32 @@
                                               "name": "panel-36"
                                             }
                                           }
+                                        },
+                                        {
+                                          "kind": "GridLayoutItem",
+                                          "spec": {
+                                            "x": 0,
+                                            "y": 16,
+                                            "width": 12,
+                                            "height": 8,
+                                            "element": {
+                                              "kind": "ElementReference",
+                                              "name": "panel-60"
+                                            }
+                                          }
+                                        },
+                                        {
+                                          "kind": "GridLayoutItem",
+                                          "spec": {
+                                            "x": 12,
+                                            "y": 16,
+                                            "width": 12,
+                                            "height": 8,
+                                            "element": {
+                                              "kind": "ElementReference",
+                                              "name": "panel-61"
+                                            }
+                                          }
                                         }
                                       ]
                                     }
@@ -5979,6 +7443,23 @@
                                               "kind": "ElementReference",
                                               "name": "panel-37"
                                             }
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "conditionalRendering": {
+                                    "kind": "ConditionalRenderingGroup",
+                                    "spec": {
+                                      "visibility": "show",
+                                      "condition": "and",
+                                      "items": [
+                                        {
+                                          "kind": "ConditionalRenderingVariable",
+                                          "spec": {
+                                            "variable": "has_encoding",
+                                            "operator": "matches",
+                                            "value": ".+"
                                           }
                                         }
                                       ]

@@ -7,7 +7,7 @@ directories:
     lazy: true
     git:
       url: https://github.com/zebradil/kasha
-      ref: v0.15.0
+      ref: v0.16.0
     includePaths:
     - deploy/grafana/kasha.json
     newRootPath: deploy/grafana
