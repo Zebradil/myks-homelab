@@ -4,9 +4,9 @@
 application:
   #! renovate: datasource=docker
   image: ghcr.io/zebradil/kasha-box:v0.14.0
-  #! The box runs natively on daddy (znix nixosModules.box); the Service
-  #! below points there. The Deployment stays at 0 replicas, with its PVC,
-  #! until the cutover has held.
+  #! The box runs natively on daddy (znix nixosModules.box), which serves
+  #! kasha.lan.zebradil.dev itself; this address is only scraped. The
+  #! Deployment stays at 0 replicas, with its PVC, until the cutover has held.
   boxAddress: 192.168.0.101
   storageSize: 250Gi
   port: 5000

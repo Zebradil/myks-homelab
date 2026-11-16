@@ -104,53 +104,15 @@ spec:
           persistentVolumeClaim:
             claimName: #@ name
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: #@ name
-  labels: #@ pod_labels
-spec:
-  ports:
-    - name: http
-      port: 80
-      targetPort: http
----
-#! Argo CD excludes EndpointSlices (argocd-cm resource.exclusions), so it never
-#! applies this one; apply it by hand after changing it:
-#!   kubectl -n kasha apply -f rendered/envs/alpha/kasha/endpointslice-kasha-box.yaml
-apiVersion: discovery.k8s.io/v1
-kind: EndpointSlice
-metadata:
-  name: #@ name + "-box"
-  labels:
-    kubernetes.io/service-name: #@ name
-addressType: IPv4
-ports:
-  - name: http
-    protocol: TCP
-    port: #@ a.port
-endpoints:
-  - addresses:
-      - #@ a.boxAddress
-    conditions:
-      ready: true
-      serving: true
-      terminating: false
----
-#! A hand-written EndpointSlice has no Endpoints object behind it, which the
-#! default `endpoints` discovery role reads, so discover by EndpointSlice.
+#! daddy serves kasha.lan.zebradil.dev itself (caddy, znix modules/hosts/daddy);
+#! the box's plain-HTTP port admits only the k3s nodes, so vmagent scrapes it
+#! by IP and kasha metrics do not depend on DNS or caddy.
 apiVersion: operator.victoriametrics.com/v1beta1
-kind: VMServiceScrape
+kind: VMStaticScrape
 metadata:
   name: #@ name + "-box"
-  labels: #@ pod_labels
 spec:
-  discoveryRole: endpointslices
-  endpoints:
-    - port: http
-      path: /metrics
-  namespaceSelector:
-    matchNames:
-      -  #@ name
-  selector:
-    matchLabels: #@ pod_labels
+  jobName: #@ name
+  targetEndpoints:
+    - targets:
+        -  #@ a.boxAddress + ":" + str(a.port)
