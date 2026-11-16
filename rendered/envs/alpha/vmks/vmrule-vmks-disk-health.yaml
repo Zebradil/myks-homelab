@@ -1,0 +1,37 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: vmks-disk-health
+spec:
+  groups:
+    - name: disk-health
+      rules:
+        - alert: SSDLifetimeLow
+          annotations:
+            description: '{{ $labels.device }} on {{ $labels.instance }} has {{ $value }}% of its rated lifetime left.'
+            summary: SSD is close to its rated write endurance.
+          expr: |
+            smartctl_device_attribute{job="smartctl-exporter", attribute_id="202", attribute_value_type="value"} < 20
+          for: 1h
+          labels:
+            severity: warning
+        - alert: DiskBadSectors
+          annotations:
+            description: '{{ $labels.device }} on {{ $labels.instance }} reports {{ $value }} {{ $labels.attribute_name }}.'
+            summary: Disk reports reallocated or pending sectors.
+          expr: |
+            smartctl_device_attribute{
+              job="smartctl-exporter", attribute_id=~"5|197|198", attribute_value_type="raw"
+            } > 0
+          for: 1h
+          labels:
+            severity: warning
+        - alert: BtrfsDeviceErrors
+          annotations:
+            description: '{{ $labels.device }} on {{ $labels.instance }} has {{ $value }} btrfs {{ $labels.type }} errors.'
+            summary: Btrfs recorded device errors.
+          expr: node_btrfs_device_errors_total{job="node-exporter"} > 0
+          labels:
+            severity: warning

@@ -1,0 +1,69 @@
+#! daddy is a NixOS box outside the cluster (znix modules/hosts/daddy). Its exporters run natively.
+#@ address = "192.168.0.101"
+
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMStaticScrape
+metadata:
+  name: daddy-node-exporter
+spec:
+  #! Same job as the in-cluster node-exporter, so the vendored node-exporter rules cover daddy too:
+  #! filesystem filling up, and NodeSystemdServiceFailed for a failed monthly btrfs scrub.
+  jobName: node-exporter
+  targetEndpoints:
+    - targets:
+        -  #@ address + ":9100"
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMStaticScrape
+metadata:
+  name: daddy-smartctl-exporter
+spec:
+  jobName: smartctl-exporter
+  targetEndpoints:
+    - targets:
+        -  #@ address + ":9633"
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: vmks-disk-health
+spec:
+  groups:
+    - name: disk-health
+      rules:
+        #! Crucial MX500: the normalized value of attribute 202 is the lifetime remaining; the raw value is
+        #! the lifetime used. It is the attribute that tracks wear from Nix builds and CI runners.
+        - alert: SSDLifetimeLow
+          expr: |
+            smartctl_device_attribute{job="smartctl-exporter", attribute_id="202", attribute_value_type="value"} < 20
+          for: 1h
+          labels:
+            severity: warning
+          annotations:
+            summary: SSD is close to its rated write endurance.
+            description: >-
+              {{ $labels.device }} on {{ $labels.instance }} has {{ $value }}% of its rated lifetime left.
+        #! Reallocated (5), pending (197) and offline-uncorrectable (198) sectors. The `for` rides out a
+        #! pending count that clears on the next write.
+        - alert: DiskBadSectors
+          expr: |
+            smartctl_device_attribute{
+              job="smartctl-exporter", attribute_id=~"5|197|198", attribute_value_type="raw"
+            } > 0
+          for: 1h
+          labels:
+            severity: warning
+          annotations:
+            summary: Disk reports reallocated or pending sectors.
+            description: >-
+              {{ $labels.device }} on {{ $labels.instance }} reports {{ $value }} {{ $labels.attribute_name }}.
+        #! The counters persist on disk; the alert clears after `btrfs device stats -z <mountpoint>`.
+        - alert: BtrfsDeviceErrors
+          expr: node_btrfs_device_errors_total{job="node-exporter"} > 0
+          labels:
+            severity: warning
+          annotations:
+            summary: Btrfs recorded device errors.
+            description: >-
+              {{ $labels.device }} on {{ $labels.instance }} has {{ $value }} btrfs {{ $labels.type }} errors.
