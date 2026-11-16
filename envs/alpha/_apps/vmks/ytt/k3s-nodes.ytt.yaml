@@ -1,0 +1,48 @@
+#! The k3s nodes run smartctl-exporter natively (znix modules/nixos/k3s-node.nix); node-exporter runs in-cluster.
+#! Wired addresses only: a dual-net host on its WiFi fallback shows as down here.
+#@ nodes = ["192.168.0.100", "192.168.0.111", "192.168.0.112", "192.168.0.113"]
+
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMStaticScrape
+metadata:
+  name: k3s-nodes-smartctl-exporter
+spec:
+  jobName: smartctl-exporter
+  targetEndpoints:
+    - targets: #@ [n + ":9633" for n in nodes]
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: vmks-nvme-health
+spec:
+  groups:
+    - name: nvme-health
+      rules:
+        #! NVMe reports endurance used, which can pass 100; 80 matches the 20%-remaining SATA SSD alert.
+        - alert: NVMeLifetimeLow
+          expr: smartctl_device_percentage_used{job="smartctl-exporter"} > 80
+          for: 1h
+          labels:
+            severity: warning
+          annotations:
+            summary: NVMe drive is close to its rated write endurance.
+            description: >-
+              {{ $labels.device }} on {{ $labels.instance }} has used {{ $value }}% of its rated endurance.
+        - alert: NVMeMediaErrors
+          expr: smartctl_device_media_errors{job="smartctl-exporter"} > 0
+          labels:
+            severity: warning
+          annotations:
+            summary: NVMe drive reports media errors.
+            description: >-
+              {{ $labels.device }} on {{ $labels.instance }} reports {{ $value }} media and data integrity errors.
+        - alert: NVMeCriticalWarning
+          expr: smartctl_device_critical_warning{job="smartctl-exporter"} > 0
+          labels:
+            severity: critical
+          annotations:
+            summary: NVMe drive raised a critical warning.
+            description: >-
+              {{ $labels.device }} on {{ $labels.instance }} has critical warning bits {{ $value }} set.
