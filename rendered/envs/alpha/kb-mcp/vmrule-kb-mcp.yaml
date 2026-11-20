@@ -1,0 +1,25 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: kb-mcp
+spec:
+  groups:
+    - name: kb-mcp
+      rules:
+        - alert: KbMcpGitPullFailing
+          annotations:
+            description: No successful git pull in 30 minutes, or the checkout diverged from origin. Writes still land locally but stay unpushed. Check kb_health and the pod logs for auto_pull; an ssh key or known_hosts problem shows up as result="fetch_failed".
+            summary: kb-mcp cannot sync the KB from GitHub
+          expr: (sum(increase(kbmcp_git_pull_total{result!~"up_to_date|updated"}[30m])) > 0 unless sum(increase(kbmcp_git_pull_total{result=~"up_to_date|updated"}[30m])) > 0) or max(kb_repo_behind_remote) == 1
+          for: 15m
+          labels:
+            severity: warning
+        - alert: KbMcpGitPushFailing
+          annotations:
+            description: Every auto-push in the last hour failed, so new KB commits exist only on the PVC. Check kb_health (kb_repo_unpushed_commits) and the pod logs for auto_push.
+            summary: kb-mcp writes are not reaching GitHub
+          expr: sum(increase(kbmcp_git_auto_push_failures_total[1h])) > 0 unless sum(increase(kbmcp_git_auto_push_total[1h])) > 0
+          labels:
+            severity: warning
