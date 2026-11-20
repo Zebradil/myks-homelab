@@ -103,8 +103,6 @@ spec:
           args:
             - |
               set -eu
-              #! ssh reads the key from /secrets; keep no private key copy on the PVC.
-              rm -f /data/state/git-key /data/state/known_hosts
               #! Sentinel gates the whole bootstrap, written only after clone AND
               #! kb-mcp init both succeed. If init dies after a successful clone,
               #! the sentinel is absent so the next start retries init (clone is
