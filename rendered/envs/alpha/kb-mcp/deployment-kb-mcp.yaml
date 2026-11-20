@@ -60,9 +60,11 @@ spec:
               value: /data/state/index.sqlite
           image: oci.zebradil.dev/zebradil/know-mcp@sha256:4c60c1f428862b264d20ca3fbbf37e67b28433245c1615675a621d371057cb7d
           livenessProbe:
-            httpGet:
-              path: /healthz
-              port: http
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - test "$(stat -c %a /data/state/git-key)" = 600 && wget -q -O /dev/null http://127.0.0.1:8080/healthz
             initialDelaySeconds: 10
             periodSeconds: 15
           name: kb-mcp

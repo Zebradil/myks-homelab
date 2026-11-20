@@ -143,10 +143,16 @@ spec:
           ports:
             - containerPort: 8080
               name: http
+          #! Also fails when the git key has drifted from 0600: ssh then refuses
+          #! it and every push/pull fails, and only a restart (init re-chmods)
+          #! fixes it. Push failures in general are not checked, since a GitHub
+          #! outage or rebase conflict would turn into a restart loop.
           livenessProbe:
-            httpGet:
-              path: /healthz
-              port: http
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - test "$(stat -c %a /data/state/git-key)" = 600 && wget -q -O /dev/null http://127.0.0.1:8080/healthz
             initialDelaySeconds: 10
             periodSeconds: 15
           readinessProbe:
