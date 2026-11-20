@@ -91,6 +91,10 @@ spec:
         runAsGroup: 65532
         runAsNonRoot: true
         fsGroup: 65532
+        #! Without this, kubelet re-applies fsGroup (g+rw) to every file on each
+        #! remount, e.g. a k3s restart, leaving the git key 0660 until the pod
+        #! restarts; ssh then refuses it and auto-push/pull fail silently.
+        fsGroupChangePolicy: OnRootMismatch
       initContainers:
         - name: init
           image: #@ a.image
