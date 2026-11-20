@@ -24,6 +24,8 @@ spec:
               value: "false"
             - name: KBMCP_LISTEN
               value: 0.0.0.0:8080
+            - name: KBMCP_METRICS_LISTEN
+              value: 0.0.0.0:9090
             - name: KBMCP_LOG_FORMAT
               value: json
             - name: KBMCP_GIT__AUTO_PUSH
@@ -49,7 +51,7 @@ spec:
             - name: HOME
               value: /data/state
             - name: GIT_SSH_COMMAND
-              value: ssh -i /data/state/git-key -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/data/state/known_hosts
+              value: ssh -i /secrets/git-key -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/secrets/known_hosts
             - name: KBMCP_GIT__BRANCH
               value: main
             - name: KBMCP_KB_PATH
@@ -60,17 +62,17 @@ spec:
               value: /data/state/index.sqlite
           image: oci.zebradil.dev/zebradil/know-mcp@sha256:4c60c1f428862b264d20ca3fbbf37e67b28433245c1615675a621d371057cb7d
           livenessProbe:
-            exec:
-              command:
-                - /bin/sh
-                - -c
-                - test "$(stat -c %a /data/state/git-key)" = 600 && wget -q -O /dev/null http://127.0.0.1:8080/healthz
+            httpGet:
+              path: /healthz
+              port: http
             initialDelaySeconds: 10
             periodSeconds: 15
           name: kb-mcp
           ports:
             - containerPort: 8080
               name: http
+            - containerPort: 9090
+              name: metrics
           readinessProbe:
             httpGet:
               path: /readyz
@@ -93,14 +95,15 @@ spec:
               name: know
             - mountPath: /data/state
               name: state
+            - mountPath: /secrets
+              name: git-secret
+              readOnly: true
       initContainers:
         - args:
             - |
               set -eu
-              cp /secrets/git-key /data/state/git-key
-              chmod 600 /data/state/git-key
-              cp /secrets/known_hosts /data/state/known_hosts
-              chmod 644 /data/state/known_hosts
+              #! ssh reads the key from /secrets; keep no private key copy on the PVC.
+              rm -f /data/state/git-key /data/state/known_hosts
               #! Sentinel gates the whole bootstrap, written only after clone AND
               #! kb-mcp init both succeed. If init dies after a successful clone,
               #! the sentinel is absent so the next start retries init (clone is
@@ -125,7 +128,7 @@ spec:
             - name: HOME
               value: /data/state
             - name: GIT_SSH_COMMAND
-              value: ssh -i /data/state/git-key -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/data/state/known_hosts
+              value: ssh -i /secrets/git-key -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/secrets/known_hosts
             - name: KBMCP_GIT__BRANCH
               value: main
             - name: KBMCP_KB_PATH

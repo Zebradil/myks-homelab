@@ -12,11 +12,12 @@
 
 #@ pod_labels = {"app.kubernetes.io/name": name}
 
-#! The deploy key + known_hosts are copied out of the read-only Secret mount
-#! into the state PVC so ssh sees a 0600 key owned by uid 65532 (ssh refuses
-#! group/other-readable keys). Re-copying on every start picks up rotation.
-#@ git_ssh_command = "ssh -i /data/state/git-key -o StrictHostKeyChecking=yes" + \
-#@   " -o UserKnownHostsFile=/data/state/known_hosts"
+#! ssh reads the deploy key straight from the Secret mount. Its files are owned
+#! by root, and ssh checks a key's mode only when the running user owns it
+#! (sshkey_perm_ok in OpenSSH authfile.c), so 0440 root:fsGroup is accepted.
+#! A copy owned by uid 65532 would be refused as soon as fsGroup made it g+rw.
+#@ git_ssh_command = "ssh -i /secrets/git-key -o StrictHostKeyChecking=yes" + \
+#@   " -o UserKnownHostsFile=/secrets/known_hosts"
 
 #@ common_envs = {
 #@   "HOME": "/data/state",
@@ -31,6 +32,7 @@
 #@ main_envs = {
 #@   "KBMCP_WATCH": "false",
 #@   "KBMCP_LISTEN": "0.0.0.0:8080",
+#@   "KBMCP_METRICS_LISTEN": "0.0.0.0:9090",
 #@   "KBMCP_LOG_FORMAT": "json",
 #@   "KBMCP_GIT__AUTO_PUSH": "true",
 #@   "KBMCP_GIT__AUTO_PULL__ENABLED": "true",
@@ -91,9 +93,8 @@ spec:
         runAsGroup: 65532
         runAsNonRoot: true
         fsGroup: 65532
-        #! Without this, kubelet re-applies fsGroup (g+rw) to every file on each
-        #! remount, e.g. a k3s restart, leaving the git key 0660 until the pod
-        #! restarts; ssh then refuses it and auto-push/pull fail silently.
+        #! Skip kubelet's recursive chown/chmod of both PVCs on every remount
+        #! (e.g. a k3s restart) once the volume root already matches fsGroup.
         fsGroupChangePolicy: OnRootMismatch
       initContainers:
         - name: init
@@ -102,10 +103,8 @@ spec:
           args:
             - |
               set -eu
-              cp /secrets/git-key /data/state/git-key
-              chmod 600 /data/state/git-key
-              cp /secrets/known_hosts /data/state/known_hosts
-              chmod 644 /data/state/known_hosts
+              #! ssh reads the key from /secrets; keep no private key copy on the PVC.
+              rm -f /data/state/git-key /data/state/known_hosts
               #! Sentinel gates the whole bootstrap, written only after clone AND
               #! kb-mcp init both succeed. If init dies after a successful clone,
               #! the sentinel is absent so the next start retries init (clone is
@@ -143,16 +142,12 @@ spec:
           ports:
             - containerPort: 8080
               name: http
-          #! Also fails when the git key has drifted from 0600: ssh then refuses
-          #! it and every push/pull fails, and only a restart (init re-chmods)
-          #! fixes it. Push failures in general are not checked, since a GitHub
-          #! outage or rebase conflict would turn into a restart loop.
+            - containerPort: 9090
+              name: metrics
           livenessProbe:
-            exec:
-              command:
-                - /bin/sh
-                - -c
-                - test "$(stat -c %a /data/state/git-key)" = 600 && wget -q -O /dev/null http://127.0.0.1:8080/healthz
+            httpGet:
+              path: /healthz
+              port: http
             initialDelaySeconds: 10
             periodSeconds: 15
           readinessProbe:
@@ -177,6 +172,9 @@ spec:
               mountPath: /data/know
             - name: state
               mountPath: /data/state
+            - name: git-secret
+              mountPath: /secrets
+              readOnly: true
       volumes:
         - name: know
           persistentVolumeClaim:
@@ -187,9 +185,9 @@ spec:
         - name: git-secret
           secret:
             secretName: kb-mcp-git
-            #! Private deploy key; init copies it to the state PVC at 0600. Mount
-            #! files are owned root:fsGroup(65532), so 0440 lets the non-root pod
-            #! read via its fsGroup without exposing the key to "other".
+            #! Mount files are owned root:fsGroup(65532), so 0440 lets the
+            #! non-root pod read the key via its fsGroup without exposing it to
+            #! "other".
             defaultMode: 0440
 ---
 apiVersion: v1
@@ -202,3 +200,52 @@ spec:
     - name: http
       port: 80
       targetPort: http
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMPodScrape
+metadata:
+  name: #@ name
+spec:
+  selector:
+    matchLabels: #@ pod_labels
+  podMetricsEndpoints:
+    - port: metrics
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: #@ name
+spec:
+  groups:
+    - name: kb-mcp
+      rules:
+        - alert: KbMcpGitPullFailing
+          #! Pull runs every 5 min, so 30m without a success is ~6 failed
+          #! fetches in a row. behind_remote == 1 covers a diverged or
+          #! mid-rebase repo, after which the pull loop stops counting.
+          expr: >-
+            (sum(increase(kbmcp_git_pull_total{result!~"up_to_date|updated"}[30m])) > 0
+            unless sum(increase(kbmcp_git_pull_total{result=~"up_to_date|updated"}[30m])) > 0)
+            or max(kb_repo_behind_remote) == 1
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: kb-mcp cannot sync the KB from GitHub
+            description: >-
+              No successful git pull in 30 minutes, or the checkout diverged from origin. Writes still land
+              locally but stay unpushed. Check kb_health and the pod logs for auto_pull; an ssh key or
+              known_hosts problem shows up as result="fetch_failed".
+        - alert: KbMcpGitPushFailing
+          #! Push runs only after a write, so this is silent while the KB is idle;
+          #! KbMcpGitPullFailing covers that case for auth and network faults.
+          expr: >-
+            sum(increase(kbmcp_git_auto_push_failures_total[1h])) > 0
+            unless sum(increase(kbmcp_git_auto_push_total[1h])) > 0
+          labels:
+            severity: warning
+          annotations:
+            summary: kb-mcp writes are not reaching GitHub
+            description: >-
+              Every auto-push in the last hour failed, so new KB commits exist only on the PVC. Check kb_health
+              (kb_repo_unpushed_commits) and the pod logs for auto_push.
