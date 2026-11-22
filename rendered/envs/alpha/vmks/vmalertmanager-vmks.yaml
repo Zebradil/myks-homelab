@@ -24,7 +24,17 @@ spec:
       cpu: 10m
       memory: 32Mi
   routePrefix: /
+  securityContext:
+    fsGroup: 1000
+    runAsGroup: 1000
+    runAsUser: 1000
   selectAllByDefault: true
+  storage:
+    volumeClaimTemplate:
+      spec:
+        resources:
+          requests:
+            storage: 1Gi
   templates:
     - key: monzo.tmpl
       name: vmalertmanager-vmks-monzo-tpl

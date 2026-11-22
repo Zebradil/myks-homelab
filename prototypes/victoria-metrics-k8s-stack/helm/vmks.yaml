@@ -40,6 +40,13 @@ vmalert:
 alertmanager:
   spec:
     resources: #@ res("10m", "32Mi", "128Mi")
+    #! Keeps silences and the notification log across pod restarts.
+    storage:
+      volumeClaimTemplate:
+        spec:
+          resources:
+            requests:
+              storage: 1Gi
 
 vmsingle:
   enabled: false
