@@ -17,6 +17,8 @@ spec:
     - name: http
       port: 80
       targetPort: http
+#! ArgoCD skips EndpointSlices (resource.exclusions in argocd-cm): apply this one by
+#! hand whenever it changes.
 ---
 apiVersion: discovery.k8s.io/v1
 kind: EndpointSlice
@@ -37,27 +39,3 @@ endpoints:
       serving: true
       terminating: false
 
-#! Kept until the library on daddy is checked against the media volume and
-#! the config is copied over; ArgoCD prunes whatever leaves this list.
-#@ pvcs = {
-#@   "cache": {"size": "3Gi"},
-#@   "config": {"size": "3Gi"},
-#@   "filebrowser-db": {"size": "1Gi"},
-#@   "media": {"size": "1000Gi", "class": "synology-iscsi-btrfs-retain-media-v1"},
-#@   "torrent-config": {"size": "1Gi"},
-#@ }
-#@ for/end id, cfg in pvcs.items():
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: #@ name + "-" + id
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: #@ cfg["size"]
-  #@ if "class" in cfg:
-  storageClassName: #@ cfg["class"]
-  #@ end
