@@ -1,4 +1,6 @@
 #! daddy is a NixOS box outside the cluster (znix modules/hosts/daddy). Its exporters run natively.
+#@ load("grafana.lib.yaml", "gen_dashboard")
+
 #@ address = "192.168.0.101"
 
 ---
@@ -23,6 +25,21 @@ spec:
   targetEndpoints:
     - targets:
         -  #@ address + ":9633"
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMStaticScrape
+metadata:
+  name: daddy-nvidia-gpu-exporter
+spec:
+  #! GTX 1070 Ti used by Jellyfin for NVENC transcoding.
+  jobName: nvidia-gpu-exporter
+  targetEndpoints:
+    - targets:
+        -  #@ address + ":9835"
+
+#! Grafana.com dashboard 14574 (revision 20), maintained with nvidia_gpu_exporter. It already
+#! binds every panel to a `datasource` variable, so it needs no rewriting.
+--- #@ gen_dashboard("nvidia-gpu-dashboard.json")
 ---
 apiVersion: operator.victoriametrics.com/v1beta1
 kind: VMRule
