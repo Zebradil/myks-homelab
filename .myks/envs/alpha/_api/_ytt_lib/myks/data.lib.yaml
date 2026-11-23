@@ -79,8 +79,8 @@ environment:
     name: ""
   - proto: webapp
     name: it-tools
-  - proto: jellyfin
-    name: ""
+  - proto: blank
+    name: jellyfin
   - proto: karma
     name: ""
   - proto: kasha

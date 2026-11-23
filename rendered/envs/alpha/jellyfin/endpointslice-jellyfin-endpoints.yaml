@@ -1,0 +1,20 @@
+addressType: IPv4
+apiVersion: discovery.k8s.io/v1
+endpoints:
+  - addresses:
+      - 192.168.0.101
+    conditions:
+      ready: true
+      serving: true
+      terminating: false
+kind: EndpointSlice
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    kubernetes.io/service-name: jellyfin
+  name: jellyfin-endpoints
+ports:
+  - name: http
+    port: 8096
+    protocol: TCP
