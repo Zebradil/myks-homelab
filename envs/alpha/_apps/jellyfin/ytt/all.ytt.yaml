@@ -1,0 +1,63 @@
+#@ load("@ytt:data", "data")
+#@ load("traefik.lib.yaml", "route")
+
+#@ name = data.values.myks.context.app
+
+#! Jellyfin runs natively on daddy (znix); the cluster keeps its URLs and TLS.
+#@ for/end route_doc in route.default(name):
+--- #@ route_doc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #@ name
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+---
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
+metadata:
+  name: #@ name + "-endpoints"
+  labels:
+    kubernetes.io/service-name: #@ name
+addressType: IPv4
+ports:
+  - name: http
+    protocol: TCP
+    port: 8096
+endpoints:
+  - addresses:
+      - 192.168.0.101
+    conditions:
+      ready: true
+      serving: true
+      terminating: false
+
+#! Kept until the library on daddy is checked against the media volume and
+#! the config is copied over; ArgoCD prunes whatever leaves this list.
+#@ pvcs = {
+#@   "cache": {"size": "3Gi"},
+#@   "config": {"size": "3Gi"},
+#@   "filebrowser-db": {"size": "1Gi"},
+#@   "media": {"size": "1000Gi", "class": "synology-iscsi-btrfs-retain-media-v1"},
+#@   "torrent-config": {"size": "1Gi"},
+#@ }
+#@ for/end id, cfg in pvcs.items():
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: #@ name + "-" + id
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: #@ cfg["size"]
+  #@ if "class" in cfg:
+  storageClassName: #@ cfg["class"]
+  #@ end

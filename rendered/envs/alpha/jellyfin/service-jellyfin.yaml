@@ -9,5 +9,3 @@ spec:
     - name: http
       port: 80
       targetPort: http
-  selector:
-    app: jellyfin

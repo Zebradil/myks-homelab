@@ -47,7 +47,8 @@ environment:
     - proto: image-puller
     - proto: webapp
       name: it-tools
-    - proto: jellyfin
+    - proto: blank
+      name: jellyfin
     - proto: karma
     - proto: kasha
     - proto: kb-mcp
