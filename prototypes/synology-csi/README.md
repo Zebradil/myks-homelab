@@ -62,6 +62,60 @@ The CA cannot be read from the TLS handshake: DSM sends only the leaf certificat
 3. Replace `tlsCACert` in `envs/alpha/_apps/synology-csi/app-data.ytt.yaml`, run `myks render alpha synology-csi`, and
    open a PR. The probe picks up the new CA from the same values.
 
+## Removing orphaned LUNs
+
+All storage classes use `reclaimPolicy: Retain`. Deleting a PVC leaves its PV in `Released`, and deleting that PV
+leaves the LUN and its iSCSI target on DSM, still taking space. Nothing in the cluster points at them any more, so they
+have to be found and deleted on DSM.
+
+A LUN's `uuid` is its PV's `spec.csi.volumeHandle`. The driver names the LUN and the target `k8s-csi-<pv name>` and sets
+the LUN description to `<namespace>/<pvc>`. Match by UUID, not by name: a LUN is orphaned when no PV carries its UUID.
+Delete any `Released` PVs you mean to drop first, since they still count as references.
+
+1. On a workstation, record the LUNs and targets still in use:
+
+   ```bash
+   kubectl get pv -o json | jq -r '.items[] | select(.spec.csi.driver=="csi.san.synology.com") | .spec.csi.volumeHandle' > handles.txt
+   kubectl get pv -o json | jq -r '.items[] | select(.spec.csi.driver=="csi.san.synology.com") | .metadata.name' > pv-names.txt
+   ```
+
+2. In an admin shell on the NAS, list LUNs and targets. `synowebapi` needs root, and its first output line is a log
+   line, hence the `sed`:
+
+   ```bash
+   sudo synowebapi --exec api=SYNO.Core.ISCSI.LUN method=list version=1 > luns.json 2>&1
+   sudo synowebapi --exec api=SYNO.Core.ISCSI.Target method=list version=1 \
+     additional='["mapped_lun","connected_sessions"]' > targets.json 2>&1
+   sed -i 1d luns.json targets.json
+   ```
+
+3. Copy both files next to the workstation lists and find the orphans:
+
+   ```bash
+   jq -r --rawfile h handles.txt '($h | split("\n")) as $hs | .data.luns[]
+     | select(.uuid as $u | $hs | index($u) | not)
+     | [.uuid, .name, .description, "\(.size / 1073741824 | floor)G"] | @tsv' luns.json
+   jq -r --rawfile n pv-names.txt '($n | split("\n")) as $ns | .data.targets[]
+     | (.name | sub("^k8s-csi-"; "")) as $pv | select($ns | index($pv) | not)
+     | [.target_id, .name, ((.mapped_luns // []) | map(.lun_uuid) | join(",")), "sessions=\(.connected_sessions | length)"]
+     | @tsv' targets.json
+   ```
+
+   Check the description of each LUN listed, and that every target listed has `sessions=0`. A target may have no LUN
+   left; it is deleted the same way.
+
+4. Delete each target, then its LUN. Deleting the target also removes the mapping. Both IDs are JSON strings, hence
+   the inner quotes:
+
+   ```bash
+   sudo synowebapi --exec api=SYNO.Core.ISCSI.Target method=delete version=1 target_id='"<target_id>"'
+   sudo synowebapi --exec api=SYNO.Core.ISCSI.LUN method=delete version=1 uuid='"<uuid>"'
+   ```
+
+   Each call prints `"success" : true`. This cannot be undone.
+
+5. Repeat steps 2 and 3: both lists should come back empty, with one LUN and one target per PV.
+
 ## Testing the alert with an invalid CA
 
 Do not put an invalid CA into `tlsCACert`: that breaks real CSI logins, which is the outage this alert exists for.
