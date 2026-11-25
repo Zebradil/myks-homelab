@@ -24,3 +24,39 @@ metadata:
   name: #@ a._.secretName
   namespace: #@ dv.myks.context.app
 stringData: #@ { "github_app_" + k: sops("0", k) for k in ["id", "installation_id", "private_key"] }
+---
+#! Adds to the environment's restrict-egress policy (DNS, same namespace).
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: runner-network
+  namespace: #@ dv.myks.context.app
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress
+  #! Nothing connects to runner pods.
+  ingress: []
+  egress:
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            #! RFC 1918 also covers k3s's default pod (10.42/16) and service
+            #! (10.43/16) CIDRs; 100.64/10 covers CGNAT and Tailscale.
+            except:
+              - 0.0.0.0/8
+              - 10.0.0.0/8
+              - 100.64.0.0/10
+              - 127.0.0.0/8
+              - 169.254.0.0/16
+              - 172.16.0.0/12
+              - 192.168.0.0/16
+    - to:
+        - ipBlock:
+            cidr: #@ a.daddyAddress + "/32"
+      ports:
+        - port: 22
+          protocol: TCP
+        - port: 443
+          protocol: TCP
