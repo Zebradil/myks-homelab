@@ -1,0 +1,10 @@
+apiVersion: scheduling.k8s.io/v1
+description: Ephemeral GitHub Actions runner pods.
+globalDefault: false
+kind: PriorityClass
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  name: homelab-runner
+preemptionPolicy: Never
+value: -100

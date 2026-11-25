@@ -6,7 +6,7 @@ application:
     - slacktus
   githubOwner: Zebradil
   runnerLabel: homelab
-  maxRunners: 1
+  maxRunners: 2
   daddyAddress: 192.168.0.101
 argocd:
   app:

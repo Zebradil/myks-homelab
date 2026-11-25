@@ -20,3 +20,4 @@ application:
     chartPrefix: homelab-
     #! Listeners run here too, keeping them out of the runner namespace's quota.
     controllerNamespace: arc-system
+    priorityClassName: homelab-runner
