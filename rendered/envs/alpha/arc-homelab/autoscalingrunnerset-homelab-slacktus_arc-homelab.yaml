@@ -6,7 +6,7 @@ metadata:
     actions.github.com/cleanup-manager-role-binding: homelab-slacktus-gha-rs-manager
     actions.github.com/cleanup-manager-role-name: homelab-slacktus-gha-rs-manager
     actions.github.com/cleanup-no-permission-service-account-name: homelab-slacktus-gha-rs-no-permission
-    actions.github.com/values-hash: 18a7d17922012b9fbb826a32c58c3bd6a64cad29b53b2ec08a1bed23a2e64a6
+    actions.github.com/values-hash: 607b53bf2f6cc79fb224be5502659fd9ee5650cde119c445e0ad2ef1467ebe7
   labels:
     actions.github.com/scale-set-name: homelab-slacktus
     actions.github.com/scale-set-namespace: arc-homelab

@@ -6,7 +6,7 @@ metadata:
     actions.github.com/cleanup-manager-role-binding: homelab-github-actions-playground-gha-rs-manager
     actions.github.com/cleanup-manager-role-name: homelab-github-actions-playground-gha-rs-manager
     actions.github.com/cleanup-no-permission-service-account-name: homelab-github-actions-playground-gha-rs-no-permission
-    actions.github.com/values-hash: 3666082c8fe6e6821c6a1055d161cbc09ca6668e8ea1d2ffe11917853098c26
+    actions.github.com/values-hash: fa543780139b6fc7790ea7afb44589801e21e8e9db754074190cd9ead3cc230
   labels:
     actions.github.com/scale-set-name: homelab-github-actions-playground
     actions.github.com/scale-set-namespace: arc-homelab
