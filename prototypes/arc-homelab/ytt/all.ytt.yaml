@@ -4,13 +4,19 @@
 #@ dv = data.values
 #@ a = dv.application
 
-#@ for ns in [a._.controllerNamespace, dv.myks.context.app]:
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: #@ ns
-#@ end
+  name: #@ a._.controllerNamespace
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: #@ dv.myks.context.app
+  labels:
+    #! Only runner pods live here (listeners run in the controller namespace).
+    pod-security.kubernetes.io/enforce: restricted
 ---
 apiVersion: v1
 kind: Secret

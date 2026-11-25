@@ -6,7 +6,7 @@ metadata:
     actions.github.com/cleanup-manager-role-binding: homelab-slacktus-gha-rs-manager
     actions.github.com/cleanup-manager-role-name: homelab-slacktus-gha-rs-manager
     actions.github.com/cleanup-no-permission-service-account-name: homelab-slacktus-gha-rs-no-permission
-    actions.github.com/values-hash: 8bf6db8b91d9c1389c316ff56d499606c8f455b193897ec9b4424c9662bcce1
+    actions.github.com/values-hash: e3ab131e1078cd3c133147fa0cb9a47c51e6a1ae0bc03e35047b181858d5897
   labels:
     actions.github.com/scale-set-name: homelab-slacktus
     actions.github.com/scale-set-namespace: arc-homelab
@@ -42,10 +42,22 @@ spec:
     - homelab
   template:
     spec:
+      automountServiceAccountToken: false
       containers:
         - command:
             - /bin/run.sh
           image: oci.zebradil.dev/ghcr.io-cache/zebradil/homelab-runner@sha256:a72874eb1253216db720fcc61b606033431030c5da0202a230888c965068d610
           name: runner
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
       restartPolicy: Never
+      securityContext:
+        runAsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+        seccompProfile:
+          type: RuntimeDefault
       serviceAccountName: homelab-slacktus-gha-rs-no-permission
