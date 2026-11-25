@@ -6,7 +6,7 @@ metadata:
     actions.github.com/cleanup-manager-role-binding: homelab-github-actions-playground-gha-rs-manager
     actions.github.com/cleanup-manager-role-name: homelab-github-actions-playground-gha-rs-manager
     actions.github.com/cleanup-no-permission-service-account-name: homelab-github-actions-playground-gha-rs-no-permission
-    actions.github.com/values-hash: 6e421e39c729f0435c28326bb012c50bfa03588c9c80a26ac9885aacac19d19
+    actions.github.com/values-hash: 31818041ed3c47d16e656c7b01f12df781ae591b75420144f9e5ded408c3c01
   labels:
     actions.github.com/scale-set-name: homelab-github-actions-playground
     actions.github.com/scale-set-namespace: arc-homelab
@@ -44,8 +44,8 @@ spec:
     spec:
       containers:
         - command:
-            - /home/runner/run.sh
-          image: oci.zebradil.dev/ghcr.io-cache/actions/actions-runner@sha256:6d0b2d80d80f143f77dcb676e50920100bbb547e39e883454d57f45ab8c31300
+            - /bin/run.sh
+          image: oci.zebradil.dev/ghcr.io-cache/zebradil/homelab-runner@sha256:a72874eb1253216db720fcc61b606033431030c5da0202a230888c965068d610
           name: runner
       restartPolicy: Never
       serviceAccountName: homelab-github-actions-playground-gha-rs-no-permission

@@ -25,4 +25,12 @@ listenerTemplate:
       #! The chart merges a container named "listener" into its own listener container.
       - name: listener
         resources: #@ res("10m", "32Mi", "128Mi")
+template:
+  spec:
+    containers:
+      - name: runner
+        #! Built and published by znix (modules/flake/homelab-runner.nix); Renovate follows the digest of `latest`.
+        #! renovate: datasource=docker digest
+        image: ghcr.io/zebradil/homelab-runner:latest@sha256:a72874eb1253216db720fcc61b606033431030c5da0202a230888c965068d610
+        command: [/bin/run.sh]
 #@ end

@@ -77,6 +77,15 @@
       ],
       "matchCurrentValue": "/^latest$/",
       "rangeStrategy": "pin"
+    },
+    {
+      "description": "The homelab runner image changes with almost every znix lock bump; one digest update a week is enough to keep the runner within GitHub's support window.",
+      "matchPackageNames": [
+        "ghcr.io/zebradil/homelab-runner"
+      ],
+      "schedule": [
+        "* 0-5 * * 1"
+      ]
     }
   ],
   "ignorePaths": [
@@ -102,6 +111,7 @@
       ],
       "matchStrings": [
         "#! renovate: datasource=(?<datasource>docker)(?: versioning=(?<versioning>[a-z-]+?))?\\s* image: ['\"]?(?<depName>\\S+):(?<currentValue>[^'\"\\s]+)['\"]?",
+        "#! renovate: datasource=(?<datasource>docker) digest\\s* image: ['\"]?(?<depName>[^\\s:@]+):(?<currentValue>[^'\"\\s@]+)@(?<currentDigest>sha256:[a-f0-9]+)['\"]?",
         "#! renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\s* [^\\s:]+: ['\"]?(?<currentValue>[^'\"\\s]+)['\"]?"
       ]
     },
