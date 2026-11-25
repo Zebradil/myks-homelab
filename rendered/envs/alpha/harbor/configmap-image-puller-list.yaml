@@ -2,15 +2,15 @@ apiVersion: v1
 data:
   images.txt: |
     ---
-    - image: index.docker.io/goharbor/harbor-core@sha256:7d2ba5304a729887cdec7cb222a82b500278423de230ae5150c386a6c332b112
-    - image: index.docker.io/goharbor/harbor-db@sha256:a32d51e636d76303e086a7c5251a2c8415c6f165b2f87bafa914efd866c5403f
-    - image: index.docker.io/goharbor/harbor-exporter@sha256:9ffede33dc519b4be035596a72f00f354754a22a3769077731f81ee7d6852f4f
-    - image: index.docker.io/goharbor/harbor-jobservice@sha256:f143578ef30e2be5c48873298257ed0fca31545025958c534e536a06765d2b82
-    - image: index.docker.io/goharbor/harbor-portal@sha256:01edf478505b21dba23a83c095f6ecac0c1e705690093edbab41e9a4d6754a75
-    - image: index.docker.io/goharbor/harbor-registryctl@sha256:30bd1ace4e3bb390d75b84673f98ddb4a69fcc6d116932ea764391df01943fb7
-    - image: index.docker.io/goharbor/valkey-photon@sha256:bb022e8f236f56f53cee7bb1f609595e497da67d829048e0af2284f97e6eb54f
-    - image: index.docker.io/goharbor/registry-photon@sha256:dc0cb388a6445c69c8a0c406679290d2991c9698833d9e6e86a23bdfaf2f83c3
-    - image: index.docker.io/goharbor/trivy-adapter-photon@sha256:813ca81b4a4ea0f44f5fa81cca2645eeb58d4b1f6c66b428df9d506174bb71d9
+    - image: index.docker.io/goharbor/harbor-core@sha256:0cf4b2269955cb88b0617518573426383705cc9ed54af2801a0a26afc95a3a71
+    - image: index.docker.io/goharbor/harbor-db@sha256:051b774efcad4e169f6c225906a592756d30f32e01dc0ced34e03df186162e6b
+    - image: index.docker.io/goharbor/harbor-exporter@sha256:e3445a81c0a13a18f8b9a73ff11f0e83ab7e08474f7cac80b419abef4e782f4d
+    - image: index.docker.io/goharbor/harbor-jobservice@sha256:72f2ea2daf9f4279be54775090d2dcb6834e111ac635df8f6a88d13536785f60
+    - image: index.docker.io/goharbor/harbor-portal@sha256:58f6b3f0e2a1ba17c1305e76a817421647fba10671030b8b5aa1cf7819d5eecd
+    - image: index.docker.io/goharbor/harbor-registryctl@sha256:6763c946ced0434b3c98f051003a25ed38724c8187a46a3917e1ded6826d3c12
+    - image: index.docker.io/goharbor/valkey-photon@sha256:33fcd8ecfc10d44c9037f4398adf9f79cee22c6053f03e71abac227037f2f4a5
+    - image: index.docker.io/goharbor/registry-photon@sha256:e345b0283d520a567c2fdaf91497d8928e0453f2880c14541e13330e6ba16c9a
+    - image: index.docker.io/goharbor/trivy-adapter-photon@sha256:b074ef1da4e69bb1d5bb489db36dabea96c57fdac71e689078e9589847f869ae
 kind: ConfigMap
 metadata:
   annotations:

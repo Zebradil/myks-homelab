@@ -48,7 +48,7 @@ spec:
           envFrom:
             - secretRef:
                 name: harbor-registry
-          image: index.docker.io/goharbor/registry-photon@sha256:dc0cb388a6445c69c8a0c406679290d2991c9698833d9e6e86a23bdfaf2f83c3
+          image: index.docker.io/goharbor/registry-photon@sha256:e345b0283d520a567c2fdaf91497d8928e0453f2880c14541e13330e6ba16c9a
           livenessProbe:
             failureThreshold: 3
             httpGet:
@@ -116,7 +116,7 @@ spec:
                 name: harbor-registry
             - secretRef:
                 name: harbor-registryctl
-          image: index.docker.io/goharbor/harbor-registryctl@sha256:30bd1ace4e3bb390d75b84673f98ddb4a69fcc6d116932ea764391df01943fb7
+          image: index.docker.io/goharbor/harbor-registryctl@sha256:6763c946ced0434b3c98f051003a25ed38724c8187a46a3917e1ded6826d3c12
           livenessProbe:
             failureThreshold: 3
             httpGet:

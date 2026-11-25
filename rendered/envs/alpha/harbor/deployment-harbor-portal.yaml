@@ -38,7 +38,7 @@ spec:
     spec:
       automountServiceAccountToken: false
       containers:
-        - image: index.docker.io/goharbor/harbor-portal@sha256:01edf478505b21dba23a83c095f6ecac0c1e705690093edbab41e9a4d6754a75
+        - image: index.docker.io/goharbor/harbor-portal@sha256:58f6b3f0e2a1ba17c1305e76a817421647fba10671030b8b5aa1cf7819d5eecd
           livenessProbe:
             failureThreshold: 3
             httpGet:
