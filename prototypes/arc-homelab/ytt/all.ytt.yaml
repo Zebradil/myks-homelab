@@ -90,3 +90,51 @@ value: -100
 preemptionPolicy: Never
 globalDefault: false
 description: Ephemeral GitHub Actions runner pods.
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMPodScrape
+metadata:
+  name: arc-controller
+  namespace: #@ a._.controllerNamespace
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/part-of: gha-rs-controller
+  podMetricsEndpoints:
+    - port: metrics
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMPodScrape
+metadata:
+  name: arc-listeners
+  namespace: #@ a._.controllerNamespace
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: runner-scale-set-listener
+  podMetricsEndpoints:
+    - port: metrics
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: arc-homelab
+  namespace: #@ a._.controllerNamespace
+spec:
+  groups:
+    - name: arc-homelab
+      rules:
+        - alert: HomelabRunnerJobsPending
+          #! Assigned counts jobs GitHub handed to the scale set; running counts
+          #! those a runner has picked up. The gap is jobs waiting for a pod.
+          expr: max by (repository) (gha_assigned_jobs - gha_running_jobs) > 0
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Jobs for {{ $labels.repository }} wait for a homelab runner"
+            description: >-
+              {{ $value }} job(s) assigned to the homelab scale set have had no runner for 10 minutes. Either runner
+              pods cannot start (image pull, ResourceQuota `runners`, scheduling: check `kubectl -n arc-homelab get
+              ephemeralrunners,pods` and events) or more jobs are queued than the pool holds (maxRunners 2 per
+              repository, 4 pods in total).
