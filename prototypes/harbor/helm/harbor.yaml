@@ -11,7 +11,7 @@ externalURL: #@ "https://" + host
 persistence:
   persistentVolumeClaim:
     registry:
-      size: 50Gi
+      size: 75Gi
     jobservice:
       jobLog:
         size: 1Gi
@@ -84,7 +84,6 @@ database:
   internal:
     #! The initial superuser password for internal database
     password: #@ sops("1", "databasePassword")
-
 
 #! Set versions manually to synchronize them with the image-puller jobs.
 ---
