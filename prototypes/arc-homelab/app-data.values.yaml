@@ -3,6 +3,7 @@
 application:
   repos:
     - github-actions-playground
+    - kasha
     - slacktus
   githubOwner: Zebradil
   runnerLabel: homelab
