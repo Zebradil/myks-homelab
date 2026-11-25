@@ -1,0 +1,895 @@
+apiVersion: v1
+data:
+  arc-homelab-dashboard.json: |-
+    {
+      "description": "ARC scale sets on the homelab cluster (runs-on: homelab) and the daddy host their builds run on.",
+      "editable": true,
+      "graphTooltip": 1,
+      "panels": [
+        {
+          "collapsed": false,
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "id": 1,
+          "panels": [],
+          "title": "Now",
+          "type": "row"
+        },
+        {
+          "datasource": {
+            "type": "prometheus"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "blue",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 4,
+            "x": 0,
+            "y": 1
+          },
+          "id": 2,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ]
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus"
+              },
+              "expr": "sum(gha_running_jobs{repository=~\"$repository\"})",
+              "legendFormat": "__auto",
+              "refId": "A"
+            }
+          ],
+          "title": "Running jobs",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "prometheus"
+          },
+          "description": "Jobs GitHub assigned to a homelab scale set that no runner has picked up yet. HomelabRunnerJobsPending fires after 10 minutes above zero.",
+          "fieldConfig": {
+            "defaults": {
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 1
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 4,
+            "x": 4,
+            "y": 1
+          },
+          "id": 3,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ]
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus"
+              },
+              "expr": "sum(gha_assigned_jobs{repository=~\"$repository\"} - gha_running_jobs{repository=~\"$repository\"})",
+              "legendFormat": "__auto",
+              "refId": "A"
+            }
+          ],
+          "title": "Waiting jobs",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "prometheus"
+          },
+          "description": "Pods counted against the `runners` ResourceQuota (hard limit 4, shared by all repositories).",
+          "fieldConfig": {
+            "defaults": {
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 4
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 4,
+            "x": 8,
+            "y": 1
+          },
+          "id": 4,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ]
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus"
+              },
+              "expr": "sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"used\"})",
+              "legendFormat": "__auto",
+              "refId": "A"
+            }
+          ],
+          "title": "Runner pods",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "prometheus"
+          },
+          "description": "Listener pods the ARC controller reports running, one per repository. Without its listener a repository's jobs stay queued.",
+          "fieldConfig": {
+            "defaults": {
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "red",
+                    "value": null
+                  },
+                  {
+                    "color": "green",
+                    "value": 1
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 4,
+            "x": 12,
+            "y": 1
+          },
+          "id": 5,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ]
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus"
+              },
+              "expr": "sum(gha_controller_running_listeners)",
+              "legendFormat": "__auto",
+              "refId": "A"
+            }
+          ],
+          "title": "Listeners",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "prometheus"
+          },
+          "description": "Over the selected time range. Listener restarts reset the counter; increase() absorbs that.",
+          "fieldConfig": {
+            "defaults": {
+              "decimals": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "blue",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 4,
+            "x": 16,
+            "y": 1
+          },
+          "id": 6,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ]
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus"
+              },
+              "expr": "sum(increase(gha_completed_jobs_total{repository=~\"$repository\"}[$__range])) or vector(0)",
+              "legendFormat": "__auto",
+              "refId": "A"
+            }
+          ],
+          "title": "Jobs completed",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "prometheus"
+          },
+          "description": "Failed, cancelled or skipped jobs over the selected time range.",
+          "fieldConfig": {
+            "defaults": {
+              "decimals": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 1
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 4,
+            "x": 20,
+            "y": 1
+          },
+          "id": 7,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ]
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus"
+              },
+              "expr": "sum(increase(gha_completed_jobs_total{repository=~\"$repository\", job_result!=\"succeeded\"}[$__range])) or vector(0)",
+              "legendFormat": "__auto",
+              "refId": "A"
+            }
+          ],
+          "title": "Jobs not succeeded",
+          "type": "stat"
+        },
+        {
+          "collapsed": false,
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 5
+          },
+          "id": 8,
+          "panels": [],
+          "title": "Scale sets",
+          "type": "row"
+        },
+        {
+          "datasource": {
+            "type": "prometheus"
+          },
+          "description": "Assigned above running means jobs are waiting for a runner pod.",
+          "fieldConfig": {
+            "defaults": {
+              "decimals": 0
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 6
+          },
+          "id": 9,
+          "options": {},
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus"
+              },
+              "expr": "sum by (repository) (gha_assigned_jobs{repository=~\"$repository\"})",
+              "legendFormat": "{{repository}} assigned",
+              "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus"
+              },
+              "expr": "sum by (repository) (gha_running_jobs{repository=~\"$repository\"})",
+              "legendFormat": "{{repository}} running",
+              "refId": "B"
+            }
+          ],
+          "title": "Jobs by repository",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus"
+          },
+          "description": "Desired comes from the listener, registered and busy from GitHub, pending and failed from the controller's EphemeralRunner objects.",
+          "fieldConfig": {
+            "defaults": {
+              "decimals": 0
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 6
+          },
+          "id": 10,
+          "options": {},
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus"
+              },
+              "expr": "sum(gha_desired_runners{repository=~\"$repository\"})",
+              "legendFormat": "desired",
+              "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus"
+              },
+              "expr": "sum(gha_registered_runners{repository=~\"$repository\"})",
+              "legendFormat": "registered",
+              "refId": "B"
+            },
+            {
+              "datasource": {
+                "type": "prometheus"
+              },
+              "expr": "sum(gha_busy_runners{repository=~\"$repository\"})",
+              "legendFormat": "busy",
+              "refId": "C"
+            },
+            {
+              "datasource": {
+                "type": "prometheus"
+              },
+              "expr": "sum(gha_controller_pending_ephemeral_runners{repository=~\"$repository\"}) or vector(0)",
+              "legendFormat": "pending pods",
+              "refId": "D"
+            },
+            {
+              "datasource": {
+                "type": "prometheus"
+              },
+              "expr": "sum(gha_controller_failed_ephemeral_runners{repository=~\"$repository\"}) or vector(0)",
+              "legendFormat": "failed",
+              "refId": "E"
+            }
+          ],
+          "title": "Runners",
+          "type": "timeseries"
+        },
+        {
+          "collapsed": false,
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 14
+          },
+          "id": 11,
+          "panels": [],
+          "title": "Jobs",
+          "type": "row"
+        },
+        {
+          "datasource": {
+            "type": "prometheus"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "drawStyle": "bars",
+                "fillOpacity": 80,
+                "stacking": {
+                  "mode": "normal"
+                }
+              },
+              "decimals": 0
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 8,
+            "x": 0,
+            "y": 15
+          },
+          "id": 12,
+          "options": {},
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus"
+              },
+              "expr": "sum by (job_result) (increase(gha_completed_jobs_total{repository=~\"$repository\"}[1h]))",
+              "interval": "1h",
+              "legendFormat": "{{job_result}}",
+              "refId": "A"
+            }
+          ],
+          "title": "Jobs completed per hour",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus"
+          },
+          "description": "ARC's job startup duration: from GitHub assigning the job to the runner starting it, so it includes pod scheduling, image pull and runner registration. Hourly windows; histogram buckets make it approximate.",
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 8,
+            "x": 8,
+            "y": 15
+          },
+          "id": 13,
+          "options": {},
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus"
+              },
+              "expr": "histogram_quantile(0.5, sum by (le) (increase(gha_job_startup_duration_seconds_bucket{repository=~\"$repository\"}[1h])))",
+              "legendFormat": "p50",
+              "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus"
+              },
+              "expr": "histogram_quantile(0.95, sum by (le) (increase(gha_job_startup_duration_seconds_bucket{repository=~\"$repository\"}[1h])))",
+              "legendFormat": "p95",
+              "refId": "B"
+            }
+          ],
+          "title": "Queue time (assigned to started)",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus"
+          },
+          "description": "Hourly windows; histogram buckets make it approximate.",
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 8,
+            "x": 16,
+            "y": 15
+          },
+          "id": 14,
+          "options": {},
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus"
+              },
+              "expr": "histogram_quantile(0.5, sum by (repository, le) (increase(gha_job_execution_duration_seconds_bucket{repository=~\"$repository\"}[1h])))",
+              "legendFormat": "{{repository}} p50",
+              "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus"
+              },
+              "expr": "histogram_quantile(0.95, sum by (repository, le) (increase(gha_job_execution_duration_seconds_bucket{repository=~\"$repository\"}[1h])))",
+              "legendFormat": "{{repository}} p95",
+              "refId": "B"
+            }
+          ],
+          "title": "Job duration by repository",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus"
+          },
+          "description": "Per workflow job. Medians come from histogram buckets, so they are approximate.",
+          "fieldConfig": {
+            "defaults": {
+              "decimals": 0
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byRegexp",
+                  "options": "Median.*"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "s"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 23
+          },
+          "id": 15,
+          "options": {
+            "sortBy": [
+              {
+                "desc": true,
+                "displayName": "Runs"
+              }
+            ]
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus"
+              },
+              "expr": "sum by (repository, job_name) (increase(gha_completed_jobs_total{repository=~\"$repository\"}[$__range]))",
+              "format": "table",
+              "instant": true,
+              "legendFormat": "__auto",
+              "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus"
+              },
+              "expr": "sum by (repository, job_name) (increase(gha_completed_jobs_total{repository=~\"$repository\", job_result!=\"succeeded\"}[$__range]))",
+              "format": "table",
+              "instant": true,
+              "legendFormat": "__auto",
+              "refId": "B"
+            },
+            {
+              "datasource": {
+                "type": "prometheus"
+              },
+              "expr": "histogram_quantile(0.5, sum by (repository, job_name, le) (increase(gha_job_startup_duration_seconds_bucket{repository=~\"$repository\"}[$__range])))",
+              "format": "table",
+              "instant": true,
+              "legendFormat": "__auto",
+              "refId": "C"
+            },
+            {
+              "datasource": {
+                "type": "prometheus"
+              },
+              "expr": "histogram_quantile(0.5, sum by (repository, job_name, le) (increase(gha_job_execution_duration_seconds_bucket{repository=~\"$repository\"}[$__range])))",
+              "format": "table",
+              "instant": true,
+              "legendFormat": "__auto",
+              "refId": "D"
+            }
+          ],
+          "title": "Jobs over the time range",
+          "transformations": [
+            {
+              "id": "merge",
+              "options": {}
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "renameByName": {
+                  "Value #A": "Runs",
+                  "Value #B": "Not succeeded",
+                  "Value #C": "Median queue time",
+                  "Value #D": "Median duration",
+                  "job_name": "Job",
+                  "repository": "Repository"
+                }
+              }
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "collapsed": false,
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 31
+          },
+          "id": 16,
+          "panels": [],
+          "title": "Resources",
+          "type": "row"
+        },
+        {
+          "datasource": {
+            "type": "prometheus"
+          },
+          "description": "Request 1 core, no CPU limit.",
+          "fieldConfig": {
+            "defaults": {
+              "unit": "cores"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 6,
+            "x": 0,
+            "y": 32
+          },
+          "id": 17,
+          "options": {},
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus"
+              },
+              "expr": "sum by (pod) (rate(container_cpu_usage_seconds_total{namespace=\"arc-homelab\",container=\"runner\"}[$__rate_interval]))",
+              "legendFormat": "{{pod}}",
+              "refId": "A"
+            }
+          ],
+          "title": "Runner pod CPU",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus"
+          },
+          "description": "Request 2 GiB, limit 6 GiB.",
+          "fieldConfig": {
+            "defaults": {
+              "unit": "bytes"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 6,
+            "x": 6,
+            "y": 32
+          },
+          "id": 18,
+          "options": {},
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus"
+              },
+              "expr": "sum by (pod) (container_memory_working_set_bytes{namespace=\"arc-homelab\",container=\"runner\"})",
+              "legendFormat": "{{pod}}",
+              "refId": "A"
+            }
+          ],
+          "title": "Runner pod memory",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus"
+          },
+          "description": "daddy runs the nixci builds (and later BuildKit), plus kasha and Jellyfin.",
+          "fieldConfig": {
+            "defaults": {
+              "max": 1,
+              "min": 0,
+              "unit": "percentunit"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 6,
+            "x": 12,
+            "y": 32
+          },
+          "id": 19,
+          "options": {},
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus"
+              },
+              "expr": "1 - avg(rate(node_cpu_seconds_total{instance=\"$daddy\",mode=\"idle\"}[$__rate_interval]))",
+              "legendFormat": "CPU busy",
+              "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus"
+              },
+              "expr": "1 - node_memory_MemAvailable_bytes{instance=\"$daddy\"} / node_memory_MemTotal_bytes{instance=\"$daddy\"}",
+              "legendFormat": "memory used",
+              "refId": "B"
+            }
+          ],
+          "title": "daddy CPU and memory",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus"
+          },
+          "description": "Writes plotted below zero.",
+          "fieldConfig": {
+            "defaults": {
+              "unit": "Bps"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 6,
+            "x": 18,
+            "y": 32
+          },
+          "id": 20,
+          "options": {},
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus"
+              },
+              "expr": "sum by (device) (rate(node_disk_read_bytes_total{instance=\"$daddy\",device!~\"loop.*|zram.*\"}[$__rate_interval]))",
+              "legendFormat": "{{device}} read",
+              "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus"
+              },
+              "expr": "-sum by (device) (rate(node_disk_written_bytes_total{instance=\"$daddy\",device!~\"loop.*|zram.*\"}[$__rate_interval]))",
+              "legendFormat": "{{device}} write",
+              "refId": "B"
+            }
+          ],
+          "title": "daddy disk I/O",
+          "type": "timeseries"
+        }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 42,
+      "tags": [
+        "arc",
+        "ci",
+        "github-actions"
+      ],
+      "templating": {
+        "list": [
+          {
+            "allValue": ".*",
+            "current": {
+              "text": "All",
+              "value": "$__all"
+            },
+            "datasource": {
+              "type": "prometheus"
+            },
+            "includeAll": true,
+            "label": "Repository",
+            "multi": true,
+            "name": "repository",
+            "query": "label_values(gha_max_runners, repository)",
+            "refresh": 2,
+            "sort": 1,
+            "type": "query"
+          },
+          {
+            "hide": 2,
+            "name": "daddy",
+            "query": "192.168.0.101:9100",
+            "type": "constant"
+          }
+        ]
+      },
+      "time": {
+        "from": "now-24h",
+        "to": "now"
+      },
+      "timezone": "browser",
+      "title": "Homelab runners",
+      "uid": "homelab-runners"
+    }
+kind: ConfigMap
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    grafana_dashboard: "1"
+  name: arc-homelab-dashboard
