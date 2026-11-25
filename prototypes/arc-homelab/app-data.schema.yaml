@@ -10,10 +10,10 @@ application:
   #@schema/validation min_len=1
   runnerLabel: ''
   maxRunners: 1
-  #@schema/validation min_len=1
-  controllerNamespace: ''
 
   #! values shared across plugins, do not change
   _:
     secretName: arc-homelab-app-credentials
     chartPrefix: homelab-
+    #! Listeners run here too, keeping them out of the runner namespace's quota.
+    controllerNamespace: arc-system

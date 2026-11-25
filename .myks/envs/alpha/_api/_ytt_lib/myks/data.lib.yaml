@@ -55,8 +55,6 @@ environment:
   applications:
   - proto: webapp
     name: airgradient-exporter
-  - proto: arc
-    name: ""
   - proto: arc-homelab
     name: ""
   - proto: argocd

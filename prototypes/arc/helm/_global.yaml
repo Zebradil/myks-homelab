@@ -1,4 +1,0 @@
-#@ load("@ytt:data", "data")
-#@ dv = data.values
----
-githubConfigSecret: #@ dv.application._.secretName

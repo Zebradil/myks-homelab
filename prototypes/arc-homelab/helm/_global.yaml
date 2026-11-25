@@ -3,7 +3,9 @@
 
 #@ dv = data.values
 #@ a = dv.application
-#@ repo = dv.myks.context.helm.chart[len(a._.chartPrefix):]
+#@ chart = dv.myks.context.helm.chart
+#@ if chart.startswith(a._.chartPrefix):
+#@ repo = chart[len(a._.chartPrefix):]
 ---
 githubConfigUrl: #@ "https://github.com/{}/{}".format(a.githubOwner, repo)
 githubConfigSecret: #@ a._.secretName
@@ -14,8 +16,8 @@ scaleSetLabels:
 minRunners: 0
 maxRunners: #@ a.maxRunners
 controllerServiceAccount:
-  namespace: #@ a.controllerNamespace
-  #! This value must match the name of the Service rendered by the arc chart
+  namespace: #@ a._.controllerNamespace
+  #! Matches the ServiceAccount the `arc` chart renders.
   name: arc-gha-rs-controller
 listenerTemplate:
   spec:
@@ -23,3 +25,4 @@ listenerTemplate:
       #! The chart merges a container named "listener" into its own listener container.
       - name: listener
         resources: #@ res("10m", "32Mi", "128Mi")
+#@ end

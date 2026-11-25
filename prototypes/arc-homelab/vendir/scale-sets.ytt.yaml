@@ -1,20 +1,26 @@
 #@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
+
 #@ a = data.values.application
+#@ chart = data.values.prototype.sources["scale-set"].helmChart
+
+#! myks identifies a chart by its directory and each release needs its own
+#! values, so every repository gets its own copy of the scale set chart.
+#@overlay/match by=overlay.subset({"kind": "Config"})
 ---
-apiVersion: vendir.k14s.io/v1alpha1
-kind: Config
 directories:
-  #! One copy of the chart per repository: myks identifies a chart by its
-  #! directory, and each release needs its own values.
+  #@overlay/match by=overlay.subset({"path": "charts/scale-set"})
+  #@overlay/remove
+  -
   #@ for repo in a.repos:
+  #@overlay/append
   - path: #@ "charts/" + a._.chartPrefix + repo
     contents:
       - path: .
         lazy: true
         helmChart:
-          name: gha-runner-scale-set
-          #! Keep in step with the controller chart in prototypes/arc.
-          version: 0.15.0
+          name: #@ chart.name
+          version: #@ chart.version
           repository:
-            url: oci://ghcr.io/actions/actions-runner-controller-charts
+            url: #@ chart.url
   #@ end
