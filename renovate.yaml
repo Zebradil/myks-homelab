@@ -168,7 +168,7 @@ customManagers:
         >-
         (
           $shaMatcher := /^[a-f0-9]{40}$/;
-          $each(prototype.sources, function($v, $k) {[
+          $exists(prototype.sources) ? $each(prototype.sources, function($v, $k) {[
               /* Helm chart from HTTP(S) registry */
               $v.helmChart[$contains(url, /^http/)].{
                 "currentValue": version,
@@ -198,5 +198,5 @@ customManagers:
                 "depName": $k,
                 "packageName": url
               }
-          ]}) ~> $reduce($append, [])
+          ]}) ~> $reduce($append, []) : []
         )
