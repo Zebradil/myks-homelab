@@ -25,6 +25,14 @@ metadata:
   namespace: #@ dv.myks.context.app
 stringData: #@ { "github_app_" + k: sops("0", k) for k in ["id", "installation_id", "private_key"] }
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: #@ a._.nixciSecretName
+  namespace: #@ dv.myks.context.app
+stringData:
+  id_ed25519: #@ sops("nixci", "ssh_key")
+---
 #! Adds to the environment's restrict-egress policy (DNS, same namespace).
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy

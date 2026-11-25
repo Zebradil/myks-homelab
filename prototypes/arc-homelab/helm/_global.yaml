@@ -1,4 +1,5 @@
 #@ load("@ytt:data", "data")
+#@ load("@ytt:base64", "base64")
 #@ load("util.star", res="resources")
 
 #@ dv = data.values
@@ -6,6 +7,8 @@
 #@ chart = dv.myks.context.helm.chart
 #@ if chart.startswith(a._.chartPrefix):
 #@ repo = chart[len(a._.chartPrefix):]
+#@ key_path = "/etc/nixci/id_ed25519"
+#@ nixci_store = "ssh-ng://nixci@{}?ssh-key={}&base64-ssh-public-host-key={}".format(a.daddyAddress, key_path, base64.encode(a.daddyHostKey))
 ---
 githubConfigUrl: #@ "https://github.com/{}/{}".format(a.githubOwner, repo)
 githubConfigSecret: #@ a._.secretName
@@ -36,6 +39,14 @@ template:
       runAsGroup: 1001
       seccompProfile:
         type: RuntimeDefault
+      #! Gives the runner group read access to the mounted key.
+      fsGroup: 1001
+    volumes:
+      - name: nixci
+        secret:
+          secretName: #@ a._.nixciSecretName
+          #! Root-owned and group-readable: ssh accepts it because the runner does not own it.
+          defaultMode: 0440
     containers:
       - name: runner
         #! Jobs mostly evaluate and wait on daddy; heavy builds run there.
@@ -48,4 +59,12 @@ template:
         #! renovate: datasource=docker digest
         image: ghcr.io/zebradil/homelab-runner:latest@sha256:a72874eb1253216db720fcc61b606033431030c5da0202a230888c965068d610
         command: [/bin/run.sh]
+        env:
+          #! Untrusted store user on daddy: jobs build there but cannot add unsigned paths.
+          - name: NIXCI_STORE
+            value: #@ nixci_store
+        volumeMounts:
+          - name: nixci
+            mountPath: /etc/nixci
+            readOnly: true
 #@ end
