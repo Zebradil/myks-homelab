@@ -6,7 +6,7 @@ metadata:
     actions.github.com/cleanup-manager-role-binding: homelab-github-actions-playground-gha-rs-manager
     actions.github.com/cleanup-manager-role-name: homelab-github-actions-playground-gha-rs-manager
     actions.github.com/cleanup-no-permission-service-account-name: homelab-github-actions-playground-gha-rs-no-permission
-    actions.github.com/values-hash: cdf18885eb9379de21566a5a94ef585d536c8fa120c0245ce779effdb62a31a
+    actions.github.com/values-hash: eff3b7090aa97833f26b889b2361f15486c33c43f7a4547790dd5e8d694f431
   labels:
     actions.github.com/scale-set-name: homelab-github-actions-playground
     actions.github.com/scale-set-namespace: arc-homelab
@@ -36,7 +36,7 @@ spec:
             requests:
               cpu: 10m
               memory: 32Mi
-  maxRunners: 1
+  maxRunners: 2
   minRunners: 0
   runnerScaleSetLabels:
     - homelab
@@ -48,11 +48,18 @@ spec:
             - /bin/run.sh
           image: oci.zebradil.dev/ghcr.io-cache/zebradil/homelab-runner@sha256:a72874eb1253216db720fcc61b606033431030c5da0202a230888c965068d610
           name: runner
+          resources:
+            limits:
+              memory: 6Gi
+            requests:
+              cpu: "1"
+              memory: 2Gi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
               drop:
                 - ALL
+      priorityClassName: homelab-runner
       restartPolicy: Never
       securityContext:
         runAsGroup: 1001

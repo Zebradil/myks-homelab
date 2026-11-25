@@ -60,3 +60,25 @@ spec:
           protocol: TCP
         - port: 443
           protocol: TCP
+---
+#! Caps the pool across all repositories (maxRunners is per scale set).
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: runners
+  namespace: #@ dv.myks.context.app
+spec:
+  hard:
+    pods: "4"
+    limits.memory: 18Gi
+---
+#! Below every homelab service (priority 0): runners are evicted first under
+#! pressure and never evict anything themselves.
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: #@ a._.priorityClassName
+value: -100
+preemptionPolicy: Never
+globalDefault: false
+description: Ephemeral GitHub Actions runner pods.
