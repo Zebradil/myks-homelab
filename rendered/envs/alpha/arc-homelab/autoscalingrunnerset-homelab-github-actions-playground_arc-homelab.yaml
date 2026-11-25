@@ -47,7 +47,7 @@ spec:
         - command:
             - /bin/run.sh
           env:
-            - name: NIXCI_STORE
+            - name: NIX_CI_STORE
               value: ssh-ng://nixci@192.168.0.101?ssh-key=/etc/nixci/id_ed25519&base64-ssh-public-host-key=c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUl1blRtR0dEODNXS290eVNWM3ZCRDVhRC9sdVU4cDFzWUN1OFV4bHl2d0s=
             - name: BUILDKIT_HOST
               value: tcp://192.168.0.101:1234
