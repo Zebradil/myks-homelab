@@ -47,6 +47,10 @@ template:
           secretName: #@ a._.nixciSecretName
           #! Root-owned and group-readable: ssh accepts it because the runner does not own it.
           defaultMode: 0440
+      - name: buildkit
+        secret:
+          secretName: #@ a._.buildkitSecretName
+          defaultMode: 0440
     containers:
       - name: runner
         #! Jobs mostly evaluate and wait on daddy; heavy builds run there.
@@ -63,8 +67,15 @@ template:
           #! Untrusted store user on daddy: jobs build there but cannot add unsigned paths.
           - name: NIXCI_STORE
             value: #@ nixci_store
+          #! Rootless BuildKit on daddy for buildx's remote driver; the client
+          #! certificate and CA are in /etc/buildkit.
+          - name: BUILDKIT_HOST
+            value: #@ "tcp://{}:{}".format(a.daddyAddress, a._.buildkitPort)
         volumeMounts:
           - name: nixci
             mountPath: /etc/nixci
+            readOnly: true
+          - name: buildkit
+            mountPath: /etc/buildkit
             readOnly: true
 #@ end

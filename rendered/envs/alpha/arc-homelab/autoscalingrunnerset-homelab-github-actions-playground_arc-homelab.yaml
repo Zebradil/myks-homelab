@@ -6,7 +6,7 @@ metadata:
     actions.github.com/cleanup-manager-role-binding: homelab-github-actions-playground-gha-rs-manager
     actions.github.com/cleanup-manager-role-name: homelab-github-actions-playground-gha-rs-manager
     actions.github.com/cleanup-no-permission-service-account-name: homelab-github-actions-playground-gha-rs-no-permission
-    actions.github.com/values-hash: 0cdb613c9e5c161bc42abfafc562771782963df2f9739930ac70d43f4b0b3b0
+    actions.github.com/values-hash: 3666082c8fe6e6821c6a1055d161cbc09ca6668e8ea1d2ffe11917853098c26
   labels:
     actions.github.com/scale-set-name: homelab-github-actions-playground
     actions.github.com/scale-set-namespace: arc-homelab
@@ -49,6 +49,8 @@ spec:
           env:
             - name: NIXCI_STORE
               value: ssh-ng://nixci@192.168.0.101?ssh-key=/etc/nixci/id_ed25519&base64-ssh-public-host-key=c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUl1blRtR0dEODNXS290eVNWM3ZCRDVhRC9sdVU4cDFzWUN1OFV4bHl2d0s=
+            - name: BUILDKIT_HOST
+              value: tcp://192.168.0.101:1234
           image: oci.zebradil.dev/ghcr.io-cache/zebradil/homelab-runner@sha256:a72874eb1253216db720fcc61b606033431030c5da0202a230888c965068d610
           name: runner
           resources:
@@ -66,6 +68,9 @@ spec:
             - mountPath: /etc/nixci
               name: nixci
               readOnly: true
+            - mountPath: /etc/buildkit
+              name: buildkit
+              readOnly: true
       priorityClassName: homelab-runner
       restartPolicy: Never
       securityContext:
@@ -81,3 +86,7 @@ spec:
           secret:
             defaultMode: 288
             secretName: nixci-ssh-key
+        - name: buildkit
+          secret:
+            defaultMode: 288
+            secretName: buildkit-client-tls

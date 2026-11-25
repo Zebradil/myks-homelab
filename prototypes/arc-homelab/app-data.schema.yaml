@@ -10,7 +10,7 @@ application:
   #@schema/validation min_len=1
   runnerLabel: ''
   maxRunners: 1
-  #! daddy: Nix builds as `nixci` (SSH) and the kasha box (HTTPS).
+  #! daddy: Nix builds as `nixci` (SSH), the kasha box (HTTPS) and BuildKit (mTLS).
   #@schema/validation min_len=1
   daddyAddress: ''
   #@schema/validation min_len=1
@@ -24,3 +24,5 @@ application:
     controllerNamespace: arc-system
     priorityClassName: homelab-runner
     nixciSecretName: nixci-ssh-key
+    buildkitSecretName: buildkit-client-tls
+    buildkitPort: 1234

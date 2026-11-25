@@ -23,6 +23,8 @@ spec:
           protocol: TCP
         - port: 443
           protocol: TCP
+        - port: 1234
+          protocol: TCP
       to:
         - ipBlock:
             cidr: 192.168.0.101/32
