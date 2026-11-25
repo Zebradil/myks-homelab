@@ -40,9 +40,9 @@ spec:
             - --autoscaling-listener-max-concurrent-reconciles=2
             - --ephemeral-runner-set-max-concurrent-reconciles=2
             - --ephemeral-runner-max-concurrent-reconciles=4
-            - --listener-metrics-addr=0
-            - --listener-metrics-endpoint=
-            - --metrics-addr=0
+            - --listener-metrics-addr=:8080
+            - --listener-metrics-endpoint=/metrics
+            - --metrics-addr=:8080
           command:
             - /manager
           env:
@@ -54,6 +54,10 @@ spec:
                   fieldPath: metadata.namespace
           image: oci.zebradil.dev/ghcr.io-cache/actions/gha-runner-scale-set-controller@sha256:162dfb5bfbda9e7e49fbed67d428994c9ced55b41a37a18b75b46dab0aa98d37
           name: manager
+          ports:
+            - containerPort: 8080
+              name: metrics
+              protocol: TCP
           resources:
             limits:
               memory: 128Mi

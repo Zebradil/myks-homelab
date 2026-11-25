@@ -1,3 +1,8 @@
 #@ load("util.star", res="resources")
 ---
 resources: #@ res("10m", "32Mi", "128Mi")
+#! The controller passes listenerAddr to every listener pod it creates, as a port named `metrics`.
+metrics:
+  controllerManagerAddr: ":8080"
+  listenerAddr: ":8080"
+  listenerEndpoint: /metrics
