@@ -1,5 +1,6 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:yaml", "yaml")
+#@ load("@ytt:sha256", "sha256")
 #@ load("secrets.star", "sops")
 
 #@ a = data.values.application
@@ -54,6 +55,9 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: #@ name
+      annotations:
+        #! snmp_exporter reads its modules only at start.
+        checksum/modules: #@ sha256.sum(data.read("snmp-modules.yaml.data"))
     spec:
       containers:
         - name: #@ name

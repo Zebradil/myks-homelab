@@ -11,6 +11,8 @@ spec:
       app.kubernetes.io/name: snmp-exporter
   template:
     metadata:
+      annotations:
+        checksum/modules: 19ed6505de6f8f97cb14092f95714bfde4e06239f46b4534f1db23cdbf68d54e
       labels:
         app.kubernetes.io/name: snmp-exporter
     spec:
