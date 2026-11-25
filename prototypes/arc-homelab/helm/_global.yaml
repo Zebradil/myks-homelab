@@ -65,7 +65,8 @@ template:
         command: [/bin/run.sh]
         env:
           #! Untrusted store user on daddy: jobs build there but cannot add unsigned paths.
-          - name: NIXCI_STORE
+          #! nix-ci's build action reads this name and builds in that store.
+          - name: NIX_CI_STORE
             value: #@ nixci_store
           #! Rootless BuildKit on daddy for buildx's remote driver; the client
           #! certificate and CA are in /etc/buildkit.
