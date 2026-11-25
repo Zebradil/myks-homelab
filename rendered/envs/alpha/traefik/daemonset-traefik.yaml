@@ -68,8 +68,10 @@ spec:
             - --entryPoints.web.http.redirections.entryPoint.scheme=https
             - --entryPoints.web.http.redirections.entryPoint.permanent=true
             - --entryPoints.web.forwardedHeaders.trustedIPs=2400:cb00::/32,2606:4700::/32,2803:f800::/32,2405:b500::/32,2405:8100::/32,2a06:98c0::/29,2c0f:f248::/32
+            - --entryPoints.web.transport.lifeCycle.requestAcceptGraceTimeout=5s
             - --entryPoints.websecure.http.tls=true
             - --entryPoints.websecure.forwardedHeaders.trustedIPs=2400:cb00::/32,2606:4700::/32,2803:f800::/32,2405:b500::/32,2405:8100::/32,2a06:98c0::/29,2c0f:f248::/32
+            - --entryPoints.websecure.transport.lifeCycle.requestAcceptGraceTimeout=5s
             - --log.level=DEBUG
             - --accesslog=true
             - --accesslog.fields.defaultmode=keep
