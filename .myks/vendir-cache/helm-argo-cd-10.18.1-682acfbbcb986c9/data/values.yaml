@@ -742,9 +742,10 @@ configs:
   #    background: linear-gradient(to bottom, #999, #777, #333, #222, #111);
   #  }
 
-# -- Array of extra K8s manifests to deploy
+# -- (list) Extra K8s manifests to deploy, as a list or a map. A map can be split over several values files, because Helm merges maps but replaces lists.
+# @default -- `[]`
 ## Note: Supports use of custom Helm templates
-extraObjects: []
+extraObjects:
   # - apiVersion: secrets-store.csi.x-k8s.io/v1
   #   kind: SecretProviderClass
   #   metadata:
@@ -955,6 +956,13 @@ controller:
   containerPorts:
     # -- Metrics container port
     metrics: 8082
+
+  ## Application controller headless service configuration
+  service:
+    # -- Application controller service annotations
+    annotations: {}
+    # -- Application controller service labels
+    labels: {}
 
   # -- Host Network for application controller pods
   hostNetwork: false
@@ -1197,6 +1205,16 @@ dex:
   # -- Runtime class name for Dex
   # @default -- `""` (defaults to global.runtimeClassName)
   runtimeClassName: ""
+
+  # -- The number of Dex server pods to run
+  ## Values above 1 need a persistent storage backend in `configs.cm."dex.config"`, the in-memory default does not share state.
+  replicas: 1
+
+  storage:
+    # -- Dex storage type. Renders the RBAC for `kubernetes` storage and validates `dex.replicas`.
+    ## Only set it when `configs.cm.create` is false, so the chart cannot read `configs.cm."dex.config"`.
+    # @default -- `""` (read from `storage.type` in `configs.cm."dex.config"`, `memory` when unset)
+    type: ""
 
   metrics:
     # -- Deploy metrics service

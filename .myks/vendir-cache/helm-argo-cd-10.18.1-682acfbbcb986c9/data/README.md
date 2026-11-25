@@ -111,6 +111,55 @@ extraObjects:
 
 Redis reads its certificate when it starts, so restart it after a renewal, for example with [Reloader](https://github.com/stakater/Reloader). `redis.tls` does not apply to `redis-ha` or to an external Redis.
 
+## Extra objects
+
+`extraObjects` takes a list or a map. A list is enough when all objects are in one values file:
+
+```yaml
+extraObjects:
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: my-config
+    data:
+      key: value
+```
+
+With a map, each values file can add its own objects, because Helm merges maps but replaces lists. For example, plain manifests in `values.yaml` and a Secret in an encrypted `secrets.yaml`:
+
+```yaml
+# values.yaml
+extraObjects:
+  argocd-network-policy:
+    apiVersion: networking.k8s.io/v1
+    kind: NetworkPolicy
+    metadata:
+      name: argocd
+    spec:
+      podSelector: {}
+      policyTypes: [Ingress]
+      ingress:
+        - from:
+            - podSelector: {}
+```
+
+```yaml
+# secrets.yaml
+extraObjects:
+  repo-credentials:
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: repo-credentials
+      labels:
+        argocd.argoproj.io/secret-type: repository
+    stringData:
+      url: https://github.com/example/repo.git
+      password: my-token
+```
+
+The map keys are only names. Use a unique key for each object.
+
 ## Ingress configuration
 
 Please refer to the [Operator Manual](https://argo-cd.readthedocs.io/en/stable/operator-manual/ingress/#ingress-configurationh) for details as the samples
@@ -1037,7 +1086,7 @@ NAME: my-release
 | crds.keep | bool | `true` | Keep CRDs on chart uninstall |
 | createAggregateRoles | bool | `false` | Create aggregated roles that extend existing cluster roles to interact with argo-cd resources |
 | createClusterRoles | bool | `true` | Create cluster roles for cluster-wide installation. |
-| extraObjects | list | `[]` | Array of extra K8s manifests to deploy |
+| extraObjects | list | `[]` | Extra K8s manifests to deploy, as a list or a map. A map can be split over several values files, because Helm merges maps but replaces lists. |
 | fullnameOverride | string | `""` | String to fully override `"argo-cd.fullname"` |
 | kubeVersionOverride | string | `""` | Override the Kubernetes version, which is used to evaluate certain manifests |
 | nameOverride | string | `"argocd"` | Provide a name in place of `argocd` |
@@ -1235,6 +1284,8 @@ NAME: my-release
 | controller.revisionHistoryLimit | int | `5` | Maximum number of controller revisions that will be maintained in StatefulSet history |
 | controller.roleRules | list | `[]` | List of custom rules for the application controller's Role resource |
 | controller.runtimeClassName | string | `""` (defaults to global.runtimeClassName) | Runtime class name for the application controller |
+| controller.service.annotations | object | `{}` | Application controller service annotations |
+| controller.service.labels | object | `{}` | Application controller service labels |
 | controller.serviceAccount.annotations | object | `{}` | Annotations applied to created service account |
 | controller.serviceAccount.automountServiceAccountToken | bool | `true` | Automount API credentials for the Service Account |
 | controller.serviceAccount.create | bool | `true` | Create a service account for the application controller |
@@ -1691,6 +1742,7 @@ NAME: my-release
 | dex.readinessProbe.periodSeconds | int | `10` | How often (in seconds) to perform the [probe] |
 | dex.readinessProbe.successThreshold | int | `1` | Minimum consecutive successes for the [probe] to be considered successful after having failed |
 | dex.readinessProbe.timeoutSeconds | int | `1` | Number of seconds after which the [probe] times out |
+| dex.replicas | int | `1` | The number of Dex server pods to run |
 | dex.resources | object | `{}` | Resource limits and requests for dex |
 | dex.runtimeClassName | string | `""` (defaults to global.runtimeClassName) | Runtime class name for Dex |
 | dex.serviceAccount.annotations | object | `{}` | Annotations applied to created service account |
@@ -1711,6 +1763,7 @@ NAME: my-release
 | dex.startupProbe.periodSeconds | int | `10` | How often (in seconds) to perform the [probe] |
 | dex.startupProbe.successThreshold | int | `1` | Minimum consecutive successes for the [probe] to be considered successful after having failed |
 | dex.startupProbe.timeoutSeconds | int | `1` | Number of seconds after which the [probe] times out |
+| dex.storage.type | string | `""` (read from `storage.type` in `configs.cm."dex.config"`, `memory` when unset) | Dex storage type. Renders the RBAC for `kubernetes` storage and validates `dex.replicas`. |
 | dex.terminationGracePeriodSeconds | int | `30` | terminationGracePeriodSeconds for container lifecycle hook |
 | dex.tolerations | list | `[]` (defaults to global.tolerations) | [Tolerations] for use with node taints |
 | dex.topologySpreadConstraints | list | `[]` (defaults to global.topologySpreadConstraints) | Assign custom [TopologySpreadConstraints] rules to dex |
