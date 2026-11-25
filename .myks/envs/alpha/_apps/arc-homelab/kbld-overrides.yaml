@@ -1,7 +1,7 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 overrides:
-    - image: ghcr.io/actions/actions-runner:latest
-      newImage: oci.zebradil.dev/ghcr.io-cache/actions/actions-runner:latest
     - image: ghcr.io/actions/gha-runner-scale-set-controller:0.15.0
       newImage: oci.zebradil.dev/ghcr.io-cache/actions/gha-runner-scale-set-controller:0.15.0
+    - image: ghcr.io/zebradil/homelab-runner:latest@sha256:a72874eb1253216db720fcc61b606033431030c5da0202a230888c965068d610
+      newImage: oci.zebradil.dev/ghcr.io-cache/zebradil/homelab-runner@sha256:a72874eb1253216db720fcc61b606033431030c5da0202a230888c965068d610
