@@ -1,0 +1,3988 @@
+apiVersion: v1
+data:
+  vmks-storage.json: |-
+    {
+      "apiVersion": "dashboard.grafana.app/v2",
+      "kind": "Dashboard",
+      "metadata": {
+        "name": "cluster-storage"
+      },
+      "spec": {
+        "annotations": [],
+        "cursorSync": "Crosshair",
+        "description": "Persistent volumes, NAS and node disks. Pick a namespace to inspect it after an alert.",
+        "editable": true,
+        "elements": {
+          "be-csi-errors": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum by (method_name, grpc_status_code) (increase(csi_operations_seconds_count{grpc_status_code!=\"OK\"}[$__rate_interval]))",
+                            "instant": false,
+                            "legendFormat": "{{method_name}} {{grpc_status_code}}",
+                            "range": true,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Failed CSI calls made by kubelet (attach, mount, stats).",
+              "id": 31,
+              "links": [],
+              "title": "CSI operation errors",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "axisSoftMin": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "lineWidth": 1,
+                        "showPoints": "never",
+                        "spanNulls": false
+                      },
+                      "unit": "short"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "legend": {
+                      "calcs": [
+                        "sum"
+                      ],
+                      "displayMode": "table",
+                      "placement": "right",
+                      "showLegend": true,
+                      "sortBy": "Total",
+                      "sortDesc": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "be-csi-latency": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "histogram_quantile(0.95, sum by (method_name, le) (rate(csi_operations_seconds_bucket[$__rate_interval])))",
+                            "instant": false,
+                            "legendFormat": "{{method_name}}",
+                            "range": true,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "",
+              "id": 32,
+              "links": [],
+              "title": "CSI operation p95 latency",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "axisSoftMin": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "lineWidth": 1,
+                        "showPoints": "never",
+                        "spanNulls": false
+                      },
+                      "unit": "s"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "legend": {
+                      "calcs": [
+                        "mean",
+                        "max"
+                      ],
+                      "displayMode": "table",
+                      "placement": "right",
+                      "showLegend": true,
+                      "sortBy": "Mean",
+                      "sortDesc": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "be-nas-disks": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "max by (diskID, diskModel) (diskModel)",
+                            "format": "table",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "model"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "model"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "max by (diskID) (diskStatus)",
+                            "format": "table",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "status"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "status"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "max by (diskID) (diskHealthStatus)",
+                            "format": "table",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "health"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "health"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "max by (diskID) (diskTemperature)",
+                            "format": "table",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "temp"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "temp"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "max by (diskID) (diskBadSector)",
+                            "format": "table",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "bad"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "bad"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": [
+                    {
+                      "group": "merge",
+                      "kind": "Transformation",
+                      "spec": {
+                        "id": "merge",
+                        "options": {}
+                      }
+                    },
+                    {
+                      "group": "organize",
+                      "kind": "Transformation",
+                      "spec": {
+                        "id": "organize",
+                        "options": {
+                          "excludeByName": {
+                            "Time": true,
+                            "Value #model": true
+                          },
+                          "renameByName": {
+                            "Value #bad": "bad sectors",
+                            "Value #health": "health",
+                            "Value #status": "status",
+                            "Value #temp": "temperature",
+                            "diskID": "disk",
+                            "diskModel": "model"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "description": "",
+              "id": 24,
+              "links": [],
+              "title": "NAS disks",
+              "vizConfig": {
+                "group": "table",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          }
+                        ]
+                      }
+                    },
+                    "overrides": [
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "status"
+                        },
+                        "properties": [
+                          {
+                            "id": "mappings",
+                            "value": [
+                              {
+                                "options": {
+                                  "1": {
+                                    "color": "green",
+                                    "text": "Normal"
+                                  },
+                                  "2": {
+                                    "color": "blue",
+                                    "text": "Initialized"
+                                  },
+                                  "3": {
+                                    "color": "orange",
+                                    "text": "Not initialized"
+                                  },
+                                  "4": {
+                                    "color": "red",
+                                    "text": "System partition failed"
+                                  },
+                                  "5": {
+                                    "color": "red",
+                                    "text": "Crashed"
+                                  }
+                                },
+                                "type": "value"
+                              }
+                            ]
+                          },
+                          {
+                            "id": "custom.cellOptions",
+                            "value": {
+                              "type": "color-text"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "health"
+                        },
+                        "properties": [
+                          {
+                            "id": "mappings",
+                            "value": [
+                              {
+                                "options": {
+                                  "1": {
+                                    "color": "green",
+                                    "text": "Normal"
+                                  },
+                                  "2": {
+                                    "color": "orange",
+                                    "text": "Warning"
+                                  },
+                                  "3": {
+                                    "color": "red",
+                                    "text": "Critical"
+                                  },
+                                  "4": {
+                                    "color": "red",
+                                    "text": "Failing"
+                                  }
+                                },
+                                "type": "value"
+                              }
+                            ]
+                          },
+                          {
+                            "id": "custom.cellOptions",
+                            "value": {
+                              "type": "color-text"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "temperature"
+                        },
+                        "properties": [
+                          {
+                            "id": "unit",
+                            "value": "celsius"
+                          },
+                          {
+                            "id": "thresholds",
+                            "value": {
+                              "mode": "absolute",
+                              "steps": [
+                                {
+                                  "color": "green",
+                                  "value": null
+                                },
+                                {
+                                  "color": "orange",
+                                  "value": 50
+                                },
+                                {
+                                  "color": "red",
+                                  "value": 60
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "id": "custom.cellOptions",
+                            "value": {
+                              "type": "color-text"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "bad sectors"
+                        },
+                        "properties": [
+                          {
+                            "id": "thresholds",
+                            "value": {
+                              "mode": "absolute",
+                              "steps": [
+                                {
+                                  "color": "green",
+                                  "value": null
+                                },
+                                {
+                                  "color": "orange",
+                                  "value": 1
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "id": "custom.cellOptions",
+                            "value": {
+                              "type": "color-text"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "options": {
+                    "cellHeight": "sm",
+                    "showHeader": true
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "be-node-fs": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "1 - node_filesystem_avail_bytes{job=\"node-exporter\", fstype=~\"ext4|btrfs|xfs|zfs\", mountpoint!~\"/boot.*|/nix/store\"} / node_filesystem_size_bytes{job=\"node-exporter\", fstype=~\"ext4|btrfs|xfs|zfs\", mountpoint!~\"/boot.*|/nix/store\"} * on (instance) group_left (nodename) max by (instance, nodename) (node_uname_info{job=\"node-exporter\"})",
+                            "instant": true,
+                            "legendFormat": "{{nodename}} {{mountpoint}}",
+                            "range": false,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Root and data filesystems of the cluster nodes. local-path volumes live on these.",
+              "id": 28,
+              "links": [],
+              "title": "Node filesystems",
+              "vizConfig": {
+                "group": "bargauge",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "thresholds"
+                      },
+                      "max": 1,
+                      "min": 0,
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          },
+                          {
+                            "color": "orange",
+                            "value": 0.8
+                          },
+                          {
+                            "color": "red",
+                            "value": 0.9
+                          }
+                        ]
+                      },
+                      "unit": "percentunit"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "displayMode": "basic",
+                    "maxVizHeight": 24,
+                    "minVizHeight": 16,
+                    "namePlacement": "left",
+                    "orientation": "horizontal",
+                    "reduceOptions": {
+                      "calcs": [
+                        "lastNotNull"
+                      ],
+                      "fields": "",
+                      "values": false
+                    },
+                    "showUnfilled": true,
+                    "sizing": "auto",
+                    "valueMode": "color"
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "be-node-fs-trend": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "node_filesystem_avail_bytes{job=\"node-exporter\", fstype=~\"ext4|btrfs|xfs|zfs\", mountpoint!~\"/boot.*|/nix/store\"} * on (instance) group_left (nodename) max by (instance, nodename) (node_uname_info{job=\"node-exporter\"})",
+                            "instant": false,
+                            "legendFormat": "{{nodename}} {{mountpoint}}",
+                            "range": true,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "",
+              "id": 29,
+              "links": [],
+              "title": "Node filesystem free",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "axisSoftMin": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "lineWidth": 1,
+                        "showPoints": "never",
+                        "spanNulls": false
+                      },
+                      "unit": "bytes"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "legend": {
+                      "calcs": [
+                        "lastNotNull",
+                        "min"
+                      ],
+                      "displayMode": "table",
+                      "placement": "right",
+                      "showLegend": true,
+                      "sortBy": "Last *",
+                      "sortDesc": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "be-node-ro": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "count(node_filesystem_readonly{job=\"node-exporter\", fstype=~\"ext4|btrfs|xfs|zfs\", mountpoint!~\"/boot.*|/nix/store\"} == 1)",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Node filesystems remounted read-only. iSCSI volumes mounted inside pods are not covered: node-exporter skips kubelet mounts.",
+              "id": 30,
+              "links": [],
+              "title": "Read-only node filesystems",
+              "vizConfig": {
+                "group": "stat",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "thresholds"
+                      },
+                      "noValue": "0",
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          },
+                          {
+                            "color": "red",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "unit": "short"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "colorMode": "background",
+                    "graphMode": "none",
+                    "justifyMode": "center",
+                    "orientation": "auto",
+                    "reduceOptions": {
+                      "calcs": [
+                        "lastNotNull"
+                      ],
+                      "fields": "",
+                      "values": false
+                    },
+                    "textMode": "value"
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "be-pv-problems": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "max by (persistentvolume, phase) (kube_persistentvolume_status_phase{phase!=\"Bound\"} == 1) * on (persistentvolume) group_left (claim_namespace, name, storageclass, reclaim_policy) max by (persistentvolume, claim_namespace, name) (kube_persistentvolume_claim_ref) * on (persistentvolume) group_left (storageclass, reclaim_policy) max by (persistentvolume, storageclass, reclaim_policy) (kube_persistentvolume_info)",
+                            "format": "table",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "pv"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "pv"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": [
+                    {
+                      "group": "organize",
+                      "kind": "Transformation",
+                      "spec": {
+                        "id": "organize",
+                        "options": {
+                          "excludeByName": {
+                            "Time": true,
+                            "Value": true
+                          },
+                          "renameByName": {
+                            "claim_namespace": "last namespace",
+                            "name": "last claim"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "description": "Released and Failed PersistentVolumes. With the Retain policy the NAS LUN outlives the claim; delete the LUN on the NAS after checking nothing needs it.",
+              "id": 25,
+              "links": [],
+              "title": "Volumes not Bound",
+              "vizConfig": {
+                "group": "table",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {},
+                    "overrides": []
+                  },
+                  "options": {
+                    "cellHeight": "sm",
+                    "showHeader": true
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "be-raid": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "1 - raidFreeSize / raidTotalSize",
+                            "instant": true,
+                            "legendFormat": "{{raidName}}",
+                            "range": false,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "",
+              "id": 26,
+              "links": [],
+              "title": "Pools and volumes",
+              "vizConfig": {
+                "group": "bargauge",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "thresholds"
+                      },
+                      "max": 1,
+                      "min": 0,
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          },
+                          {
+                            "color": "orange",
+                            "value": 0.85
+                          },
+                          {
+                            "color": "red",
+                            "value": 0.95
+                          }
+                        ]
+                      },
+                      "unit": "percentunit"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "displayMode": "basic",
+                    "maxVizHeight": 24,
+                    "minVizHeight": 16,
+                    "namePlacement": "left",
+                    "orientation": "horizontal",
+                    "reduceOptions": {
+                      "calcs": [
+                        "lastNotNull"
+                      ],
+                      "fields": "",
+                      "values": false
+                    },
+                    "showUnfilled": true,
+                    "sizing": "auto",
+                    "valueMode": "color"
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "be-raid-trend": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "raidFreeSize",
+                            "instant": false,
+                            "legendFormat": "{{raidName}}",
+                            "range": true,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {
+                    "timeFrom": "30d"
+                  },
+                  "transformations": []
+                }
+              },
+              "description": "A falling line on the iSCSI volume eats into every thin-provisioned PVC.",
+              "id": 27,
+              "links": [],
+              "title": "Free space, 30 days",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "axisSoftMin": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "lineWidth": 1,
+                        "showPoints": "never",
+                        "spanNulls": false
+                      },
+                      "unit": "bytes"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "legend": {
+                      "calcs": [
+                        "lastNotNull",
+                        "min"
+                      ],
+                      "displayMode": "table",
+                      "placement": "right",
+                      "showLegend": true,
+                      "sortBy": "Last *",
+                      "sortDesc": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "io-iops": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "label_replace(label_replace(max by (iSCSILUNInfoIndex) (iSCSILUNIopsRead) * on (iSCSILUNInfoIndex) group_left (iSCSILUNName) max by (iSCSILUNInfoIndex, iSCSILUNName) (iSCSILUNName), \"persistentvolume\", \"$1\", \"iSCSILUNName\", \"k8s-csi-(.+)\") * on (persistentvolume) group_left (claim_namespace, name) max by (persistentvolume, claim_namespace, name) (kube_persistentvolume_claim_ref{claim_namespace=~\"$namespace\"}), \"persistentvolumeclaim\", \"$1\", \"name\", \"(.+)\")",
+                            "instant": false,
+                            "legendFormat": "{{claim_namespace}}/{{persistentvolumeclaim}} read",
+                            "range": true,
+                            "refId": "read"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "read"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "label_replace(label_replace(max by (iSCSILUNInfoIndex) (iSCSILUNIopsWrite) * on (iSCSILUNInfoIndex) group_left (iSCSILUNName) max by (iSCSILUNInfoIndex, iSCSILUNName) (iSCSILUNName), \"persistentvolume\", \"$1\", \"iSCSILUNName\", \"k8s-csi-(.+)\") * on (persistentvolume) group_left (claim_namespace, name) max by (persistentvolume, claim_namespace, name) (kube_persistentvolume_claim_ref{claim_namespace=~\"$namespace\"}), \"persistentvolumeclaim\", \"$1\", \"name\", \"(.+)\")",
+                            "instant": false,
+                            "legendFormat": "{{claim_namespace}}/{{persistentvolumeclaim}} write",
+                            "range": true,
+                            "refId": "write"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "write"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Operations per second per volume, as seen by the NAS. Read plotted below zero, write above. Synology iSCSI volumes only; local-path volumes have no per-volume I/O.",
+              "id": 20,
+              "links": [],
+              "title": "IOPS",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "axisSoftMin": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "lineWidth": 1,
+                        "showPoints": "never",
+                        "spanNulls": false
+                      },
+                      "unit": "iops"
+                    },
+                    "overrides": [
+                      {
+                        "matcher": {
+                          "id": "byRegexp",
+                          "options": ".* read$"
+                        },
+                        "properties": [
+                          {
+                            "id": "custom.transform",
+                            "value": "negative-Y"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "options": {
+                    "legend": {
+                      "calcs": [
+                        "mean",
+                        "max"
+                      ],
+                      "displayMode": "table",
+                      "placement": "right",
+                      "showLegend": true,
+                      "sortBy": "Mean",
+                      "sortDesc": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "io-latency": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "label_replace(label_replace(max by (iSCSILUNInfoIndex) (iSCSILUNDiskLatencyRead) * on (iSCSILUNInfoIndex) group_left (iSCSILUNName) max by (iSCSILUNInfoIndex, iSCSILUNName) (iSCSILUNName), \"persistentvolume\", \"$1\", \"iSCSILUNName\", \"k8s-csi-(.+)\") * on (persistentvolume) group_left (claim_namespace, name) max by (persistentvolume, claim_namespace, name) (kube_persistentvolume_claim_ref{claim_namespace=~\"$namespace\"}), \"persistentvolumeclaim\", \"$1\", \"name\", \"(.+)\")",
+                            "instant": false,
+                            "legendFormat": "{{claim_namespace}}/{{persistentvolumeclaim}} read",
+                            "range": true,
+                            "refId": "read"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "read"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "label_replace(label_replace(max by (iSCSILUNInfoIndex) (iSCSILUNDiskLatencyWrite) * on (iSCSILUNInfoIndex) group_left (iSCSILUNName) max by (iSCSILUNInfoIndex, iSCSILUNName) (iSCSILUNName), \"persistentvolume\", \"$1\", \"iSCSILUNName\", \"k8s-csi-(.+)\") * on (persistentvolume) group_left (claim_namespace, name) max by (persistentvolume, claim_namespace, name) (kube_persistentvolume_claim_ref{claim_namespace=~\"$namespace\"}), \"persistentvolumeclaim\", \"$1\", \"name\", \"(.+)\")",
+                            "instant": false,
+                            "legendFormat": "{{claim_namespace}}/{{persistentvolumeclaim}} write",
+                            "range": true,
+                            "refId": "write"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "write"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Average NAS disk latency per volume. Read plotted below zero, write above. Synology iSCSI volumes only; local-path volumes have no per-volume I/O.",
+              "id": 22,
+              "links": [],
+              "title": "Disk latency",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "axisSoftMin": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "lineWidth": 1,
+                        "showPoints": "never",
+                        "spanNulls": false
+                      },
+                      "unit": "µs"
+                    },
+                    "overrides": [
+                      {
+                        "matcher": {
+                          "id": "byRegexp",
+                          "options": ".* read$"
+                        },
+                        "properties": [
+                          {
+                            "id": "custom.transform",
+                            "value": "negative-Y"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "options": {
+                    "legend": {
+                      "calcs": [
+                        "mean",
+                        "max"
+                      ],
+                      "displayMode": "table",
+                      "placement": "right",
+                      "showLegend": true,
+                      "sortBy": "Mean",
+                      "sortDesc": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "io-queue": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "label_replace(label_replace(max by (iSCSILUNInfoIndex) (iSCSILUNQueueDepth) * on (iSCSILUNInfoIndex) group_left (iSCSILUNName) max by (iSCSILUNInfoIndex, iSCSILUNName) (iSCSILUNName), \"persistentvolume\", \"$1\", \"iSCSILUNName\", \"k8s-csi-(.+)\") * on (persistentvolume) group_left (claim_namespace, name) max by (persistentvolume, claim_namespace, name) (kube_persistentvolume_claim_ref{claim_namespace=~\"$namespace\"}), \"persistentvolumeclaim\", \"$1\", \"name\", \"(.+)\")",
+                            "instant": false,
+                            "legendFormat": "{{claim_namespace}}/{{persistentvolumeclaim}}",
+                            "range": true,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "iSCSI commands waiting in the LUN queue. Sustained non-zero values mean the NAS cannot keep up.",
+              "id": 23,
+              "links": [],
+              "title": "Queue depth",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "axisSoftMin": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "lineWidth": 1,
+                        "showPoints": "never",
+                        "spanNulls": false
+                      },
+                      "unit": "short"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "legend": {
+                      "calcs": [
+                        "mean",
+                        "max"
+                      ],
+                      "displayMode": "table",
+                      "placement": "right",
+                      "showLegend": true,
+                      "sortBy": "Mean",
+                      "sortDesc": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "io-throughput": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "label_replace(label_replace(max by (iSCSILUNInfoIndex) (iSCSILUNThroughputReadHigh * 4294967296 + iSCSILUNThroughputReadLow) * on (iSCSILUNInfoIndex) group_left (iSCSILUNName) max by (iSCSILUNInfoIndex, iSCSILUNName) (iSCSILUNName), \"persistentvolume\", \"$1\", \"iSCSILUNName\", \"k8s-csi-(.+)\") * on (persistentvolume) group_left (claim_namespace, name) max by (persistentvolume, claim_namespace, name) (kube_persistentvolume_claim_ref{claim_namespace=~\"$namespace\"}), \"persistentvolumeclaim\", \"$1\", \"name\", \"(.+)\")",
+                            "instant": false,
+                            "legendFormat": "{{claim_namespace}}/{{persistentvolumeclaim}} read",
+                            "range": true,
+                            "refId": "read"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "read"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "label_replace(label_replace(max by (iSCSILUNInfoIndex) (iSCSILUNThroughputWriteHigh * 4294967296 + iSCSILUNThroughputWriteLow) * on (iSCSILUNInfoIndex) group_left (iSCSILUNName) max by (iSCSILUNInfoIndex, iSCSILUNName) (iSCSILUNName), \"persistentvolume\", \"$1\", \"iSCSILUNName\", \"k8s-csi-(.+)\") * on (persistentvolume) group_left (claim_namespace, name) max by (persistentvolume, claim_namespace, name) (kube_persistentvolume_claim_ref{claim_namespace=~\"$namespace\"}), \"persistentvolumeclaim\", \"$1\", \"name\", \"(.+)\")",
+                            "instant": false,
+                            "legendFormat": "{{claim_namespace}}/{{persistentvolumeclaim}} write",
+                            "range": true,
+                            "refId": "write"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "write"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Bytes per second per volume. Read plotted below zero, write above. Synology iSCSI volumes only; local-path volumes have no per-volume I/O.",
+              "id": 21,
+              "links": [],
+              "title": "Throughput",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "axisSoftMin": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "lineWidth": 1,
+                        "showPoints": "never",
+                        "spanNulls": false
+                      },
+                      "unit": "Bps"
+                    },
+                    "overrides": [
+                      {
+                        "matcher": {
+                          "id": "byRegexp",
+                          "options": ".* read$"
+                        },
+                        "properties": [
+                          {
+                            "id": "custom.transform",
+                            "value": "negative-Y"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "options": {
+                    "legend": {
+                      "calcs": [
+                        "mean",
+                        "max"
+                      ],
+                      "displayMode": "table",
+                      "placement": "right",
+                      "showLegend": true,
+                      "sortBy": "Mean",
+                      "sortDesc": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "ov-alert-table": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "ALERTS{alertstate=\"firing\", alertname=~\"KubePersistentVolume.*|PersistentVolumeFillingUpSoon|DiskRunsOutOfSpace.*\", namespace=~\"$namespace\"} or ALERTS{alertstate=\"firing\", alertname=~\"Node(Filesystem|Disk|RAID).*|Synology.*|DiskBadSectors\"}",
+                            "format": "table",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": [
+                    {
+                      "group": "organize",
+                      "kind": "Transformation",
+                      "spec": {
+                        "id": "organize",
+                        "options": {
+                          "includeByName": {
+                            "alertname": true,
+                            "diskID": true,
+                            "instance": true,
+                            "mountpoint": true,
+                            "namespace": true,
+                            "persistentvolumeclaim": true,
+                            "raidName": true,
+                            "severity": true
+                          },
+                          "indexByName": {
+                            "alertname": 0,
+                            "diskID": 6,
+                            "instance": 4,
+                            "mountpoint": 5,
+                            "namespace": 2,
+                            "persistentvolumeclaim": 3,
+                            "raidName": 7,
+                            "severity": 1
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "description": "Hidden while nothing fires.",
+              "id": 7,
+              "links": [],
+              "title": "Firing storage alerts",
+              "vizConfig": {
+                "group": "table",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {},
+                    "overrides": [
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "namespace"
+                        },
+                        "properties": [
+                          {
+                            "id": "links",
+                            "value": [
+                              {
+                                "title": "Inspect namespace ${__value.raw}",
+                                "url": "/d/cluster-storage?${__url_time_range}\u0026var-namespace=${__value.raw}"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "options": {
+                    "cellHeight": "sm",
+                    "showHeader": true
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "ov-alerts": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "count(ALERTS{alertstate=\"firing\", alertname=~\"KubePersistentVolume.*|PersistentVolumeFillingUpSoon|DiskRunsOutOfSpace.*\", namespace=~\"$namespace\"} or ALERTS{alertstate=\"firing\", alertname=~\"Node(Filesystem|Disk|RAID).*|Synology.*|DiskBadSectors\"})",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Firing PersistentVolume alerts in the selected namespaces plus node-disk and NAS alerts.",
+              "id": 6,
+              "links": [],
+              "title": "Storage alerts firing",
+              "vizConfig": {
+                "group": "stat",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "thresholds"
+                      },
+                      "noValue": "0",
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          },
+                          {
+                            "color": "red",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "unit": "short"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "colorMode": "background",
+                    "graphMode": "none",
+                    "justifyMode": "center",
+                    "orientation": "auto",
+                    "reduceOptions": {
+                      "calcs": [
+                        "lastNotNull"
+                      ],
+                      "fields": "",
+                      "values": false
+                    },
+                    "textMode": "value"
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "ov-by-ns": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sort_desc(sum by (namespace) (max by (namespace, persistentvolumeclaim) (kubelet_volume_stats_used_bytes{job=\"kubelet\", namespace=~\"$namespace\"})))",
+                            "instant": true,
+                            "legendFormat": "{{namespace}}",
+                            "range": false,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Bytes in use per namespace.",
+              "id": 9,
+              "links": [],
+              "title": "Used by namespace",
+              "vizConfig": {
+                "group": "bargauge",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "thresholds"
+                      },
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          }
+                        ]
+                      },
+                      "unit": "bytes"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "displayMode": "basic",
+                    "maxVizHeight": 24,
+                    "minVizHeight": 16,
+                    "namePlacement": "left",
+                    "orientation": "horizontal",
+                    "reduceOptions": {
+                      "calcs": [
+                        "lastNotNull"
+                      ],
+                      "fields": "",
+                      "values": false
+                    },
+                    "showUnfilled": true,
+                    "sizing": "auto",
+                    "valueMode": "color"
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "ov-count": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "count(kube_persistentvolumeclaim_info{namespace=~\"$namespace\"})",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "PersistentVolumeClaims in the selected namespaces.",
+              "id": 1,
+              "links": [],
+              "title": "Volumes",
+              "vizConfig": {
+                "group": "stat",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "thresholds"
+                      },
+                      "noValue": "0",
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          }
+                        ]
+                      },
+                      "unit": "short"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "colorMode": "none",
+                    "graphMode": "none",
+                    "justifyMode": "center",
+                    "orientation": "auto",
+                    "reduceOptions": {
+                      "calcs": [
+                        "lastNotNull"
+                      ],
+                      "fields": "",
+                      "values": false
+                    },
+                    "textMode": "value"
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "ov-filling": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "count(predict_linear(kubelet_volume_stats_available_bytes{job=\"kubelet\", namespace=~\"$namespace\"}[7d], 14 * 86400) \u003c 0 unless on (namespace, persistentvolumeclaim) kube_persistentvolumeclaim_access_mode{access_mode=\"ReadOnlyMany\"} == 1 unless on (namespace, persistentvolumeclaim) kube_persistentvolumeclaim_labels{label_excluded_from_alerts=\"true\"} == 1)",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Volumes whose 7d trend predicts running out of space within two weeks (same rule as PersistentVolumeFillingUpSoon).",
+              "id": 5,
+              "links": [],
+              "title": "Full within 14d",
+              "vizConfig": {
+                "group": "stat",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "thresholds"
+                      },
+                      "noValue": "0",
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          },
+                          {
+                            "color": "orange",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "unit": "short"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "colorMode": "background",
+                    "graphMode": "none",
+                    "justifyMode": "center",
+                    "orientation": "auto",
+                    "reduceOptions": {
+                      "calcs": [
+                        "lastNotNull"
+                      ],
+                      "fields": "",
+                      "values": false
+                    },
+                    "textMode": "value"
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "ov-fullest": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "max(max by (namespace, persistentvolumeclaim) (kubelet_volume_stats_used_bytes{job=\"kubelet\", namespace=~\"$namespace\"}) / max by (namespace, persistentvolumeclaim) (kubelet_volume_stats_capacity_bytes{job=\"kubelet\", namespace=~\"$namespace\"}))",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Highest used/capacity ratio among mounted volumes. See the Volumes tab for which one.",
+              "id": 4,
+              "links": [],
+              "title": "Fullest volume",
+              "vizConfig": {
+                "group": "stat",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "thresholds"
+                      },
+                      "decimals": 1,
+                      "noValue": "0",
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          },
+                          {
+                            "color": "orange",
+                            "value": 0.8
+                          },
+                          {
+                            "color": "red",
+                            "value": 0.9
+                          }
+                        ]
+                      },
+                      "unit": "percentunit"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "colorMode": "background",
+                    "graphMode": "none",
+                    "justifyMode": "center",
+                    "orientation": "auto",
+                    "reduceOptions": {
+                      "calcs": [
+                        "lastNotNull"
+                      ],
+                      "fields": "",
+                      "values": false
+                    },
+                    "textMode": "value"
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "ov-iscsi-free": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "max(iSCSILUNThinProvisionVolFreeMBs) * 1048576",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Free space on the Synology volume holding the thin-provisioned LUNs. Thin LUNs fail writes when it runs out, whatever each PVC reports.",
+              "id": 10,
+              "links": [],
+              "title": "NAS iSCSI volume free",
+              "vizConfig": {
+                "group": "stat",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "thresholds"
+                      },
+                      "noValue": "no data",
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "red",
+                            "value": null
+                          },
+                          {
+                            "color": "orange",
+                            "value": 50000000000
+                          },
+                          {
+                            "color": "green",
+                            "value": 100000000000
+                          }
+                        ]
+                      },
+                      "unit": "bytes"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "colorMode": "background",
+                    "graphMode": "none",
+                    "justifyMode": "center",
+                    "orientation": "auto",
+                    "reduceOptions": {
+                      "calcs": [
+                        "lastNotNull"
+                      ],
+                      "fields": "",
+                      "values": false
+                    },
+                    "textMode": "value"
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "ov-nas-disks": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "count(diskHealthStatus != 1 or diskStatus != 1)",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Disks whose status or health is not Normal.",
+              "id": 12,
+              "links": [],
+              "title": "NAS disks unhealthy",
+              "vizConfig": {
+                "group": "stat",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "thresholds"
+                      },
+                      "noValue": "0",
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          },
+                          {
+                            "color": "red",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "unit": "short"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "colorMode": "background",
+                    "graphMode": "none",
+                    "justifyMode": "center",
+                    "orientation": "auto",
+                    "reduceOptions": {
+                      "calcs": [
+                        "lastNotNull"
+                      ],
+                      "fields": "",
+                      "values": false
+                    },
+                    "textMode": "value"
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "ov-nas-pool": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "max(1 - raidFreeSize / raidTotalSize)",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Highest usage among the Synology storage pools and volumes.",
+              "id": 11,
+              "links": [],
+              "title": "Fullest NAS pool",
+              "vizConfig": {
+                "group": "stat",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "thresholds"
+                      },
+                      "decimals": 1,
+                      "noValue": "no data",
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          },
+                          {
+                            "color": "orange",
+                            "value": 0.85
+                          },
+                          {
+                            "color": "red",
+                            "value": 0.95
+                          }
+                        ]
+                      },
+                      "unit": "percentunit"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "colorMode": "background",
+                    "graphMode": "none",
+                    "justifyMode": "center",
+                    "orientation": "auto",
+                    "reduceOptions": {
+                      "calcs": [
+                        "lastNotNull"
+                      ],
+                      "fields": "",
+                      "values": false
+                    },
+                    "textMode": "value"
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "ov-node-fs": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "max(1 - node_filesystem_avail_bytes{job=\"node-exporter\", fstype=~\"ext4|btrfs|xfs|zfs\", mountpoint!~\"/boot.*|/nix/store\"} / node_filesystem_size_bytes{job=\"node-exporter\", fstype=~\"ext4|btrfs|xfs|zfs\", mountpoint!~\"/boot.*|/nix/store\"})",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Highest usage among node root and data filesystems.",
+              "id": 13,
+              "links": [],
+              "title": "Fullest node disk",
+              "vizConfig": {
+                "group": "stat",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "thresholds"
+                      },
+                      "decimals": 1,
+                      "noValue": "0",
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          },
+                          {
+                            "color": "orange",
+                            "value": 0.8
+                          },
+                          {
+                            "color": "red",
+                            "value": 0.9
+                          }
+                        ]
+                      },
+                      "unit": "percentunit"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "colorMode": "background",
+                    "graphMode": "none",
+                    "justifyMode": "center",
+                    "orientation": "auto",
+                    "reduceOptions": {
+                      "calcs": [
+                        "lastNotNull"
+                      ],
+                      "fields": "",
+                      "values": false
+                    },
+                    "textMode": "value"
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "ov-pv-released": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "count(kube_persistentvolume_status_phase{phase=~\"Released|Failed\"} == 1)",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "PersistentVolumes left behind by a deleted claim. With the Retain policy their NAS LUN still holds space until removed by hand.",
+              "id": 15,
+              "links": [],
+              "title": "Released volumes",
+              "vizConfig": {
+                "group": "stat",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "thresholds"
+                      },
+                      "noValue": "0",
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          },
+                          {
+                            "color": "orange",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "unit": "short"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "colorMode": "background",
+                    "graphMode": "none",
+                    "justifyMode": "center",
+                    "orientation": "auto",
+                    "reduceOptions": {
+                      "calcs": [
+                        "lastNotNull"
+                      ],
+                      "fields": "",
+                      "values": false
+                    },
+                    "textMode": "value"
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "ov-pvc-unbound": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "count(kube_persistentvolumeclaim_status_phase{phase!=\"Bound\", namespace=~\"$namespace\"} == 1)",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "",
+              "id": 14,
+              "links": [],
+              "title": "Claims not Bound",
+              "vizConfig": {
+                "group": "stat",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "thresholds"
+                      },
+                      "noValue": "0",
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          },
+                          {
+                            "color": "orange",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "unit": "short"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "colorMode": "background",
+                    "graphMode": "none",
+                    "justifyMode": "center",
+                    "orientation": "auto",
+                    "reduceOptions": {
+                      "calcs": [
+                        "lastNotNull"
+                      ],
+                      "fields": "",
+                      "values": false
+                    },
+                    "textMode": "value"
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "ov-requested": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum(kube_persistentvolumeclaim_resource_requests_storage_bytes{namespace=~\"$namespace\"})",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Sum of the storage requested by the claims.",
+              "id": 2,
+              "links": [],
+              "title": "Provisioned",
+              "vizConfig": {
+                "group": "stat",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "thresholds"
+                      },
+                      "noValue": "0",
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          }
+                        ]
+                      },
+                      "unit": "bytes"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "colorMode": "none",
+                    "graphMode": "none",
+                    "justifyMode": "center",
+                    "orientation": "auto",
+                    "reduceOptions": {
+                      "calcs": [
+                        "lastNotNull"
+                      ],
+                      "fields": "",
+                      "values": false
+                    },
+                    "textMode": "value"
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "ov-top": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "topk(12, max by (namespace, persistentvolumeclaim) (kubelet_volume_stats_used_bytes{job=\"kubelet\", namespace=~\"$namespace\"}) / max by (namespace, persistentvolumeclaim) (kubelet_volume_stats_capacity_bytes{job=\"kubelet\", namespace=~\"$namespace\"}))",
+                            "instant": true,
+                            "legendFormat": "{{namespace}}/{{persistentvolumeclaim}}",
+                            "range": false,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Mounted volumes by used/capacity.",
+              "id": 8,
+              "links": [],
+              "title": "Fullest volumes",
+              "vizConfig": {
+                "group": "bargauge",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "thresholds"
+                      },
+                      "max": 1,
+                      "min": 0,
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          },
+                          {
+                            "color": "orange",
+                            "value": 0.8
+                          },
+                          {
+                            "color": "red",
+                            "value": 0.9
+                          }
+                        ]
+                      },
+                      "unit": "percentunit"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "displayMode": "basic",
+                    "maxVizHeight": 24,
+                    "minVizHeight": 16,
+                    "namePlacement": "left",
+                    "orientation": "horizontal",
+                    "reduceOptions": {
+                      "calcs": [
+                        "lastNotNull"
+                      ],
+                      "fields": "",
+                      "values": false
+                    },
+                    "showUnfilled": true,
+                    "sizing": "auto",
+                    "valueMode": "color"
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "ov-used": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum(max by (namespace, persistentvolumeclaim) (kubelet_volume_stats_used_bytes{job=\"kubelet\", namespace=~\"$namespace\"}))",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Bytes in use on mounted volumes. Unmounted claims report nothing.",
+              "id": 3,
+              "links": [],
+              "title": "Used",
+              "vizConfig": {
+                "group": "stat",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "thresholds"
+                      },
+                      "noValue": "0",
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          }
+                        ]
+                      },
+                      "unit": "bytes"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "colorMode": "none",
+                    "graphMode": "none",
+                    "justifyMode": "center",
+                    "orientation": "auto",
+                    "reduceOptions": {
+                      "calcs": [
+                        "lastNotNull"
+                      ],
+                      "fields": "",
+                      "values": false
+                    },
+                    "textMode": "value"
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "vol-growth": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "deriv(max by (namespace, persistentvolumeclaim) (kubelet_volume_stats_used_bytes{job=\"kubelet\", namespace=~\"$namespace\"})[1h:]) * 3600",
+                            "instant": false,
+                            "legendFormat": "{{namespace}}/{{persistentvolumeclaim}}",
+                            "range": true,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Rate of change of used bytes. Positive means filling.",
+              "id": 19,
+              "links": [],
+              "title": "Growth per hour",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "axisSoftMin": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "lineWidth": 1,
+                        "showPoints": "never",
+                        "spanNulls": false
+                      },
+                      "unit": "bytes"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "legend": {
+                      "calcs": [
+                        "mean",
+                        "max"
+                      ],
+                      "displayMode": "table",
+                      "placement": "right",
+                      "showLegend": true,
+                      "sortBy": "Mean",
+                      "sortDesc": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "vol-ratio": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "max by (namespace, persistentvolumeclaim) (kubelet_volume_stats_used_bytes{job=\"kubelet\", namespace=~\"$namespace\"}) / max by (namespace, persistentvolumeclaim) (kubelet_volume_stats_capacity_bytes{job=\"kubelet\", namespace=~\"$namespace\"})",
+                            "instant": false,
+                            "legendFormat": "{{namespace}}/{{persistentvolumeclaim}}",
+                            "range": true,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "",
+              "id": 17,
+              "links": [],
+              "title": "Used %",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "axisSoftMin": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "lineWidth": 1,
+                        "showPoints": "never",
+                        "spanNulls": false,
+                        "thresholdsStyle": {
+                          "mode": "dashed"
+                        }
+                      },
+                      "max": 1,
+                      "min": 0,
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          },
+                          {
+                            "color": "orange",
+                            "value": 0.8
+                          },
+                          {
+                            "color": "red",
+                            "value": 0.9
+                          }
+                        ]
+                      },
+                      "unit": "percentunit"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "legend": {
+                      "calcs": [
+                        "lastNotNull",
+                        "max"
+                      ],
+                      "displayMode": "table",
+                      "placement": "right",
+                      "showLegend": true,
+                      "sortBy": "Last *",
+                      "sortDesc": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "vol-table": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "max by (namespace, persistentvolumeclaim, storageclass) (kube_persistentvolumeclaim_info{namespace=~\"$namespace\"}) * on (namespace, persistentvolumeclaim) group_left () max by (namespace, persistentvolumeclaim) (kube_persistentvolumeclaim_resource_requests_storage_bytes{namespace=~\"$namespace\"})",
+                            "format": "table",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "requested"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "requested"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "max by (namespace, persistentvolumeclaim, node) (kubelet_volume_stats_capacity_bytes{job=\"kubelet\", namespace=~\"$namespace\"})",
+                            "format": "table",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "capacity"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "capacity"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "max by (namespace, persistentvolumeclaim) (kubelet_volume_stats_used_bytes{job=\"kubelet\", namespace=~\"$namespace\"})",
+                            "format": "table",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "used"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "used"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "max by (namespace, persistentvolumeclaim) (kubelet_volume_stats_used_bytes{job=\"kubelet\", namespace=~\"$namespace\"}) / max by (namespace, persistentvolumeclaim) (kubelet_volume_stats_capacity_bytes{job=\"kubelet\", namespace=~\"$namespace\"})",
+                            "format": "table",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "ratio"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "ratio"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "max by (namespace, persistentvolumeclaim) (kubelet_volume_stats_available_bytes{job=\"kubelet\", namespace=~\"$namespace\"})",
+                            "format": "table",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "free"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "free"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "max by (namespace, persistentvolumeclaim) (kubelet_volume_stats_used_bytes{job=\"kubelet\", namespace=~\"$namespace\"}) - (max by (namespace, persistentvolumeclaim) (kubelet_volume_stats_used_bytes{job=\"kubelet\", namespace=~\"$namespace\"}) offset 1d)",
+                            "format": "table",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "growth"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "growth"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "(max by (namespace, persistentvolumeclaim) (kubelet_volume_stats_available_bytes{job=\"kubelet\", namespace=~\"$namespace\"}) / -deriv(max by (namespace, persistentvolumeclaim) (kubelet_volume_stats_available_bytes{job=\"kubelet\", namespace=~\"$namespace\"})[7d:])) / 86400 \u003e 0 \u003c 365",
+                            "format": "table",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "eta"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "eta"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": [
+                    {
+                      "group": "merge",
+                      "kind": "Transformation",
+                      "spec": {
+                        "id": "merge",
+                        "options": {}
+                      }
+                    },
+                    {
+                      "group": "organize",
+                      "kind": "Transformation",
+                      "spec": {
+                        "id": "organize",
+                        "options": {
+                          "excludeByName": {
+                            "Time": true
+                          },
+                          "indexByName": {
+                            "Value #capacity": 5,
+                            "Value #eta": 10,
+                            "Value #free": 8,
+                            "Value #growth": 9,
+                            "Value #ratio": 7,
+                            "Value #requested": 4,
+                            "Value #used": 6,
+                            "namespace": 0,
+                            "node": 3,
+                            "persistentvolumeclaim": 1,
+                            "storageclass": 2
+                          },
+                          "renameByName": {
+                            "Value #capacity": "capacity",
+                            "Value #eta": "full in",
+                            "Value #free": "free",
+                            "Value #growth": "change 24h",
+                            "Value #ratio": "used %",
+                            "Value #requested": "requested",
+                            "Value #used": "used",
+                            "persistentvolumeclaim": "claim",
+                            "storageclass": "storage class"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "group": "sortBy",
+                      "kind": "Transformation",
+                      "spec": {
+                        "id": "sortBy",
+                        "options": {
+                          "sort": [
+                            {
+                              "desc": true,
+                              "field": "used %"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "description": "One row per claim. Usage columns stay empty while no pod mounts the volume. Click a namespace to narrow the dashboard to it.",
+              "id": 16,
+              "links": [],
+              "title": "Volumes",
+              "vizConfig": {
+                "group": "table",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "custom": {
+                        "align": "auto",
+                        "filterable": true
+                      },
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          }
+                        ]
+                      }
+                    },
+                    "overrides": [
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "namespace"
+                        },
+                        "properties": [
+                          {
+                            "id": "links",
+                            "value": [
+                              {
+                                "title": "Inspect namespace ${__value.raw}",
+                                "url": "/d/cluster-storage?${__url_time_range}\u0026var-namespace=${__value.raw}"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "requested"
+                        },
+                        "properties": [
+                          {
+                            "id": "unit",
+                            "value": "bytes"
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "capacity"
+                        },
+                        "properties": [
+                          {
+                            "id": "unit",
+                            "value": "bytes"
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "used"
+                        },
+                        "properties": [
+                          {
+                            "id": "unit",
+                            "value": "bytes"
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "free"
+                        },
+                        "properties": [
+                          {
+                            "id": "unit",
+                            "value": "bytes"
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "change 24h"
+                        },
+                        "properties": [
+                          {
+                            "id": "unit",
+                            "value": "bytes"
+                          },
+                          {
+                            "id": "decimals",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "used %"
+                        },
+                        "properties": [
+                          {
+                            "id": "unit",
+                            "value": "percentunit"
+                          },
+                          {
+                            "id": "min",
+                            "value": 0
+                          },
+                          {
+                            "id": "max",
+                            "value": 1
+                          },
+                          {
+                            "id": "decimals",
+                            "value": 1
+                          },
+                          {
+                            "id": "thresholds",
+                            "value": {
+                              "mode": "absolute",
+                              "steps": [
+                                {
+                                  "color": "green",
+                                  "value": null
+                                },
+                                {
+                                  "color": "orange",
+                                  "value": 0.8
+                                },
+                                {
+                                  "color": "red",
+                                  "value": 0.9
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "id": "custom.cellOptions",
+                            "value": {
+                              "mode": "basic",
+                              "type": "gauge",
+                              "valueDisplayMode": "text"
+                            }
+                          },
+                          {
+                            "id": "custom.width",
+                            "value": 200
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "full in"
+                        },
+                        "properties": [
+                          {
+                            "id": "unit",
+                            "value": "d"
+                          },
+                          {
+                            "id": "decimals",
+                            "value": 0
+                          },
+                          {
+                            "id": "description",
+                            "value": "Days until full at the 7d trend. Empty when not filling within a year."
+                          },
+                          {
+                            "id": "thresholds",
+                            "value": {
+                              "mode": "absolute",
+                              "steps": [
+                                {
+                                  "color": "red",
+                                  "value": null
+                                },
+                                {
+                                  "color": "orange",
+                                  "value": 14
+                                },
+                                {
+                                  "color": "text",
+                                  "value": 60
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "id": "custom.cellOptions",
+                            "value": {
+                              "type": "color-text"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "options": {
+                    "cellHeight": "sm",
+                    "footer": {
+                      "show": false
+                    },
+                    "showHeader": true
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "vol-used": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "max by (namespace, persistentvolumeclaim) (kubelet_volume_stats_used_bytes{job=\"kubelet\", namespace=~\"$namespace\"})",
+                            "instant": false,
+                            "legendFormat": "{{namespace}}/{{persistentvolumeclaim}}",
+                            "range": true,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "",
+              "id": 18,
+              "links": [],
+              "title": "Used",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "axisSoftMin": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "lineWidth": 1,
+                        "showPoints": "never",
+                        "spanNulls": false
+                      },
+                      "unit": "bytes"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "legend": {
+                      "calcs": [
+                        "lastNotNull",
+                        "max"
+                      ],
+                      "displayMode": "table",
+                      "placement": "right",
+                      "showLegend": true,
+                      "sortBy": "Last *",
+                      "sortDesc": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          }
+        },
+        "layout": {
+          "kind": "TabsLayout",
+          "spec": {
+            "tabs": [
+              {
+                "kind": "TabsLayoutTab",
+                "spec": {
+                  "layout": {
+                    "kind": "RowsLayout",
+                    "spec": {
+                      "rows": [
+                        {
+                          "kind": "RowsLayoutRow",
+                          "spec": {
+                            "hideHeader": true,
+                            "layout": {
+                              "kind": "AutoGridLayout",
+                              "spec": {
+                                "columnWidthMode": "standard",
+                                "fillScreen": false,
+                                "items": [
+                                  {
+                                    "kind": "AutoGridLayoutItem",
+                                    "spec": {
+                                      "conditionalRendering": {
+                                        "kind": "ConditionalRenderingGroup",
+                                        "spec": {
+                                          "condition": "and",
+                                          "items": [
+                                            {
+                                              "kind": "ConditionalRenderingData",
+                                              "spec": {
+                                                "value": true
+                                              }
+                                            }
+                                          ],
+                                          "visibility": "show"
+                                        }
+                                      },
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "ov-alert-table"
+                                      }
+                                    }
+                                  }
+                                ],
+                                "maxColumnCount": 1,
+                                "rowHeightMode": "short"
+                              }
+                            },
+                            "title": "Firing alerts"
+                          }
+                        },
+                        {
+                          "kind": "RowsLayoutRow",
+                          "spec": {
+                            "collapse": false,
+                            "layout": {
+                              "kind": "GridLayout",
+                              "spec": {
+                                "items": [
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "ov-count"
+                                      },
+                                      "height": 4,
+                                      "width": 4,
+                                      "x": 0,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "ov-requested"
+                                      },
+                                      "height": 4,
+                                      "width": 4,
+                                      "x": 4,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "ov-used"
+                                      },
+                                      "height": 4,
+                                      "width": 4,
+                                      "x": 8,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "ov-fullest"
+                                      },
+                                      "height": 4,
+                                      "width": 4,
+                                      "x": 12,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "ov-filling"
+                                      },
+                                      "height": 4,
+                                      "width": 4,
+                                      "x": 16,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "ov-alerts"
+                                      },
+                                      "height": 4,
+                                      "width": 4,
+                                      "x": 20,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "ov-top"
+                                      },
+                                      "height": 10,
+                                      "width": 12,
+                                      "x": 0,
+                                      "y": 4
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "ov-by-ns"
+                                      },
+                                      "height": 10,
+                                      "width": 12,
+                                      "x": 12,
+                                      "y": 4
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "title": "Volumes"
+                          }
+                        },
+                        {
+                          "kind": "RowsLayoutRow",
+                          "spec": {
+                            "collapse": false,
+                            "layout": {
+                              "kind": "GridLayout",
+                              "spec": {
+                                "items": [
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "ov-iscsi-free"
+                                      },
+                                      "height": 4,
+                                      "width": 4,
+                                      "x": 0,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "ov-nas-pool"
+                                      },
+                                      "height": 4,
+                                      "width": 4,
+                                      "x": 4,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "ov-nas-disks"
+                                      },
+                                      "height": 4,
+                                      "width": 4,
+                                      "x": 8,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "ov-node-fs"
+                                      },
+                                      "height": 4,
+                                      "width": 4,
+                                      "x": 12,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "ov-pvc-unbound"
+                                      },
+                                      "height": 4,
+                                      "width": 4,
+                                      "x": 16,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "ov-pv-released"
+                                      },
+                                      "height": 4,
+                                      "width": 4,
+                                      "x": 20,
+                                      "y": 0
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "title": "Backend"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "title": "Overview"
+                }
+              },
+              {
+                "kind": "TabsLayoutTab",
+                "spec": {
+                  "layout": {
+                    "kind": "GridLayout",
+                    "spec": {
+                      "items": [
+                        {
+                          "kind": "GridLayoutItem",
+                          "spec": {
+                            "element": {
+                              "kind": "ElementReference",
+                              "name": "vol-table"
+                            },
+                            "height": 15,
+                            "width": 24,
+                            "x": 0,
+                            "y": 0
+                          }
+                        },
+                        {
+                          "kind": "GridLayoutItem",
+                          "spec": {
+                            "element": {
+                              "kind": "ElementReference",
+                              "name": "vol-ratio"
+                            },
+                            "height": 9,
+                            "width": 12,
+                            "x": 0,
+                            "y": 15
+                          }
+                        },
+                        {
+                          "kind": "GridLayoutItem",
+                          "spec": {
+                            "element": {
+                              "kind": "ElementReference",
+                              "name": "vol-used"
+                            },
+                            "height": 9,
+                            "width": 12,
+                            "x": 12,
+                            "y": 15
+                          }
+                        },
+                        {
+                          "kind": "GridLayoutItem",
+                          "spec": {
+                            "element": {
+                              "kind": "ElementReference",
+                              "name": "vol-growth"
+                            },
+                            "height": 8,
+                            "width": 24,
+                            "x": 0,
+                            "y": 24
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "title": "Volumes"
+                }
+              },
+              {
+                "kind": "TabsLayoutTab",
+                "spec": {
+                  "layout": {
+                    "kind": "GridLayout",
+                    "spec": {
+                      "items": [
+                        {
+                          "kind": "GridLayoutItem",
+                          "spec": {
+                            "element": {
+                              "kind": "ElementReference",
+                              "name": "io-iops"
+                            },
+                            "height": 9,
+                            "width": 12,
+                            "x": 0,
+                            "y": 0
+                          }
+                        },
+                        {
+                          "kind": "GridLayoutItem",
+                          "spec": {
+                            "element": {
+                              "kind": "ElementReference",
+                              "name": "io-throughput"
+                            },
+                            "height": 9,
+                            "width": 12,
+                            "x": 12,
+                            "y": 0
+                          }
+                        },
+                        {
+                          "kind": "GridLayoutItem",
+                          "spec": {
+                            "element": {
+                              "kind": "ElementReference",
+                              "name": "io-latency"
+                            },
+                            "height": 9,
+                            "width": 12,
+                            "x": 0,
+                            "y": 9
+                          }
+                        },
+                        {
+                          "kind": "GridLayoutItem",
+                          "spec": {
+                            "element": {
+                              "kind": "ElementReference",
+                              "name": "io-queue"
+                            },
+                            "height": 9,
+                            "width": 12,
+                            "x": 12,
+                            "y": 9
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "title": "I/O"
+                }
+              },
+              {
+                "kind": "TabsLayoutTab",
+                "spec": {
+                  "layout": {
+                    "kind": "RowsLayout",
+                    "spec": {
+                      "rows": [
+                        {
+                          "kind": "RowsLayoutRow",
+                          "spec": {
+                            "collapse": false,
+                            "layout": {
+                              "kind": "GridLayout",
+                              "spec": {
+                                "items": [
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "be-raid"
+                                      },
+                                      "height": 8,
+                                      "width": 8,
+                                      "x": 0,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "be-raid-trend"
+                                      },
+                                      "height": 8,
+                                      "width": 16,
+                                      "x": 8,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "be-nas-disks"
+                                      },
+                                      "height": 6,
+                                      "width": 24,
+                                      "x": 0,
+                                      "y": 8
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "title": "NAS"
+                          }
+                        },
+                        {
+                          "kind": "RowsLayoutRow",
+                          "spec": {
+                            "collapse": false,
+                            "layout": {
+                              "kind": "GridLayout",
+                              "spec": {
+                                "items": [
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "be-node-fs"
+                                      },
+                                      "height": 8,
+                                      "width": 8,
+                                      "x": 0,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "be-node-fs-trend"
+                                      },
+                                      "height": 8,
+                                      "width": 12,
+                                      "x": 8,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "be-node-ro"
+                                      },
+                                      "height": 8,
+                                      "width": 4,
+                                      "x": 20,
+                                      "y": 0
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "title": "Nodes"
+                          }
+                        },
+                        {
+                          "kind": "RowsLayoutRow",
+                          "spec": {
+                            "collapse": false,
+                            "layout": {
+                              "kind": "GridLayout",
+                              "spec": {
+                                "items": [
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "be-csi-errors"
+                                      },
+                                      "height": 8,
+                                      "width": 12,
+                                      "x": 0,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "be-csi-latency"
+                                      },
+                                      "height": 8,
+                                      "width": 12,
+                                      "x": 12,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "be-pv-problems"
+                                      },
+                                      "height": 5,
+                                      "width": 24,
+                                      "x": 0,
+                                      "y": 8
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "title": "CSI and lifecycle"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "title": "Backend"
+                }
+              }
+            ]
+          }
+        },
+        "links": [
+          {
+            "asDropdown": false,
+            "icon": "external link",
+            "includeVars": false,
+            "keepTime": true,
+            "tags": [],
+            "targetBlank": false,
+            "title": "Synology NAS",
+            "tooltip": "",
+            "type": "link",
+            "url": "/d/i55CRAlMk"
+          }
+        ],
+        "preload": false,
+        "tags": [
+          "storage",
+          "kubernetes",
+          "synology"
+        ],
+        "timeSettings": {
+          "autoRefresh": "1m",
+          "autoRefreshIntervals": [
+            "1m",
+            "5m",
+            "15m",
+            "1h"
+          ],
+          "fiscalYearStartMonth": 0,
+          "from": "now-24h",
+          "hideTimepicker": false,
+          "timezone": "browser",
+          "to": "now"
+        },
+        "title": "Cluster storage",
+        "variables": [
+          {
+            "kind": "QueryVariable",
+            "spec": {
+              "allValue": ".*",
+              "allowCustomValue": true,
+              "current": {
+                "text": [
+                  "All"
+                ],
+                "value": [
+                  "$__all"
+                ]
+              },
+              "definition": "label_values(kube_persistentvolumeclaim_info, namespace)",
+              "description": "Narrows volume panels. NAS and node panels always show the whole cluster.",
+              "hide": "dontHide",
+              "includeAll": true,
+              "label": "Namespace",
+              "multi": true,
+              "name": "namespace",
+              "options": [],
+              "query": {
+                "group": "prometheus",
+                "kind": "DataQuery",
+                "spec": {
+                  "qryType": 1,
+                  "query": "label_values(kube_persistentvolumeclaim_info, namespace)",
+                  "refId": "PrometheusVariableQueryEditor-VariableQuery"
+                },
+                "version": "v0"
+              },
+              "refresh": "onDashboardLoad",
+              "regex": "",
+              "skipUrlSync": false,
+              "sort": "alphabeticalAsc"
+            }
+          }
+        ]
+      }
+    }
+kind: ConfigMap
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    grafana_dashboard: "1"
+  name: vmks-storage
