@@ -33,6 +33,17 @@ metadata:
 stringData:
   id_ed25519: #@ sops("nixci", "ssh_key")
 ---
+#! Client half of daddy's BuildKit mTLS (one-off CA, see znix modules/hosts/daddy/buildkit.nix).
+apiVersion: v1
+kind: Secret
+metadata:
+  name: #@ a._.buildkitSecretName
+  namespace: #@ dv.myks.context.app
+stringData:
+  ca.crt: #@ sops("buildkit", "ca_crt")
+  tls.crt: #@ sops("buildkit", "client_crt")
+  tls.key: #@ sops("buildkit", "client_key")
+---
 #! Adds to the environment's restrict-egress policy (DNS, same namespace).
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -67,6 +78,8 @@ spec:
         - port: 22
           protocol: TCP
         - port: 443
+          protocol: TCP
+        - port: #@ a._.buildkitPort
           protocol: TCP
 ---
 #! Caps the pool across all repositories (maxRunners is per scale set).
