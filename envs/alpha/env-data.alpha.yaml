@@ -30,7 +30,7 @@ environment:
   applications:
     - proto: webapp
       name: airgradient-exporter
-    - proto: arc
+    - proto: arc-homelab
     - proto: argocd
     - proto: authelia
     - proto: maks-cams

@@ -1,0 +1,20 @@
+#@data/values
+---
+application:
+  repos:
+    - github-actions-playground
+  githubOwner: Zebradil
+  runnerLabel: homelab
+  maxRunners: 1
+argocd:
+  app:
+    syncPolicy:
+      syncOptions:
+        #! The app spans two namespaces, rendered explicitly.
+        CreateNamespace: null
+helm:
+  charts:
+    - name: arc
+      namespace: arc-system
+render:
+  includeNamespace: true

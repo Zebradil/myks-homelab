@@ -1,0 +1,20 @@
+#@ load("@ytt:data", "data")
+#@ load("/secrets.star", "sops")
+
+#@ dv = data.values
+#@ a = dv.application
+
+#@ for ns in [a._.controllerNamespace, dv.myks.context.app]:
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: #@ ns
+#@ end
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: #@ a._.secretName
+  namespace: #@ dv.myks.context.app
+stringData: #@ { "github_app_" + k: sops("0", k) for k in ["id", "installation_id", "private_key"] }

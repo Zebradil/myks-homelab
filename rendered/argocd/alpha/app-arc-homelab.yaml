@@ -6,15 +6,15 @@ metadata:
     myks.dev/environment: alpha
   finalizers:
     - resources-finalizer.argocd.argoproj.io
-  name: app-alpha-arc
+  name: app-alpha-arc-homelab
   namespace: argocd
 spec:
   destination:
     name: in-cluster
-    namespace: arc
+    namespace: arc-homelab
   project: env-alpha
   source:
-    path: rendered/envs/alpha/arc
+    path: rendered/envs/alpha/arc-homelab
     plugin:
       name: vals
     repoURL: https://github.com/Zebradil/myks-homelab

@@ -6,14 +6,14 @@ metadata:
   finalizers:
     - actions.github.com/cleanup-protection
   labels:
-    actions.github.com/scale-set-name: scale-set
-    actions.github.com/scale-set-namespace: arc-runners
+    actions.github.com/scale-set-name: homelab-github-actions-playground
+    actions.github.com/scale-set-namespace: arc-homelab
     app.kubernetes.io/component: manager-role
-    app.kubernetes.io/instance: scale-set
-    app.kubernetes.io/name: scale-set
+    app.kubernetes.io/instance: homelab-github-actions-playground
+    app.kubernetes.io/name: homelab-github-actions-playground
     app.kubernetes.io/part-of: gha-rs
-  name: scale-set-gha-rs-manager
-  namespace: arc-runners
+  name: homelab-github-actions-playground-gha-rs-manager
+  namespace: arc-homelab
 rules:
   - apiGroups:
       - ""
