@@ -1,0 +1,51 @@
+apiVersion: actions.github.com/v1alpha1
+kind: AutoscalingRunnerSet
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+    actions.github.com/cleanup-manager-role-binding: homelab-github-actions-playground-gha-rs-manager
+    actions.github.com/cleanup-manager-role-name: homelab-github-actions-playground-gha-rs-manager
+    actions.github.com/cleanup-no-permission-service-account-name: homelab-github-actions-playground-gha-rs-no-permission
+    actions.github.com/values-hash: 6e421e39c729f0435c28326bb012c50bfa03588c9c80a26ac9885aacac19d19
+  labels:
+    actions.github.com/scale-set-name: homelab-github-actions-playground
+    actions.github.com/scale-set-namespace: arc-homelab
+    app.kubernetes.io/component: autoscaling-runner-set
+    app.kubernetes.io/instance: homelab-github-actions-playground
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: homelab-github-actions-playground
+    app.kubernetes.io/part-of: gha-rs
+    app.kubernetes.io/version: 0.15.0
+    helm.sh/chart: gha-rs-0.15.0
+  name: homelab-github-actions-playground
+  namespace: arc-homelab
+spec:
+  githubConfigSecret: arc-homelab-app-credentials
+  githubConfigUrl: https://github.com/Zebradil/github-actions-playground
+  listenerConfig:
+    scaler:
+      burst: 100
+      qps: 50
+  listenerTemplate:
+    spec:
+      containers:
+        - name: listener
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 10m
+              memory: 32Mi
+  maxRunners: 1
+  minRunners: 0
+  runnerScaleSetLabels:
+    - homelab
+  template:
+    spec:
+      containers:
+        - command:
+            - /home/runner/run.sh
+          image: oci.zebradil.dev/ghcr.io-cache/actions/actions-runner@sha256:6d0b2d80d80f143f77dcb676e50920100bbb547e39e883454d57f45ab8c31300
+          name: runner
+      restartPolicy: Never
+      serviceAccountName: homelab-github-actions-playground-gha-rs-no-permission

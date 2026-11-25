@@ -1,0 +1,19 @@
+#@data/values-schema
+---
+#@overlay/match-child-defaults missing_ok=True
+application:
+  #! Repositories of githubOwner that get a scale set each.
+  repos: ['']
+  #@schema/validation min_len=1
+  githubOwner: ''
+  #! The runs-on label every scale set registers as.
+  #@schema/validation min_len=1
+  runnerLabel: ''
+  maxRunners: 1
+  #@schema/validation min_len=1
+  controllerNamespace: ''
+
+  #! values shared across plugins, do not change
+  _:
+    secretName: arc-homelab-app-credentials
+    chartPrefix: homelab-

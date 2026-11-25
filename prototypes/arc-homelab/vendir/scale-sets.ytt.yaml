@@ -1,0 +1,20 @@
+#@ load("@ytt:data", "data")
+#@ a = data.values.application
+---
+apiVersion: vendir.k14s.io/v1alpha1
+kind: Config
+directories:
+  #! One copy of the chart per repository: myks identifies a chart by its
+  #! directory, and each release needs its own values.
+  #@ for repo in a.repos:
+  - path: #@ "charts/" + a._.chartPrefix + repo
+    contents:
+      - path: .
+        lazy: true
+        helmChart:
+          name: gha-runner-scale-set
+          #! Keep in step with the controller chart in prototypes/arc.
+          version: 0.15.0
+          repository:
+            url: oci://ghcr.io/actions/actions-runner-controller-charts
+  #@ end

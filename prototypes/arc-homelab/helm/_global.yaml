@@ -1,0 +1,25 @@
+#@ load("@ytt:data", "data")
+#@ load("util.star", res="resources")
+
+#@ dv = data.values
+#@ a = dv.application
+#@ repo = dv.myks.context.helm.chart[len(a._.chartPrefix):]
+---
+githubConfigUrl: #@ "https://github.com/{}/{}".format(a.githubOwner, repo)
+githubConfigSecret: #@ a._.secretName
+#! The chart names Kubernetes objects after the scale set name (the release
+#! name, unique per repository); jobs select the shared label with runs-on.
+scaleSetLabels:
+  - #@ a.runnerLabel
+minRunners: 0
+maxRunners: #@ a.maxRunners
+controllerServiceAccount:
+  namespace: #@ a.controllerNamespace
+  #! This value must match the name of the Service rendered by the arc chart
+  name: arc-gha-rs-controller
+listenerTemplate:
+  spec:
+    containers:
+      #! The chart merges a container named "listener" into its own listener container.
+      - name: listener
+        resources: #@ res("10m", "32Mi", "128Mi")

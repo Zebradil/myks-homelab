@@ -57,6 +57,8 @@ environment:
     name: airgradient-exporter
   - proto: arc
     name: ""
+  - proto: arc-homelab
+    name: ""
   - proto: argocd
     name: ""
   - proto: authelia

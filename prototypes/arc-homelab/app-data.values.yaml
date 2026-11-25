@@ -1,0 +1,10 @@
+#@data/values
+---
+application:
+  repos:
+    - github-actions-playground
+  githubOwner: Zebradil
+  runnerLabel: homelab
+  maxRunners: 1
+  #! The controller of the `arc` app serves these scale sets too.
+  controllerNamespace: arc-system
