@@ -75,12 +75,3 @@ prototype:
         - prometheus/node-exporter-full.json
       newRootPath: prometheus
       plugin: ytt
-    pvc-dashboard:
-      #! Archived repo, so the ref never moves; the dashboard tracks the stable
-      #! kubelet_volume_stats_* metrics. Grafana.com dashboard 13646.
-      git:
-        ref: 721ee4069aab28c533babf63f1c21051924f2f33
-        url: https://github.com/dfds/ded-grafana-dashboards
-      includePaths:
-        - kubernetes-persistent-volumes.json
-      plugin: ytt

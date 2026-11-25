@@ -78,16 +78,7 @@
 #@   end
 #@ end
 
-#! PVC usage dashboards. Two of them for now to compare; drop one later.
-
-#! 1. Vendored via vendir from dfds/ded-grafana-dashboards (Grafana.com 13646).
-#!    Its panels hard-code the datasource name "Prometheus"; our provisioned
-#!    default is named "VictoriaMetrics", so rewrite the name (couples to the
-#!    datasource name set in vmks.grafana.yaml).
-#@ dash = json.decode(data.read("kubernetes-persistent-volumes.json").replace('"Prometheus"', '"VictoriaMetrics"'))
---- #@ gen_dashboard_obj("vmks-pvc-usage-13646", dash)
-
-#! 2. kubernetes-mixin "persistentvolumesusage", copy-pasted from kube-prometheus
-#!    compiled output. Uses a templated ${datasource} var, binds to the default.
-#!    TODO: move to jsonnet generation once myks supports it.
---- #@ gen_dashboard("persistentvolumesusage.json", name="vmks-pvc-usage-mixin")
+#! Homelab-owned storage dashboard: PVCs, per-volume iSCSI I/O, NAS and node disks.
+#! Grafana schema v2 (tabs, rows, conditional rendering), so it is a Kubernetes-style
+#! resource (apiVersion dashboard.grafana.app/v2); metadata.name is the uid.
+--- #@ gen_dashboard("storage-dashboard.json", name="vmks-storage")

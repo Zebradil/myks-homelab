@@ -85,12 +85,3 @@ directories:
     includePaths:
     - prometheus/node-exporter-full.json
     newRootPath: prometheus
-- path: ytt/pvc-dashboard
-  contents:
-  - path: .
-    lazy: true
-    git:
-      url: https://github.com/dfds/ded-grafana-dashboards
-      ref: 721ee4069aab28c533babf63f1c21051924f2f33
-    includePaths:
-    - kubernetes-persistent-volumes.json
