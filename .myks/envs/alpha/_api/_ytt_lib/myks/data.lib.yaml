@@ -97,8 +97,6 @@ environment:
     name: ""
   - proto: outdoor-weather
     name: ""
-  - proto: pacoloco
-    name: ""
   - proto: paperless
     name: ""
   - proto: snmp-exporter
