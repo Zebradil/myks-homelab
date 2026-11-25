@@ -3,6 +3,7 @@
 application:
   repos:
     - github-actions-playground
+    - slacktus
   githubOwner: Zebradil
   runnerLabel: homelab
   maxRunners: 1
