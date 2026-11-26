@@ -3166,7 +3166,26 @@ data:
                           "group": "prometheus",
                           "kind": "DataQuery",
                           "spec": {
-                            "expr": "sum(gha_controller_pending_ephemeral_runners{repository=~\"$repository\"}) * (1 - (sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"used\"}) \u003e= bool sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"hard\"})))",
+                            "expr": "(sum(kube_pod_status_unschedulable{namespace=\"arc-homelab\"}) or vector(0))",
+                            "instant": false,
+                            "legendFormat": "no node fits",
+                            "range": true,
+                            "refId": "B"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "G"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "clamp_min(sum(gha_controller_pending_ephemeral_runners{repository=~\"$repository\"}) * (1 - (sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"used\"}) \u003e= bool sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"hard\"}))) - (sum(kube_pod_status_unschedulable{namespace=\"arc-homelab\"}) or vector(0)), 0)",
                             "instant": false,
                             "legendFormat": "pod starting",
                             "range": true,
@@ -3258,7 +3277,7 @@ data:
                   "transformations": []
                 }
               },
-              "description": "Jobs assigned to a runner but not running yet, stacked by cause: runner pods pending while the namespace quota is full (pod quota full), runner pods pending below the quota, so scheduling or image pull (pod starting), and the rest, waiting on GitHub or the listener (other). A scale set never takes more jobs than its maxRunners: further jobs stay queued on GitHub, invisible here, so the line \"repos at maxRunners\" counts the repositories that are at that cap. The pod lines cover all repositories.",
+              "description": "Jobs assigned to a runner but not running yet, stacked by cause: runner pods pending while the namespace quota is full (pod quota full), runner pods no node has room for (no node fits; all repositories, whatever the filter), other pending runner pods, so image pull or container start (pod starting), and the rest, waiting on GitHub or the listener (other). A scale set never runs more runners than its maxRunners: jobs beyond that wait without a pod, so the line \"repos at maxRunners\" counts the repositories whose assigned jobs reach that cap. The pod lines cover all repositories.",
               "id": 27,
               "links": [],
               "title": "Why jobs wait",
@@ -3287,6 +3306,21 @@ data:
                       "decimals": 0
                     },
                     "overrides": [
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "no node fits"
+                        },
+                        "properties": [
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "dark-red",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      },
                       {
                         "matcher": {
                           "id": "byName",

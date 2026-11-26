@@ -6,7 +6,7 @@ metadata:
     actions.github.com/cleanup-manager-role-binding: homelab-github-actions-playground-gha-rs-manager
     actions.github.com/cleanup-manager-role-name: homelab-github-actions-playground-gha-rs-manager
     actions.github.com/cleanup-no-permission-service-account-name: homelab-github-actions-playground-gha-rs-no-permission
-    actions.github.com/values-hash: 8bca1fb88901e51a116e120610831228cd6bb6328d884d67189a0fb98178b58
+    actions.github.com/values-hash: b5bb89f5908a7d4526db5aa64b746d159b81d13a63939e416041e2dd72520d9
   labels:
     actions.github.com/scale-set-name: homelab-github-actions-playground
     actions.github.com/scale-set-namespace: arc-homelab
@@ -36,7 +36,7 @@ spec:
             requests:
               cpu: 10m
               memory: 32Mi
-  maxRunners: 6
+  maxRunners: 50
   minRunners: 0
   runnerScaleSetLabels:
     - homelab
