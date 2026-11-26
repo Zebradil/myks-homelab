@@ -6,7 +6,7 @@ metadata:
     actions.github.com/cleanup-manager-role-binding: homelab-kasha-gha-rs-manager
     actions.github.com/cleanup-manager-role-name: homelab-kasha-gha-rs-manager
     actions.github.com/cleanup-no-permission-service-account-name: homelab-kasha-gha-rs-no-permission
-    actions.github.com/values-hash: 6fa436f3453c071822b2f18f8db41d5395662707855fd3ad6dda27291ec34b3
+    actions.github.com/values-hash: ad98c0b48f66bf4b26f93e744ef0e66e165d2fbfdac95fa03840bcf5651798a
   labels:
     actions.github.com/scale-set-name: homelab-kasha
     actions.github.com/scale-set-namespace: arc-homelab
@@ -36,7 +36,7 @@ spec:
             requests:
               cpu: 10m
               memory: 32Mi
-  maxRunners: 2
+  maxRunners: 4
   minRunners: 0
   runnerScaleSetLabels:
     - homelab
@@ -58,7 +58,7 @@ spec:
               memory: 6Gi
             requests:
               cpu: "1"
-              memory: 2Gi
+              memory: 3Gi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:

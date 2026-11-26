@@ -11,7 +11,7 @@ spec:
       rules:
         - alert: HomelabRunnerJobsPending
           annotations:
-            description: '{{ $value }} job(s) assigned to the homelab scale set have had no runner for 10 minutes. Either runner pods cannot start (image pull, ResourceQuota `runners`, scheduling: check `kubectl -n arc-homelab get ephemeralrunners,pods` and events) or more jobs are queued than the pool holds (maxRunners 2 per repository, 4 pods in total).'
+            description: '{{ $value }} job(s) assigned to the homelab scale set have had no runner for 10 minutes. Either runner pods cannot start (image pull, ResourceQuota `runners`, scheduling: check `kubectl -n arc-homelab get ephemeralrunners,pods` and events) or more jobs are queued than the pool holds (maxRunners 4 per repository, 6 pods in total).'
             summary: Jobs for {{ $labels.repository }} wait for a homelab runner
           expr: max by (repository) (gha_assigned_jobs - gha_running_jobs) > 0
           for: 10m

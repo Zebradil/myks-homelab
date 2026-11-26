@@ -6,7 +6,7 @@ metadata:
     actions.github.com/cleanup-manager-role-binding: homelab-know-mcp-gha-rs-manager
     actions.github.com/cleanup-manager-role-name: homelab-know-mcp-gha-rs-manager
     actions.github.com/cleanup-no-permission-service-account-name: homelab-know-mcp-gha-rs-no-permission
-    actions.github.com/values-hash: 87ba8ebf4b31d7a921de47f6b199891581b76631fbf51b93a71732bff034c8c
+    actions.github.com/values-hash: 30efafd1d4aa8a18f3b51e15bd9ee9f7d30db011ce591f16887c09a553b5739
   labels:
     actions.github.com/scale-set-name: homelab-know-mcp
     actions.github.com/scale-set-namespace: arc-homelab
@@ -36,7 +36,7 @@ spec:
             requests:
               cpu: 10m
               memory: 32Mi
-  maxRunners: 2
+  maxRunners: 4
   minRunners: 0
   runnerScaleSetLabels:
     - homelab
@@ -58,7 +58,7 @@ spec:
               memory: 6Gi
             requests:
               cpu: "1"
-              memory: 2Gi
+              memory: 3Gi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
