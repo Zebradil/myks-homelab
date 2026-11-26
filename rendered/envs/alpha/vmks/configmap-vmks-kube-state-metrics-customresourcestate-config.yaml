@@ -1,0 +1,54 @@
+apiVersion: v1
+data:
+  config.yaml: |
+    kind: CustomResourceStateMetrics
+    spec:
+      resources:
+      - groupVersionKind:
+          group: actions.github.com
+          kind: EphemeralRunner
+          version: v1alpha1
+        labelsFromPath:
+          ephemeralrunner:
+          - metadata
+          - name
+          namespace:
+          - metadata
+          - namespace
+          organization:
+          - metadata
+          - labels
+          - actions.github.com/organization
+          repository:
+          - metadata
+          - labels
+          - actions.github.com/repository
+        metricNamePrefix: arc_ephemeralrunner
+        metrics:
+        - each:
+            info:
+              labelsFromPath:
+                job_display_name:
+                - status
+                - jobDisplayName
+                workflow_ref:
+                - status
+                - jobWorkflowRef
+                workflow_run_id:
+                - status
+                - workflowRunId
+            type: Info
+          help: Workflow job the runner was assigned; job labels stay empty until GitHub
+            assigns one.
+          name: job_info
+kind: ConfigMap
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  labels:
+    app.kubernetes.io/component: metrics
+    app.kubernetes.io/instance: vmks
+    app.kubernetes.io/name: kube-state-metrics
+    app.kubernetes.io/part-of: kube-state-metrics
+  name: vmks-kube-state-metrics-customresourcestate-config
+  namespace: vmks

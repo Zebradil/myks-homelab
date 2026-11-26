@@ -17,6 +17,39 @@ victoria-metrics-operator:
 
 kube-state-metrics:
   resources: #@ res("10m", "48Mi", "128Mi")
+  #! ARC's own metrics carry no per-run identity. An EphemeralRunner exists for exactly one job and
+  #! names it in its status, which gives the Homelab runners dashboard its job timeline and run links.
+  rbac:
+    extraRules:
+      - apiGroups: [actions.github.com]
+        resources: [ephemeralrunners]
+        verbs: [list, watch]
+  customResourceState:
+    enabled: true
+    config:
+      kind: CustomResourceStateMetrics
+      spec:
+        resources:
+          - groupVersionKind:
+              group: actions.github.com
+              version: v1alpha1
+              kind: EphemeralRunner
+            metricNamePrefix: arc_ephemeralrunner
+            labelsFromPath:
+              ephemeralrunner: [metadata, name]
+              namespace: [metadata, namespace]
+              organization: [metadata, labels, actions.github.com/organization]
+              repository: [metadata, labels, actions.github.com/repository]
+            metrics:
+              - name: job_info
+                help: Workflow job the runner was assigned; job labels stay empty until GitHub assigns one.
+                each:
+                  type: Info
+                  info:
+                    labelsFromPath:
+                      job_display_name: [status, jobDisplayName]
+                      workflow_ref: [status, jobWorkflowRef]
+                      workflow_run_id: [status, workflowRunId]
 
 prometheus-node-exporter:
   resources: #@ res("10m", "32Mi", "64Mi")

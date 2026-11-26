@@ -2,889 +2,3748 @@ apiVersion: v1
 data:
   arc-homelab-dashboard.json: |-
     {
-      "description": "ARC scale sets on the homelab cluster (runs-on: homelab) and the daddy host their builds run on.",
-      "editable": true,
-      "graphTooltip": 1,
-      "panels": [
-        {
-          "collapsed": false,
-          "gridPos": {
-            "h": 1,
-            "w": 24,
-            "x": 0,
-            "y": 0
-          },
-          "id": 1,
-          "panels": [],
-          "title": "Now",
-          "type": "row"
-        },
-        {
-          "datasource": {
-            "type": "prometheus"
-          },
-          "fieldConfig": {
-            "defaults": {
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "blue",
-                    "value": null
-                  }
-                ]
-              }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 4,
-            "w": 4,
-            "x": 0,
-            "y": 1
-          },
-          "id": 2,
-          "options": {
-            "colorMode": "background",
-            "graphMode": "none",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ]
-            }
-          },
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus"
-              },
-              "expr": "sum(gha_running_jobs{repository=~\"$repository\"})",
-              "legendFormat": "__auto",
-              "refId": "A"
-            }
-          ],
-          "title": "Running jobs",
-          "type": "stat"
-        },
-        {
-          "datasource": {
-            "type": "prometheus"
-          },
-          "description": "Jobs GitHub assigned to a homelab scale set that no runner has picked up yet. HomelabRunnerJobsPending fires after 10 minutes above zero.",
-          "fieldConfig": {
-            "defaults": {
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "orange",
-                    "value": 1
-                  }
-                ]
-              }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 4,
-            "w": 4,
-            "x": 4,
-            "y": 1
-          },
-          "id": 3,
-          "options": {
-            "colorMode": "background",
-            "graphMode": "none",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ]
-            }
-          },
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus"
-              },
-              "expr": "sum(gha_assigned_jobs{repository=~\"$repository\"} - gha_running_jobs{repository=~\"$repository\"})",
-              "legendFormat": "__auto",
-              "refId": "A"
-            }
-          ],
-          "title": "Waiting jobs",
-          "type": "stat"
-        },
-        {
-          "datasource": {
-            "type": "prometheus"
-          },
-          "description": "Pods counted against the `runners` ResourceQuota (hard limit 4, shared by all repositories).",
-          "fieldConfig": {
-            "defaults": {
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "orange",
-                    "value": 4
-                  }
-                ]
-              }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 4,
-            "w": 4,
-            "x": 8,
-            "y": 1
-          },
-          "id": 4,
-          "options": {
-            "colorMode": "background",
-            "graphMode": "none",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ]
-            }
-          },
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus"
-              },
-              "expr": "sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"used\"})",
-              "legendFormat": "__auto",
-              "refId": "A"
-            }
-          ],
-          "title": "Runner pods",
-          "type": "stat"
-        },
-        {
-          "datasource": {
-            "type": "prometheus"
-          },
-          "description": "Listener pods the ARC controller reports running, one per repository. Without its listener a repository's jobs stay queued.",
-          "fieldConfig": {
-            "defaults": {
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "red",
-                    "value": null
-                  },
-                  {
-                    "color": "green",
-                    "value": 1
-                  }
-                ]
-              }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 4,
-            "w": 4,
-            "x": 12,
-            "y": 1
-          },
-          "id": 5,
-          "options": {
-            "colorMode": "background",
-            "graphMode": "none",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ]
-            }
-          },
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus"
-              },
-              "expr": "sum(gha_controller_running_listeners)",
-              "legendFormat": "__auto",
-              "refId": "A"
-            }
-          ],
-          "title": "Listeners",
-          "type": "stat"
-        },
-        {
-          "datasource": {
-            "type": "prometheus"
-          },
-          "description": "Over the selected time range. Listener restarts reset the counter; increase() absorbs that.",
-          "fieldConfig": {
-            "defaults": {
-              "decimals": 0,
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "blue",
-                    "value": null
-                  }
-                ]
-              }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 4,
-            "w": 4,
-            "x": 16,
-            "y": 1
-          },
-          "id": 6,
-          "options": {
-            "colorMode": "background",
-            "graphMode": "none",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ]
-            }
-          },
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus"
-              },
-              "expr": "sum(increase(gha_completed_jobs_total{repository=~\"$repository\"}[$__range])) or vector(0)",
-              "legendFormat": "__auto",
-              "refId": "A"
-            }
-          ],
-          "title": "Jobs completed",
-          "type": "stat"
-        },
-        {
-          "datasource": {
-            "type": "prometheus"
-          },
-          "description": "Failed, cancelled or skipped jobs over the selected time range.",
-          "fieldConfig": {
-            "defaults": {
-              "decimals": 0,
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 1
-                  }
-                ]
-              }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 4,
-            "w": 4,
-            "x": 20,
-            "y": 1
-          },
-          "id": 7,
-          "options": {
-            "colorMode": "background",
-            "graphMode": "none",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ]
-            }
-          },
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus"
-              },
-              "expr": "sum(increase(gha_completed_jobs_total{repository=~\"$repository\", job_result!=\"succeeded\"}[$__range])) or vector(0)",
-              "legendFormat": "__auto",
-              "refId": "A"
-            }
-          ],
-          "title": "Jobs not succeeded",
-          "type": "stat"
-        },
-        {
-          "collapsed": false,
-          "gridPos": {
-            "h": 1,
-            "w": 24,
-            "x": 0,
-            "y": 5
-          },
-          "id": 8,
-          "panels": [],
-          "title": "Scale sets",
-          "type": "row"
-        },
-        {
-          "datasource": {
-            "type": "prometheus"
-          },
-          "description": "Assigned above running means jobs are waiting for a runner pod.",
-          "fieldConfig": {
-            "defaults": {
-              "decimals": 0
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 0,
-            "y": 6
-          },
-          "id": 9,
-          "options": {},
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus"
-              },
-              "expr": "sum by (repository) (gha_assigned_jobs{repository=~\"$repository\"})",
-              "legendFormat": "{{repository}} assigned",
-              "refId": "A"
-            },
-            {
-              "datasource": {
-                "type": "prometheus"
-              },
-              "expr": "sum by (repository) (gha_running_jobs{repository=~\"$repository\"})",
-              "legendFormat": "{{repository}} running",
-              "refId": "B"
-            }
-          ],
-          "title": "Jobs by repository",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "prometheus"
-          },
-          "description": "Desired comes from the listener, registered and busy from GitHub, pending and failed from the controller's EphemeralRunner objects.",
-          "fieldConfig": {
-            "defaults": {
-              "decimals": 0
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 12,
-            "y": 6
-          },
-          "id": 10,
-          "options": {},
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus"
-              },
-              "expr": "sum(gha_desired_runners{repository=~\"$repository\"})",
-              "legendFormat": "desired",
-              "refId": "A"
-            },
-            {
-              "datasource": {
-                "type": "prometheus"
-              },
-              "expr": "sum(gha_registered_runners{repository=~\"$repository\"})",
-              "legendFormat": "registered",
-              "refId": "B"
-            },
-            {
-              "datasource": {
-                "type": "prometheus"
-              },
-              "expr": "sum(gha_busy_runners{repository=~\"$repository\"})",
-              "legendFormat": "busy",
-              "refId": "C"
-            },
-            {
-              "datasource": {
-                "type": "prometheus"
-              },
-              "expr": "sum(gha_controller_pending_ephemeral_runners{repository=~\"$repository\"}) or vector(0)",
-              "legendFormat": "pending pods",
-              "refId": "D"
-            },
-            {
-              "datasource": {
-                "type": "prometheus"
-              },
-              "expr": "sum(gha_controller_failed_ephemeral_runners{repository=~\"$repository\"}) or vector(0)",
-              "legendFormat": "failed",
-              "refId": "E"
-            }
-          ],
-          "title": "Runners",
-          "type": "timeseries"
-        },
-        {
-          "collapsed": false,
-          "gridPos": {
-            "h": 1,
-            "w": 24,
-            "x": 0,
-            "y": 14
-          },
-          "id": 11,
-          "panels": [],
-          "title": "Jobs",
-          "type": "row"
-        },
-        {
-          "datasource": {
-            "type": "prometheus"
-          },
-          "fieldConfig": {
-            "defaults": {
-              "custom": {
-                "drawStyle": "bars",
-                "fillOpacity": 80,
-                "stacking": {
-                  "mode": "normal"
+      "apiVersion": "dashboard.grafana.app/v2",
+      "kind": "Dashboard",
+      "metadata": {
+        "name": "homelab-runners"
+      },
+      "spec": {
+        "annotations": [],
+        "cursorSync": "Crosshair",
+        "description": "ARC scale sets on the homelab cluster (runs-on: homelab) and the daddy host their builds run on.",
+        "editable": true,
+        "elements": {
+          "completed": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "round(sum(increase(gha_completed_jobs_total{repository=~\"$repository\"}[$__range])))",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
                 }
               },
-              "decimals": 0
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 8,
-            "w": 8,
-            "x": 0,
-            "y": 15
-          },
-          "id": 12,
-          "options": {},
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus"
-              },
-              "expr": "sum by (job_result) (increase(gha_completed_jobs_total{repository=~\"$repository\"}[1h]))",
-              "interval": "1h",
-              "legendFormat": "{{job_result}}",
-              "refId": "A"
-            }
-          ],
-          "title": "Jobs completed per hour",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "prometheus"
-          },
-          "description": "ARC's job startup duration: from GitHub assigning the job to the runner starting it, so it includes pod scheduling, image pull and runner registration. Hourly windows; histogram buckets make it approximate.",
-          "fieldConfig": {
-            "defaults": {
-              "unit": "s"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 8,
-            "w": 8,
-            "x": 8,
-            "y": 15
-          },
-          "id": 13,
-          "options": {},
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus"
-              },
-              "expr": "histogram_quantile(0.5, sum by (le) (increase(gha_job_startup_duration_seconds_bucket{repository=~\"$repository\"}[1h])))",
-              "legendFormat": "p50",
-              "refId": "A"
-            },
-            {
-              "datasource": {
-                "type": "prometheus"
-              },
-              "expr": "histogram_quantile(0.95, sum by (le) (increase(gha_job_startup_duration_seconds_bucket{repository=~\"$repository\"}[1h])))",
-              "legendFormat": "p95",
-              "refId": "B"
-            }
-          ],
-          "title": "Queue time (assigned to started)",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "prometheus"
-          },
-          "description": "Hourly windows; histogram buckets make it approximate.",
-          "fieldConfig": {
-            "defaults": {
-              "unit": "s"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 8,
-            "w": 8,
-            "x": 16,
-            "y": 15
-          },
-          "id": 14,
-          "options": {},
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus"
-              },
-              "expr": "histogram_quantile(0.5, sum by (repository, le) (increase(gha_job_execution_duration_seconds_bucket{repository=~\"$repository\"}[1h])))",
-              "legendFormat": "{{repository}} p50",
-              "refId": "A"
-            },
-            {
-              "datasource": {
-                "type": "prometheus"
-              },
-              "expr": "histogram_quantile(0.95, sum by (repository, le) (increase(gha_job_execution_duration_seconds_bucket{repository=~\"$repository\"}[1h])))",
-              "legendFormat": "{{repository}} p95",
-              "refId": "B"
-            }
-          ],
-          "title": "Job duration by repository",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "prometheus"
-          },
-          "description": "Per workflow job. Medians come from histogram buckets, so they are approximate.",
-          "fieldConfig": {
-            "defaults": {
-              "decimals": 0
-            },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byRegexp",
-                  "options": "Median.*"
-                },
-                "properties": [
-                  {
-                    "id": "unit",
-                    "value": "s"
+              "description": "Over the selected time range.",
+              "id": 5,
+              "links": [],
+              "title": "Jobs completed",
+              "vizConfig": {
+                "group": "stat",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "thresholds"
+                      },
+                      "decimals": 0,
+                      "noValue": "0",
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "blue",
+                            "value": null
+                          }
+                        ]
+                      }
+                    },
+                    "overrides": []
                   },
-                  {
-                    "id": "decimals",
-                    "value": 1
+                  "options": {
+                    "colorMode": "background",
+                    "graphMode": "none",
+                    "justifyMode": "center",
+                    "orientation": "auto",
+                    "reduceOptions": {
+                      "calcs": [
+                        "lastNotNull"
+                      ],
+                      "fields": "",
+                      "values": false
+                    },
+                    "textMode": "value"
                   }
-                ]
-              }
-            ]
-          },
-          "gridPos": {
-            "h": 8,
-            "w": 24,
-            "x": 0,
-            "y": 23
-          },
-          "id": 15,
-          "options": {
-            "sortBy": [
-              {
-                "desc": true,
-                "displayName": "Runs"
-              }
-            ]
-          },
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus"
-              },
-              "expr": "sum by (repository, job_name) (increase(gha_completed_jobs_total{repository=~\"$repository\"}[$__range]))",
-              "format": "table",
-              "instant": true,
-              "legendFormat": "__auto",
-              "refId": "A"
-            },
-            {
-              "datasource": {
-                "type": "prometheus"
-              },
-              "expr": "sum by (repository, job_name) (increase(gha_completed_jobs_total{repository=~\"$repository\", job_result!=\"succeeded\"}[$__range]))",
-              "format": "table",
-              "instant": true,
-              "legendFormat": "__auto",
-              "refId": "B"
-            },
-            {
-              "datasource": {
-                "type": "prometheus"
-              },
-              "expr": "histogram_quantile(0.5, sum by (repository, job_name, le) (increase(gha_job_startup_duration_seconds_bucket{repository=~\"$repository\"}[$__range])))",
-              "format": "table",
-              "instant": true,
-              "legendFormat": "__auto",
-              "refId": "C"
-            },
-            {
-              "datasource": {
-                "type": "prometheus"
-              },
-              "expr": "histogram_quantile(0.5, sum by (repository, job_name, le) (increase(gha_job_execution_duration_seconds_bucket{repository=~\"$repository\"}[$__range])))",
-              "format": "table",
-              "instant": true,
-              "legendFormat": "__auto",
-              "refId": "D"
-            }
-          ],
-          "title": "Jobs over the time range",
-          "transformations": [
-            {
-              "id": "merge",
-              "options": {}
-            },
-            {
-              "id": "organize",
-              "options": {
-                "excludeByName": {
-                  "Time": true
                 },
-                "renameByName": {
-                  "Value #A": "Runs",
-                  "Value #B": "Not succeeded",
-                  "Value #C": "Median queue time",
-                  "Value #D": "Median duration",
-                  "job_name": "Job",
-                  "repository": "Repository"
+                "version": "13.2.3"
+              }
+            }
+          },
+          "completed_bars": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum by (job_result) (increase(gha_completed_jobs_total{repository=~\"$repository\"}[$__interval]))",
+                            "instant": false,
+                            "legendFormat": "{{job_result}}",
+                            "range": true,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {
+                    "interval": "1m",
+                    "maxDataPoints": 50
+                  },
+                  "transformations": []
+                }
+              },
+              "description": "Jobs finished per bar. The bar width follows the time range: about 50 bars, at least a minute each.",
+              "id": 9,
+              "links": [],
+              "title": "Jobs completed",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "axisSoftMin": 0,
+                        "barAlignment": -1,
+                        "drawStyle": "bars",
+                        "fillOpacity": 80,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "showPoints": "never",
+                        "spanNulls": false,
+                        "stacking": {
+                          "group": "A",
+                          "mode": "normal"
+                        }
+                      },
+                      "decimals": 0
+                    },
+                    "overrides": [
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "succeeded"
+                        },
+                        "properties": [
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "green",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "failed"
+                        },
+                        "properties": [
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "red",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "canceled"
+                        },
+                        "properties": [
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "gray",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "cancelled"
+                        },
+                        "properties": [
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "gray",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "options": {
+                    "legend": {
+                      "displayMode": "list",
+                      "placement": "bottom",
+                      "showLegend": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "cpu": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum by (mode) (rate(node_cpu_seconds_total{instance=\"$daddy\", mode!=\"idle\"}[$__rate_interval])) / scalar(count(node_cpu_seconds_total{instance=\"$daddy\", mode=\"idle\"}))",
+                            "instant": false,
+                            "legendFormat": "{{mode}}",
+                            "range": true,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Busy time by mode across all cores. iowait points at the disks rather than the CPU.",
+              "id": 21,
+              "links": [],
+              "title": "CPU",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "axisSoftMin": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 60,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "showPoints": "never",
+                        "spanNulls": false,
+                        "stacking": {
+                          "group": "A",
+                          "mode": "normal"
+                        }
+                      },
+                      "max": 1,
+                      "min": 0,
+                      "unit": "percentunit"
+                    },
+                    "overrides": [
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "iowait"
+                        },
+                        "properties": [
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "orange",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "system"
+                        },
+                        "properties": [
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "red",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "user"
+                        },
+                        "properties": [
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "blue",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "nice"
+                        },
+                        "properties": [
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "green",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "options": {
+                    "legend": {
+                      "displayMode": "list",
+                      "placement": "bottom",
+                      "showLegend": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "disk_busy": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "rate(node_disk_io_time_seconds_total{instance=\"$daddy\", device=~\"sd.*|nvme.*\"}[$__rate_interval])",
+                            "instant": false,
+                            "legendFormat": "{{device}}",
+                            "range": true,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Share of time each disk had I/O in flight. Near 100% the disk is the bottleneck.",
+              "id": 26,
+              "links": [],
+              "title": "Disk busy",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "axisSoftMin": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "showPoints": "never",
+                        "spanNulls": false
+                      },
+                      "max": 1,
+                      "min": 0,
+                      "unit": "percentunit"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "legend": {
+                      "displayMode": "list",
+                      "placement": "bottom",
+                      "showLegend": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "disk_io": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum by (device) (rate(node_disk_read_bytes_total{instance=\"$daddy\", device=~\"sd.*|nvme.*\"}[$__rate_interval]))",
+                            "instant": false,
+                            "legendFormat": "{{device}} read",
+                            "range": true,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "-sum by (device) (rate(node_disk_written_bytes_total{instance=\"$daddy\", device=~\"sd.*|nvme.*\"}[$__rate_interval]))",
+                            "instant": false,
+                            "legendFormat": "{{device}} write",
+                            "range": true,
+                            "refId": "B"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "B"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Writes plotted below zero. sdb is the SSD (root, Nix store, BuildKit), sda the HDD (kasha, media).",
+              "id": 25,
+              "links": [],
+              "title": "Disk throughput",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "drawStyle": "line",
+                        "fillOpacity": 20,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "showPoints": "never",
+                        "spanNulls": false
+                      },
+                      "unit": "Bps"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "legend": {
+                      "displayMode": "list",
+                      "placement": "bottom",
+                      "showLegend": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "duration": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum by (repository, job_name) (increase(gha_job_execution_duration_seconds_sum{repository=~\"$repository\"}[$__interval])) / sum by (repository, job_name) (increase(gha_job_execution_duration_seconds_count{repository=~\"$repository\"}[$__interval]))",
+                            "instant": false,
+                            "legendFormat": "{{repository}} · {{job_name}}",
+                            "range": true,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {
+                    "interval": "1m",
+                    "maxDataPoints": 200
+                  },
+                  "transformations": []
+                }
+              },
+              "description": "Each point is the mean duration of the jobs with that name that finished in that interval. Logarithmic axis: jobs range from seconds to tens of minutes.",
+              "id": 11,
+              "links": [],
+              "title": "Job duration",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "axisSoftMin": 0,
+                        "drawStyle": "points",
+                        "fillOpacity": 0,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 8,
+                        "scaleDistribution": {
+                          "log": 10,
+                          "type": "log"
+                        },
+                        "showPoints": "always",
+                        "spanNulls": false
+                      },
+                      "unit": "s"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "legend": {
+                      "displayMode": "list",
+                      "placement": "bottom",
+                      "showLegend": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "failed": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "round(sum(increase(gha_completed_jobs_total{repository=~\"$repository\", job_result!=\"succeeded\"}[$__range])))",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Failed or cancelled jobs over the selected time range.",
+              "id": 6,
+              "links": [],
+              "title": "Jobs not succeeded",
+              "vizConfig": {
+                "group": "stat",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "thresholds"
+                      },
+                      "decimals": 0,
+                      "noValue": "0",
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          },
+                          {
+                            "color": "red",
+                            "value": 1
+                          }
+                        ]
+                      }
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "colorMode": "background",
+                    "graphMode": "none",
+                    "justifyMode": "center",
+                    "orientation": "auto",
+                    "reduceOptions": {
+                      "calcs": [
+                        "lastNotNull"
+                      ],
+                      "fields": "",
+                      "values": false
+                    },
+                    "textMode": "value"
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "fs_free": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "node_filesystem_avail_bytes{instance=\"$daddy\", mountpoint=~\"/|/srv/hdd\"}",
+                            "instant": false,
+                            "legendFormat": "{{mountpoint}}",
+                            "range": true,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "The SSD root holds the Nix store and BuildKit's cache. BuildKit garbage-collects to keep 50 GB free (dashed line) and caps its cache at 100 GB; nix-gc runs on a timer.",
+              "id": 18,
+              "links": [],
+              "title": "Free space",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "axisSoftMin": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "showPoints": "never",
+                        "spanNulls": false,
+                        "thresholdsStyle": {
+                          "mode": "dashed"
+                        }
+                      },
+                      "min": 0,
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "transparent",
+                            "value": null
+                          },
+                          {
+                            "color": "orange",
+                            "value": 50000000000
+                          }
+                        ]
+                      },
+                      "unit": "bytes"
+                    },
+                    "overrides": [
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "/"
+                        },
+                        "properties": [
+                          {
+                            "id": "displayName",
+                            "value": "/ (Nix store, BuildKit cache)"
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "/srv/hdd"
+                        },
+                        "properties": [
+                          {
+                            "id": "displayName",
+                            "value": "/srv/hdd (kasha)"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "options": {
+                    "legend": {
+                      "displayMode": "list",
+                      "placement": "bottom",
+                      "showLegend": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "jobs_by_repo": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum by (repository) (gha_running_jobs{repository=~\"$repository\"})",
+                            "instant": false,
+                            "legendFormat": "{{repository}} running",
+                            "range": true,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "clamp_min(sum(gha_assigned_jobs{repository=~\"$repository\"} - gha_running_jobs{repository=~\"$repository\"}), 0)",
+                            "instant": false,
+                            "legendFormat": "waiting",
+                            "range": true,
+                            "refId": "B"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "B"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum(gha_assigned_jobs{repository=~\"$repository\"})",
+                            "instant": false,
+                            "legendFormat": "total",
+                            "range": true,
+                            "refId": "C"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "C"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Running jobs stacked per repository, with jobs waiting for a runner on top; `total` is every assigned job.",
+              "id": 13,
+              "links": [],
+              "title": "Jobs by repository",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "axisSoftMin": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 40,
+                        "lineInterpolation": "stepAfter",
+                        "lineWidth": 1,
+                        "showPoints": "never",
+                        "spanNulls": false,
+                        "stacking": {
+                          "group": "A",
+                          "mode": "normal"
+                        }
+                      },
+                      "decimals": 0
+                    },
+                    "overrides": [
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "waiting"
+                        },
+                        "properties": [
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "orange",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "total"
+                        },
+                        "properties": [
+                          {
+                            "id": "custom.stacking",
+                            "value": {
+                              "group": "A",
+                              "mode": "none"
+                            }
+                          },
+                          {
+                            "id": "custom.fillOpacity",
+                            "value": 0
+                          },
+                          {
+                            "id": "custom.lineWidth",
+                            "value": 2
+                          },
+                          {
+                            "id": "custom.lineStyle",
+                            "value": {
+                              "dash": [
+                                10,
+                                10
+                              ],
+                              "fill": "dash"
+                            }
+                          },
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "text",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "options": {
+                    "legend": {
+                      "displayMode": "list",
+                      "placement": "bottom",
+                      "showLegend": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "kasha_lookups": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum by (result) (increase(kasha_narinfo_requests_total[$__interval]))",
+                            "instant": false,
+                            "legendFormat": "{{result}}",
+                            "range": true,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {
+                    "interval": "1m",
+                    "maxDataPoints": 50
+                  },
+                  "transformations": []
+                }
+              },
+              "description": "narinfo lookups against the LAN binary cache on daddy, per bar. Misses are fetched upstream.",
+              "id": 19,
+              "links": [
+                {
+                  "targetBlank": false,
+                  "title": "kasha dashboard",
+                  "url": "/d/kasha?${__url_time_range}"
+                }
+              ],
+              "title": "Cache lookups (kasha)",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "axisSoftMin": 0,
+                        "barAlignment": -1,
+                        "drawStyle": "bars",
+                        "fillOpacity": 80,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "showPoints": "never",
+                        "spanNulls": false,
+                        "stacking": {
+                          "group": "A",
+                          "mode": "normal"
+                        }
+                      },
+                      "decimals": 0
+                    },
+                    "overrides": [
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "hit"
+                        },
+                        "properties": [
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "green",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "miss"
+                        },
+                        "properties": [
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "orange",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "options": {
+                    "legend": {
+                      "displayMode": "list",
+                      "placement": "bottom",
+                      "showLegend": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "kasha_traffic": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum by (direction) (rate(kasha_nar_bytes_total{direction=~\"served|ingest|pull\"}[$__rate_interval]))",
+                            "instant": false,
+                            "legendFormat": "{{direction}}",
+                            "range": true,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "NAR bytes served to clients, ingested (pushed by CI and hosts) and pulled from upstreams.",
+              "id": 20,
+              "links": [
+                {
+                  "targetBlank": false,
+                  "title": "kasha dashboard",
+                  "url": "/d/kasha?${__url_time_range}"
+                }
+              ],
+              "title": "Cache traffic (kasha)",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "axisSoftMin": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "showPoints": "never",
+                        "spanNulls": false
+                      },
+                      "unit": "Bps"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "legend": {
+                      "displayMode": "list",
+                      "placement": "bottom",
+                      "showLegend": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "listeners": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum(gha_controller_running_listeners)",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Listener pods the ARC controller reports running, one per repository. Without its listener a repository's jobs stay queued.",
+              "id": 4,
+              "links": [],
+              "title": "Listeners",
+              "vizConfig": {
+                "group": "stat",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "thresholds"
+                      },
+                      "noValue": "0",
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "red",
+                            "value": null
+                          },
+                          {
+                            "color": "green",
+                            "value": 1
+                          }
+                        ]
+                      }
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "colorMode": "background",
+                    "graphMode": "none",
+                    "justifyMode": "center",
+                    "orientation": "auto",
+                    "reduceOptions": {
+                      "calcs": [
+                        "lastNotNull"
+                      ],
+                      "fields": "",
+                      "values": false
+                    },
+                    "textMode": "value"
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "memory": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "node_memory_MemTotal_bytes{instance=\"$daddy\"} - node_memory_MemAvailable_bytes{instance=\"$daddy\"}",
+                            "instant": false,
+                            "legendFormat": "used",
+                            "range": true,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "node_memory_MemAvailable_bytes{instance=\"$daddy\"} - node_memory_MemFree_bytes{instance=\"$daddy\"}",
+                            "instant": false,
+                            "legendFormat": "reclaimable cache",
+                            "range": true,
+                            "refId": "B"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "B"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "node_memory_MemTotal_bytes{instance=\"$daddy\"}",
+                            "instant": false,
+                            "legendFormat": "total",
+                            "range": true,
+                            "refId": "C"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "C"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "node_memory_SwapTotal_bytes{instance=\"$daddy\"} - node_memory_SwapFree_bytes{instance=\"$daddy\"}",
+                            "instant": false,
+                            "legendFormat": "swap used",
+                            "range": true,
+                            "refId": "D"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "D"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "BuildKit is capped at 12 GiB (MemoryMax).",
+              "id": 23,
+              "links": [],
+              "title": "Memory",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "axisSoftMin": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 40,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "showPoints": "never",
+                        "spanNulls": false,
+                        "stacking": {
+                          "group": "A",
+                          "mode": "normal"
+                        }
+                      },
+                      "min": 0,
+                      "unit": "bytes"
+                    },
+                    "overrides": [
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "used"
+                        },
+                        "properties": [
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "blue",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "reclaimable cache"
+                        },
+                        "properties": [
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "#808080",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "total"
+                        },
+                        "properties": [
+                          {
+                            "id": "custom.stacking",
+                            "value": {
+                              "group": "A",
+                              "mode": "none"
+                            }
+                          },
+                          {
+                            "id": "custom.fillOpacity",
+                            "value": 0
+                          },
+                          {
+                            "id": "custom.lineStyle",
+                            "value": {
+                              "dash": [
+                                10,
+                                10
+                              ],
+                              "fill": "dash"
+                            }
+                          },
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "text",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "swap used"
+                        },
+                        "properties": [
+                          {
+                            "id": "custom.stacking",
+                            "value": {
+                              "group": "A",
+                              "mode": "none"
+                            }
+                          },
+                          {
+                            "id": "custom.fillOpacity",
+                            "value": 0
+                          },
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "red",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "options": {
+                    "legend": {
+                      "displayMode": "list",
+                      "placement": "bottom",
+                      "showLegend": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "network": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "rate(node_network_receive_bytes_total{instance=\"$daddy\", device!=\"lo\"}[$__rate_interval]) * 8",
+                            "instant": false,
+                            "legendFormat": "{{device}} in",
+                            "range": true,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "-rate(node_network_transmit_bytes_total{instance=\"$daddy\", device!=\"lo\"}[$__rate_interval]) * 8",
+                            "instant": false,
+                            "legendFormat": "{{device}} out",
+                            "range": true,
+                            "refId": "B"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "B"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Out is plotted below zero. enp6s0 carries the runners' Nix and BuildKit traffic, cache traffic and uploads; tailscale0 is remote access.",
+              "id": 24,
+              "links": [],
+              "title": "Network",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "drawStyle": "line",
+                        "fillOpacity": 20,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "showPoints": "never",
+                        "spanNulls": false
+                      },
+                      "unit": "bps"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "legend": {
+                      "displayMode": "list",
+                      "placement": "bottom",
+                      "showLegend": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "per_job": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "round(sum by (repository, job_name) (increase(gha_completed_jobs_total{repository=~\"$repository\"}[$__range])))",
+                            "format": "table",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "runs"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "runs"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "round(sum by (repository, job_name) (increase(gha_completed_jobs_total{repository=~\"$repository\", job_result!=\"succeeded\"}[$__range]))) or 0 * sum by (repository, job_name) (gha_completed_jobs_total{repository=~\"$repository\"})",
+                            "format": "table",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "failed"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "failed"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum by (repository, job_name) (increase(gha_job_startup_duration_seconds_sum{repository=~\"$repository\"}[$__range])) / sum by (repository, job_name) (increase(gha_job_startup_duration_seconds_count{repository=~\"$repository\"}[$__range]))",
+                            "format": "table",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "queue"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "queue"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum by (repository, job_name) (increase(gha_job_execution_duration_seconds_sum{repository=~\"$repository\"}[$__range])) / sum by (repository, job_name) (increase(gha_job_execution_duration_seconds_count{repository=~\"$repository\"}[$__range]))",
+                            "format": "table",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "duration"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "duration"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum by (repository, job_name) (increase(gha_job_execution_duration_seconds_sum{repository=~\"$repository\"}[$__range]))",
+                            "format": "table",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "total"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "total"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": [
+                    {
+                      "group": "merge",
+                      "kind": "Transformation",
+                      "spec": {
+                        "options": {}
+                      }
+                    },
+                    {
+                      "group": "organize",
+                      "kind": "Transformation",
+                      "spec": {
+                        "options": {
+                          "excludeByName": {
+                            "Time": true
+                          },
+                          "indexByName": {
+                            "Value #duration": 5,
+                            "Value #failed": 3,
+                            "Value #queue": 4,
+                            "Value #runs": 2,
+                            "Value #total": 6,
+                            "job_name": 1,
+                            "repository": 0
+                          },
+                          "renameByName": {
+                            "Value #duration": "Mean duration",
+                            "Value #failed": "Not succeeded",
+                            "Value #queue": "Mean queue time",
+                            "Value #runs": "Runs",
+                            "Value #total": "Runner time",
+                            "job_name": "Job",
+                            "repository": "Repository"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "description": "Per workflow job. Runner time is the sum of all runs' durations.",
+              "id": 12,
+              "links": [],
+              "title": "Jobs over the time range",
+              "vizConfig": {
+                "group": "table",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "decimals": 0
+                    },
+                    "overrides": [
+                      {
+                        "matcher": {
+                          "id": "byRegexp",
+                          "options": "Mean.*|Runner time"
+                        },
+                        "properties": [
+                          {
+                            "id": "unit",
+                            "value": "dtdurations"
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "Not succeeded"
+                        },
+                        "properties": [
+                          {
+                            "id": "thresholds",
+                            "value": {
+                              "mode": "absolute",
+                              "steps": [
+                                {
+                                  "color": "transparent",
+                                  "value": null
+                                },
+                                {
+                                  "color": "red",
+                                  "value": 1
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "id": "custom.cellOptions",
+                            "value": {
+                              "mode": "basic",
+                              "type": "color-background"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "options": {
+                    "cellHeight": "sm",
+                    "showHeader": true,
+                    "sortBy": [
+                      {
+                        "desc": true,
+                        "displayName": "Runs"
+                      }
+                    ]
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "pod_cpu": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum by (pod) (rate(container_cpu_usage_seconds_total{namespace=\"arc-homelab\",container=\"runner\"}[$__rate_interval]))",
+                            "instant": false,
+                            "legendFormat": "{{pod}}",
+                            "range": true,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Request 1 core, no CPU limit. Heavy builds run on daddy, not here.",
+              "id": 15,
+              "links": [],
+              "title": "Runner pod CPU",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "axisSoftMin": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "showPoints": "never",
+                        "spanNulls": false
+                      },
+                      "unit": "cores"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "legend": {
+                      "displayMode": "list",
+                      "placement": "bottom",
+                      "showLegend": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "pod_memory": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum by (pod) (container_memory_working_set_bytes{namespace=\"arc-homelab\",container=\"runner\"})",
+                            "instant": false,
+                            "legendFormat": "{{pod}}",
+                            "range": true,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Request 2 GiB, limit 6 GiB.",
+              "id": 16,
+              "links": [],
+              "title": "Runner pod memory",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "axisSoftMin": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "showPoints": "never",
+                        "spanNulls": false,
+                        "thresholdsStyle": {
+                          "mode": "dashed"
+                        }
+                      },
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "transparent",
+                            "value": null
+                          },
+                          {
+                            "color": "red",
+                            "value": 6442450944
+                          }
+                        ]
+                      },
+                      "unit": "bytes"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "legend": {
+                      "displayMode": "list",
+                      "placement": "bottom",
+                      "showLegend": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "pods": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"used\"})",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Pods counted against the `runners` ResourceQuota (hard limit 4, shared by all repositories).",
+              "id": 3,
+              "links": [],
+              "title": "Runner pods",
+              "vizConfig": {
+                "group": "stat",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "thresholds"
+                      },
+                      "noValue": "0",
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          },
+                          {
+                            "color": "orange",
+                            "value": 4
+                          }
+                        ]
+                      }
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "colorMode": "background",
+                    "graphMode": "none",
+                    "justifyMode": "center",
+                    "orientation": "auto",
+                    "reduceOptions": {
+                      "calcs": [
+                        "lastNotNull"
+                      ],
+                      "fields": "",
+                      "values": false
+                    },
+                    "textMode": "value"
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "pressure": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "rate(node_pressure_cpu_waiting_seconds_total{instance=\"$daddy\"}[$__rate_interval])",
+                            "instant": false,
+                            "legendFormat": "CPU",
+                            "range": true,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "rate(node_pressure_memory_waiting_seconds_total{instance=\"$daddy\"}[$__rate_interval])",
+                            "instant": false,
+                            "legendFormat": "memory",
+                            "range": true,
+                            "refId": "B"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "B"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "rate(node_pressure_io_waiting_seconds_total{instance=\"$daddy\"}[$__rate_interval])",
+                            "instant": false,
+                            "legendFormat": "I/O",
+                            "range": true,
+                            "refId": "C"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "C"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "rate(node_pressure_io_stalled_seconds_total{instance=\"$daddy\"}[$__rate_interval])",
+                            "instant": false,
+                            "legendFormat": "I/O, all stalled",
+                            "range": true,
+                            "refId": "D"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "D"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Pressure stall information: the share of time some task waited for the resource. This, not utilisation, shows CI builds, BuildKit and Jellyfin slowing each other down.",
+              "id": 22,
+              "links": [],
+              "title": "Pressure",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "axisSoftMin": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "showPoints": "never",
+                        "spanNulls": false
+                      },
+                      "min": 0,
+                      "unit": "percentunit"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "legend": {
+                      "displayMode": "list",
+                      "placement": "bottom",
+                      "showLegend": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "queue_time": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum by (repository) (increase(gha_job_startup_duration_seconds_sum{repository=~\"$repository\"}[$__interval])) / sum by (repository) (increase(gha_job_startup_duration_seconds_count{repository=~\"$repository\"}[$__interval]))",
+                            "instant": false,
+                            "legendFormat": "{{repository}}",
+                            "range": true,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {
+                    "interval": "1m",
+                    "maxDataPoints": 200
+                  },
+                  "transformations": []
+                }
+              },
+              "description": "From GitHub assigning a job to the runner starting it: pod scheduling, image pull and runner registration. Each point is the mean of the jobs that started in that interval, exact rather than estimated from histogram buckets.",
+              "id": 10,
+              "links": [],
+              "title": "Queue time",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "axisSoftMin": 0,
+                        "drawStyle": "points",
+                        "fillOpacity": 0,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 8,
+                        "showPoints": "always",
+                        "spanNulls": false
+                      },
+                      "unit": "s"
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "legend": {
+                      "displayMode": "list",
+                      "placement": "bottom",
+                      "showLegend": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "runners": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum(gha_busy_runners{repository=~\"$repository\"})",
+                            "instant": false,
+                            "legendFormat": "busy",
+                            "range": true,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum(gha_idle_runners{repository=~\"$repository\"})",
+                            "instant": false,
+                            "legendFormat": "idle",
+                            "range": true,
+                            "refId": "B"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "B"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum(gha_controller_pending_ephemeral_runners{repository=~\"$repository\"})",
+                            "instant": false,
+                            "legendFormat": "pending pods",
+                            "range": true,
+                            "refId": "C"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "C"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum(gha_controller_failed_ephemeral_runners{repository=~\"$repository\"})",
+                            "instant": false,
+                            "legendFormat": "failed",
+                            "range": true,
+                            "refId": "D"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "D"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum(gha_desired_runners{repository=~\"$repository\"})",
+                            "instant": false,
+                            "legendFormat": "desired",
+                            "range": true,
+                            "refId": "E"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "E"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum(gha_max_runners{repository=~\"$repository\"})",
+                            "instant": false,
+                            "legendFormat": "max",
+                            "range": true,
+                            "refId": "F"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "F"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Busy and idle runners (as GitHub sees them) and runner pods that are still pending or failed, stacked. Desired comes from the listeners; max is the scale sets' ceiling.",
+              "id": 14,
+              "links": [],
+              "title": "Runners",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "axisSoftMin": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 40,
+                        "lineInterpolation": "stepAfter",
+                        "lineWidth": 1,
+                        "showPoints": "never",
+                        "spanNulls": false,
+                        "stacking": {
+                          "group": "A",
+                          "mode": "normal"
+                        }
+                      },
+                      "decimals": 0
+                    },
+                    "overrides": [
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "busy"
+                        },
+                        "properties": [
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "blue",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "idle"
+                        },
+                        "properties": [
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "green",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "pending pods"
+                        },
+                        "properties": [
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "yellow",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "failed"
+                        },
+                        "properties": [
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "red",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "desired"
+                        },
+                        "properties": [
+                          {
+                            "id": "custom.stacking",
+                            "value": {
+                              "group": "A",
+                              "mode": "none"
+                            }
+                          },
+                          {
+                            "id": "custom.fillOpacity",
+                            "value": 0
+                          },
+                          {
+                            "id": "custom.lineWidth",
+                            "value": 2
+                          },
+                          {
+                            "id": "custom.lineStyle",
+                            "value": {
+                              "dash": [
+                                10,
+                                10
+                              ],
+                              "fill": "dash"
+                            }
+                          },
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "text",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "max"
+                        },
+                        "properties": [
+                          {
+                            "id": "custom.stacking",
+                            "value": {
+                              "group": "A",
+                              "mode": "none"
+                            }
+                          },
+                          {
+                            "id": "custom.fillOpacity",
+                            "value": 0
+                          },
+                          {
+                            "id": "custom.lineWidth",
+                            "value": 1
+                          },
+                          {
+                            "id": "custom.lineStyle",
+                            "value": {
+                              "dash": [
+                                4,
+                                6
+                              ],
+                              "fill": "dash"
+                            }
+                          },
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "red",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "options": {
+                    "legend": {
+                      "displayMode": "list",
+                      "placement": "bottom",
+                      "showLegend": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "running": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum(gha_running_jobs{repository=~\"$repository\"})",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "",
+              "id": 1,
+              "links": [],
+              "title": "Running jobs",
+              "vizConfig": {
+                "group": "stat",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "thresholds"
+                      },
+                      "noValue": "0",
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "blue",
+                            "value": null
+                          }
+                        ]
+                      }
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "colorMode": "background",
+                    "graphMode": "none",
+                    "justifyMode": "center",
+                    "orientation": "auto",
+                    "reduceOptions": {
+                      "calcs": [
+                        "lastNotNull"
+                      ],
+                      "fields": "",
+                      "values": false
+                    },
+                    "textMode": "value"
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "runs": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "max by (organization, repository, workflow, job_display_name, workflow_run_id, ephemeralrunner) (label_replace(tfirst_over_time(arc_ephemeralrunner_job_info{repository=~\"$repository\", job_display_name!=\"\"}[$__range]), \"workflow\", \"$1\", \"workflow_ref\", \"[^@]*/([^/@]+)@.*\")) * 1000",
+                            "format": "table",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "started"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "started"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "max by (organization, repository, workflow, job_display_name, workflow_run_id, ephemeralrunner) (label_replace(tlast_over_time(arc_ephemeralrunner_job_info{repository=~\"$repository\", job_display_name!=\"\"}[$__range]) - tfirst_over_time(arc_ephemeralrunner_job_info{repository=~\"$repository\", job_display_name!=\"\"}[$__range]), \"workflow\", \"$1\", \"workflow_ref\", \"[^@]*/([^/@]+)@.*\"))",
+                            "format": "table",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "duration"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "duration"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": [
+                    {
+                      "group": "merge",
+                      "kind": "Transformation",
+                      "spec": {
+                        "options": {}
+                      }
+                    },
+                    {
+                      "group": "organize",
+                      "kind": "Transformation",
+                      "spec": {
+                        "options": {
+                          "excludeByName": {
+                            "Time": true
+                          },
+                          "indexByName": {
+                            "Value #duration": 4,
+                            "Value #started": 0,
+                            "job_display_name": 3,
+                            "organization": 6,
+                            "repository": 1,
+                            "workflow": 2,
+                            "workflow_run_id": 5
+                          },
+                          "renameByName": {
+                            "Value #duration": "Duration",
+                            "Value #started": "Started",
+                            "job_display_name": "Job",
+                            "repository": "Repository",
+                            "workflow": "Workflow",
+                            "workflow_run_id": "Run"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "description": "Runs seen in the time range, newest first. Start and duration come from the 20 s samples of the EphemeralRunner, so both are off by up to that much. The run id opens the run on GitHub.",
+              "id": 8,
+              "links": [],
+              "title": "Job runs",
+              "vizConfig": {
+                "group": "table",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "custom": {
+                        "align": "auto"
+                      }
+                    },
+                    "overrides": [
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "Started"
+                        },
+                        "properties": [
+                          {
+                            "id": "unit",
+                            "value": "dateTimeAsLocalNoDateIfToday"
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "Duration"
+                        },
+                        "properties": [
+                          {
+                            "id": "unit",
+                            "value": "dtdurations"
+                          },
+                          {
+                            "id": "mappings",
+                            "value": [
+                              {
+                                "options": {
+                                  "0": {
+                                    "index": 0,
+                                    "text": "\u003c 20 s"
+                                  }
+                                },
+                                "type": "value"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "organization"
+                        },
+                        "properties": [
+                          {
+                            "id": "custom.hideFrom.viz",
+                            "value": true
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "ephemeralrunner"
+                        },
+                        "properties": [
+                          {
+                            "id": "custom.hideFrom.viz",
+                            "value": true
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "Run"
+                        },
+                        "properties": [
+                          {
+                            "id": "links",
+                            "value": [
+                              {
+                                "targetBlank": true,
+                                "title": "Open run on GitHub",
+                                "url": "https://github.com/${__data.fields.organization}/${__data.fields.Repository}/actions/runs/${__value.raw}"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "options": {
+                    "cellHeight": "sm",
+                    "showHeader": true,
+                    "sortBy": [
+                      {
+                        "desc": true,
+                        "displayName": "Started"
+                      }
+                    ]
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "services": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "label_replace(max by (name) (node_systemd_unit_state{instance=\"$daddy\", name=~\"(nix-daemon|buildkit|kasha|jellyfin)\\\\.service\", state=\"active\"}), \"unit\", \"$1\", \"name\", \"(.+)\\\\.service\")",
+                            "instant": true,
+                            "legendFormat": "{{unit}}",
+                            "range": false,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "systemd state on daddy: nix-daemon serves the CI's ssh-ng store (NIX_CI_STORE), buildkit the runners' buildx remote driver, kasha the LAN binary cache. Jellyfin shares the box.",
+              "id": 17,
+              "links": [],
+              "title": "Services",
+              "vizConfig": {
+                "group": "stat",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "thresholds"
+                      },
+                      "mappings": [
+                        {
+                          "options": {
+                            "0": {
+                              "index": 0,
+                              "text": "down"
+                            },
+                            "1": {
+                              "index": 1,
+                              "text": "active"
+                            }
+                          },
+                          "type": "value"
+                        }
+                      ],
+                      "noValue": "0",
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "red",
+                            "value": null
+                          },
+                          {
+                            "color": "green",
+                            "value": 1
+                          }
+                        ]
+                      }
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "colorMode": "background",
+                    "graphMode": "none",
+                    "justifyMode": "center",
+                    "orientation": "auto",
+                    "reduceOptions": {
+                      "calcs": [
+                        "lastNotNull"
+                      ],
+                      "fields": "",
+                      "values": false
+                    },
+                    "text": {
+                      "titleSize": 14,
+                      "valueSize": 22
+                    },
+                    "textMode": "value_and_name"
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "timeline": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "max by (repository, job_name) (label_replace(arc_ephemeralrunner_job_info{repository=~\"$repository\", job_display_name!=\"\"}, \"job_name\", \"$1\", \"job_display_name\", \"(.+)\") or label_set((sum by (repository, job_name) (increase(gha_completed_jobs_total{repository=~\"$repository\", job_result=\"succeeded\"}[$__interval])) \u003e 0) * 0 + 2, \"src\", \"ok\") or label_set((sum by (repository, job_name) (increase(gha_completed_jobs_total{repository=~\"$repository\", job_result!=\"succeeded\"}[$__interval])) \u003e 0) * 0 + 3, \"src\", \"failed\"))",
+                            "instant": false,
+                            "legendFormat": "{{repository}} · {{job_name}}",
+                            "range": true,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {
+                    "interval": "20s",
+                    "maxDataPoints": 300
+                  },
+                  "transformations": []
+                }
+              },
+              "description": "One row per workflow job. Blue: a runner holds the job (EphemeralRunner objects through kube-state-metrics, sampled every 20 s). Green or red: the job finished in that step, from the listener's counters, so jobs shorter than a sample still show up.",
+              "id": 7,
+              "links": [],
+              "title": "Job timeline",
+              "vizConfig": {
+                "group": "state-timeline",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "thresholds"
+                      },
+                      "custom": {
+                        "fillOpacity": 85,
+                        "lineWidth": 0
+                      },
+                      "mappings": [
+                        {
+                          "options": {
+                            "1": {
+                              "index": 1,
+                              "text": "running"
+                            },
+                            "2": {
+                              "index": 2,
+                              "text": "succeeded"
+                            },
+                            "3": {
+                              "index": 3,
+                              "text": "failed or cancelled"
+                            }
+                          },
+                          "type": "value"
+                        }
+                      ],
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "blue",
+                            "value": null
+                          },
+                          {
+                            "color": "green",
+                            "value": 2
+                          },
+                          {
+                            "color": "red",
+                            "value": 3
+                          }
+                        ]
+                      }
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "alignValue": "left",
+                    "legend": {
+                      "displayMode": "list",
+                      "placement": "bottom",
+                      "showLegend": false
+                    },
+                    "mergeValues": true,
+                    "rowHeight": 0.85,
+                    "showValue": "never",
+                    "tooltip": {
+                      "mode": "single",
+                      "sort": "none"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
+          "waiting": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum(gha_assigned_jobs{repository=~\"$repository\"} - gha_running_jobs{repository=~\"$repository\"})",
+                            "instant": true,
+                            "legendFormat": "",
+                            "range": false,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Jobs GitHub assigned to a homelab scale set that no runner has picked up yet. HomelabRunnerJobsPending fires after 10 minutes above zero.",
+              "id": 2,
+              "links": [],
+              "title": "Waiting jobs",
+              "vizConfig": {
+                "group": "stat",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "thresholds"
+                      },
+                      "noValue": "0",
+                      "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          },
+                          {
+                            "color": "orange",
+                            "value": 1
+                          }
+                        ]
+                      }
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "colorMode": "background",
+                    "graphMode": "none",
+                    "justifyMode": "center",
+                    "orientation": "auto",
+                    "reduceOptions": {
+                      "calcs": [
+                        "lastNotNull"
+                      ],
+                      "fields": "",
+                      "values": false
+                    },
+                    "textMode": "value"
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          }
+        },
+        "layout": {
+          "kind": "TabsLayout",
+          "spec": {
+            "tabs": [
+              {
+                "kind": "TabsLayoutTab",
+                "spec": {
+                  "layout": {
+                    "kind": "RowsLayout",
+                    "spec": {
+                      "rows": [
+                        {
+                          "kind": "RowsLayoutRow",
+                          "spec": {
+                            "collapse": false,
+                            "hideHeader": true,
+                            "layout": {
+                              "kind": "GridLayout",
+                              "spec": {
+                                "items": [
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "running"
+                                      },
+                                      "height": 4,
+                                      "width": 4,
+                                      "x": 0,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "waiting"
+                                      },
+                                      "height": 4,
+                                      "width": 4,
+                                      "x": 4,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "pods"
+                                      },
+                                      "height": 4,
+                                      "width": 4,
+                                      "x": 8,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "listeners"
+                                      },
+                                      "height": 4,
+                                      "width": 4,
+                                      "x": 12,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "completed"
+                                      },
+                                      "height": 4,
+                                      "width": 4,
+                                      "x": 16,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "failed"
+                                      },
+                                      "height": 4,
+                                      "width": 4,
+                                      "x": 20,
+                                      "y": 0
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "title": "Now"
+                          }
+                        },
+                        {
+                          "kind": "RowsLayoutRow",
+                          "spec": {
+                            "collapse": false,
+                            "layout": {
+                              "kind": "GridLayout",
+                              "spec": {
+                                "items": [
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "timeline"
+                                      },
+                                      "height": 9,
+                                      "width": 24,
+                                      "x": 0,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "runs"
+                                      },
+                                      "height": 8,
+                                      "width": 24,
+                                      "x": 0,
+                                      "y": 9
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "title": "Timeline"
+                          }
+                        },
+                        {
+                          "kind": "RowsLayoutRow",
+                          "spec": {
+                            "collapse": false,
+                            "layout": {
+                              "kind": "GridLayout",
+                              "spec": {
+                                "items": [
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "completed_bars"
+                                      },
+                                      "height": 8,
+                                      "width": 8,
+                                      "x": 0,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "queue_time"
+                                      },
+                                      "height": 8,
+                                      "width": 8,
+                                      "x": 8,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "duration"
+                                      },
+                                      "height": 8,
+                                      "width": 8,
+                                      "x": 16,
+                                      "y": 0
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "title": "Trends"
+                          }
+                        },
+                        {
+                          "kind": "RowsLayoutRow",
+                          "spec": {
+                            "collapse": false,
+                            "layout": {
+                              "kind": "GridLayout",
+                              "spec": {
+                                "items": [
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "per_job"
+                                      },
+                                      "height": 8,
+                                      "width": 24,
+                                      "x": 0,
+                                      "y": 0
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "title": "Per job"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "title": "Jobs"
+                }
+              },
+              {
+                "kind": "TabsLayoutTab",
+                "spec": {
+                  "layout": {
+                    "kind": "RowsLayout",
+                    "spec": {
+                      "rows": [
+                        {
+                          "kind": "RowsLayoutRow",
+                          "spec": {
+                            "collapse": false,
+                            "layout": {
+                              "kind": "GridLayout",
+                              "spec": {
+                                "items": [
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "jobs_by_repo"
+                                      },
+                                      "height": 9,
+                                      "width": 12,
+                                      "x": 0,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "runners"
+                                      },
+                                      "height": 9,
+                                      "width": 12,
+                                      "x": 12,
+                                      "y": 0
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "title": "Runners"
+                          }
+                        },
+                        {
+                          "kind": "RowsLayoutRow",
+                          "spec": {
+                            "collapse": false,
+                            "layout": {
+                              "kind": "GridLayout",
+                              "spec": {
+                                "items": [
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "pod_cpu"
+                                      },
+                                      "height": 8,
+                                      "width": 12,
+                                      "x": 0,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "pod_memory"
+                                      },
+                                      "height": 8,
+                                      "width": 12,
+                                      "x": 12,
+                                      "y": 0
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "title": "Runner pods"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "title": "Scale sets"
+                }
+              },
+              {
+                "kind": "TabsLayoutTab",
+                "spec": {
+                  "layout": {
+                    "kind": "RowsLayout",
+                    "spec": {
+                      "rows": [
+                        {
+                          "kind": "RowsLayoutRow",
+                          "spec": {
+                            "collapse": false,
+                            "layout": {
+                              "kind": "GridLayout",
+                              "spec": {
+                                "items": [
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "timeline"
+                                      },
+                                      "height": 6,
+                                      "width": 24,
+                                      "x": 0,
+                                      "y": 0
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "title": "Jobs"
+                          }
+                        },
+                        {
+                          "kind": "RowsLayoutRow",
+                          "spec": {
+                            "collapse": false,
+                            "layout": {
+                              "kind": "GridLayout",
+                              "spec": {
+                                "items": [
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "services"
+                                      },
+                                      "height": 8,
+                                      "width": 6,
+                                      "x": 0,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "fs_free"
+                                      },
+                                      "height": 8,
+                                      "width": 6,
+                                      "x": 6,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "kasha_lookups"
+                                      },
+                                      "height": 8,
+                                      "width": 6,
+                                      "x": 12,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "kasha_traffic"
+                                      },
+                                      "height": 8,
+                                      "width": 6,
+                                      "x": 18,
+                                      "y": 0
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "title": "Roles"
+                          }
+                        },
+                        {
+                          "kind": "RowsLayoutRow",
+                          "spec": {
+                            "collapse": false,
+                            "layout": {
+                              "kind": "GridLayout",
+                              "spec": {
+                                "items": [
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "cpu"
+                                      },
+                                      "height": 8,
+                                      "width": 8,
+                                      "x": 0,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "pressure"
+                                      },
+                                      "height": 8,
+                                      "width": 8,
+                                      "x": 8,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "memory"
+                                      },
+                                      "height": 8,
+                                      "width": 8,
+                                      "x": 16,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "network"
+                                      },
+                                      "height": 8,
+                                      "width": 8,
+                                      "x": 0,
+                                      "y": 8
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "disk_io"
+                                      },
+                                      "height": 8,
+                                      "width": 8,
+                                      "x": 8,
+                                      "y": 8
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "disk_busy"
+                                      },
+                                      "height": 8,
+                                      "width": 8,
+                                      "x": 16,
+                                      "y": 8
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "title": "Host"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "title": "Builder (daddy)"
                 }
               }
-            }
-          ],
-          "type": "table"
+            ]
+          }
         },
-        {
-          "collapsed": false,
-          "gridPos": {
-            "h": 1,
-            "w": 24,
-            "x": 0,
-            "y": 31
-          },
-          "id": 16,
-          "panels": [],
-          "title": "Resources",
-          "type": "row"
-        },
-        {
-          "datasource": {
-            "type": "prometheus"
-          },
-          "description": "Request 1 core, no CPU limit.",
-          "fieldConfig": {
-            "defaults": {
-              "unit": "cores"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 8,
-            "w": 6,
-            "x": 0,
-            "y": 32
-          },
-          "id": 17,
-          "options": {},
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus"
-              },
-              "expr": "sum by (pod) (rate(container_cpu_usage_seconds_total{namespace=\"arc-homelab\",container=\"runner\"}[$__rate_interval]))",
-              "legendFormat": "{{pod}}",
-              "refId": "A"
-            }
-          ],
-          "title": "Runner pod CPU",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "prometheus"
-          },
-          "description": "Request 2 GiB, limit 6 GiB.",
-          "fieldConfig": {
-            "defaults": {
-              "unit": "bytes"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 8,
-            "w": 6,
-            "x": 6,
-            "y": 32
-          },
-          "id": 18,
-          "options": {},
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus"
-              },
-              "expr": "sum by (pod) (container_memory_working_set_bytes{namespace=\"arc-homelab\",container=\"runner\"})",
-              "legendFormat": "{{pod}}",
-              "refId": "A"
-            }
-          ],
-          "title": "Runner pod memory",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "prometheus"
-          },
-          "description": "daddy runs the nixci builds (and later BuildKit), plus kasha and Jellyfin.",
-          "fieldConfig": {
-            "defaults": {
-              "max": 1,
-              "min": 0,
-              "unit": "percentunit"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 8,
-            "w": 6,
-            "x": 12,
-            "y": 32
-          },
-          "id": 19,
-          "options": {},
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus"
-              },
-              "expr": "1 - avg(rate(node_cpu_seconds_total{instance=\"$daddy\",mode=\"idle\"}[$__rate_interval]))",
-              "legendFormat": "CPU busy",
-              "refId": "A"
-            },
-            {
-              "datasource": {
-                "type": "prometheus"
-              },
-              "expr": "1 - node_memory_MemAvailable_bytes{instance=\"$daddy\"} / node_memory_MemTotal_bytes{instance=\"$daddy\"}",
-              "legendFormat": "memory used",
-              "refId": "B"
-            }
-          ],
-          "title": "daddy CPU and memory",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "prometheus"
-          },
-          "description": "Writes plotted below zero.",
-          "fieldConfig": {
-            "defaults": {
-              "unit": "Bps"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 8,
-            "w": 6,
-            "x": 18,
-            "y": 32
-          },
-          "id": 20,
-          "options": {},
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus"
-              },
-              "expr": "sum by (device) (rate(node_disk_read_bytes_total{instance=\"$daddy\",device!~\"loop.*|zram.*\"}[$__rate_interval]))",
-              "legendFormat": "{{device}} read",
-              "refId": "A"
-            },
-            {
-              "datasource": {
-                "type": "prometheus"
-              },
-              "expr": "-sum by (device) (rate(node_disk_written_bytes_total{instance=\"$daddy\",device!~\"loop.*|zram.*\"}[$__rate_interval]))",
-              "legendFormat": "{{device}} write",
-              "refId": "B"
-            }
-          ],
-          "title": "daddy disk I/O",
-          "type": "timeseries"
-        }
-      ],
-      "refresh": "1m",
-      "schemaVersion": 42,
-      "tags": [
-        "arc",
-        "ci",
-        "github-actions"
-      ],
-      "templating": {
-        "list": [
+        "links": [
           {
-            "allValue": ".*",
-            "current": {
-              "text": "All",
-              "value": "$__all"
-            },
-            "datasource": {
-              "type": "prometheus"
-            },
-            "includeAll": true,
-            "label": "Repository",
-            "multi": true,
-            "name": "repository",
-            "query": "label_values(gha_max_runners, repository)",
-            "refresh": 2,
-            "sort": 1,
-            "type": "query"
+            "asDropdown": false,
+            "icon": "dashboard",
+            "includeVars": false,
+            "keepTime": true,
+            "tags": [],
+            "targetBlank": false,
+            "title": "kasha",
+            "tooltip": "",
+            "type": "link",
+            "url": "/d/kasha"
+          }
+        ],
+        "preload": false,
+        "tags": [
+          "arc",
+          "ci",
+          "github-actions"
+        ],
+        "timeSettings": {
+          "autoRefresh": "1m",
+          "autoRefreshIntervals": [
+            "1m",
+            "5m",
+            "15m",
+            "1h"
+          ],
+          "fiscalYearStartMonth": 0,
+          "from": "now-24h",
+          "hideTimepicker": false,
+          "timezone": "browser",
+          "to": "now"
+        },
+        "title": "Homelab runners",
+        "variables": [
+          {
+            "kind": "QueryVariable",
+            "spec": {
+              "allValue": ".*",
+              "allowCustomValue": true,
+              "current": {
+                "text": [
+                  "All"
+                ],
+                "value": [
+                  "$__all"
+                ]
+              },
+              "definition": "label_values(gha_max_runners, repository)",
+              "hide": "dontHide",
+              "includeAll": true,
+              "label": "Repository",
+              "multi": true,
+              "name": "repository",
+              "options": [],
+              "query": {
+                "group": "prometheus",
+                "kind": "DataQuery",
+                "spec": {
+                  "qryType": 1,
+                  "query": "label_values(gha_max_runners, repository)",
+                  "refId": "PrometheusVariableQueryEditor-VariableQuery"
+                },
+                "version": "v0"
+              },
+              "refresh": "onDashboardLoad",
+              "regex": "",
+              "skipUrlSync": false,
+              "sort": "alphabeticalAsc"
+            }
           },
           {
-            "hide": 2,
-            "name": "daddy",
-            "query": "192.168.0.101:9100",
-            "type": "constant"
+            "kind": "ConstantVariable",
+            "spec": {
+              "current": {
+                "text": "192.168.0.101:9100",
+                "value": "192.168.0.101:9100"
+              },
+              "hide": "hideVariable",
+              "name": "daddy",
+              "query": "192.168.0.101:9100",
+              "skipUrlSync": true
+            }
           }
         ]
-      },
-      "time": {
-        "from": "now-24h",
-        "to": "now"
-      },
-      "timezone": "browser",
-      "title": "Homelab runners",
-      "uid": "homelab-runners"
+      }
     }
 kind: ConfigMap
 metadata:
