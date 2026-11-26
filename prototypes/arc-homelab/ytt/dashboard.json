@@ -93,6 +93,32 @@
             "value": "192.168.0.101:9100"
           }
         }
+      },
+      {
+        "kind": "ConstantVariable",
+        "spec": {
+          "name": "runner_memory_request",
+          "query": "3221225472",
+          "hide": "hideVariable",
+          "skipUrlSync": true,
+          "current": {
+            "text": "3221225472",
+            "value": "3221225472"
+          }
+        }
+      },
+      {
+        "kind": "ConstantVariable",
+        "spec": {
+          "name": "runner_cpu_request",
+          "query": "1.0",
+          "hide": "hideVariable",
+          "skipUrlSync": true,
+          "current": {
+            "text": "1.0",
+            "value": "1.0"
+          }
+        }
       }
     ],
     "elements": {
@@ -3566,6 +3592,820 @@
             }
           }
         }
+      },
+      "node_cpu_pressure": {
+        "kind": "Panel",
+        "spec": {
+          "id": 28,
+          "title": "CPU pressure",
+          "description": "Share of time some task on the node waited for a CPU (PSI \"some\"). Runner pods have no CPU limit, so a CI burst shows here before anywhere else; the service pods below tell whether homelab services felt it.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "spec": {
+                        "expr": "max by (node) (rate(node_pressure_cpu_waiting_seconds_total[$__rate_interval]) * on(instance) group_left(node) max by (instance, node) (label_replace(kube_node_info, \"instance\", \"$1:9100\", \"internal_ip\", \"(.*)\")))",
+                        "legendFormat": "{{node}}",
+                        "range": true,
+                        "instant": false,
+                        "refId": "A"
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.2.3",
+            "spec": {
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "drawStyle": "line",
+                    "lineWidth": 1,
+                    "fillOpacity": 0,
+                    "showPoints": "never",
+                    "spanNulls": false,
+                    "axisSoftMin": 0,
+                    "lineInterpolation": "linear"
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "unit": "percentunit",
+                  "min": 0
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "node_memory_pressure": {
+        "kind": "Panel",
+        "spec": {
+          "id": 29,
+          "title": "Memory pressure",
+          "description": "Share of time some task on the node waited for memory (PSI \"some\": reclaim, swap-in, refaults). HomelabRunnerNodeMemoryPressure fires when it stays high.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "spec": {
+                        "expr": "max by (node) (rate(node_pressure_memory_waiting_seconds_total[$__rate_interval]) * on(instance) group_left(node) max by (instance, node) (label_replace(kube_node_info, \"instance\", \"$1:9100\", \"internal_ip\", \"(.*)\")))",
+                        "legendFormat": "{{node}}",
+                        "range": true,
+                        "instant": false,
+                        "refId": "A"
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.2.3",
+            "spec": {
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "drawStyle": "line",
+                    "lineWidth": 1,
+                    "fillOpacity": 0,
+                    "showPoints": "never",
+                    "spanNulls": false,
+                    "axisSoftMin": 0,
+                    "lineInterpolation": "linear"
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "unit": "percentunit",
+                  "min": 0
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "node_io_pressure": {
+        "kind": "Panel",
+        "spec": {
+          "id": 30,
+          "title": "I/O pressure",
+          "description": "Share of time some task on the node waited for block I/O (PSI \"some\").",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "spec": {
+                        "expr": "max by (node) (rate(node_pressure_io_waiting_seconds_total[$__rate_interval]) * on(instance) group_left(node) max by (instance, node) (label_replace(kube_node_info, \"instance\", \"$1:9100\", \"internal_ip\", \"(.*)\")))",
+                        "legendFormat": "{{node}}",
+                        "range": true,
+                        "instant": false,
+                        "refId": "A"
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.2.3",
+            "spec": {
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "drawStyle": "line",
+                    "lineWidth": 1,
+                    "fillOpacity": 0,
+                    "showPoints": "never",
+                    "spanNulls": false,
+                    "axisSoftMin": 0,
+                    "lineInterpolation": "linear"
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "unit": "percentunit",
+                  "min": 0
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "services_cpu_pressure": {
+        "kind": "Panel",
+        "spec": {
+          "id": 31,
+          "title": "Service pods: CPU pressure",
+          "description": "The most stalled pod outside arc-homelab on each node: share of time some of its tasks waited for a CPU. Rising with the runner count means runners slow homelab services down.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "spec": {
+                        "expr": "max by (node) (rate(container_pressure_cpu_waiting_seconds_total{namespace!=\"arc-homelab\",container=\"\",pod!=\"\"}[$__rate_interval]))",
+                        "legendFormat": "{{node}}",
+                        "range": true,
+                        "instant": false,
+                        "refId": "A"
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.2.3",
+            "spec": {
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "drawStyle": "line",
+                    "lineWidth": 1,
+                    "fillOpacity": 0,
+                    "showPoints": "never",
+                    "spanNulls": false,
+                    "axisSoftMin": 0,
+                    "lineInterpolation": "linear"
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "unit": "percentunit",
+                  "min": 0
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "services_memory_pressure": {
+        "kind": "Panel",
+        "spec": {
+          "id": 32,
+          "title": "Service pods: memory pressure",
+          "description": "The most stalled pod outside arc-homelab on each node: share of time some of its tasks waited for memory.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "spec": {
+                        "expr": "max by (node) (rate(container_pressure_memory_waiting_seconds_total{namespace!=\"arc-homelab\",container=\"\",pod!=\"\"}[$__rate_interval]))",
+                        "legendFormat": "{{node}}",
+                        "range": true,
+                        "instant": false,
+                        "refId": "A"
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.2.3",
+            "spec": {
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "drawStyle": "line",
+                    "lineWidth": 1,
+                    "fillOpacity": 0,
+                    "showPoints": "never",
+                    "spanNulls": false,
+                    "axisSoftMin": 0,
+                    "lineInterpolation": "linear"
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "unit": "percentunit",
+                  "min": 0
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "services_top": {
+        "kind": "Panel",
+        "spec": {
+          "id": 33,
+          "title": "Service pods that waited most",
+          "description": "Pods outside arc-homelab by the share of the time range some of their tasks waited for a CPU.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "spec": {
+                        "expr": "topk(10, max by (node, namespace, pod) (rate(container_pressure_cpu_waiting_seconds_total{namespace!=\"arc-homelab\",container=\"\",pod!=\"\"}[$__range])))",
+                        "legendFormat": "",
+                        "range": false,
+                        "instant": true,
+                        "refId": "A",
+                        "format": "table"
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [
+                {
+                  "kind": "Transformation",
+                  "group": "organize",
+                  "spec": {
+                    "options": {
+                      "excludeByName": {
+                        "Time": true
+                      },
+                      "indexByName": {
+                        "node": 0,
+                        "namespace": 1,
+                        "pod": 2,
+                        "Value": 3
+                      },
+                      "renameByName": {
+                        "Value": "CPU waiting"
+                      }
+                    }
+                  }
+                }
+              ],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "13.2.3",
+            "spec": {
+              "options": {
+                "showHeader": true,
+                "cellHeight": "sm",
+                "sortBy": [
+                  {
+                    "displayName": "CPU waiting",
+                    "desc": true
+                  }
+                ]
+              },
+              "fieldConfig": {
+                "defaults": {},
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "CPU waiting"
+                    },
+                    "properties": [
+                      {
+                        "id": "unit",
+                        "value": "percentunit"
+                      },
+                      {
+                        "id": "decimals",
+                        "value": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "runners_fit": {
+        "kind": "Panel",
+        "spec": {
+          "id": 34,
+          "title": "Runner pods that still fit",
+          "description": "Runner pods the scheduler could still place on each node: unrequested allocatable memory and CPU (requests of pending and running pods subtracted) divided by one runner pod's request, whichever is smaller. Runners wait with \"no node fits\" once every node shows 0.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "spec": {
+                        "expr": "min by (node) (floor(clamp_min((max by (node, resource) (kube_node_status_allocatable{resource=\"memory\"}) - sum by (node, resource) (kube_pod_container_resource_requests{resource=\"memory\"} and on(namespace, pod) (kube_pod_status_phase{phase=~\"Pending|Running\"} == 1))) / $runner_memory_request, 0)) or floor(clamp_min((max by (node, resource) (kube_node_status_allocatable{resource=\"cpu\"}) - sum by (node, resource) (kube_pod_container_resource_requests{resource=\"cpu\"} and on(namespace, pod) (kube_pod_status_phase{phase=~\"Pending|Running\"} == 1))) / $runner_cpu_request, 0)))",
+                        "legendFormat": "{{node}}",
+                        "range": true,
+                        "instant": false,
+                        "refId": "A"
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.2.3",
+            "spec": {
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "drawStyle": "line",
+                    "lineWidth": 1,
+                    "fillOpacity": 0,
+                    "showPoints": "never",
+                    "spanNulls": false,
+                    "axisSoftMin": 0,
+                    "lineInterpolation": "stepAfter"
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "decimals": 0,
+                  "min": 0
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "oom_kills": {
+        "kind": "Panel",
+        "spec": {
+          "id": 35,
+          "title": "OOM kills",
+          "description": "Processes the kernel OOM killer ended on each node, and OOM events in runner containers (a runner pod hitting its memory limit). Runner pods vanish quickly, so their counter can miss kills the node counter still shows.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "spec": {
+                        "expr": "max by (node) (increase(node_vmstat_oom_kill[$__interval]) * on(instance) group_left(node) max by (instance, node) (label_replace(kube_node_info, \"instance\", \"$1:9100\", \"internal_ip\", \"(.*)\")))",
+                        "legendFormat": "{{node}}",
+                        "range": true,
+                        "instant": false,
+                        "refId": "A"
+                      }
+                    }
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "B",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "spec": {
+                        "expr": "sum(increase(container_oom_events_total{namespace=\"arc-homelab\",container=\"runner\"}[$__interval]))",
+                        "legendFormat": "runner containers",
+                        "range": true,
+                        "instant": false,
+                        "refId": "B"
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.2.3",
+            "spec": {
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "drawStyle": "bars",
+                    "lineWidth": 1,
+                    "fillOpacity": 80,
+                    "showPoints": "never",
+                    "spanNulls": false,
+                    "axisSoftMin": 0,
+                    "lineInterpolation": "linear",
+                    "barAlignment": -1
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "decimals": 0
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "runner containers"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "mode": "fixed",
+                          "fixedColor": "red"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "pod_memory_share": {
+        "kind": "Panel",
+        "spec": {
+          "id": 36,
+          "title": "Runner pod memory / limit",
+          "description": "Working set of each runner pod as a share of its memory limit. HomelabRunnerPodMemoryNearLimit fires at the dashed line; at the limit the kernel OOM-kills inside the pod.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "spec": {
+                        "expr": "max by (pod) (container_memory_working_set_bytes{namespace=\"arc-homelab\",container=\"runner\"} / (container_spec_memory_limit_bytes{namespace=\"arc-homelab\",container=\"runner\"} > 0))",
+                        "legendFormat": "{{pod}}",
+                        "range": true,
+                        "instant": false,
+                        "refId": "A"
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.2.3",
+            "spec": {
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "drawStyle": "line",
+                    "lineWidth": 1,
+                    "fillOpacity": 10,
+                    "showPoints": "never",
+                    "spanNulls": false,
+                    "axisSoftMin": 0,
+                    "lineInterpolation": "linear",
+                    "thresholdsStyle": {
+                      "mode": "dashed"
+                    }
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "unit": "percentunit",
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": null,
+                        "color": "transparent"
+                      },
+                      {
+                        "value": 0.9,
+                        "color": "red"
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "pod_cpu_pressure": {
+        "kind": "Panel",
+        "spec": {
+          "id": 37,
+          "title": "Runner pod CPU pressure",
+          "description": "Share of time some task in each runner pod waited for a CPU. High while the node's CPU pressure is high: the node is oversubscribed, not the pod limited (runner pods have no CPU limit).",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "spec": {
+                        "expr": "max by (pod) (rate(container_pressure_cpu_waiting_seconds_total{namespace=\"arc-homelab\",container=\"runner\"}[$__rate_interval]))",
+                        "legendFormat": "{{pod}}",
+                        "range": true,
+                        "instant": false,
+                        "refId": "A"
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.2.3",
+            "spec": {
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "drawStyle": "line",
+                    "lineWidth": 1,
+                    "fillOpacity": 0,
+                    "showPoints": "never",
+                    "spanNulls": false,
+                    "axisSoftMin": 0,
+                    "lineInterpolation": "linear"
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "unit": "percentunit",
+                  "min": 0
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
       }
     },
     "layout": {
@@ -3891,6 +4731,191 @@
                                   "element": {
                                     "kind": "ElementReference",
                                     "name": "pod_memory"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 0,
+                                  "y": 8,
+                                  "width": 12,
+                                  "height": 8,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "pod_memory_share"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 12,
+                                  "y": 8,
+                                  "width": 12,
+                                  "height": 8,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "pod_cpu_pressure"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "kind": "TabsLayoutTab",
+            "spec": {
+              "title": "Nodes",
+              "layout": {
+                "kind": "RowsLayout",
+                "spec": {
+                  "rows": [
+                    {
+                      "kind": "RowsLayoutRow",
+                      "spec": {
+                        "title": "Pressure",
+                        "collapse": false,
+                        "layout": {
+                          "kind": "GridLayout",
+                          "spec": {
+                            "items": [
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 8,
+                                  "height": 8,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "node_cpu_pressure"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 8,
+                                  "y": 0,
+                                  "width": 8,
+                                  "height": 8,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "node_memory_pressure"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 16,
+                                  "y": 0,
+                                  "width": 8,
+                                  "height": 8,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "node_io_pressure"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "kind": "RowsLayoutRow",
+                      "spec": {
+                        "title": "Homelab services",
+                        "collapse": false,
+                        "layout": {
+                          "kind": "GridLayout",
+                          "spec": {
+                            "items": [
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 8,
+                                  "height": 8,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "services_cpu_pressure"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 8,
+                                  "y": 0,
+                                  "width": 8,
+                                  "height": 8,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "services_memory_pressure"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 16,
+                                  "y": 0,
+                                  "width": 8,
+                                  "height": 8,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "services_top"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "kind": "RowsLayoutRow",
+                      "spec": {
+                        "title": "Capacity",
+                        "collapse": false,
+                        "layout": {
+                          "kind": "GridLayout",
+                          "spec": {
+                            "items": [
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 12,
+                                  "height": 8,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "runners_fit"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 12,
+                                  "y": 0,
+                                  "width": 12,
+                                  "height": 8,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "oom_kills"
                                   }
                                 }
                               }

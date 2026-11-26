@@ -17,3 +17,34 @@ spec:
           for: 10m
           labels:
             severity: warning
+        - alert: HomelabRunnerNodeOOMKill
+          annotations:
+            description: The kernel on {{ $labels.node }} killed {{ $value | humanize }} process(es) for lack of memory in the last 10 minutes. Runner pods request less memory than their limit, so several busy ones can overcommit a node. Check the victims (`kubectl get events -A --field-selector reason=SystemOOM`, `journalctl -k -g 'Killed process'` on the node) and the Nodes tab of the Homelab runners dashboard.
+            summary: OOM killer ran on {{ $labels.node }}
+          expr: max by (node) (increase(node_vmstat_oom_kill[10m]) * on(instance) group_left(node) max by (instance, node) (label_replace(kube_node_info, "instance", "$1:9100", "internal_ip", "(.*)"))) > 0
+          labels:
+            severity: warning
+        - alert: HomelabRunnerNodeMemoryPressure
+          annotations:
+            description: 'Tasks on {{ $labels.node }} have waited for memory {{ $value | humanizePercentage }} of the time for 5 minutes (PSI memory "some"): reclaim is slowing homelab services down. Check how many runner pods run there (`kubectl -n arc-homelab get pods -o wide`) and their memory on the Homelab runners dashboard.'
+            summary: '{{ $labels.node }} stalls on memory'
+          expr: max by (node) (rate(node_pressure_memory_waiting_seconds_total[5m]) * on(instance) group_left(node) max by (instance, node) (label_replace(kube_node_info, "instance", "$1:9100", "internal_ip", "(.*)"))) > 0.1
+          for: 5m
+          labels:
+            severity: warning
+        - alert: HomelabRunnerPodMemoryNearLimit
+          annotations:
+            description: '{{ $labels.pod }} on {{ $labels.node }} uses {{ $value | humanizePercentage }} of its memory limit; at the limit the kernel OOM-kills inside the pod and the job usually fails. If this repeats, find the job (the pod name carries the repository) and raise `runner.memoryLimitGi` or move the heavy step to daddy.'
+            summary: Runner pod {{ $labels.pod }} is close to its memory limit
+          expr: max by (pod, node) (container_memory_working_set_bytes{namespace="arc-homelab",container="runner"} / (container_spec_memory_limit_bytes{namespace="arc-homelab",container="runner"} > 0)) >= 0.9
+          for: 1m
+          labels:
+            severity: warning
+        - alert: HomelabBuilderStoreLowSpace
+          annotations:
+            description: daddy's /nix/store has {{ $value | humanizePercentage }} free. It shares the SSD with BuildKit's cache, which garbage-collects only down to its own free-space floor, so CI builds will start failing. Check what grew (`sudo du -xsh /nix/store /var/lib/buildkit`) and collect garbage (`sudo nix-collect-garbage --delete-older-than 3d`).
+            summary: Nix store on daddy is running out of space
+          expr: node_filesystem_avail_bytes{instance="192.168.0.101:9100",mountpoint="/nix/store"} / node_filesystem_size_bytes{instance="192.168.0.101:9100",mountpoint="/nix/store"} < 0.15
+          for: 15m
+          labels:
+            severity: warning
