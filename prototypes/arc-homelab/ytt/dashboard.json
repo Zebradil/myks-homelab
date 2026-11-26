@@ -3220,7 +3220,7 @@
         "spec": {
           "id": 27,
           "title": "Why jobs wait",
-          "description": "Jobs assigned to a runner but not running yet, stacked by cause: runner pods pending while the namespace quota is full (pod quota full), runner pods pending below the quota, so scheduling or image pull (pod starting), and the rest, waiting on GitHub or the listener (other). A scale set never takes more jobs than its maxRunners: further jobs stay queued on GitHub, invisible here, so the line \"repos at maxRunners\" counts the repositories that are at that cap. The pod lines cover all repositories.",
+          "description": "Jobs assigned to a runner but not running yet, stacked by cause: runner pods pending while the namespace quota is full (pod quota full), runner pods no node has room for (no node fits; all repositories, whatever the filter), other pending runner pods, so image pull or container start (pod starting), and the rest, waiting on GitHub or the listener (other). A scale set never runs more runners than its maxRunners: jobs beyond that wait without a pod, so the line \"repos at maxRunners\" counts the repositories whose assigned jobs reach that cap. The pod lines cover all repositories.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -3248,6 +3248,25 @@
                 {
                   "kind": "PanelQuery",
                   "spec": {
+                    "refId": "G",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "spec": {
+                        "expr": "(sum(kube_pod_status_unschedulable{namespace=\"arc-homelab\"}) or vector(0))",
+                        "legendFormat": "no node fits",
+                        "range": true,
+                        "instant": false,
+                        "refId": "B"
+                      }
+                    }
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
                     "refId": "B",
                     "hidden": false,
                     "query": {
@@ -3255,7 +3274,7 @@
                       "group": "prometheus",
                       "version": "v0",
                       "spec": {
-                        "expr": "sum(gha_controller_pending_ephemeral_runners{repository=~\"$repository\"}) * (1 - (sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"used\"}) >= bool sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"hard\"})))",
+                        "expr": "clamp_min(sum(gha_controller_pending_ephemeral_runners{repository=~\"$repository\"}) * (1 - (sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"used\"}) >= bool sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"hard\"}))) - (sum(kube_pod_status_unschedulable{namespace=\"arc-homelab\"}) or vector(0)), 0)",
                         "legendFormat": "pod starting",
                         "range": true,
                         "instant": false,
@@ -3382,6 +3401,21 @@
                   "decimals": 0
                 },
                 "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "no node fits"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "mode": "fixed",
+                          "fixedColor": "dark-red"
+                        }
+                      }
+                    ]
+                  },
                   {
                     "matcher": {
                       "id": "byName",

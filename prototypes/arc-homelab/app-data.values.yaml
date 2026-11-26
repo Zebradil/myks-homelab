@@ -12,7 +12,11 @@ application:
     - znix
   githubOwner: Zebradil
   runnerLabel: homelab
-  maxRunners: 6
+  maxRunners: 50
+  runner:
+    cpu: "1"
+    memoryGi: 3
+    memoryLimitGi: 6
   daddyAddress: 192.168.0.101
   daddyHostKey: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIunTmGGD83WKotySV3vBD5aD/luU8p1sYCu8UxlyvwK
 argocd:

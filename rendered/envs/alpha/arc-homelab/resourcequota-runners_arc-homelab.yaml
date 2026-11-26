@@ -7,5 +7,5 @@ metadata:
   namespace: arc-homelab
 spec:
   hard:
-    limits.memory: 36Gi
-    pods: "6"
+    limits.memory: 300Gi
+    pods: "50"
