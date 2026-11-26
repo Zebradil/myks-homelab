@@ -6,7 +6,7 @@ metadata:
     actions.github.com/cleanup-manager-role-binding: homelab-scry-gha-rs-manager
     actions.github.com/cleanup-manager-role-name: homelab-scry-gha-rs-manager
     actions.github.com/cleanup-no-permission-service-account-name: homelab-scry-gha-rs-no-permission
-    actions.github.com/values-hash: d31442942fb585d62ba40f5b44ed21acbd19600b5400b3c402b754b428462d0
+    actions.github.com/values-hash: cdd3ca886e25129037bd89783916452eadb04705cd40318227439f51c14ee5a
   labels:
     actions.github.com/scale-set-name: homelab-scry
     actions.github.com/scale-set-namespace: arc-homelab
@@ -36,7 +36,7 @@ spec:
             requests:
               cpu: 10m
               memory: 32Mi
-  maxRunners: 4
+  maxRunners: 6
   minRunners: 0
   runnerScaleSetLabels:
     - homelab

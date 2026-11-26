@@ -6,7 +6,7 @@ metadata:
     actions.github.com/cleanup-manager-role-binding: homelab-znix-gha-rs-manager
     actions.github.com/cleanup-manager-role-name: homelab-znix-gha-rs-manager
     actions.github.com/cleanup-no-permission-service-account-name: homelab-znix-gha-rs-no-permission
-    actions.github.com/values-hash: 246b847b246aa33a02e029e01cdf643f93b0c10680e8d73b9a14dde72290c4d
+    actions.github.com/values-hash: ff681b5e29f8e43aa1736d418174689eba0bf63e7e0f53f576120380607fa8e
   labels:
     actions.github.com/scale-set-name: homelab-znix
     actions.github.com/scale-set-namespace: arc-homelab
@@ -36,7 +36,7 @@ spec:
             requests:
               cpu: 10m
               memory: 32Mi
-  maxRunners: 4
+  maxRunners: 6
   minRunners: 0
   runnerScaleSetLabels:
     - homelab
