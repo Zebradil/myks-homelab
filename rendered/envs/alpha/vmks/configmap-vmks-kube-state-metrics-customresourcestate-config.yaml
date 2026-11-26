@@ -28,6 +28,9 @@ data:
         - each:
             info:
               labelsFromPath:
+                created:
+                - metadata
+                - creationTimestamp
                 job_display_name:
                 - status
                 - jobDisplayName
@@ -41,6 +44,15 @@ data:
           help: Workflow job the runner was assigned; job labels stay empty until GitHub
             assigns one.
           name: job_info
+        - each:
+            gauge:
+              path:
+              - metadata
+              - creationTimestamp
+            type: Gauge
+          help: Unix time the runner was created, which picks the latest runner of a job
+            name.
+          name: created
 kind: ConfigMap
 metadata:
   annotations:
