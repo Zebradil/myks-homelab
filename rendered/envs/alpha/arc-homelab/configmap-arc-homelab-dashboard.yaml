@@ -3938,7 +3938,7 @@ data:
                           "group": "prometheus",
                           "kind": "DataQuery",
                           "spec": {
-                            "expr": "max by (repository, job_name, created) (label_replace(arc_ephemeralrunner_job_info{repository=~\"$repository\", job_display_name!=\"\"}, \"job_name\", \"$1\", \"job_display_name\", \"(.+)\") or (label_set((sum by (repository, job_name) (increase(gha_completed_jobs_total{repository=~\"$repository\", job_result=\"succeeded\"}[$__interval])) \u003e 0) * 0 + 2, \"src\", \"ok\") * on (repository, job_name) group_left (created) (topk by (repository, job_name) (1, max by (repository, job_name, created) (label_replace(max by (namespace, ephemeralrunner) (last_over_time(arc_ephemeralrunner_created{repository=~\"$repository\"}[$__rate_interval])) * on (namespace, ephemeralrunner) group_left (repository, job_display_name, created) max by (namespace, ephemeralrunner, repository, job_display_name, created) (last_over_time(arc_ephemeralrunner_job_info{repository=~\"$repository\", job_display_name!=\"\"}[$__rate_interval])), \"job_name\", \"$1\", \"job_display_name\", \"(.+)\"))) * 0 + 1)) or (label_set((sum by (repository, job_name) (increase(gha_completed_jobs_total{repository=~\"$repository\", job_result!=\"succeeded\"}[$__interval])) \u003e 0) * 0 + 3, \"src\", \"failed\") * on (repository, job_name) group_left (created) (topk by (repository, job_name) (1, max by (repository, job_name, created) (label_replace(max by (namespace, ephemeralrunner) (last_over_time(arc_ephemeralrunner_created{repository=~\"$repository\"}[$__rate_interval])) * on (namespace, ephemeralrunner) group_left (repository, job_display_name, created) max by (namespace, ephemeralrunner, repository, job_display_name, created) (last_over_time(arc_ephemeralrunner_job_info{repository=~\"$repository\", job_display_name!=\"\"}[$__rate_interval])), \"job_name\", \"$1\", \"job_display_name\", \"(.+)\"))) * 0 + 1)))",
+                            "expr": "max by (repository, job_name) (label_replace(arc_ephemeralrunner_job_info{repository=~\"$repository\", job_display_name!=\"\"}, \"job_name\", \"$1\", \"job_display_name\", \"(.+)\") or label_set((sum by (repository, job_name) (increase(gha_completed_jobs_total{repository=~\"$repository\", job_result=\"succeeded\"}[$__interval])) \u003e 0) * 0 + 2, \"src\", \"ok\") or label_set((sum by (repository, job_name) (increase(gha_completed_jobs_total{repository=~\"$repository\", job_result!=\"succeeded\"}[$__interval])) \u003e 0) * 0 + 3, \"src\", \"failed\"))",
                             "instant": false,
                             "legendFormat": "{{repository}} · {{job_name}}",
                             "range": true,
@@ -3954,39 +3954,10 @@ data:
                     "interval": "20s",
                     "maxDataPoints": 300
                   },
-                  "transformations": [
-                    {
-                      "group": "joinByField",
-                      "kind": "Transformation",
-                      "spec": {
-                        "options": {
-                          "mode": "outer"
-                        }
-                      }
-                    },
-                    {
-                      "group": "organize",
-                      "kind": "Transformation",
-                      "spec": {
-                        "options": {
-                          "excludeByName": {},
-                          "indexByName": {},
-                          "orderBy": [
-                            {
-                              "desc": true,
-                              "name": "created",
-                              "type": "label"
-                            }
-                          ],
-                          "orderByMode": "auto",
-                          "renameByName": {}
-                        }
-                      }
-                    }
-                  ]
+                  "transformations": []
                 }
               },
-              "description": "One row per job run, newest first, 15 rows per page. Blue: a runner holds the job (EphemeralRunner objects through kube-state-metrics, sampled every 20 s). Green or red: the job finished in that step, from the listener's counters, so jobs shorter than a sample still show up; when two runs share a job name, the mark lands on the newer one.",
+              "description": "One row per workflow job. Blue: a runner holds the job (EphemeralRunner objects through kube-state-metrics, sampled every 20 s). Green or red: the job finished in that step, from the listener's counters, so jobs shorter than a sample still show up.",
               "id": 7,
               "links": [],
               "title": "Job timeline",
@@ -4050,7 +4021,6 @@ data:
                       "showLegend": false
                     },
                     "mergeValues": true,
-                    "perPage": 15,
                     "rowHeight": 0.85,
                     "showValue": "never",
                     "tooltip": {
