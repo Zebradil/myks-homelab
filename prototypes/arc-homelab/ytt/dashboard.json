@@ -592,7 +592,7 @@
                       "version": "v0",
                       "spec": {
                         "expr": "max by (repository, job_name) (label_replace(arc_ephemeralrunner_job_info{repository=~\"$repository\", job_display_name!=\"\"}, \"job_name\", \"$1\", \"job_display_name\", \"(.+)\") or label_set((sum by (repository, job_name) (increase(gha_completed_jobs_total{repository=~\"$repository\", job_result=\"succeeded\"}[$__interval])) > 0) * 0 + 2, \"src\", \"ok\") or label_set((sum by (repository, job_name) (increase(gha_completed_jobs_total{repository=~\"$repository\", job_result!=\"succeeded\"}[$__interval])) > 0) * 0 + 3, \"src\", \"failed\"))",
-                        "legendFormat": "{{repository}} \u00b7 {{job_name}}",
+                        "legendFormat": "{{repository}} · {{job_name}}",
                         "range": true,
                         "instant": false,
                         "refId": "A"
@@ -1121,7 +1121,7 @@
                       "version": "v0",
                       "spec": {
                         "expr": "sum by (repository, job_name) (increase(gha_job_execution_duration_seconds_sum{repository=~\"$repository\"}[$__interval])) / sum by (repository, job_name) (increase(gha_job_execution_duration_seconds_count{repository=~\"$repository\"}[$__interval]))",
-                        "legendFormat": "{{repository}} \u00b7 {{job_name}}",
+                        "legendFormat": "{{repository}} · {{job_name}}",
                         "range": true,
                         "instant": false,
                         "refId": "A"
@@ -3214,6 +3214,324 @@
             }
           }
         }
+      },
+      "waiting_why": {
+        "kind": "Panel",
+        "spec": {
+          "id": 27,
+          "title": "Why jobs wait",
+          "description": "Jobs assigned to a runner but not running yet, stacked by cause: runner pods pending while the namespace quota is full (pod quota full), runner pods pending below the quota, so scheduling or image pull (pod starting), and the rest, waiting on GitHub or the listener (other). A scale set never takes more jobs than its maxRunners: further jobs stay queued on GitHub, invisible here, so the line \"repos at maxRunners\" counts the repositories that are at that cap. The pod lines cover all repositories.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "spec": {
+                        "expr": "sum(gha_controller_pending_ephemeral_runners{repository=~\"$repository\"}) * (sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"used\"}) >= bool sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"hard\"}))",
+                        "legendFormat": "pod quota full",
+                        "range": true,
+                        "instant": false,
+                        "refId": "A"
+                      }
+                    }
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "B",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "spec": {
+                        "expr": "sum(gha_controller_pending_ephemeral_runners{repository=~\"$repository\"}) * (1 - (sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"used\"}) >= bool sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"hard\"})))",
+                        "legendFormat": "pod starting",
+                        "range": true,
+                        "instant": false,
+                        "refId": "B"
+                      }
+                    }
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "C",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "spec": {
+                        "expr": "clamp_min(sum(gha_assigned_jobs{repository=~\"$repository\"} - gha_running_jobs{repository=~\"$repository\"}) - sum(gha_controller_pending_ephemeral_runners{repository=~\"$repository\"}), 0)",
+                        "legendFormat": "other",
+                        "range": true,
+                        "instant": false,
+                        "refId": "C"
+                      }
+                    }
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "D",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "spec": {
+                        "expr": "count(gha_assigned_jobs{repository=~\"$repository\"} >= gha_max_runners{repository=~\"$repository\"}) or vector(0)",
+                        "legendFormat": "repos at maxRunners",
+                        "range": true,
+                        "instant": false,
+                        "refId": "D"
+                      }
+                    }
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "E",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "spec": {
+                        "expr": "sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"used\"})",
+                        "legendFormat": "pods used",
+                        "range": true,
+                        "instant": false,
+                        "refId": "E"
+                      }
+                    }
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "F",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "spec": {
+                        "expr": "sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"hard\"})",
+                        "legendFormat": "pod quota",
+                        "range": true,
+                        "instant": false,
+                        "refId": "F"
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.2.3",
+            "spec": {
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "drawStyle": "line",
+                    "lineWidth": 1,
+                    "fillOpacity": 40,
+                    "showPoints": "never",
+                    "spanNulls": false,
+                    "axisSoftMin": 0,
+                    "lineInterpolation": "stepAfter",
+                    "stacking": {
+                      "mode": "normal",
+                      "group": "A"
+                    }
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "decimals": 0
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "pod quota full"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "mode": "fixed",
+                          "fixedColor": "red"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "pod starting"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "mode": "fixed",
+                          "fixedColor": "yellow"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "other"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "mode": "fixed",
+                          "fixedColor": "orange"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "pods used"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.stacking",
+                        "value": {
+                          "mode": "none",
+                          "group": "A"
+                        }
+                      },
+                      {
+                        "id": "custom.fillOpacity",
+                        "value": 0
+                      },
+                      {
+                        "id": "custom.lineWidth",
+                        "value": 2
+                      },
+                      {
+                        "id": "color",
+                        "value": {
+                          "mode": "fixed",
+                          "fixedColor": "blue"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "pod quota"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.stacking",
+                        "value": {
+                          "mode": "none",
+                          "group": "A"
+                        }
+                      },
+                      {
+                        "id": "custom.fillOpacity",
+                        "value": 0
+                      },
+                      {
+                        "id": "custom.lineWidth",
+                        "value": 1
+                      },
+                      {
+                        "id": "custom.lineStyle",
+                        "value": {
+                          "fill": "dash",
+                          "dash": [
+                            4,
+                            6
+                          ]
+                        }
+                      },
+                      {
+                        "id": "color",
+                        "value": {
+                          "mode": "fixed",
+                          "fixedColor": "red"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "repos at maxRunners"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.stacking",
+                        "value": {
+                          "mode": "none",
+                          "group": "A"
+                        }
+                      },
+                      {
+                        "id": "custom.fillOpacity",
+                        "value": 0
+                      },
+                      {
+                        "id": "custom.lineWidth",
+                        "value": 2
+                      },
+                      {
+                        "id": "color",
+                        "value": {
+                          "mode": "fixed",
+                          "fixedColor": "purple"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
       }
     },
     "layout": {
@@ -3486,6 +3804,19 @@
                                   "element": {
                                     "kind": "ElementReference",
                                     "name": "runners"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 0,
+                                  "y": 9,
+                                  "width": 24,
+                                  "height": 9,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "waiting_why"
                                   }
                                 }
                               }
