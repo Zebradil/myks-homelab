@@ -9,7 +9,17 @@ application:
   #! The runs-on label every scale set registers as.
   #@schema/validation min_len=1
   runnerLabel: ''
+  #! Per repository. Also the pod count of the namespace quota: one repository
+  #! may take the whole pool.
   maxRunners: 1
+  #! Resources of every runner pod; the quota allows maxRunners of them.
+  runner:
+    #@schema/validation min_len=1
+    cpu: ''
+    #@schema/validation min=1
+    memoryGi: 0
+    #@schema/validation min=1
+    memoryLimitGi: 0
   #! daddy: Nix builds as `nixci` (SSH), the kasha box (HTTPS) and BuildKit (mTLS).
   #@schema/validation min_len=1
   daddyAddress: ''

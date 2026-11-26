@@ -54,7 +54,7 @@ template:
     containers:
       - name: runner
         #! Jobs mostly evaluate and wait on daddy; heavy builds run there.
-        resources: #@ res("1", "3Gi", "6Gi")
+        resources: #@ res(a.runner.cpu, "{}Gi".format(a.runner.memoryGi), "{}Gi".format(a.runner.memoryLimitGi))
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
