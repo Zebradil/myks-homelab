@@ -13,6 +13,99 @@ data:
         "description": "ARC scale sets on the homelab cluster (runs-on: homelab) and the daddy host their builds run on.",
         "editable": true,
         "elements": {
+          "builder_sessions": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "nix_builder_ssh_sessions{instance=\"$daddy\"}",
+                            "instant": false,
+                            "legendFormat": "{{user}} sessions",
+                            "range": true,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "nix_builder_active_builds{instance=\"$daddy\"}",
+                            "instant": false,
+                            "legendFormat": "builds",
+                            "range": true,
+                            "refId": "B"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "B"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "SSH store sessions per user (nixci: CI runner pods, nixremote: hosts offloading builds), one nix-daemon --stdio each, and builds in progress (busy nixbld users). From the builder-metrics textfile collector.",
+              "id": 38,
+              "links": [],
+              "title": "Store sessions and builds",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "axisSoftMin": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "lineInterpolation": "stepAfter",
+                        "lineWidth": 1,
+                        "showPoints": "never",
+                        "spanNulls": false
+                      },
+                      "decimals": 0,
+                      "min": 0
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "legend": {
+                      "displayMode": "list",
+                      "placement": "bottom",
+                      "showLegend": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
           "completed": {
             "kind": "Panel",
             "spec": {
@@ -3756,6 +3849,80 @@ data:
               }
             }
           },
+          "sshd_drops": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum by (reason) (increase(sshd_dropped_connections_total{instance=\"$daddy\"}[$__interval]))",
+                            "instant": false,
+                            "legendFormat": "{{reason}}",
+                            "range": true,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Connections sshd dropped before authentication: MaxStartups (too many unauthenticated connections at once) or PerSourcePenalties (a source address penalised for earlier failures). Runner pods reach daddy behind their node's IP, so one busy node shares a penalty.",
+              "id": 39,
+              "links": [],
+              "title": "Refused SSH connections",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "axisSoftMin": 0,
+                        "barAlignment": -1,
+                        "drawStyle": "bars",
+                        "fillOpacity": 80,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "showPoints": "never",
+                        "spanNulls": false
+                      },
+                      "decimals": 0
+                    },
+                    "overrides": []
+                  },
+                  "options": {
+                    "legend": {
+                      "displayMode": "list",
+                      "placement": "bottom",
+                      "showLegend": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
+          },
           "timeline": {
             "kind": "Panel",
             "spec": {
@@ -4918,6 +5085,46 @@ data:
                               }
                             },
                             "title": "Roles"
+                          }
+                        },
+                        {
+                          "kind": "RowsLayoutRow",
+                          "spec": {
+                            "collapse": false,
+                            "layout": {
+                              "kind": "GridLayout",
+                              "spec": {
+                                "items": [
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "builder_sessions"
+                                      },
+                                      "height": 8,
+                                      "width": 12,
+                                      "x": 0,
+                                      "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "sshd_drops"
+                                      },
+                                      "height": 8,
+                                      "width": 12,
+                                      "x": 12,
+                                      "y": 0
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "title": "Sessions"
                           }
                         },
                         {
