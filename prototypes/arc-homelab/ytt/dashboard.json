@@ -4406,6 +4406,173 @@
             }
           }
         }
+      },
+      "builder_sessions": {
+        "kind": "Panel",
+        "spec": {
+          "id": 38,
+          "title": "Store sessions and builds",
+          "description": "SSH store sessions per user (nixci: CI runner pods, nixremote: hosts offloading builds), one nix-daemon --stdio each, and builds in progress (busy nixbld users). From the builder-metrics textfile collector.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "spec": {
+                        "expr": "nix_builder_ssh_sessions{instance=\"$daddy\"}",
+                        "legendFormat": "{{user}} sessions",
+                        "range": true,
+                        "instant": false,
+                        "refId": "A"
+                      }
+                    }
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "B",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "spec": {
+                        "expr": "nix_builder_active_builds{instance=\"$daddy\"}",
+                        "legendFormat": "builds",
+                        "range": true,
+                        "instant": false,
+                        "refId": "B"
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.2.3",
+            "spec": {
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "drawStyle": "line",
+                    "lineWidth": 1,
+                    "fillOpacity": 0,
+                    "showPoints": "never",
+                    "spanNulls": false,
+                    "axisSoftMin": 0,
+                    "lineInterpolation": "stepAfter"
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "decimals": 0,
+                  "min": 0
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "sshd_drops": {
+        "kind": "Panel",
+        "spec": {
+          "id": 39,
+          "title": "Refused SSH connections",
+          "description": "Connections sshd dropped before authentication: MaxStartups (too many unauthenticated connections at once) or PerSourcePenalties (a source address penalised for earlier failures). Runner pods reach daddy behind their node's IP, so one busy node shares a penalty.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "refId": "A",
+                    "hidden": false,
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "spec": {
+                        "expr": "sum by (reason) (increase(sshd_dropped_connections_total{instance=\"$daddy\"}[$__interval]))",
+                        "legendFormat": "{{reason}}",
+                        "range": true,
+                        "instant": false,
+                        "refId": "A"
+                      }
+                    }
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.2.3",
+            "spec": {
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "drawStyle": "bars",
+                    "lineWidth": 1,
+                    "fillOpacity": 80,
+                    "showPoints": "never",
+                    "spanNulls": false,
+                    "axisSoftMin": 0,
+                    "lineInterpolation": "linear",
+                    "barAlignment": -1
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "decimals": 0
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
       }
     },
     "layout": {
@@ -5022,6 +5189,46 @@
                                   "element": {
                                     "kind": "ElementReference",
                                     "name": "kasha_traffic"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "kind": "RowsLayoutRow",
+                      "spec": {
+                        "title": "Sessions",
+                        "collapse": false,
+                        "layout": {
+                          "kind": "GridLayout",
+                          "spec": {
+                            "items": [
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 12,
+                                  "height": 8,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "builder_sessions"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 12,
+                                  "y": 0,
+                                  "width": 12,
+                                  "height": 8,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "sshd_drops"
                                   }
                                 }
                               }
