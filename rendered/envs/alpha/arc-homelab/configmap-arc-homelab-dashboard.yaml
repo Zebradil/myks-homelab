@@ -1908,7 +1908,7 @@ data:
                   "transformations": []
                 }
               },
-              "description": "Request 2 GiB, limit 6 GiB.",
+              "description": "Working set per runner pod; request and limit come from the data values `runner.memoryGi` and `runner.memoryLimitGi`.",
               "id": 16,
               "links": [],
               "title": "Runner pod memory",
@@ -1997,7 +1997,7 @@ data:
                   "transformations": []
                 }
               },
-              "description": "Pods counted against the `runners` ResourceQuota (hard limit 4, shared by all repositories).",
+              "description": "Pods counted against the `runners` ResourceQuota, shared by all repositories.",
               "id": 3,
               "links": [],
               "title": "Runner pods",
@@ -2364,7 +2364,7 @@ data:
                           "group": "prometheus",
                           "kind": "DataQuery",
                           "spec": {
-                            "expr": "sum(gha_max_runners{repository=~\"$repository\"})",
+                            "expr": "(clamp_max(sum(gha_max_runners{repository=~\"$repository\"}), scalar(sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"hard\"})))) and on() ((sum(gha_desired_runners{repository=~\"$repository\"})) \u003e= 0.8 * (clamp_max(sum(gha_max_runners{repository=~\"$repository\"}), scalar(sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"hard\"})))))",
                             "instant": false,
                             "legendFormat": "max",
                             "range": true,
@@ -2380,7 +2380,7 @@ data:
                   "transformations": []
                 }
               },
-              "description": "Busy and idle runners (as GitHub sees them) and runner pods that are still pending or failed, stacked. Desired comes from the listeners; max is the scale sets' ceiling.",
+              "description": "Busy and idle runners (as GitHub sees them) and runner pods that are still pending or failed, stacked. Desired comes from the listeners; max is the ceiling (the smaller of the scale sets' maxRunners and the pod quota), drawn only once desired reaches 80 % of it.",
               "id": 14,
               "links": [],
               "title": "Runners",
@@ -3170,7 +3170,7 @@ data:
                             "instant": false,
                             "legendFormat": "no node fits",
                             "range": true,
-                            "refId": "B"
+                            "refId": "G"
                           },
                           "version": "v0"
                         },
@@ -3261,7 +3261,7 @@ data:
                           "group": "prometheus",
                           "kind": "DataQuery",
                           "spec": {
-                            "expr": "sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"hard\"})",
+                            "expr": "(sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"hard\"})) and on() ((sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"used\"})) \u003e= 0.8 * (sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"hard\"})))",
                             "instant": false,
                             "legendFormat": "pod quota",
                             "range": true,
@@ -3277,7 +3277,7 @@ data:
                   "transformations": []
                 }
               },
-              "description": "Jobs assigned to a runner but not running yet, stacked by cause: runner pods pending while the namespace quota is full (pod quota full), runner pods no node has room for (no node fits; all repositories, whatever the filter), other pending runner pods, so image pull or container start (pod starting), and the rest, waiting on GitHub or the listener (other). A scale set never runs more runners than its maxRunners: jobs beyond that wait without a pod, so the line \"repos at maxRunners\" counts the repositories whose assigned jobs reach that cap. The pod lines cover all repositories.",
+              "description": "Jobs assigned to a runner but not running yet, stacked by cause: runner pods pending while the namespace quota is full (pod quota full), runner pods no node has room for (no node fits; all repositories, whatever the filter), other pending runner pods, so image pull or container start (pod starting), and the rest, waiting on GitHub or the listener (other). A scale set never runs more runners than its maxRunners: jobs beyond that wait without a pod, so the line \"repos at maxRunners\" counts the repositories whose assigned jobs reach that cap. The pod lines cover all repositories; the quota line appears once pods used reach 80 % of it.",
               "id": 27,
               "links": [],
               "title": "Why jobs wait",

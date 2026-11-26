@@ -257,7 +257,7 @@
         "spec": {
           "id": 3,
           "title": "Runner pods",
-          "description": "Pods counted against the `runners` ResourceQuota (hard limit 4, shared by all repositories).",
+          "description": "Pods counted against the `runners` ResourceQuota, shared by all repositories.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -1578,7 +1578,7 @@
         "spec": {
           "id": 14,
           "title": "Runners",
-          "description": "Busy and idle runners (as GitHub sees them) and runner pods that are still pending or failed, stacked. Desired comes from the listeners; max is the scale sets' ceiling.",
+          "description": "Busy and idle runners (as GitHub sees them) and runner pods that are still pending or failed, stacked. Desired comes from the listeners; max is the ceiling (the smaller of the scale sets' maxRunners and the pod quota), drawn only once desired reaches 80 % of it.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -1689,7 +1689,7 @@
                       "group": "prometheus",
                       "version": "v0",
                       "spec": {
-                        "expr": "sum(gha_max_runners{repository=~\"$repository\"})",
+                        "expr": "(clamp_max(sum(gha_max_runners{repository=~\"$repository\"}), scalar(sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"hard\"})))) and on() ((sum(gha_desired_runners{repository=~\"$repository\"})) >= 0.8 * (clamp_max(sum(gha_max_runners{repository=~\"$repository\"}), scalar(sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"hard\"})))))",
                         "legendFormat": "max",
                         "range": true,
                         "instant": false,
@@ -1964,7 +1964,7 @@
         "spec": {
           "id": 16,
           "title": "Runner pod memory",
-          "description": "Request 2 GiB, limit 6 GiB.",
+          "description": "Working set per runner pod; request and limit come from the data values `runner.memoryGi` and `runner.memoryLimitGi`.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -3220,7 +3220,7 @@
         "spec": {
           "id": 27,
           "title": "Why jobs wait",
-          "description": "Jobs assigned to a runner but not running yet, stacked by cause: runner pods pending while the namespace quota is full (pod quota full), runner pods no node has room for (no node fits; all repositories, whatever the filter), other pending runner pods, so image pull or container start (pod starting), and the rest, waiting on GitHub or the listener (other). A scale set never runs more runners than its maxRunners: jobs beyond that wait without a pod, so the line \"repos at maxRunners\" counts the repositories whose assigned jobs reach that cap. The pod lines cover all repositories.",
+          "description": "Jobs assigned to a runner but not running yet, stacked by cause: runner pods pending while the namespace quota is full (pod quota full), runner pods no node has room for (no node fits; all repositories, whatever the filter), other pending runner pods, so image pull or container start (pod starting), and the rest, waiting on GitHub or the listener (other). A scale set never runs more runners than its maxRunners: jobs beyond that wait without a pod, so the line \"repos at maxRunners\" counts the repositories whose assigned jobs reach that cap. The pod lines cover all repositories; the quota line appears once pods used reach 80 % of it.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -3259,7 +3259,7 @@
                         "legendFormat": "no node fits",
                         "range": true,
                         "instant": false,
-                        "refId": "B"
+                        "refId": "G"
                       }
                     }
                   }
@@ -3350,7 +3350,7 @@
                       "group": "prometheus",
                       "version": "v0",
                       "spec": {
-                        "expr": "sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"hard\"})",
+                        "expr": "(sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"hard\"})) and on() ((sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"used\"})) >= 0.8 * (sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"hard\"})))",
                         "legendFormat": "pod quota",
                         "range": true,
                         "instant": false,
