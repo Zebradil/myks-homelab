@@ -10,6 +10,15 @@ directories:
       version: 0.15.0
       repository:
         url: oci://ghcr.io/actions/actions-runner-controller-charts
+- path: charts/homelab-docs-kit
+  contents:
+  - path: .
+    lazy: true
+    helmChart:
+      name: gha-runner-scale-set
+      version: 0.15.0
+      repository:
+        url: oci://ghcr.io/actions/actions-runner-controller-charts
 - path: charts/homelab-github-actions-playground
   contents:
   - path: .
@@ -28,7 +37,43 @@ directories:
       version: 0.15.0
       repository:
         url: oci://ghcr.io/actions/actions-runner-controller-charts
+- path: charts/homelab-know-mcp
+  contents:
+  - path: .
+    lazy: true
+    helmChart:
+      name: gha-runner-scale-set
+      version: 0.15.0
+      repository:
+        url: oci://ghcr.io/actions/actions-runner-controller-charts
+- path: charts/homelab-scry
+  contents:
+  - path: .
+    lazy: true
+    helmChart:
+      name: gha-runner-scale-set
+      version: 0.15.0
+      repository:
+        url: oci://ghcr.io/actions/actions-runner-controller-charts
+- path: charts/homelab-sito
+  contents:
+  - path: .
+    lazy: true
+    helmChart:
+      name: gha-runner-scale-set
+      version: 0.15.0
+      repository:
+        url: oci://ghcr.io/actions/actions-runner-controller-charts
 - path: charts/homelab-slacktus
+  contents:
+  - path: .
+    lazy: true
+    helmChart:
+      name: gha-runner-scale-set
+      version: 0.15.0
+      repository:
+        url: oci://ghcr.io/actions/actions-runner-controller-charts
+- path: charts/homelab-znix
   contents:
   - path: .
     lazy: true

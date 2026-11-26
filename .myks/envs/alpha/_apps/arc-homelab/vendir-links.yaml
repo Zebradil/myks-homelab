@@ -1,4 +1,9 @@
 charts/arc: helm-gha-runner-scale-set-controller-0.15.0-c2de1487d5d4bd3d
+charts/homelab-docs-kit: helm-gha-runner-scale-set-0.15.0-65dd0037e7afbb28
 charts/homelab-github-actions-playground: helm-gha-runner-scale-set-0.15.0-65dd0037e7afbb28
 charts/homelab-kasha: helm-gha-runner-scale-set-0.15.0-65dd0037e7afbb28
+charts/homelab-know-mcp: helm-gha-runner-scale-set-0.15.0-65dd0037e7afbb28
+charts/homelab-scry: helm-gha-runner-scale-set-0.15.0-65dd0037e7afbb28
+charts/homelab-sito: helm-gha-runner-scale-set-0.15.0-65dd0037e7afbb28
 charts/homelab-slacktus: helm-gha-runner-scale-set-0.15.0-65dd0037e7afbb28
+charts/homelab-znix: helm-gha-runner-scale-set-0.15.0-65dd0037e7afbb28
