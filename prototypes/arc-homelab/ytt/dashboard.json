@@ -601,7 +601,7 @@
         "spec": {
           "id": 7,
           "title": "Job timeline",
-          "description": "One row per workflow job. Blue: a runner holds the job (EphemeralRunner objects through kube-state-metrics, sampled every 20 s). Green or red: the job finished in that step, from the listener's counters, so jobs shorter than a sample still show up.",
+          "description": "One row per job run, newest first, 15 rows per page. Blue: a runner holds the job (EphemeralRunner objects through kube-state-metrics, sampled every 20 s). Green or red: the job finished in that step, from the listener's counters, so jobs shorter than a sample still show up; when two runs share a job name, the mark lands on the newer one.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -617,7 +617,7 @@
                       "group": "prometheus",
                       "version": "v0",
                       "spec": {
-                        "expr": "max by (repository, job_name) (label_replace(arc_ephemeralrunner_job_info{repository=~\"$repository\", job_display_name!=\"\"}, \"job_name\", \"$1\", \"job_display_name\", \"(.+)\") or label_set((sum by (repository, job_name) (increase(gha_completed_jobs_total{repository=~\"$repository\", job_result=\"succeeded\"}[$__interval])) > 0) * 0 + 2, \"src\", \"ok\") or label_set((sum by (repository, job_name) (increase(gha_completed_jobs_total{repository=~\"$repository\", job_result!=\"succeeded\"}[$__interval])) > 0) * 0 + 3, \"src\", \"failed\"))",
+                        "expr": "max by (repository, job_name, created) (label_replace(arc_ephemeralrunner_job_info{repository=~\"$repository\", job_display_name!=\"\"}, \"job_name\", \"$1\", \"job_display_name\", \"(.+)\") or (label_set((sum by (repository, job_name) (increase(gha_completed_jobs_total{repository=~\"$repository\", job_result=\"succeeded\"}[$__interval])) > 0) * 0 + 2, \"src\", \"ok\") * on (repository, job_name) group_left (created) (topk by (repository, job_name) (1, max by (repository, job_name, created) (label_replace(max by (namespace, ephemeralrunner) (last_over_time(arc_ephemeralrunner_created{repository=~\"$repository\"}[$__rate_interval])) * on (namespace, ephemeralrunner) group_left (repository, job_display_name, created) max by (namespace, ephemeralrunner, repository, job_display_name, created) (last_over_time(arc_ephemeralrunner_job_info{repository=~\"$repository\", job_display_name!=\"\"}[$__rate_interval])), \"job_name\", \"$1\", \"job_display_name\", \"(.+)\"))) * 0 + 1)) or (label_set((sum by (repository, job_name) (increase(gha_completed_jobs_total{repository=~\"$repository\", job_result!=\"succeeded\"}[$__interval])) > 0) * 0 + 3, \"src\", \"failed\") * on (repository, job_name) group_left (created) (topk by (repository, job_name) (1, max by (repository, job_name, created) (label_replace(max by (namespace, ephemeralrunner) (last_over_time(arc_ephemeralrunner_created{repository=~\"$repository\"}[$__rate_interval])) * on (namespace, ephemeralrunner) group_left (repository, job_display_name, created) max by (namespace, ephemeralrunner, repository, job_display_name, created) (last_over_time(arc_ephemeralrunner_job_info{repository=~\"$repository\", job_display_name!=\"\"}[$__rate_interval])), \"job_name\", \"$1\", \"job_display_name\", \"(.+)\"))) * 0 + 1)))",
                         "legendFormat": "{{repository}} · {{job_name}}",
                         "range": true,
                         "instant": false,
@@ -627,7 +627,36 @@
                   }
                 }
               ],
-              "transformations": [],
+              "transformations": [
+                {
+                  "kind": "Transformation",
+                  "group": "joinByField",
+                  "spec": {
+                    "options": {
+                      "mode": "outer"
+                    }
+                  }
+                },
+                {
+                  "kind": "Transformation",
+                  "group": "organize",
+                  "spec": {
+                    "options": {
+                      "excludeByName": {},
+                      "indexByName": {},
+                      "renameByName": {},
+                      "orderByMode": "auto",
+                      "orderBy": [
+                        {
+                          "type": "label",
+                          "name": "created",
+                          "desc": true
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
               "queryOptions": {
                 "maxDataPoints": 300,
                 "interval": "20s"
@@ -652,7 +681,8 @@
                 "tooltip": {
                   "mode": "single",
                   "sort": "none"
-                }
+                },
+                "perPage": 15
               },
               "fieldConfig": {
                 "defaults": {
@@ -5122,7 +5152,7 @@
                                   "height": 6,
                                   "element": {
                                     "kind": "ElementReference",
-                                    "name": "timeline"
+                                    "name": "jobs_by_repo"
                                   }
                                 }
                               }

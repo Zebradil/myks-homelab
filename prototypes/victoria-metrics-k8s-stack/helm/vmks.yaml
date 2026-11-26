@@ -50,6 +50,14 @@ kube-state-metrics:
                       job_display_name: [status, jobDisplayName]
                       workflow_ref: [status, jobWorkflowRef]
                       workflow_run_id: [status, workflowRunId]
+                      #! RFC 3339 sorts as text, so the timeline orders its rows by this label.
+                      created: [metadata, creationTimestamp]
+              - name: created
+                help: Unix time the runner was created, which picks the latest runner of a job name.
+                each:
+                  type: Gauge
+                  gauge:
+                    path: [metadata, creationTimestamp]
 
 prometheus-node-exporter:
   resources: #@ res("10m", "32Mi", "64Mi")
