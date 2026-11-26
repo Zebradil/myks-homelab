@@ -1,4 +1,5 @@
 {{- define "traefik.podTemplate" }}
+  {{- $enabledPorts := (include "traefik.enabledPorts" .) | fromYaml }}
   {{- $version := include "traefik.proxyVersion" $ }}
     metadata:
       annotations:
@@ -9,11 +10,11 @@
       {{- if and (.Values.metrics.prometheus) (not (.Values.metrics.prometheus.serviceMonitor).enabled) }}
         prometheus.io/scrape: "true"
         prometheus.io/path: "/metrics"
-        prometheus.io/port: {{ quote (index .Values.ports .Values.metrics.prometheus.entryPoint).port }}
+        prometheus.io/port: {{ quote (index $enabledPorts .Values.metrics.prometheus.entryPoint).port }}
       {{- end }}
       {{- end }}
       labels:
-      {{- include "traefik.labels" . | nindent 8 -}}
+      {{- include "traefik.podlabels" . | nindent 8 -}}
       {{- with .Values.deployment.podLabels }}
         {{- tpl (toYaml .) $ | nindent 8 }}
       {{- end }}
@@ -75,11 +76,14 @@
           {{- with .Values.resources }}
           {{- toYaml . | nindent 10 }}
           {{- end }}
-        {{- if (and (empty .Values.ports.traefik) (empty .Values.deployment.healthchecksPort)) }}
+        {{- if (and (not (hasKey $enabledPorts "traefik")) (empty .Values.deployment.healthchecksPort)) }}
           {{- fail "ERROR: When disabling traefik port, you need to specify `deployment.healthchecksPort`" }}
         {{- end }}
-        {{- $healthchecksPort := (default (.Values.ports.traefik).port .Values.deployment.healthchecksPort) }}
-        {{- $healthchecksHost := (default (.Values.ports.traefik).hostIP .Values.deployment.healthchecksHost) }}
+        {{- $healthchecksPort := (default ($enabledPorts.traefik).port .Values.deployment.healthchecksPort) }}
+        {{- $healthchecksHost := .Values.deployment.healthchecksHost }}
+        {{- if and .Values.hostNetwork (not $healthchecksHost) $enabledPorts.traefik }}
+          {{- $healthchecksHost = $enabledPorts.traefik.hostIP }}
+        {{- end }}
         {{- $healthchecksScheme := (default "HTTP" .Values.deployment.healthchecksScheme) }}
         {{- $readinessPath := (default "/ping" .Values.deployment.readinessPath) }}
         {{- $livenessPath := (default "/ping" .Values.deployment.livenessPath) }}
@@ -111,8 +115,7 @@
           {{- end }}
         ports:
         {{- $hostNetwork := .Values.hostNetwork }}
-        {{- range $name, $config := .Values.ports }}
-         {{- if $config }}
+        {{- range $name, $config := $enabledPorts }}
           {{- if and $hostNetwork (and $config.hostPort $config.port) }}
             {{- if ne ($config.hostPort | int) ($config.port | int) }}
               {{- fail "ERROR: All hostPort must match their respective containerPort when `hostNetwork` is enabled" }}
@@ -135,7 +138,6 @@
            {{- end }}
           protocol: UDP
           {{- end }}
-         {{- end }}
         {{- end }}
         {{- if .Values.hub.token }}
           {{- if not .Values.hub.offline }}
@@ -216,10 +218,20 @@
           - "--global.aliasHeadersStrategy={{ . }}"
            {{- end }}
           {{- end }}
-          {{- range $name, $config := .Values.ports }}
-           {{- if $config }}
+          {{- with .Values.serversTransport.forwardingTimeouts }}
+           {{- with .readTimeout }}
+          - "--serversTransport.forwardingTimeouts.readTimeout={{ if kindIs "float64" . }}{{ printf "%.0f" . }}{{ else }}{{ . }}{{ end }}"
+           {{- end }}
+           {{- with .writeTimeout }}
+          - "--serversTransport.forwardingTimeouts.writeTimeout={{ if kindIs "float64" . }}{{ printf "%.0f" . }}{{ else }}{{ . }}{{ end }}"
+           {{- end }}
+          {{- end }}
+          {{- range $name, $config := $enabledPorts }}
             {{- $entryPoints := (empty $config.uplink) | ternary "entryPoints" "hub.uplinkEntryPoints" }}
-            {{- $hostIP := default "" $config.hostIP }}
+            {{- $hostIP := "" }}
+            {{- if $.Values.hostNetwork }}
+              {{- $hostIP = default "" $config.hostIP }}
+            {{- end }}
             {{- if contains ":" $hostIP }}
               {{- $hostIP = printf "[%s]" $hostIP }}
             {{- end }}
@@ -241,7 +253,6 @@
           - "--{{$entryPoints}}.{{$name}}.observability.traceVerbosity={{ .traceVerbosity }}"
               {{- end }}
             {{- end }}
-           {{- end }}
           {{- end }}
           {{- with .Values.api }}
             {{- $apiConfig := . }}
@@ -540,7 +551,7 @@
           - "--providers.kubernetesingress.allowEmptyServices={{ . }}"
             {{- end }}
            {{- end }}
-           {{- if .Values.providers.kubernetesIngress.publishedService.enabled }}
+           {{- if and .Values.providers.kubernetesIngress.publishedService.enabled (not .Values.providers.kubernetesIngress.reportNodeInternalIPs) }}
             {{- if or .Values.service.enabled .Values.providers.kubernetesIngress.publishedService.pathOverride }}
           - "--providers.kubernetesingress.ingressendpoint.publishedservice={{ template "providers.kubernetesIngress.publishedServicePath" . }}"
             {{- end }}
@@ -565,6 +576,9 @@
            {{- end }}
            {{- if .Values.providers.kubernetesIngress.strictPrefixMatching }}
           - "--providers.kubernetesingress.strictPrefixMatching=true"
+           {{- end }}
+           {{- if ne .Values.providers.kubernetesIngress.reportNodeInternalIPs nil }}
+          - "--providers.kubernetesingress.reportNodeInternalIPs={{ .Values.providers.kubernetesIngress.reportNodeInternalIPs }}"
            {{- end }}
           {{- end }}
           {{- if .Values.experimental.kubernetesGateway.enabled }}
@@ -625,6 +639,9 @@
             {{- with .burst }}
           - "--providers.kubernetesgateway.burst={{ . }}"
             {{- end }}
+            {{- if ne .retryMaxRequestBodyBytes nil }}
+          - "--providers.kubernetesgateway.retryMaxRequestBodyBytes={{ .retryMaxRequestBodyBytes | int64 }}"
+            {{- end }}
            {{- end }}
           {{- end }}
           {{- with .Values.providers.kubernetesIngress }}
@@ -655,7 +672,11 @@
           - "--providers.kubernetesingressnginx.modsec=true"
               {{- include "traefik.yaml2CommandLineArgs" (dict "path" "providers.kubernetesingressnginx.modsec" "content" (omit .modsec "enabled")) | nindent 10 }}
             {{- end }}
-            {{- include "traefik.yaml2CommandLineArgs" (dict "path" "providers.kubernetesingressnginx" "content" (omit . "enabled" "publishService" "watchNamespace" "modsec")) | nindent 10 }}
+            {{- $nginxArgs := omit . "enabled" "publishService" "watchNamespace" "modsec" }}
+            {{- if .disableNonTLSRouters }}
+              {{- $nginxArgs = omit $nginxArgs "httpEntryPoint" }}
+            {{- end }}
+            {{- include "traefik.yaml2CommandLineArgs" (dict "path" "providers.kubernetesingressnginx" "content" $nginxArgs) | nindent 10 }}
            {{- end }}
           {{- end }}
           {{- with .Values.providers.knative }}
@@ -669,8 +690,7 @@
             {{- end }}
            {{- end }}
           {{- end }}
-          {{- range $name, $config := $.Values.ports }}
-          {{- if $config }}
+          {{- range $name, $config := $enabledPorts }}
             {{- $entryPoints := (empty $config.uplink) | ternary "entryPoints" "hub.uplinkEntryPoints" }}
             {{- with $config.http }}
               {{- include "traefik.yaml2CommandLineArgs" (dict "path" (printf "%s.%s.http.encodedCharacters" $entryPoints $name) "content" .encodedCharacters) | nindent 10 }}
@@ -684,11 +704,11 @@
           - "--{{$entryPoints}}.{{ $name }}.http.middlewares={{ join "," . }}"
               {{- end }}
               {{- with (.redirections).entryPoint }}
-               {{- if not (hasKey $.Values.ports .to) }}
-                 {{- $errorMsg := printf "ERROR: Cannot redirect %s to %s: entryPoint not found" $name .to }}
+               {{- if not (hasKey $enabledPorts .to) }}
+                 {{- $errorMsg := printf "ERROR: Cannot redirect %s to %s: entryPoint not found (or disabled)" $name .to }}
                  {{- fail $errorMsg }}
                {{- end }}
-               {{- $toPort := index $.Values.ports .to }}
+               {{- $toPort := index $enabledPorts .to }}
                {{- if and (((($toPort).http).tls).enabled) .scheme (ne .scheme "https") }}
                  {{- $errorMsg := printf "ERROR: Cannot redirect %s to %s without setting scheme to https" $name .to }}
                  {{- fail $errorMsg }}
@@ -754,6 +774,9 @@
               {{- if $config.forwardedHeaders.notAppendXForwardedFor }}
           - "--{{$entryPoints}}.{{ $name }}.forwardedHeaders.notAppendXForwardedFor=true"
               {{- end }}
+              {{- if ne $config.forwardedHeaders.addXForwardedSchemeHeaders nil }}
+          - "--{{$entryPoints}}.{{ $name }}.forwardedHeaders.addXForwardedSchemeHeaders={{ $config.forwardedHeaders.addXForwardedSchemeHeaders }}"
+              {{- end }}
             {{- end }}
             {{- if $config.proxyProtocol }}
               {{- if $config.proxyProtocol.trustedIPs }}
@@ -790,7 +813,6 @@
           - "--{{$entryPoints}}.{{ $name }}.transport.keepAliveMaxTime={{ .keepAliveMaxTime }}"
               {{- end }}
             {{- end }}
-          {{- end }}
           {{- end }}
           {{- with .Values.log }}
             {{- with .format }}
@@ -970,6 +992,17 @@
                 {{- include "traefik.yaml2CommandLineArgs" (dict "path" $vpcPath "content" $val) | nindent 10 }}
               {{- end }}
             {{- end }}
+            {{- if .providers.vcenter.enabled }}
+          - "--hub.providers.vcenter"
+              {{- include "traefik.yaml2CommandLineArgs" (dict "path" "hub.providers.vcenter" "content" (omit $.Values.hub.providers.vcenter "enabled" "password" "solutionUser")) | nindent 10 }}
+              {{- if .providers.vcenter.password.secretName }}
+          - "--hub.providers.vcenter.password=$(HUB_VCENTER_PASSWORD)"
+              {{- end }}
+              {{- if .providers.vcenter.solutionUser.secretName }}
+          - "--hub.providers.vcenter.certificate=$(HUB_VCENTER_CERTIFICATE)"
+          - "--hub.providers.vcenter.privateKey=$(HUB_VCENTER_PRIVATE_KEY)"
+              {{- end }}
+            {{- end }}
             {{- if .providers.multicluster.enabled }}
           - "--hub.providers.multicluster=true"
               {{- include "traefik.yaml2CommandLineArgs" (dict "path" "hub.providers.multicluster" "content" (omit $.Values.hub.providers.multicluster "enabled" "children")) | nindent 10 }}
@@ -1039,6 +1072,29 @@
                 fieldPath: metadata.namespace
           - name: USER
             value: traefik
+          {{- if .Values.hub.token }}
+          {{- with .Values.hub.providers.vcenter }}
+            {{- if and .enabled .password.secretName }}
+          - name: HUB_VCENTER_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .password.secretName }}
+                key: {{ .password.key }}
+            {{- end }}
+            {{- if and .enabled .solutionUser.secretName }}
+          - name: HUB_VCENTER_CERTIFICATE
+            valueFrom:
+              secretKeyRef:
+                name: {{ .solutionUser.secretName }}
+                key: {{ .solutionUser.certificateKey }}
+          - name: HUB_VCENTER_PRIVATE_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ .solutionUser.secretName }}
+                key: {{ .solutionUser.privateKeyKey }}
+            {{- end }}
+          {{- end }}
+          {{- end }}
           {{- if ($.Values.resources.limits).cpu }}
           - name: GOMAXPROCS
             valueFrom:
@@ -1092,7 +1148,7 @@
           {{- end }}
         {{- end }}
         {{- if .Values.deployment.additionalVolumes }}
-          {{- toYaml .Values.deployment.additionalVolumes | nindent 8 }}
+          {{- tpl (toYaml .Values.deployment.additionalVolumes) . | nindent 8 }}
         {{- end }}
         {{- range $localPluginName, $localPlugin := .Values.experimental.localPlugins }}
         {{- $pluginType := include "traefik.getLocalPluginType" (dict "plugin" $localPlugin "pluginName" $localPluginName) }}
