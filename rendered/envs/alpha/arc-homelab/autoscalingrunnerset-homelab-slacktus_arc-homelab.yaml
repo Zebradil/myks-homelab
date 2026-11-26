@@ -6,7 +6,7 @@ metadata:
     actions.github.com/cleanup-manager-role-binding: homelab-slacktus-gha-rs-manager
     actions.github.com/cleanup-manager-role-name: homelab-slacktus-gha-rs-manager
     actions.github.com/cleanup-no-permission-service-account-name: homelab-slacktus-gha-rs-no-permission
-    actions.github.com/values-hash: 607b53bf2f6cc79fb224be5502659fd9ee5650cde119c445e0ad2ef1467ebe7
+    actions.github.com/values-hash: 786286a2f140f1ed1c276b40555cac6c1b4160ff04e7d355d16c69ed4f67d0e
   labels:
     actions.github.com/scale-set-name: homelab-slacktus
     actions.github.com/scale-set-namespace: arc-homelab
@@ -36,7 +36,7 @@ spec:
             requests:
               cpu: 10m
               memory: 32Mi
-  maxRunners: 2
+  maxRunners: 6
   minRunners: 0
   runnerScaleSetLabels:
     - homelab
@@ -58,7 +58,7 @@ spec:
               memory: 6Gi
             requests:
               cpu: "1"
-              memory: 2Gi
+              memory: 3Gi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:

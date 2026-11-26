@@ -3131,6 +3131,324 @@ data:
                 "version": "13.2.3"
               }
             }
+          },
+          "waiting_why": {
+            "kind": "Panel",
+            "spec": {
+              "data": {
+                "kind": "QueryGroup",
+                "spec": {
+                  "queries": [
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum(gha_controller_pending_ephemeral_runners{repository=~\"$repository\"}) * (sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"used\"}) \u003e= bool sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"hard\"}))",
+                            "instant": false,
+                            "legendFormat": "pod quota full",
+                            "range": true,
+                            "refId": "A"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "A"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum(gha_controller_pending_ephemeral_runners{repository=~\"$repository\"}) * (1 - (sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"used\"}) \u003e= bool sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"hard\"})))",
+                            "instant": false,
+                            "legendFormat": "pod starting",
+                            "range": true,
+                            "refId": "B"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "B"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "clamp_min(sum(gha_assigned_jobs{repository=~\"$repository\"} - gha_running_jobs{repository=~\"$repository\"}) - sum(gha_controller_pending_ephemeral_runners{repository=~\"$repository\"}), 0)",
+                            "instant": false,
+                            "legendFormat": "other",
+                            "range": true,
+                            "refId": "C"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "C"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "count(gha_assigned_jobs{repository=~\"$repository\"} \u003e= gha_max_runners{repository=~\"$repository\"}) or vector(0)",
+                            "instant": false,
+                            "legendFormat": "repos at maxRunners",
+                            "range": true,
+                            "refId": "D"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "D"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"used\"})",
+                            "instant": false,
+                            "legendFormat": "pods used",
+                            "range": true,
+                            "refId": "E"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "E"
+                      }
+                    },
+                    {
+                      "kind": "PanelQuery",
+                      "spec": {
+                        "hidden": false,
+                        "query": {
+                          "group": "prometheus",
+                          "kind": "DataQuery",
+                          "spec": {
+                            "expr": "sum(kube_resourcequota{namespace=\"arc-homelab\",resourcequota=\"runners\",resource=\"pods\",type=\"hard\"})",
+                            "instant": false,
+                            "legendFormat": "pod quota",
+                            "range": true,
+                            "refId": "F"
+                          },
+                          "version": "v0"
+                        },
+                        "refId": "F"
+                      }
+                    }
+                  ],
+                  "queryOptions": {},
+                  "transformations": []
+                }
+              },
+              "description": "Jobs assigned to a runner but not running yet, stacked by cause: runner pods pending while the namespace quota is full (pod quota full), runner pods pending below the quota, so scheduling or image pull (pod starting), and the rest, waiting on GitHub or the listener (other). A scale set never takes more jobs than its maxRunners: further jobs stay queued on GitHub, invisible here, so the line \"repos at maxRunners\" counts the repositories that are at that cap. The pod lines cover all repositories.",
+              "id": 27,
+              "links": [],
+              "title": "Why jobs wait",
+              "vizConfig": {
+                "group": "timeseries",
+                "kind": "VizConfig",
+                "spec": {
+                  "fieldConfig": {
+                    "defaults": {
+                      "color": {
+                        "mode": "palette-classic"
+                      },
+                      "custom": {
+                        "axisSoftMin": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 40,
+                        "lineInterpolation": "stepAfter",
+                        "lineWidth": 1,
+                        "showPoints": "never",
+                        "spanNulls": false,
+                        "stacking": {
+                          "group": "A",
+                          "mode": "normal"
+                        }
+                      },
+                      "decimals": 0
+                    },
+                    "overrides": [
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "pod quota full"
+                        },
+                        "properties": [
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "red",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "pod starting"
+                        },
+                        "properties": [
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "yellow",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "other"
+                        },
+                        "properties": [
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "orange",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "pods used"
+                        },
+                        "properties": [
+                          {
+                            "id": "custom.stacking",
+                            "value": {
+                              "group": "A",
+                              "mode": "none"
+                            }
+                          },
+                          {
+                            "id": "custom.fillOpacity",
+                            "value": 0
+                          },
+                          {
+                            "id": "custom.lineWidth",
+                            "value": 2
+                          },
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "blue",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "pod quota"
+                        },
+                        "properties": [
+                          {
+                            "id": "custom.stacking",
+                            "value": {
+                              "group": "A",
+                              "mode": "none"
+                            }
+                          },
+                          {
+                            "id": "custom.fillOpacity",
+                            "value": 0
+                          },
+                          {
+                            "id": "custom.lineWidth",
+                            "value": 1
+                          },
+                          {
+                            "id": "custom.lineStyle",
+                            "value": {
+                              "dash": [
+                                4,
+                                6
+                              ],
+                              "fill": "dash"
+                            }
+                          },
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "red",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "repos at maxRunners"
+                        },
+                        "properties": [
+                          {
+                            "id": "custom.stacking",
+                            "value": {
+                              "group": "A",
+                              "mode": "none"
+                            }
+                          },
+                          {
+                            "id": "custom.fillOpacity",
+                            "value": 0
+                          },
+                          {
+                            "id": "custom.lineWidth",
+                            "value": 2
+                          },
+                          {
+                            "id": "color",
+                            "value": {
+                              "fixedColor": "purple",
+                              "mode": "fixed"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "options": {
+                    "legend": {
+                      "displayMode": "list",
+                      "placement": "bottom",
+                      "showLegend": true
+                    },
+                    "tooltip": {
+                      "mode": "multi",
+                      "sort": "desc"
+                    }
+                  }
+                },
+                "version": "13.2.3"
+              }
+            }
           }
         },
         "layout": {
@@ -3402,6 +3720,19 @@ data:
                                       "width": 12,
                                       "x": 12,
                                       "y": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "GridLayoutItem",
+                                    "spec": {
+                                      "element": {
+                                        "kind": "ElementReference",
+                                        "name": "waiting_why"
+                                      },
+                                      "height": 9,
+                                      "width": 24,
+                                      "x": 0,
+                                      "y": 9
                                     }
                                   }
                                 ]
