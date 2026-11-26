@@ -1,2 +1,50 @@
-#@ load("grafana.lib.yaml", "gen_dashboard")
---- #@ gen_dashboard("dashboard.json", name="arc-homelab-dashboard")
+#@ load("@ytt:assert", "assert")
+#@ load("@ytt:data", "data")
+#@ load("@ytt:json", "json")
+#@ load("grafana.lib.yaml", "gen_dashboard_obj")
+
+#@ a = data.values.application
+#@ gib = 1024 * 1024 * 1024
+
+#@ def cores(quantity):
+#@   return int(quantity[:-1]) / 1000.0 if quantity.endswith("m") else float(quantity)
+#@ end
+
+#! Grafana drops the whole panel when two of its queries share a refId; a
+#! copied query easily keeps the inner one.
+#@ def check_ref_ids(dash):
+#@   for name, element in dash["spec"]["elements"].items():
+#@     seen = {}
+#@     for q in element["spec"]["data"]["spec"]["queries"]:
+#@       ref = q["spec"]["refId"]
+#@       if ref != q["spec"]["query"]["spec"].get("refId") or ref in seen:
+#@         assert.fail("panel {}: refId {} differs from its query's or repeats".format(name, ref))
+#@       end
+#@       seen[ref] = True
+#@     end
+#@   end
+#@ end
+
+#! Hidden constants the queries use; the JSON holds the current values so it
+#! still imports on its own.
+#@ constants = {
+#@   "daddy": a.daddyAddress + ":9100",
+#@   "runner_memory_request": str(a.runner.memoryGi * gib),
+#@   "runner_cpu_request": str(cores(a.runner.cpu)),
+#@ }
+
+#@ dash = json.decode(data.read("dashboard.json"))
+#@ check_ref_ids(dash)
+#@ for v in dash["spec"]["variables"]:
+#@   name = v["spec"]["name"]
+#@   if v["kind"] == "ConstantVariable" and name in constants:
+#@     v["spec"]["query"] = constants[name]
+#@     v["spec"]["current"] = {"text": constants[name], "value": constants[name]}
+#@   end
+#@ end
+#@ elements = dash["spec"]["elements"]
+#! Thresholds cannot use variables.
+#@ elements["pod_memory"]["spec"]["vizConfig"]["spec"]["fieldConfig"]["defaults"]["thresholds"]["steps"][1]["value"] = a.runner.memoryLimitGi * gib
+#@ elements["pods"]["spec"]["vizConfig"]["spec"]["fieldConfig"]["defaults"]["thresholds"]["steps"][1]["value"] = int(0.8 * a.maxRunners)
+
+--- #@ gen_dashboard_obj("arc-homelab-dashboard", dash)

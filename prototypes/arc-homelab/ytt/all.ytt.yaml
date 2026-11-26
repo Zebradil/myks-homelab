@@ -3,6 +3,11 @@
 
 #@ dv = data.values
 #@ a = dv.application
+#! Alert selectors. node-exporter series carry only the host's IP:port; the
+#! join names the Kubernetes node and leaves out daddy, which is not one.
+#@ node_join = ' * on(instance) group_left(node) max by (instance, node) (label_replace(kube_node_info, "instance", "$1:9100", "internal_ip", "(.*)"))'
+#@ runner = 'namespace="{}",container="runner"'.format(dv.myks.context.app)
+#@ daddy_store = 'instance="{}:9100",mountpoint="/nix/store"'.format(a.daddyAddress)
 
 ---
 apiVersion: v1
@@ -152,3 +157,49 @@ spec:
               pods cannot start (image pull, ResourceQuota `runners`, scheduling: check `kubectl -n arc-homelab get
               ephemeralrunners,pods` and events) or more jobs are queued than the pool holds (maxRunners per
               repository, ResourceQuota `runners` in total).
+        - alert: HomelabRunnerNodeOOMKill
+          expr: #@ "max by (node) (increase(node_vmstat_oom_kill[10m])" + node_join + ") > 0"
+          labels:
+            severity: warning
+          annotations:
+            summary: "OOM killer ran on {{ $labels.node }}"
+            description: >-
+              The kernel on {{ $labels.node }} killed {{ $value | humanize }} process(es) for lack of memory in the last
+              10 minutes. Runner pods request less memory than their limit, so several busy ones can overcommit a node.
+              Check the victims (`kubectl get events -A --field-selector reason=SystemOOM`, `journalctl -k -g
+              'Killed process'` on the node) and the Nodes tab of the Homelab runners dashboard.
+        - alert: HomelabRunnerNodeMemoryPressure
+          expr: #@ "max by (node) (rate(node_pressure_memory_waiting_seconds_total[5m])" + node_join + ") > 0.1"
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "{{ $labels.node }} stalls on memory"
+            description: >-
+              Tasks on {{ $labels.node }} have waited for memory {{ $value | humanizePercentage }} of the time for 5
+              minutes (PSI memory "some"): reclaim is slowing homelab services down. Check how many runner pods run
+              there (`kubectl -n arc-homelab get pods -o wide`) and their memory on the Homelab runners dashboard.
+        - alert: HomelabRunnerPodMemoryNearLimit
+          expr: #@ "max by (pod, node) (container_memory_working_set_bytes{" + runner + "} / (container_spec_memory_limit_bytes{" + runner + "} > 0)) >= 0.9"
+          #! Runner pods live for minutes.
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Runner pod {{ $labels.pod }} is close to its memory limit"
+            description: >-
+              {{ $labels.pod }} on {{ $labels.node }} uses {{ $value | humanizePercentage }} of its memory limit; at the
+              limit the kernel OOM-kills inside the pod and the job usually fails. If this repeats, find the job (the pod name
+              carries the repository) and raise `runner.memoryLimitGi` or move the heavy step to daddy.
+        - alert: HomelabBuilderStoreLowSpace
+          expr: #@ "node_filesystem_avail_bytes{" + daddy_store + "} / node_filesystem_size_bytes{" + daddy_store + "} < 0.15"
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Nix store on daddy is running out of space"
+            description: >-
+              daddy's /nix/store has {{ $value | humanizePercentage }} free. It shares the SSD with BuildKit's cache,
+              which garbage-collects only down to its own free-space floor, so CI builds will start failing. Check what
+              grew (`sudo du -xsh /nix/store /var/lib/buildkit`) and collect garbage (`sudo nix-collect-garbage
+              --delete-older-than 3d`).
