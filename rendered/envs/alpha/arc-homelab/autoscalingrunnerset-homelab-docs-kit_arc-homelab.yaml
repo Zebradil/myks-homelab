@@ -1,0 +1,92 @@
+apiVersion: actions.github.com/v1alpha1
+kind: AutoscalingRunnerSet
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+    actions.github.com/cleanup-manager-role-binding: homelab-docs-kit-gha-rs-manager
+    actions.github.com/cleanup-manager-role-name: homelab-docs-kit-gha-rs-manager
+    actions.github.com/cleanup-no-permission-service-account-name: homelab-docs-kit-gha-rs-no-permission
+    actions.github.com/values-hash: d4c2400a407d507f0e4424b681ec43dc5104d98989a9a0d882fd6ec56a9f3a2
+  labels:
+    actions.github.com/scale-set-name: homelab-docs-kit
+    actions.github.com/scale-set-namespace: arc-homelab
+    app.kubernetes.io/component: autoscaling-runner-set
+    app.kubernetes.io/instance: homelab-docs-kit
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: homelab-docs-kit
+    app.kubernetes.io/part-of: gha-rs
+    app.kubernetes.io/version: 0.15.0
+    helm.sh/chart: gha-rs-0.15.0
+  name: homelab-docs-kit
+  namespace: arc-homelab
+spec:
+  githubConfigSecret: arc-homelab-app-credentials
+  githubConfigUrl: https://github.com/Zebradil/docs-kit
+  listenerConfig:
+    scaler:
+      burst: 100
+      qps: 50
+  listenerTemplate:
+    spec:
+      containers:
+        - name: listener
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 10m
+              memory: 32Mi
+  maxRunners: 2
+  minRunners: 0
+  runnerScaleSetLabels:
+    - homelab
+  template:
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - command:
+            - /bin/run.sh
+          env:
+            - name: NIX_CI_STORE
+              value: ssh-ng://nixci@192.168.0.101?ssh-key=/etc/nixci/id_ed25519&base64-ssh-public-host-key=c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUl1blRtR0dEODNXS290eVNWM3ZCRDVhRC9sdVU4cDFzWUN1OFV4bHl2d0s=
+            - name: BUILDKIT_HOST
+              value: tcp://192.168.0.101:1234
+          image: oci.zebradil.dev/ghcr.io-cache/zebradil/homelab-runner@sha256:a72874eb1253216db720fcc61b606033431030c5da0202a230888c965068d610
+          name: runner
+          resources:
+            limits:
+              memory: 6Gi
+            requests:
+              cpu: "1"
+              memory: 2Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - mountPath: /etc/nixci
+              name: nixci
+              readOnly: true
+            - mountPath: /etc/buildkit
+              name: buildkit
+              readOnly: true
+      priorityClassName: homelab-runner
+      restartPolicy: Never
+      securityContext:
+        fsGroup: 1001
+        runAsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+        seccompProfile:
+          type: RuntimeDefault
+      serviceAccountName: homelab-docs-kit-gha-rs-no-permission
+      volumes:
+        - name: nixci
+          secret:
+            defaultMode: 288
+            secretName: nixci-ssh-key
+        - name: buildkit
+          secret:
+            defaultMode: 288
+            secretName: buildkit-client-tls

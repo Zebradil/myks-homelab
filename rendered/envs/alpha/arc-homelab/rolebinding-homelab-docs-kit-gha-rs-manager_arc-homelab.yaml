@@ -1,0 +1,24 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  annotations:
+    a8r.io/repository: https://github.com/Zebradil/myks-homelab
+  finalizers:
+    - actions.github.com/cleanup-protection
+  labels:
+    actions.github.com/scale-set-name: homelab-docs-kit
+    actions.github.com/scale-set-namespace: arc-homelab
+    app.kubernetes.io/component: manager-role-binding
+    app.kubernetes.io/instance: homelab-docs-kit
+    app.kubernetes.io/name: homelab-docs-kit
+    app.kubernetes.io/part-of: gha-rs
+  name: homelab-docs-kit-gha-rs-manager
+  namespace: arc-homelab
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: homelab-docs-kit-gha-rs-manager
+subjects:
+  - kind: ServiceAccount
+    name: arc-gha-rs-controller
+    namespace: arc-system

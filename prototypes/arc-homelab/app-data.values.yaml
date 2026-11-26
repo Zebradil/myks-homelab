@@ -2,9 +2,14 @@
 ---
 application:
   repos:
+    - docs-kit
     - github-actions-playground
     - kasha
+    - know-mcp
+    - scry
+    - sito
     - slacktus
+    - znix
   githubOwner: Zebradil
   runnerLabel: homelab
   maxRunners: 2
