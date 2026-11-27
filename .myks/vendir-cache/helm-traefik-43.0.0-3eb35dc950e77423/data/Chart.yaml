@@ -1,19 +1,16 @@
 annotations:
   artifacthub.io/changes: |
-    - kind: fixed
-      description: "fix(service): reject removed service.type value"
-    - kind: fixed
-      description: "fix(providers): update CRD safeNaming to reflect warning language"
-    - kind: added
-      description: "feat: support traefik v3.8-rc1"
-    - kind: added
-      description: "feat(hub): support traefik hub v3.21.8"
-  traefik.io/hub-max-version: v3.21.8
-  traefik.io/hub-min-version: v3.19.3
-  traefik.io/proxy-max-version: v3.7.17
-  traefik.io/proxy-min-version: v3.6.0
+    - kind: changed
+      description: "This is a major release with breaking changes. Read the upgrade notes before upgrading."
+      links:
+        - name: Upgrade Notes
+          url: https://github.com/traefik/traefik-helm-chart/releases/tag/v43.0.0
+  traefik.io/hub-max-version: v3.21.13
+  traefik.io/hub-min-version: v3.21.0
+  traefik.io/proxy-max-version: v3.8.0
+  traefik.io/proxy-min-version: v3.7.0
 apiVersion: v2
-appVersion: v3.7.17
+appVersion: v3.8.0
 description: A Traefik based Kubernetes ingress controller
 home: https://traefik.io/
 icon: https://raw.githubusercontent.com/traefik/traefik/master/docs/content/assets/img/traefik.logo.png
@@ -33,4 +30,4 @@ sources:
 - https://github.com/traefik/traefik-helm-chart
 - https://github.com/traefik/traefik
 type: application
-version: 42.3.1
+version: 43.0.0

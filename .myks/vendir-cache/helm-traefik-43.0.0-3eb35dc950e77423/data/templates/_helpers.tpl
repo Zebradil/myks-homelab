@@ -26,12 +26,13 @@ Install the Traefik Hub distribution. Enabled without a token means proxy mode. 
 {{- end -}}
 
 {{/*
-Image defaults. An explicit image value always wins; otherwise the chart picks the hardened
-default, then the Traefik Hub one when hub is enabled, then Traefik Proxy.
+Image defaults. An explicit image value always wins, then global.imageRegistry for the registry;
+otherwise the chart picks the hardened default, then the Traefik Hub one when hub is enabled,
+then Traefik Proxy.
 */}}
 {{- define "traefik.imageRegistry" -}}
 {{- $default := ternary "ghcr.io" "docker.io" (eq (include "traefik.hub.enabled" .) "true") -}}
-{{- .Values.image.registry | default (ternary "registry.traefik.io" $default .Values.hub.hardened) -}}
+{{- .Values.image.registry | default .Values.global.imageRegistry | default (ternary "registry.traefik.io" $default .Values.hub.hardened) -}}
 {{- end -}}
 
 {{- define "traefik.imageRepository" -}}
@@ -107,6 +108,11 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- with .Values.commonLabels }}
 {{ toYaml . }}
 {{- end }}
+{{- end }}
+
+{{/* traefik.labels without helm.sh/chart, to avoid pod restarts on chart-only upgrades */}}
+{{- define "traefik.podlabels" -}}
+{{- omit (include "traefik.labels" . | fromYaml) "helm.sh/chart" | toYaml -}}
 {{- end }}
 
 {{/*
@@ -223,30 +229,12 @@ It requires a dict with "Version" and "Hub".
  {{- if .Hub -}}
    {{- $hubProxyVersion := "v3.7.17" }}
    {{- if regexMatch "v[0-9]+.[0-9]+.[0-9]+" (default "" $version) }}
-     {{- if semverCompare "<v3.19.0-0" $version }}
-        {{- $hubProxyVersion = "v3.6.3" }}
-     {{- else if semverCompare "<v3.20.0-ea.7" $version }}
-        {{- $hubProxyVersion = "v3.6.7" }}
-     {{- else if semverCompare "<v3.20.0-0" $version }}
-        {{- $hubProxyVersion = "v3.7.0-rc.1" }}
-     {{- else if semverCompare "<v3.20.2-0" $version }}
-        {{- $hubProxyVersion = "v3.7.0" }}
-     {{- else if semverCompare "<v3.20.5-0" $version }}
-        {{- $hubProxyVersion = "v3.7.1" }}
-     {{- else if semverCompare "<v3.20.6-0" $version }}
-       {{- $hubProxyVersion = "v3.7.5" }}
-     {{- else if semverCompare "<v3.20.7-0" $version }}
-       {{- $hubProxyVersion = "v3.7.6" }}
-     {{- else if semverCompare "<v3.20.8-0" $version }}
-       {{- $hubProxyVersion = "v3.7.9" }}
-     {{- else if semverCompare "<v3.20.11-0" $version }}
-       {{- $hubProxyVersion = "v3.7.10" }}
-     {{- else if semverCompare "<v3.20.12-0" $version }}
-       {{- $hubProxyVersion = "v3.7.11" }}
-     {{- else if semverCompare "<v3.20.14-0 || >=v3.21.0-0 <v3.21.1-0" $version }}
+     {{- if semverCompare "<v3.21.1-0" $version }}
        {{- $hubProxyVersion = "v3.7.12" }}
-     {{- else if semverCompare "<v3.20.20-0 || >=v3.21.0-0 <v3.21.7-0" $version }}
+     {{- else if semverCompare "<v3.21.7-0" $version }}
        {{- $hubProxyVersion = "v3.7.14" }}
+     {{- else if semverCompare ">=v3.22.0-0" $version }}
+       {{- $hubProxyVersion = "v3.8.0-rc.1" }}
      {{- end -}}
    {{- end -}}
    {{- $hubProxyVersion }}
@@ -264,6 +252,10 @@ Hub images use the embedded Proxy version resolved by traefik.proxyVersion.
   {{- $version := include "traefik.proxyVersion" . -}}
   {{- if semverCompare ">=v3.8.0-0" $version -}}
     v1.7.0
+  {{- else if semverCompare ">=v3.7.15-0" $version -}}
+    v1.6.3
+  {{- else if semverCompare ">=v3.7.14-0" $version -}}
+    v1.6.2
   {{- else if semverCompare ">=v3.7.10-0" $version -}}
     v1.6.1
   {{- else -}}
@@ -619,4 +611,17 @@ A driver is what enables transparency logs, so this doubles as the feature switc
         {{- end -}}
     {{- end -}}
     {{- join " " $drivers -}}
+{{- end -}}
+
+{{/*
+Return a struct of all enabled ports (as yaml string)
+*/}}
+{{- define "traefik.enabledPorts" }}
+{{- $ports := dict }}
+ {{- range $portName, $config := .Values.ports }}
+  {{- if and $config (dig "enabled" true $config) }}
+   {{- $_ := set $ports $portName $config }}
+  {{- end }}
+ {{- end }}
+{{- toYaml $ports }}
 {{- end -}}
