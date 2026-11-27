@@ -48,7 +48,7 @@ spec:
                 name: harbor-exporter-env
             - secretRef:
                 name: harbor-exporter
-          image: index.docker.io/goharbor/harbor-exporter@sha256:9ffede33dc519b4be035596a72f00f354754a22a3769077731f81ee7d6852f4f
+          image: index.docker.io/goharbor/harbor-exporter@sha256:e3445a81c0a13a18f8b9a73ff11f0e83ab7e08474f7cac80b419abef4e782f4d
           livenessProbe:
             failureThreshold: 3
             httpGet:

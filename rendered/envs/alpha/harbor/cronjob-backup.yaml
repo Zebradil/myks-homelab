@@ -58,7 +58,7 @@ spec:
                     secretKeyRef:
                       key: POSTGRES_PASSWORD
                       name: harbor-database
-              image: index.docker.io/goharbor/harbor-db@sha256:a32d51e636d76303e086a7c5251a2c8415c6f165b2f87bafa914efd866c5403f
+              image: index.docker.io/goharbor/harbor-db@sha256:051b774efcad4e169f6c225906a592756d30f32e01dc0ced34e03df186162e6b
               name: dump
               securityContext:
                 allowPrivilegeEscalation: false
